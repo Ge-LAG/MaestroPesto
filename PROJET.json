@@ -24,11 +24,50 @@
       "resume": "Bootstrap de la Methode V5 sur MaestroPesto. Creation des fichiers racine + amend METHOD.md (branche PR + commits structures). Branche dediee Ge-LAG/bootstrap-v5-doc, 1 seul commit 'method: bootstrap v5 doc'. Aucun fichier source modifie, aucun push.",
       "agent": "Hermes (MiniMax-M3)",
       "po": "Ge-LAG"
+    },
+    {
+      "date": "2026-08-22",
+      "session": "backlog-idees-ocr-recettes",
+      "resume": "Ajout d'une section 'Backlog idees produit' dans PROJET.md (et miroir PROJET.json, BP-17) avec l'entree IDEA-OCR-RECETTES : integration d'un OCR local pour formaliser les recettes au format MaestroPesto. Aucun fichier source modifie, aucun commit, aucun push (le repo est en bootstrap V5, en attente de validation PO).",
+      "agent": "Hermes (MiniMax-M3)",
+      "po": "Ge-LAG"
     }
   ],
   "test_dev_en_cours": null,
   "backlog_test_dev": [],
   "backlog_audit_code": [],
+  "backlog_idees_produit": [
+    {
+      "id": "IDEA-OCR-RECETTES",
+      "titre": "OCR local pour formalisation de recettes",
+      "source": "Gui, session 2026-08-22 (chat Hermes)",
+      "date": "2026-08-22",
+      "pitch": "Integrer un modele local d'OCR dans MaestroPesto pour prendre en photo une recette (livre, magazine, manuscrit) et que l'app la formalise automatiquement au format interne MaestroPesto (sections ingredients / etapes / quantites / temps).",
+      "raison_local": "Pas d'appel cloud (donnees perso + offline-first + latence).",
+      "modeles_candidats": [
+        "Tesseract 5 (baseline, multilingue FR/EN/IT/ES)",
+        "PaddleOCR (texte imprime structure)",
+        "EasyOCR (integration rapide)",
+        "Florence-2 / TrOCR (robustesse manuscrits)"
+      ],
+      "pipeline_pressenti": [
+        "capture photo",
+        "pre-traitement (deskew, denoise, detection zones)",
+        "OCR brut",
+        "parsing structurant (LLM local leger type Phi-3 mini ou regex+modeles)",
+        "validation UI",
+        "sauvegarde format MaestroPesto"
+      ],
+      "dependances_identifiees": [
+        "format de recette interne (a verifier dans lib/models/recipe.dart ou equivalent)",
+        "choix modele OCR (perf/RAM mobile)",
+        "choix parseur structurant"
+      ],
+      "statut": "idee backlog",
+      "priorite": null,
+      "prochain_pas": "Ouvrir une ADR (cf. methode V5) avant tout code."
+    }
+  ],
   "documents_associes": [
     "METHOD.md",
     "METHOD.json",

@@ -35,6 +35,11 @@ Valider avec Gui la branche PR (Ge-LAG/bootstrap-v5-doc) et l'integration des re
 - PO : Ge-LAG
 - Agent : Hermes (MiniMax-M3)
 
+#### 2026-08-22 - backlog-idees-ocr-recettes
+*Ajout d'une section "Backlog idees produit" dans PROJET.md (et miroir PROJET.json, BP-17) avec l'entree IDEA-OCR-RECETTES : integration d'un OCR local pour formaliser les recettes au format MaestroPesto. Aucun fichier source modifie, aucun commit, aucun push (le repo est en bootstrap V5, en attente de validation PO).*
+- PO : Ge-LAG
+- Agent : Hermes (MiniMax-M3)
+
 ## Test-dev en cours
 
 Aucun (`test_dev_en_cours` = `null`).
@@ -46,6 +51,20 @@ Vide. Format attendu : `td-NNN` (retours de test manuel), voir BP-10.
 ## Backlog audit code
 
 Vide. Format attendu : `ac-NNN` (constats d'audit de code), voir BP-18.
+
+## Backlog idees produit
+
+Format attendu : `IDEA-<SLUG>` (idees emises par le PO, non chiffrees, non priorisees). A convertir en ADR (voir METHOD.md) avant toute implementation.
+
+#### IDEA-OCR-RECETTES — OCR local pour formalisation de recettes
+- **Source** : Gui, session 2026-08-22 (chat Hermes).
+- **Pitch** : Integrer un modele local d'OCR dans MaestroPesto pour prendre en photo une recette (livre, magazine, manuscrit…) et que l'app la formalise automatiquement au format interne MaestroPesto (sections ingredients / etapes / quantites / temps).
+- **Pourquoi local** : pas d'appel cloud (donnees perso + offline-first + latence).
+- **Modeles candidats a evaluer** : Tesseract 5 (baseline, multilingue FR/EN/IT/ES), PaddleOCR (texte imprime structure), EasyOCR (integration rapide), Florence-2 / TrOCR (robustesse manuscrits). Choix apres spike sur photos reelles.
+- **Pipeline pressenti** : capture photo → pre-traitement (deskew, denoise, detection zones) → OCR brut → parsing structurant (LLM local leger type Phi-3 mini ou regex+modeles) → validation UI → sauvegarde format MaestroPesto.
+- **Dépendances identifiees** : format de recette interne (a verifier dans `lib/models/recipe.dart` ou equivalent), choix modele OCR (perf/RAM mobile), choix parseur structurant.
+- **Statut** : 🟡 Idee backlog — non chiffree, non priorisee.
+- **Prochain pas** : ouvrir une ADR (cf. methode V5) avant tout code.
 
 ## Documents associes
 
