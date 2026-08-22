@@ -28,7 +28,8 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
   List<Recipe> get _filteredRecipes {
     final normalizedQuery = _query.trim().toLowerCase();
     return _recipes.where((recipe) {
-      final matchesQuery = normalizedQuery.isEmpty ||
+      final matchesQuery =
+          normalizedQuery.isEmpty ||
           '${recipe.title} ${recipe.description} ${recipe.tags.join(' ')}'
               .toLowerCase()
               .contains(normalizedQuery);
@@ -59,6 +60,13 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       _selectedTags
         ..clear()
         ..addAll(tags);
+    });
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _query = '';
+      _selectedTags.clear();
     });
   }
 
@@ -96,6 +104,24 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
         _recipes[index] = edited;
       }
       _selectedRecipeId = edited.id;
+    });
+  }
+
+  void _duplicateRecipe(Recipe recipe) {
+    final duplicated = recipe.copyWith(
+      id: 'recipe-${DateTime.now().microsecondsSinceEpoch}',
+      title: context.strings.duplicateRecipeTitle(recipe.title),
+      ingredients: List<RecipeIngredient>.from(recipe.ingredients),
+      steps: List<String>.from(recipe.steps),
+      tags: List<String>.from(recipe.tags),
+    );
+
+    setState(() {
+      final index = _recipes.indexWhere((item) => item.id == recipe.id);
+      _recipes.insert(index == -1 ? 0 : index + 1, duplicated);
+      _selectedRecipeId = duplicated.id;
+      _query = '';
+      _selectedTags.clear();
     });
   }
 
@@ -172,8 +198,10 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                 onQueryChanged: (value) => setState(() => _query = value),
                 onRecipeSelected: _selectRecipe,
                 onTagsChanged: _setSelectedTags,
+                onClearFilters: _clearFilters,
                 onCreateRecipe: _createRecipe,
                 onEditRecipe: _editRecipe,
+                onDuplicateRecipe: _duplicateRecipe,
                 onDeleteRecipe: _deleteRecipe,
               );
             }
@@ -191,6 +219,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                     onQueryChanged: (value) => setState(() => _query = value),
                     onRecipeSelected: _selectRecipe,
                     onTagsChanged: _setSelectedTags,
+                    onClearFilters: _clearFilters,
                     onCreateRecipe: _createRecipe,
                   ),
                 ),
@@ -202,6 +231,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                           recipe: selectedRecipe,
                           isWide: isWide,
                           onEdit: _editRecipe,
+                          onDuplicate: _duplicateRecipe,
                           onDelete: _deleteRecipe,
                         ),
                 ),
@@ -224,8 +254,10 @@ class _CompactLayout extends StatelessWidget {
     required this.onQueryChanged,
     required this.onRecipeSelected,
     required this.onTagsChanged,
+    required this.onClearFilters,
     required this.onCreateRecipe,
     required this.onEditRecipe,
+    required this.onDuplicateRecipe,
     required this.onDeleteRecipe,
   });
 
@@ -237,8 +269,10 @@ class _CompactLayout extends StatelessWidget {
   final ValueChanged<String> onQueryChanged;
   final ValueChanged<String> onRecipeSelected;
   final ValueChanged<Set<String>> onTagsChanged;
+  final VoidCallback onClearFilters;
   final VoidCallback onCreateRecipe;
   final ValueChanged<Recipe> onEditRecipe;
+  final ValueChanged<Recipe> onDuplicateRecipe;
   final ValueChanged<Recipe> onDeleteRecipe;
 
   @override
@@ -257,6 +291,7 @@ class _CompactLayout extends StatelessWidget {
             onQueryChanged: onQueryChanged,
             onRecipeSelected: onRecipeSelected,
             onTagsChanged: onTagsChanged,
+            onClearFilters: onClearFilters,
             onCreateRecipe: onCreateRecipe,
             compact: true,
           ),
@@ -269,6 +304,7 @@ class _CompactLayout extends StatelessWidget {
                   isWide: false,
                   scrollable: false,
                   onEdit: onEditRecipe,
+                  onDuplicate: onDuplicateRecipe,
                   onDelete: onDeleteRecipe,
                 ),
         ),
@@ -278,10 +314,7 @@ class _CompactLayout extends StatelessWidget {
 }
 
 class EmptyRecipeState extends StatelessWidget {
-  const EmptyRecipeState({
-    required this.onCreateRecipe,
-    super.key,
-  });
+  const EmptyRecipeState({required this.onCreateRecipe, super.key});
 
   final VoidCallback onCreateRecipe;
 
@@ -306,9 +339,8 @@ class EmptyRecipeState extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     context.strings.noRecipeTitle,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                    style: Theme.of(context).textTheme.titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w800),
                   ),
                   const SizedBox(height: 8),
                   Text(

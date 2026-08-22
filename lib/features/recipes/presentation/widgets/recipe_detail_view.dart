@@ -9,6 +9,7 @@ class RecipeDetailView extends StatelessWidget {
     required this.recipe,
     required this.isWide,
     required this.onEdit,
+    required this.onDuplicate,
     required this.onDelete,
     this.scrollable = true,
     super.key,
@@ -17,6 +18,7 @@ class RecipeDetailView extends StatelessWidget {
   final Recipe recipe;
   final bool isWide;
   final ValueChanged<Recipe> onEdit;
+  final ValueChanged<Recipe> onDuplicate;
   final ValueChanged<Recipe> onDelete;
   final bool scrollable;
 
@@ -25,6 +27,7 @@ class RecipeDetailView extends StatelessWidget {
     final content = _RecipeContent(
       recipe: recipe,
       onEdit: onEdit,
+      onDuplicate: onDuplicate,
       onDelete: onDelete,
     );
 
@@ -66,11 +69,13 @@ class _RecipeContent extends StatelessWidget {
   const _RecipeContent({
     required this.recipe,
     required this.onEdit,
+    required this.onDuplicate,
     required this.onDelete,
   });
 
   final Recipe recipe;
   final ValueChanged<Recipe> onEdit;
+  final ValueChanged<Recipe> onDuplicate;
   final ValueChanged<Recipe> onDelete;
 
   @override
@@ -78,49 +83,13 @@ class _RecipeContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _RecipeToolbar(
+        _RecipeOverviewPanel(
           recipe: recipe,
           onEdit: onEdit,
+          onDuplicate: onDuplicate,
           onDelete: onDelete,
         ),
-        const SizedBox(height: 22),
-        Text(
-          recipe.title,
-          style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0,
-              ),
-        ),
-        if (recipe.description.trim().isNotEmpty) ...[
-          const SizedBox(height: 12),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 760),
-            child: Text(
-              recipe.description,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ),
-        ],
-        const SizedBox(height: 22),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            _MetricPill(
-              icon: Icons.people_alt_outlined,
-              label: '${recipe.servings} portions',
-            ),
-            _MetricPill(
-              icon: Icons.timer_outlined,
-              label: '${recipe.totalMinutes} min',
-            ),
-            _MetricPill(
-              icon: Icons.storage_outlined,
-              label: 'Ciqual',
-            ),
-          ],
-        ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 18),
         _SectionPanel(
           title: context.strings.ingredients,
           icon: Icons.format_list_bulleted,
@@ -147,15 +116,94 @@ class _RecipeContent extends StatelessWidget {
   }
 }
 
-class _RecipeToolbar extends StatelessWidget {
-  const _RecipeToolbar({
+class _RecipeOverviewPanel extends StatelessWidget {
+  const _RecipeOverviewPanel({
     required this.recipe,
     required this.onEdit,
+    required this.onDuplicate,
     required this.onDelete,
   });
 
   final Recipe recipe;
   final ValueChanged<Recipe> onEdit;
+  final ValueChanged<Recipe> onDuplicate;
+  final ValueChanged<Recipe> onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(22),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _RecipeToolbar(
+              recipe: recipe,
+              onEdit: onEdit,
+              onDuplicate: onDuplicate,
+              onDelete: onDelete,
+            ),
+            const SizedBox(height: 18),
+            Text(
+              recipe.title,
+              style: Theme.of(context).textTheme.displaySmall
+                  ?.copyWith(fontWeight: FontWeight.w900, letterSpacing: 0),
+            ),
+            if (recipe.description.trim().isNotEmpty) ...[
+              const SizedBox(height: 12),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 760),
+                child: Text(
+                  recipe.description,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+            ],
+            const SizedBox(height: 20),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                _MetricPill(
+                  icon: Icons.people_alt_outlined,
+                  label: '${recipe.servings} portions',
+                ),
+                _MetricPill(
+                  icon: Icons.timer_outlined,
+                  label: '${recipe.totalMinutes} min',
+                ),
+                _MetricPill(
+                  icon: Icons.format_list_bulleted,
+                  label: context.strings.ingredientCount(
+                    recipe.ingredients.length,
+                  ),
+                ),
+                _MetricPill(
+                  icon: Icons.checklist,
+                  label: context.strings.stepCount(recipe.steps.length),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            _SourceSummary(recipe: recipe),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RecipeToolbar extends StatelessWidget {
+  const _RecipeToolbar({
+    required this.recipe,
+    required this.onEdit,
+    required this.onDuplicate,
+    required this.onDelete,
+  });
+
+  final Recipe recipe;
+  final ValueChanged<Recipe> onEdit;
+  final ValueChanged<Recipe> onDuplicate;
   final ValueChanged<Recipe> onDelete;
 
   @override
@@ -166,10 +214,7 @@ class _RecipeToolbar extends StatelessWidget {
         final tags = Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: [
-            for (final tag in recipe.tags)
-              RecipeTagLabel(label: tag),
-          ],
+          children: [for (final tag in recipe.tags) RecipeTagLabel(label: tag)],
         );
         final actions = Wrap(
           spacing: 8,
@@ -189,6 +234,11 @@ class _RecipeToolbar extends StatelessWidget {
               onPressed: () => onDelete(recipe),
               icon: const Icon(Icons.delete_outline),
               tooltip: context.strings.deleteAction,
+            ),
+            IconButton.outlined(
+              onPressed: () => onDuplicate(recipe),
+              icon: const Icon(Icons.content_copy_outlined),
+              tooltip: context.strings.duplicateAction,
             ),
             FilledButton.icon(
               onPressed: () => onEdit(recipe),
@@ -222,11 +272,89 @@ class _RecipeToolbar extends StatelessWidget {
   }
 }
 
+class _SourceSummary extends StatelessWidget {
+  const _SourceSummary({required this.recipe});
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    final counts = <IngredientSource, int>{
+      IngredientSource.ciqual: 0,
+      IngredientSource.recipe: 0,
+      IngredientSource.free: 0,
+    };
+    for (final ingredient in recipe.ingredients) {
+      counts[ingredient.source] = (counts[ingredient.source] ?? 0) + 1;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.strings.sources,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: const Color(0xFF4E5349),
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final entry in counts.entries)
+              if (entry.value > 0)
+                _SourceCountBadge(
+                  label: context.strings.sourceCount(
+                    _sourceLabel(context, entry.key),
+                    entry.value,
+                  ),
+                ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+String _sourceLabel(BuildContext context, IngredientSource source) {
+  return switch (source) {
+    IngredientSource.ciqual => context.strings.ciqual,
+    IngredientSource.recipe => context.strings.sourceRecipe,
+    IngredientSource.free => context.strings.sourceFree,
+  };
+}
+
+class _SourceCountBadge extends StatelessWidget {
+  const _SourceCountBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: const Color(0xFFF4F0E7),
+        border: Border.all(color: const Color(0xFFE2D6BF)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: const Color(0xFF554B37),
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _MetricPill extends StatelessWidget {
-  const _MetricPill({
-    required this.icon,
-    required this.label,
-  });
+  const _MetricPill({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
@@ -246,10 +374,7 @@ class _MetricPill extends StatelessWidget {
           children: [
             Icon(icon, size: 18),
             const SizedBox(width: 8),
-            Text(
-              label,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
           ],
         ),
       ),
@@ -282,9 +407,8 @@ class _SectionPanel extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
                 ),
               ],
             ),
@@ -372,9 +496,8 @@ class _SourceBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
+          style: Theme.of(context).textTheme.labelSmall
+              ?.copyWith(fontWeight: FontWeight.w800),
         ),
       ),
     );
@@ -382,10 +505,7 @@ class _SourceBadge extends StatelessWidget {
 }
 
 class _StepRow extends StatelessWidget {
-  const _StepRow({
-    required this.index,
-    required this.text,
-  });
+  const _StepRow({required this.index, required this.text});
 
   final int index;
   final String text;
