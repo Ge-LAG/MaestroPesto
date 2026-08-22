@@ -1,0 +1,23 @@
+{
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-22",
+  "row_count": 603,
+  "deliverables": [
+    "DATA_SOURCE_REGISTER.csv",
+    "ingredient_registry.csv",
+    "ingredient_registry_v1.csv",
+    "ingredient_schema.md",
+    "ingredient_coverage_report.md",
+    "excluded_items.csv",
+    "ingredient_merge_log.csv",
+    "qa_report.md"
+  ],
+  "policy": {
+    "no_brands": true,
+    "no_skus": true,
+    "no_finished_dishes": true,
+    "approved_sources_only": true,
+    "no_hallucinated_data": true
+  }
+}

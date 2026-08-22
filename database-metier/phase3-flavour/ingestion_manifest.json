@@ -1,0 +1,36 @@
+{
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-22",
+  "row_count": {
+    "aroma_compounds": 39,
+    "ingredient_aroma_compounds": 56,
+    "pairwise_flavor_evidence": 4560,
+    "higher_order_flavor_evidence": 5,
+    "flavor_compatibility": 4593
+  },
+  "deliverables": [
+    "sensory_descriptor_ontology.csv",
+    "aroma_compounds.csv",
+    "ingredient_aroma_compounds.csv",
+    "pairwise_flavor_evidence.csv",
+    "higher_order_flavor_evidence.csv",
+    "flavor_compatibility.csv",
+    "flavor_scoring_method.md",
+    "flavor_benchmark.csv",
+    "flavor_coverage_report.md",
+    "qa_report.md"
+  ],
+  "approved_sources": [
+    "FLAVORDB2",
+    "PUBCHEM",
+    "CHEBI",
+    "CULINARY_LIT"
+  ],
+  "policy": {
+    "no_exhaustive_combination_storage": true,
+    "culinary_gold_for_calibration": true,
+    "scoring_weights_versioned": true,
+    "no_hallucination": true
+  }
+}

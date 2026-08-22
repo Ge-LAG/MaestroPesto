@@ -1,0 +1,54 @@
+descriptor_id,fr,en,parent,dimension
+sweet,Sucré,Sweet,,taste
+sour,Acide,Sour,,taste
+salty,Salé,Salty,,taste
+bitter,Amer,Bitter,,taste
+umami,Umami,Umami,,taste
+fatty,Gras,Fatty,,taste
+astringent,Astringent,Astringent,,taste
+pungent,Piquant,Pungent,,chemesthesis
+cooling,Frais,Cooling,,chemesthesis
+warming,Chaud,Warming,,chemesthesis
+metallic,Métallique,Metallic,,taste
+kokumi,Kokumi,Kokumi,,taste
+fruity,Fruité,Fruity,,aroma
+citrus,Agrume,Citrus,fruity,aroma
+berry,Fruits rouges,Berry,fruity,aroma
+stone_fruit,Fruits à noyau,Stone fruit,fruity,aroma
+tropical,Fruits tropicaux,Tropical,fruity,aroma
+green,Végétal vert,Green,,aroma
+herbal,Herbacé,Herbal,green,aroma
+grassy,Herbe fraîche,Grassy,green,aroma
+leafy,Feuille,Leafy,green,aroma
+floral,Floral,Floral,,aroma
+rose,Rose,Rose,floral,aroma
+violet,Violette,Violet,floral,aroma
+woody,Bois,Woody,,aroma
+earthy,Terre,Earthy,,aroma
+mushroom,Champignon,Mushroom,earthy,aroma
+truffle,Truffe,Truffle,earthy,aroma
+nutty,Noisette,Nutty,,aroma
+roasted,Rôti,Roasted,,aroma
+toasted,Grillé/torréfié,Toasted,roasted,aroma
+caramel,Caramel,Caramel,,aroma
+smoky,Fumé,Smoky,,aroma
+spicy,Épicé,Spicy,,chemesthesis
+peppery,Poivré,Peppery,spicy,chemesthesis
+sulfurous,Soufré,Sulfurous,,aroma
+meaty,Charnu,Meaty,,aroma
+marine,Marin,Marine,,aroma
+dairy,Laitier,Dairy,,aroma
+fermented,Fermenté,Fermented,,aroma
+solvent,Solvant,Solvent,,aroma
+medicinal,Médicinal,Medicinal,,aroma
+resinous,Résineux,Resinous,,aroma
+vanillic,Vanillé,Vanillic,,aroma
+cocoa,Cacao,Cocoa,,aroma
+coffee,Café,Coffee,roasted,aroma
+buttery,Beurre,Buttery,dairy,aroma
+cheesy,Fromage,Cheesy,fermented,aroma
+yeasty,Levure,Yeasty,fermented,aroma
+acidic,Acidulé,Acidic,sour,taste
+malty,Malté,Malty,roasted,aroma
+honey,Miel,Honey,caramel,aroma
+jammy,Confiture,Jammy,fruity,aroma

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "document_id": "projet-maestropesto",
+  "projet": "MaestroPesto",
+  "phase_courante": "P0 - bootstrap methodologique",
+  "etat_general": "Bootstrap V5 en cours sur la branche PR Ge-LAG/bootstrap-v5-doc. Aucune feature de code n'est developpee tant que la methode n'est pas validee par le PO.",
+  "focus_immediat": "Valider avec Gui la branche PR (Ge-LAG/bootstrap-v5-doc) et l'integration des regles PR/commit dans METHOD.md.",
+  "questions_ouvertes": [
+    "Valider le format de branche Ge-LAG/<resume-2-3-mots> propose pour toutes les futures branches PR.",
+    "Confirmer la liste des themes de commit acceptes (UI, UX, backend, db, test, docs, build, method, chore, fix).",
+    "Decider si on garde un seul commit par PR ou si on accepte les commits de merge.",
+    "Decider du calendrier d'activation de l'override politique_de_branche."
+  ],
+  "prochaines_etapes": [
+    "Attendre validation PO du bootstrap V5 (R-06 / A.8).",
+    "Ouvrir une PR GitHub depuis Ge-LAG/bootstrap-v5-doc vers main.",
+    "Indexer dans INDEX-docs.md les fichiers METHOD/PROJET crees.",
+    "Planifier la premiere feature produit sur une nouvelle branche PR dediee."
+  ],
+  "journal_des_sessions": [
+    {
+      "date": "2026-08-22",
+      "session": "bootstrap-v5",
+      "resume": "Bootstrap de la Methode V5 sur MaestroPesto. Creation des fichiers racine + amend METHOD.md (branche PR + commits structures). Branche dediee Ge-LAG/bootstrap-v5-doc, 1 seul commit 'method: bootstrap v5 doc'. Aucun fichier source modifie, aucun push.",
+      "agent": "Hermes (MiniMax-M3)",
+      "po": "Ge-LAG"
+    }
+  ],
+  "test_dev_en_cours": null,
+  "backlog_test_dev": [],
+  "backlog_audit_code": [],
+  "documents_associes": [
+    "METHOD.md",
+    "METHOD.json",
+    "METHOD-BOOTSTRAP.md",
+    "PROJET.md",
+    "PROJET.json",
+    "INDEX-docs.md",
+    "ARCHITECTURE.md",
+    "README.md"
+  ]
+}

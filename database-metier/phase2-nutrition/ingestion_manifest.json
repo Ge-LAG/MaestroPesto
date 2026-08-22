@@ -1,0 +1,31 @@
+{
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-22",
+  "ingredient_registry_version": "1.0.0",
+  "row_count": 751,
+  "mapping_count": 64,
+  "component_count": 79,
+  "deliverables": [
+    "nutrition_database.csv",
+    "component_dictionary.csv",
+    "nutrition_mapping_log.csv",
+    "nutrition_schema.md",
+    "nutrition_confidence_method.md",
+    "nutrition_coverage_report.md",
+    "qa_report.md",
+    "qa_anomalies.csv"
+  ],
+  "approved_sources": [
+    "CIQUAL",
+    "USDAFDC",
+    "INFOODS",
+    "FOODON"
+  ],
+  "policy": {
+    "no_hallucination": true,
+    "no_zero_for_missing": true,
+    "state_distinction": true,
+    "value_qualifier_vocabulary": true
+  }
+}

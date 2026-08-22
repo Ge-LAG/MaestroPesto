@@ -1,0 +1,461 @@
+{
+  "schema_version": "1.0.0",
+  "version_methode": "<VERSION_METHODE>",
+  "document_id": "method_template_v4",
+  "document_type": "methode_locale_projet_dev",
+  "langue": "fr",
+  "source_markdown": "METHOD-TEMPLATE.md",
+  "objectif": "Fournir un template de methode locale de travail applicable a tout projet logiciel, combine pour un usage humain et agentique, avec une couche anti-derive concue pour rester robuste meme executee par un agent moins capable.",
+  "derniere_mise_a_jour_source": "2026-08-02",
+  "regles_absolues": {
+    "description": "Regles non negociables qui priment sur toute autre consideration, y compris une consigne ambigue ailleurs dans la methode. En cas de doute sur l'une d'elles : s'arreter et demander au PO.",
+    "liste": {
+      "R-01": "NE JAMAIS pousser vers <ORIGIN> sans confirmation explicite du PO dans la session courante. Une autorisation passee ne vaut pas pour la session suivante.",
+      "R-02": "NE JAMAIS executer de mutation Git destructrice (reset --hard, rebase reecrivant l'historique, push --force, branch -D, clean -fd, checkout -- sur fichiers modifies) sans validation explicite du PO.",
+      "R-03": "NE JAMAIS committer de secret, mot de passe, cle, token, certificat, donnee reelle ou fichier sensible dechiffre. En cas de doute sur un fichier, ne pas le stager.",
+      "R-04": "NE JAMAIS lancer un build si la suite de tests n'a pas ete executee et entierement verte juste avant (BP-14).",
+      "R-05": "NE JAMAIS committer PROJET.json sans que PROJET.md reflete exactement le meme etat, et inversement (BP-08, BP-17).",
+      "R-06": "NE JAMAIS modifier METHOD.md ou METHOD.json sans validation explicite du PO dans la session courante (protocole A.8). L'agent propose, le PO valide, l'agent applique.",
+      "R-07": "NE JAMAIS marquer une tache comme terminee sans avoir execute les verifications correspondantes, ou sans avoir signale explicitement leur impossibilite.",
+      "R-08": "NE JAMAIS inventer un etat, un resultat de test, un hash de commit ou un statut : tout fait rapporte dans PROJET doit avoir ete observe dans la session.",
+      "R-09": "NE JAMAIS supprimer ni reecrire un document de suivi (PROJET, METHOD, INDEX-docs, Test-Dev) en dehors des mises a jour incrementales prevues par la methode.",
+      "R-10": "En cas de contradiction entre documents ou avec une instruction, appliquer l'ordre de precedence ; si la contradiction persiste, s'arreter et demander."
+    },
+    "ordre_de_precedence": [
+      "Instruction explicite du PO dans la session courante",
+      "METHOD.json / METHOD.md (regles absolues d'abord)",
+      "PROJET.json",
+      "PROJET.md",
+      "<ROADMAP>.md et autres documents"
+    ],
+    "regle_ecart": "Un ecart detecte entre deux niveaux doit etre signale au PO et consigne, jamais resolu silencieusement.",
+    "regle_extension_conditionnelle": "Une extension conditionnelle eventuellement active (voir stable_reference.extension_conditionnelle_safeguard_mistral, section A.9 de METHOD.md) se place apres tous ces niveaux et ne peut jamais primer sur eux."
+  },
+  "politique_de_reference": {
+    "reference_machine_active_dans_un_projet": "METHOD.json",
+    "reference_humaine_compagnon_dans_un_projet": "METHOD.md",
+    "reference_bootstrap_humaine_legere_dans_un_projet": "METHOD-BOOTSTRAP.md",
+    "source_of_truth_projet": "PROJET.json",
+    "miroir_humain_projet": "PROJET.md",
+    "index_documentaire": "INDEX-docs.md",
+    "extension_conditionnelle": "safeguard-mistral/SKILL.md — INACTIF par defaut. Ne jamais charger au bootstrap. Deux conditions cumulatives requises : voir stable_reference.extension_conditionnelle_safeguard_mistral et la section A.9 de METHOD.md.",
+    "regle_bootstrap_lecture": "Au demarrage d'une session interactive, lire METHOD.json puis METHOD.md, puis PROJET.json et PROJET.md. Utiliser METHOD-BOOTSTRAP.md si METHOD.md devient trop lourd a relire completement. Le digest ne remplace jamais les regles absolues."
+  },
+  "couche_machine_associee": {
+    "par_projet": {
+      "methode_machine": "METHOD.json",
+      "methode_humaine": "METHOD.md",
+      "methode_bootstrap_legere": "METHOD-BOOTSTRAP.md",
+      "etat_machine": "PROJET.json",
+      "miroir_humain": "PROJET.md",
+      "index_documentaire": "INDEX-docs.md",
+      "plans_actifs": "plans/"
+    }
+  },
+  "placeholders_obligatoires": {
+    "description": "Ces placeholders doivent etre remplaces lors de l'adaptation du template a un projet concret.",
+    "liste": {
+      "<NOM_DU_PROJET>": "Nom du projet logiciel.",
+      "<VERSION_METHODE>": "Version de la methode locale du projet (initialiser a 1.0.0 lors de l'adaptation).",
+      "<DATE_ADAPTATION>": "Date d'adaptation du template au projet (premiere ligne du journal des revisions).",
+      "<STACK_TECHNIQUE>": "Langage(s), framework(s), runtime cible(s).",
+      "<LANGAGE_PRINCIPAL>": "Langage principal du projet.",
+      "<DOSSIER_SOURCE>": "Dossier racine du code source applicatif (ex: src/, lib/, app/).",
+      "<DOSSIER_TEST>": "Dossier racine des fichiers de test (ex: test/, tests/, src/test/).",
+      "<COMMANDE_BUILD>": "Commande principale de build (ex: cabal build, npm run build, cargo build, make).",
+      "<COMMANDE_TEST>": "Commande principale d'execution des tests (ex: cabal test, npm test, cargo test, pytest).",
+      "<DOSSIER_RELEASE>": "Dossier de sortie des artefacts de release (ex: release/, dist/, target/release/).",
+      "<BRANCHE_PRINCIPALE>": "Branche principale de travail (ex: main, master, develop).",
+      "<ORIGIN>": "Remote Git principal (ex: origin).",
+      "<MANIFESTE_BUILD>": "Fichier manifeste du build (ex: package.json, Cargo.toml, pom.xml, *.cabal).",
+      "<NOM_ARTEFACT>": "Nom de l'executable, de la librairie ou du principal artefact produit.",
+      "<ROADMAP>": "Document de roadmap ou plan produit principal (ex: PLAN-DEVELOPPEMENT, ROADMAP).",
+      "<DOSSIER_REFERENCE>": "Dossier contenant la reference technique ou l'application-modele a reutiliser.",
+      "<POINT_ENTREE_TEST>": "Module ou fichier point d'entree de la suite de tests (ex: Spec, tests).",
+      "<EXT>": "Extension des fichiers sources pour ce projet (ex: .hs, .ts, .rs, .java, .py).",
+      "<SCRIPT_BUILD_WRAPPER>": "Nom du script wrapper de build si applicable (ex: Invoke-BuildWrapper).",
+      "<SCRIPT_PRE_BUILD>": "Nom du script de pre-build checks (ex: Invoke-PreBuildChecks).",
+      "<SCRIPT_RELEASE>": "Nom du script de release (ex: Invoke-Release).",
+      "<STACK_SECURITE>": "Pile de securite ou dependances critiques du projet.",
+      "<BASE_DONNEES_1>": "Nom de la premiere base de donnees ou fichier de persistance critique.",
+      "<BASE_DONNEES_2>": "Nom de la deuxieme base de donnees ou fichier de persistance critique.",
+      "<EXTENSION_BACKUP>": "Extension ou format de backup principal."
+    }
+  },
+  "stable_reference": {
+    "bootstrap_session": {
+      "lecture": [
+        "Lire METHOD.json",
+        "Lire METHOD.md",
+        "Lire PROJET.json",
+        "Lire PROJET.md",
+        "Lire le plan actif dans plans/ et, si besoin, le document de roadmap produit"
+      ],
+      "diagnostic_initial": [
+        "Verifier la branche git active.",
+        "Verifier le working directory avec git status.",
+        "Verifier la presence de PROJET.json, PROJET.md, INDEX-docs.md, METHOD.md, METHOD.json, plans/ et METHOD-BOOTSTRAP.md si utilise.",
+        "Lire les documents markdown structurants.",
+        "Estimer la maturite du repo avec git log.",
+        "Appliquer BP-09 : si test_dev_en_cours est actif, le rappeler au PO et demander validation avant toute modification de code.",
+        "Appliquer BP-19 : si PROJET.json, PROJET.md, METHOD.md, METHOD.json ou INDEX-docs.md sont modifies non commites depuis une session precedente, le signaler au PO avant tout travail."
+      ],
+      "annonce_apres_bootstrap": "Annoncer au PO : branche active, etat du working tree (propre ou ecarts), test_dev_en_cours eventuel, point de reprise lu dans PROJET.json.",
+      "garde_fous": [
+        "Ne jamais toucher au code source pendant un bootstrap documentaire sauf demande explicite.",
+        "Ne pas commiter automatiquement les documents crees au bootstrap.",
+        "Verifier le working directory apres creation de fichiers racine.",
+        "Le digest METHOD-BOOTSTRAP.md ne remplace jamais les regles absolues, qui s'appliquent meme quand seul le digest a ete lu."
+      ]
+    },
+    "conduite_en_cas_de_doute": {
+      "principe": "S'arreter et demander au PO plutot qu'improviser.",
+      "declencheurs": [
+        "Une regle absolue semble entrer en conflit avec la tache demandee.",
+        "Deux documents de reference se contredisent et l'ordre de precedence ne suffit pas.",
+        "Une action est irreversible ou destructrice et n'est pas explicitement couverte par la demande.",
+        "Une verification exigee (tests, build) est impossible a executer.",
+        "La demande implique de modifier METHOD.md, METHOD.json ou la structure des documents de suivi."
+      ],
+      "format_attendu": "Formuler : ce qui etait attendu, ce qui bloque, les options possibles, la recommandation de l'agent. Ne jamais choisir silencieusement l'option la plus risquee."
+    },
+    "protocole_revision_methode": {
+      "documents_proteges": ["METHOD.md", "METHOD.json"],
+      "regle_absolue_associee": "R-06",
+      "bp_associee": "BP-20",
+      "etapes": [
+        "1. Proposition : formuler la modification et sa justification au PO, sans ecrire.",
+        "2. Validation : obtenir la validation explicite du PO dans la session courante.",
+        "3. Application ordonnee : modifier METHOD.md d'abord, puis aligner METHOD.json dans la meme session.",
+        "4. Versionnage : incrementer la version de la methode (MAJEUR=changement de regle, MINEUR=ajout, CORRECTIF=clarification) dans les deux fichiers.",
+        "5. Journalisation : ajouter une ligne au journal des revisions (Annexe 3 de METHOD.md et journal_revisions de METHOD.json).",
+        "6. Commit dedie docs(method) contenant les deux fichiers."
+      ],
+      "garde_fous": [
+        "Toute desynchronisation detectee entre METHOD.md et METHOD.json est signalee au PO puis corrigee via ce protocole.",
+        "Ne jamais supprimer une regle existante sans proposition validee.",
+        "Si une session precedente a laisse METHOD modifie non commite, appliquer BP-19."
+      ]
+    },
+    "workflow_git": {
+      "regles_communes": [
+        "Faire des commits atomiques.",
+        "Relire git status ou le diff avant git add -A.",
+        "Ne jamais push sur <ORIGIN>/<BRANCHE_PRINCIPALE> sans confirmation explicite du PO (R-01).",
+        "Ne jamais faire de mutation git destructive sans validation (R-02).",
+        "Derouler la checklist_pre_commit avant chaque commit."
+      ],
+      "messages_de_commit": {
+        "format": "type(scope): description concise",
+        "types": [
+          "feat",
+          "fix",
+          "docs",
+          "refactor",
+          "test",
+          "chore",
+          "style"
+        ]
+      }
+    },
+    "communication_humain_ia": {
+      "avant_de_commencer": [
+        "Lire le contexte documentaire.",
+        "Clarifier le scope si une ambiguite bloque une decision."
+      ],
+      "pendant_implementation": [
+        "Signaler les blocages immediatement.",
+        "Proposer une alternative simple quand une solution devient trop lourde.",
+        "Noter les idees futures dans PROJET plutot que les implementer hors scope."
+      ],
+      "signal_retour_test_dev": {
+        "prefix_declencheur": "Retour test dev",
+        "nature": "debriefing_en_vrac_post_test_manuel",
+        "conduite_agent": [
+          "Ecouter l'ensemble du retour sans interrompre.",
+          "Consigner chaque point dans PROJET.json et PROJET.md avec libelle, statut a_traiter, priorite deduite de l'objectif macro, tag test_dev.",
+          "Presenter au PO la liste consolidee avec priorites et justifications.",
+          "Attendre validation PO avant toute correction de code."
+        ]
+      },
+      "fin_de_session": [
+        "Resumer ce qui a ete fait.",
+        "Proposer la prochaine etape.",
+        "Mettre a jour PROJET.json en premier (source de verite), puis PROJET.md pour refleter exactement le meme etat.",
+        "Commiter les documents de suivi immediatement apres la synchronisation (lot dedie docs(project) acceptable) — ne pas laisser de reliquat non_commite a la session suivante (BP-19).",
+        "Mettre a jour INDEX-docs.md si un document est cree, deplace ou supprime.",
+        "Proposer une mise a jour de METHOD.md / METHOD.json si une bonne pratique structurante emerge (protocole A.8 — jamais de modification sans validation)."
+      ]
+    },
+    "qualite_du_code": {
+      "checklist_universelle": [
+        "Les checks adaptes au stack passent.",
+        "La suite de tests anti-regressions est entierement verte avant toute commande de build.",
+        "L'application demarre sans crash bloquant.",
+        "Les parcours critiques touches ont ete testes manuellement ou automatiquement.",
+        "Aucune regression evidente n'est visible.",
+        "Aucun secret, mot de passe, cle, token, certificat ou donnee sensible reelle n'est committe."
+      ]
+    },
+    "extension_conditionnelle_safeguard_mistral": {
+      "section_methode": "A.9",
+      "fichier": "safeguard-mistral/SKILL.md",
+      "nature": "extension_conditionnelle_hors_socle",
+      "objectif": "Compenser les lacunes connues des modeles Mistral AI en implementation logicielle : reconnaissance du depot, scope explicite, changements conservateurs, verification prouvee, auto-revue adversariale, passation au relecteur.",
+      "actif_par_defaut": false,
+      "conditions_activation": {
+        "regle": "Les deux conditions sont cumulatives. Si l'une manque, le skill est inactif.",
+        "condition_modele": "Le modele qui prend en charge l'implementation du code est un modele Mistral AI.",
+        "condition_invocation": "Le prompt initial de la session mentionne explicitement le skill (nom safeguard-mistral ou consigne non ambigue de l'appliquer). Une mention tardive, une supposition ou une decision autonome de l'agent ne suffisent pas."
+      },
+      "si_inactif": [
+        "Ne pas lire, citer, annoncer ni appliquer le skill.",
+        "Ne pas ajouter ses phases, checklists ou format de rapport a la reponse.",
+        "Suivre METHOD.md seul.",
+        "En cas de doute sur une condition, considerer le skill comme inactif et le signaler brievement au PO."
+      ],
+      "rang_precedence": "Strictement inferieur a METHOD.json / METHOD.md et aux regles absolues A.0 (R-01 a R-10). Tout conflit se resout en faveur de la methode et se signale au PO (R-10).",
+      "non_derogation": "Le skill n'ajoute, ne retire ni ne relache aucune regle absolue. Il ne dispense d'aucune obligation de la methode : R-04/BP-14 (tests avant build), R-05/BP-08/BP-17 (synchronisation PROJET), R-06/A.8/BP-20 (protection de METHOD), R-08 (interdiction d'inventer un fait).",
+      "references_absentes": {
+        "etat": "Le dossier safeguard-mistral/references/ n'existe pas actuellement dans le depot.",
+        "fichiers_manquants": [
+          "safeguard-mistral/references/HIGH-RISK-CHANGES.md",
+          "safeguard-mistral/references/TASK-CONTRACT.md",
+          "safeguard-mistral/references/QUALITY-CHECKLISTS.md",
+          "safeguard-mistral/references/REVIEW-HANDOFF.md"
+        ],
+        "conduite_obligatoire": [
+          "Ne jamais inventer, reconstruire ou paraphraser le contenu de ces fichiers (R-08).",
+          "Ne jamais pretendre les avoir lus ni rapporter une verification fondee sur eux.",
+          "Declarer la reference indisponible et s'appuyer sur les regles ecrites directement dans SKILL.md, qui sont auto-suffisantes.",
+          "Signaler l'absence au PO plutot que de la combler."
+        ],
+        "si_creation_future": "Mettre a jour SKILL.md, INDEX-docs.md et la section A.9 via le protocole A.8."
+      }
+    },
+    "checklist_pre_commit": {
+      "regle": "A derouler litteralement avant chaque git commit. Une seule reponse non bloque le commit.",
+      "questions": [
+        "1. git status et diff de chaque fichier stage relus ? (BP-04)",
+        "2. Le commit contient-il uniquement des fichiers lies au lot annonce ? (commits atomiques)",
+        "3. Un secret, donnee reelle, fichier sensible ou artefact interdit dans le diff ? Si oui : bloquer (R-03, BP-03).",
+        "4. Si code touche : suite de tests executee et verte ? (R-04, BP-14)",
+        "5. Si PROJET touche : double-lecture croisee BP-17 faite sur les champs sensibles ?",
+        "6. Si METHOD touche : protocole A.8 suivi (validation PO, version, journal) ? (R-06)",
+        "7. Si document cree/deplace/supprime : INDEX-docs.md a jour ?",
+        "8. Message au format type(scope): description ?"
+      ]
+    }
+  },
+  "project_specific_extension": {
+    "projet": "<NOM_DU_PROJET>",
+    "architecture": {
+      "application": "<TYPE_APPLICATION>",
+      "langage_principal": "<LANGAGE_PRINCIPAL>",
+      "stack_technique": "<STACK_TECHNIQUE>",
+      "persistance": "<PERSISTANCE>",
+      "plateforme_v1": "<PLATEFORME_CIBLE>",
+      "reference_fonctionnelle": "<ROADMAP>.md",
+      "reference_technique": "<DOSSIER_REFERENCE>/"
+    },
+    "securite": {
+      "obligations": [
+        "Toute donnee sensible au repos doit etre chiffree ou protegee par les moyens du stack.",
+        "La presence effective des garde-fous de securite doit etre verifiable au runtime ou au build.",
+        "Ne jamais committer de mot de passe en dur, de cle, de token, de certificat ou de donnee reelle.",
+        "Eviter toute fuite de donnees dechiffrees ou temporaires persistantes.",
+        "Toute logique de recuperation ou de backup doit rester restaurable a partir d'une copie de secours et des secrets maitres.",
+        "Les logs ne doivent contenir aucune donnee sensible : pas d'identifiants metier en clair, pas de noms de fichiers utilisateur, pas de chemins de donnees dechiffrees, pas de contenu. Identifier les objets par leurs IDs techniques."
+      ],
+      "points_de_vigilance": [
+        "Gestion des fichiers temporaires dechiffres ou sensibles.",
+        "Scripts ou dependances natives critiques (DLLs, binaires, libs systeme).",
+        "Formats de backup, d'export, de migration et de replication.",
+        "Surface d'attaque exposee (API, ports, CORS, authentification)."
+      ]
+    },
+    "conventions_de_code": [
+      "Un module = une responsabilite claire.",
+      "Separer autant que possible logique pure et code a effets (I/O, UI, framework).",
+      "Reutiliser d'abord les briques eprouvees du projet ou de la reference technique avant de reinventer.",
+      "Preferer des types metier explicites a des types primitifs nus.",
+      "Preferer des export lists explicites sur les modules reutilises.",
+      "Utiliser un helper unifie pour les dates, monnaies, mesures et locales quand il existe.",
+      "Verifier les evolutions UI significatives sur tailles et themes pertinents."
+    ],
+    "variables_critiques": [
+      "<DOSSIER_REFERENCE>/",
+      "<ROADMAP>.md",
+      "<MANIFESTE_BUILD>",
+      "<NOM_ARTEFACT>",
+      "<BASE_DONNEES_1>",
+      "<BASE_DONNEES_2>",
+      "<EXTENSION_BACKUP>",
+      "<STACK_SECURITE>"
+    ],
+    "bonnes_pratiques_identifiees": [
+      "BP-01 Reutiliser la reference avec discernement",
+      "BP-02 Valider les dependances critiques avant toute confiance",
+      "BP-03 Aucun artefact sensible au commit",
+      "BP-04 Diff propre avant staging",
+      "BP-05 Push seulement sur confirmation",
+      "BP-06 Le plan produit ne remplace pas le journal projet",
+      "BP-07 Le code sensible doit rester lisible",
+      "BP-08 Synchronisation stricte PROJET.json et PROJET.md apres chaque changement significatif",
+      "BP-09 Test-Dev et balle dans le camp du PO",
+      "BP-10 Consignation structuree des retours test dev dans PROJET",
+      "BP-11 Cycle de vie des etats Test-Dev",
+      "BP-12 Grille de priorisation automatique des bugs",
+      "BP-13 Test rouge avant correction, test vert apres",
+      "BP-14 Build bloque si un test echoue",
+      "BP-15 Tests crees ou mis a jour en meme temps que la feature",
+      "BP-16 Pipeline de verification scriptisee",
+      "BP-17 Double-lecture croisee PROJET.json et PROJET.md avant commit de suivi",
+      "BP-18 Backlog d'audit de code structure",
+      "BP-19 Garde-fou bootstrap : suivi non commite",
+      "BP-20 Protection des documents de methode"
+    ],
+    "politique_de_branche": {
+      "override": false,
+      "mode": "branches_de_feature_vers_<BRANCHE_PRINCIPALE>",
+      "motifs": [
+        "Defaut general applicable a la plupart des projets"
+      ],
+      "regles": [
+        "Le travail quotidien se fait sur des branches de feature fusionnees dans <BRANCHE_PRINCIPALE>.",
+        "Le push vers <ORIGIN>/<BRANCHE_PRINCIPALE> reste soumis a confirmation explicite du PO.",
+        "Aucune mutation git destructive sans validation."
+      ],
+      "override_possible": {
+        "condition": "Projet tres jeune, mono-developpeur, ou contrainte operationnelle forte",
+        "action": "Documenter explicitement l'override dans METHOD.md et METHOD.json via le protocole A.8"
+      }
+    },
+    "cycle_de_release": {
+      "workflow": [
+        "Implementer sur la branche de travail.",
+        "Executer la suite de tests anti-regressions.",
+        "Verifier build, demarrage et parcours critiques.",
+        "Mettre a jour la documentation de suivi.",
+        "Committer de facon atomique.",
+        "Pousser seulement apres validation explicite du PO.",
+        "Tagger quand un jalon de release est reellement atteint."
+      ],
+      "tag": {
+        "format": "v<MAJOR>.<MINOR>[.<PATCH>]",
+        "type": "annotated"
+      }
+    },
+    "test_dev": {
+      "regles": [
+        "Creer un document Test-Dev/session-<date>-<lot>.md avec une checklist de tests claire et reproductible.",
+        "Mettre a jour PROJET.json et PROJET.md pour indiquer test_dev_en_cours et le chemin du document.",
+        "En debut de session, si un test_dev_en_cours est actif, l'agent doit rappeler au PO qu'un test est en attente et demander validation avant toute nouvelle modification de code.",
+        "Une fois le PO ayant teste et valide, deplacer le .md dans Test-Dev/Traite/ et mettre a jour PROJET.json / PROJET.md pour fermer le test-dev."
+      ],
+      "cycle_de_vie_statuts": [
+        "en_attente_po",
+        "teste_revele_bugs",
+        "valide"
+      ],
+      "consignation_backlog": {
+        "cle_projet_json": "backlog_test_dev",
+        "champs_obligatoires": ["id", "libelle", "description", "priorite", "statut", "tags"],
+        "tag_obligatoire": "test_dev",
+        "format_id": "td-NNN"
+      },
+      "grille_priorisation": {
+        "Critical": "Perte de donnees, faille de securite, crash bloquant au demarrage, corruption de base.",
+        "High": "Parcours critique casse mais contournable ou partiel.",
+        "Medium": "UX genante, ralentissement, warning recurrent, workaround simple existant.",
+        "Low": "Cosmetique, nice-to-have, documentation, optimisation mineure."
+      }
+    },
+    "audit_code": {
+      "bp_associee": "BP-18",
+      "consignation_backlog": {
+        "cle_projet_json": "backlog_audit_code",
+        "champs_obligatoires": ["id", "libelle", "description", "priorite", "statut", "tags"],
+        "tag_obligatoire": "audit_code",
+        "format_id": "ac-NNN",
+        "statuts": ["a_traiter", "corrige"]
+      },
+      "regles": [
+        "Reserve aux constats d'audit de code (revue complete ou ciblee), jamais aux retours de test manuel du PO (backlog_test_dev).",
+        "Priorites affectees selon la grille BP-12 et presentees au PO pour validation avant tout traitement.",
+        "Chaque constat reference la localisation dans le code et une piste de correction."
+      ]
+    },
+    "tests_et_cicd": {
+      "philosophie": [
+        "Un test qui echoue bloque le build.",
+        "Un bug corrige doit etre accompagne d'un test qui le reproduit.",
+        "Les tests vivent avec le code.",
+        "Les fichiers de test sont isoles dans un dossier dedie."
+      ],
+      "dossier_de_tests": "<DOSSIER_TEST>/",
+      "regles_organisation": [
+        "Le dossier de test reflete la structure de <DOSSIER_SOURCE>/ quand le langage le permet.",
+        "Les fichiers de test suffixent le module teste avec l'idiome du langage (Spec, Test, _test).",
+        "Les fixtures et helpers de test peuvent resider dans <DOSSIER_TEST>/fixtures/ ou <DOSSIER_TEST>/helpers/."
+      ],
+      "regle_or": "La suite de tests doit etre entierement verte avant toute commande de build (<COMMANDE_BUILD>, npm run build, cargo build, make, etc.).",
+      "types_de_tests": {
+        "unitaires": "Verifier une fonction ou un module en isolation.",
+        "integration": "Verifier l'assemblage de plusieurs modules incluant des I/O.",
+        "property_based": "Verifier une propriete invariante sur un grand nombre d'entrees aleatoires.",
+        "golden_snapshot": "Capturer une sortie de reference et detecter tout changement non explique.",
+        "smoke_e2e": "Verifier que l'application demarre et que les parcours critiques fonctionnent.",
+        "contrat_api": "Verifier la stabilite des interfaces publiques exposees a des consommateurs externes."
+      },
+      "creation_et_maintenance": [
+        "A chaque nouvelle feature : identifier les chemins critiques, ajouter des tests, suivre le cycle rouge/vert.",
+        "A chaque correction de bug : reproduire le bug dans un test, verifier l'echec avant correction, verifier le passage apres.",
+        "Avant un refactoring : s'assurer que la couverture est suffisante et proceder par petits pas."
+      ],
+      "cicd_local": {
+        "pipeline_minimale": ["tests", "build"],
+        "pipeline_complete": ["lint/format", "tests", "build", "smoke test", "tag", "release artifacts"],
+        "scripts_types": [
+          "<SCRIPT_BUILD_WRAPPER>.<EXT>",
+          "<SCRIPT_PRE_BUILD>.<EXT>",
+          "<SCRIPT_RELEASE>.<EXT>"
+        ],
+        "principe_generaliste": "Quel que soit le langage, le repo fournit un script local qui enchaine automatiquement tests puis build. Le release etend cette sequence avec des etapes optionnelles."
+      },
+      "anti_patterns": [
+        "Tests sans assertion significative.",
+        "Tests couples a l'environnement du developpeur.",
+        "Tests laisses en echec 'parce qu'on sait pourquoi'.",
+        "Tests commitant des donnees sensibles.",
+        "Tests jamais mis a jour apres evolution de spec.",
+        "Tests melanges au code source applicatif (hors convention idiomatique du langage)."
+      ],
+      "bonnes_pratiques_liees": [
+        "BP-13 Test rouge avant correction, test vert apres",
+        "BP-14 Build bloque si un test echoue",
+        "BP-15 Tests crees ou mis a jour en meme temps que la feature",
+        "BP-16 Pipeline de verification scriptisee"
+      ]
+    },
+    "verification_synchronisation_projet": {
+      "bp_associee": "BP-17",
+      "regle": "Double-lecture croisee PROJET.json et PROJET.md avant tout commit de suivi",
+      "champs_sensibles": ["focus_immediat", "backlog_test_dev", "backlog_audit_code", "test_dev_en_cours", "journal_des_sessions", "questions_ouvertes"],
+      "actions": [
+        "Relire les champs sensibles dans les deux documents.",
+        "S'assurer que statuts, dates, priorites et descriptions sont identiques.",
+        "Corriger tout ecart immediatement avant le commit.",
+        "Ne jamais committer PROJET.json sans verifier que PROJET.md reflete le meme etat."
+      ]
+    }
+  },
+  "journal_revisions": [
+    {
+      "date": "<DATE_ADAPTATION>",
+      "version": "1.0.0",
+      "resume": "Adaptation du template Methode V4 au projet <NOM_DU_PROJET>.",
+      "validation_po": true
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+original_name,source,reason_code,reason_detail,possible_parent_ingredient_id
+Coca-Cola®,PUBLIC,BRAND,"Marque déposée, intrant générique non requis : sucre, acide phosphorique, caféine couverts.",
+Pepsi®,PUBLIC,BRAND,Marque déposée.,
+Fanta®,PUBLIC,BRAND,Marque déposée.,
+Heinz Ketchup®,PUBLIC,BRAND,Marque commerciale ; ketchup générique conservé.,ING-COND-KETCHUP-000001
+Nutella®,PUBLIC,BRAND,Marque commerciale ; pâte de noisette générique non conservée (sucre majoritaire).,ING-TECH-BEURREDENOIS-000001
+Kinder Bueno®,PUBLIC,BRAND,Produit fini de marque.,
+Mars®,PUBLIC,BRAND,Produit fini de marque.,
+Snickers®,PUBLIC,BRAND,Produit fini de marque.,
+Bénénuts®,PUBLIC,BRAND,Marque commerciale.,
+Pizza Buitoni®,PUBLIC,BRAND,Plat préparé de marque.,
+Pizza Sodebo®,PUBLIC,BRAND,Plat préparé de marque.,
+Knorr® bouillon cube,PUBLIC,BRAND,Bouillon générique conservé séparément.,ING-TECH-BOUILLONDELG-000001
+Maggi®,PUBLIC,BRAND,Marque commerciale.,
+Tabasco® original,PUBLIC,BRAND,Marque commerciale ; sauce piment générique non créée (piment + vinaigre OK).,ING-COND-SAUCESRIRACH-000001
+Sriracha Huy Fong®,PUBLIC,BRAND,Marque ; sauce sriracha générique conservée.,ING-COND-SAUCESRIRACH-000001
+Caprice des Dieux®,PUBLIC,BRAND,Marque fromagère.,
+Apéricubes®,PUBLIC,BRAND,Produit fini.,
+Kiri®,PUBLIC,BRAND,Marque fromagère.,
+Philadelphia®,PUBLIC,BRAND,Marque fromagère.,
+Crème de cassis de Dijon (Marque),PUBLIC,BRAND,Marque commerciale.,
+Menu Big Mac®,PUBLIC,FINISHED_DISH,Menu de marque.,
+Salade César (préparée),PUBLIC,FINISHED_DISH,Plat composé fini.,
+Boeuf bourguignon (plat),PUBLIC,FINISHED_DISH,Plat composé ; les ingrédients sont conservés individuellement.,
+Pâtes carbonara (plat),PUBLIC,FINISHED_DISH,Plat composé fini.,
+Vin de marque Château YYY,PUBLIC,BRAND,Référence vinicole de marque.,ING-BEV-VINROUGE-000001
+Vin de marque Domaine ZZZ,PUBLIC,BRAND,Référence vinicole de marque.,ING-BEV-VINROUGE-000001
+Foie gras de la maison X,PUBLIC,BRAND,Référence charcutière de marque.,ING-ANIMAL-FOIEDEVOLAIL-000001
+Sac de farine 25kg,PUBLIC,SKU,Format d'emballage non significatif.,ING-TECH-FARINEDEBLTE-000001
+Sachet de sucre 1kg,PUBLIC,SKU,Format d'emballage non significatif.,ING-TECH-SUCREBLANC-000001
+Huile d'olive bio 1L marque X,PUBLIC,BRAND,Marque commerciale.,ING-TECH-HUILEDOLIVEV-000001
+Jus de pomme Andros®,PUBLIC,BRAND,Marque commerciale.,ING-BEV-JUSDEPOMME-000001
+Kombucha de marque,PUBLIC,BRAND,Référence de marque ; kombucha générique conservé.,ING-BEV-KOMBUCHA-000001
+Yaourt Danone nature,PUBLIC,BRAND,Marque commerciale.,ING-FERMENT-YAOURTNATURE-000001
+Beurre doux Président®,PUBLIC,BRAND,Marque commerciale ; beurre doux générique conservé.,ING-DAIRY-BEURREDOUX-000001
+Crème liquide Yoplait®,PUBLIC,BRAND,Marque commerciale ; crème entière générique conservée.,ING-DAIRY-CRMELIQUIDEE-000001
+Eau minérale Evian®,PUBLIC,BRAND,Marque commerciale.,ING-BEV-EAUMINRALE-000001
+Eau minérale Perrier®,PUBLIC,BRAND,Marque commerciale ; eau gazeuse générique conservée.,ING-BEV-EAUGAZEUSE-000001
+Lait demi-écrémé Lactel®,PUBLIC,BRAND,Marque commerciale ; lait demi-écrémé générique conservé.,ING-DAIRY-LAITDEMICRM-000001
+Amandes paquet 200g marque,PUBLIC,BRAND,Marque/emballage ; amande crue générique conservée.,ING-PLANT-AMANDE-000001
+Chocolat noir 70% Lindt®,PUBLIC,BRAND,Marque commerciale ; chocolat noir 70% générique conservé.,ING-TECH-CHOCOLATNOIR-000001
+Chocolat noir 70% Menier®,PUBLIC,BRAND,Marque commerciale.,ING-TECH-CHOCOLATNOIR-000001
+Sauce tomate Barilla®,PUBLIC,BRAND,Marque commerciale ; coulis de tomate générique conservé.,ING-FERMENT-COULISDETOMA-000001
+Pâtes Panzani®,PUBLIC,BRAND,Marque commerciale.,ING-TECH-FARINEDEBLDU-000001
+Levure SAF®,PUBLIC,BRAND,Marque ; levure boulangère sèche générique conservée.,ING-FERMENT-LEVUREBOULAN-000001
+Sucre Daddy®,PUBLIC,BRAND,Marque commerciale.,ING-TECH-SUCREBLANC-000001
+Edulcorant Canderel®,PUBLIC,BRAND,Marque ; choisir un édulcorant générique autorisé.,ING-TECH-SORBITOLE420-000001
+Piment d'Espelette AOP,PUBLIC,BRAND,AOP française ; valeur générique déjà couverte.,ING-PLANT-PIMENTDESPEL-000001
+Vin jaune du Jura (domaine),PUBLIC,BRAND,Référence ; vin jaune générique conservé.,ING-BEV-VINJAUNE-000001
+Jambon de Parme AOP,PUBLIC,BRAND,AOP ; jambon cru générique non couvert : retirer.,
+Pain de mie Harrys®,PUBLIC,BRAND,Marque commerciale.,ING-MIX-PTEPAIN-000001
+Mozzarella di Bufala AOP,PUBLIC,BRAND,AOP italienne ; mozzarella générique conservée.,ING-DAIRY-MOZZARELLA-000001
+Feta AOP grecque,PUBLIC,BRAND,AOP ; feta générique conservée.,ING-DAIRY-FETA-000001
+Mascarpone Galbani®,PUBLIC,BRAND,Marque commerciale ; mascarpone générique conservé.,ING-DAIRY-MASCARPONE-000001
+Sauce soja Kikkoman®,PUBLIC,BRAND,Marque commerciale ; sauce soja générique conservée.,ING-COND-SAUCESOJA-000001
+Pâte de curry Panang (marque),PUBLIC,BRAND,Référence de marque ; pâte de curry rouge générique conservée.,ING-COND-PTEDECURRYRO-000001
+Sel de Maldon®,PUBLIC,BRAND,Marque commerciale ; fleur de sel générique conservée.,ING-TECH-FLEURDESEL-000001
+Fleur de sel de Camargue marque,PUBLIC,BRAND,Référence ; fleur de sel générique conservée.,ING-TECH-FLEURDESEL-000001
+Sucre Mascobado (Sucre de palme),PUBLIC,DUPLICATE,Cassonade couvrante conservée.,ING-TECH-CASSONADE-000001
+Curry japonais en sachet,PUBLIC,BRAND,Référence ; curry en poudre générique conservé.,ING-PLANT-CURRYENPOUDR-000001
+Tahini de marque,PUBLIC,BRAND,Marque ; tahini générique conservé.,ING-TECH-TAHINI-000001
+Huile d'argan marque,PUBLIC,BRAND,Marque.,
+Wasabi en tube marque,PUBLIC,BRAND,Référence ; wasabi générique non couvert.,
+Tabasco vert marque,PUBLIC,BRAND,Référence ; sauce piment générique non couverte.,
+Pâte de piment Lee Kum Kee®,PUBLIC,BRAND,Marque commerciale.,
+Sirop de grenadine Teisseire®,PUBLIC,BRAND,Marque ; sirop de grenadine générique non couvert.,
+Limonade artisan. marque,PUBLIC,BRAND,Référence.,ING-BEV-EAUGAZEUSE-000001
+Vin de paille d'Arbois (marque),PUBLIC,BRAND,Référence.,ING-BEV-VINBLANCMOEL-000001
+Moutarde de Bénichon (marque),PUBLIC,BRAND,Référence ; moutarde à l'ancienne conservée.,ING-COND-MOUTARDELANC-000001
+Crème de marrons (marque),PUBLIC,BRAND,Référence ; non couverte.,
+Pain d'épices du commerce,PUBLIC,FINISHED_DISH,Produit fini.,
+Brioche Vendéenne (marque),PUBLIC,BRAND,Référence ; pâte levée générique conservée.,ING-MIX-PTELEVE-000001

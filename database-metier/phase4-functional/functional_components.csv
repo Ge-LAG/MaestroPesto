@@ -1,0 +1,41 @@
+component_id,canonical_name,category,source_organism,role,ingredient_class,chemistry,thermal_behavior,solubility,source_refs,license_source,confidence
+PROT_CASEINE,Caséines,Protéines,Bos taurus,principal,ingrédient,polaire,iso-pH 4.6,soluble,LIT:Damodaran,literature,0.90
+PROT_WHEY,"Protéines sériques (lactalbumine, lactoglobuline)",Protéines,Bos taurus,principal,ingrédient,polaire,engelant,soluble,LIT:Damodaran,literature,0.90
+PROT_OVALB,Ovalbumine,Protéines,Gallus gallus,principal,ingrédient,globulaire,engelant,soluble,LIT:Damodaran,literature,0.95
+PROT_SOY,"Protéines de soja (glycinine, β-conglycinine)",Protéines,Glycine max,principal,ingrédient,globulaire,engelant,soluble,LIT:Damodaran,literature,0.90
+PROT_GLU,Gluten (gliadine + gluténine),Protéines,Triticum aestivum,principal,ingrédient,amphiphile,engelant,insoluble,LIT:Shewry,literature,0.95
+PROT_GEL,Gélatine,Protéines,Bos taurus/Sus scrofa,principal,ingrédient,polaire,réversible <35°C,soluble à chaud,LIT:GME,literature,0.95
+PROT_PEA,Protéines de pois,Protéines,Pisum sativum,principal,ingrédient,globulaire,engelant,soluble,LIT:Townshend,literature,0.85
+POLY_AMIDON,Amidon natif,Polysaccharides,"Multi (maïs, pomme de terre, blé)",principal,ingrédient,polaire,semi-cristallin,insoluble à froid,LIT:BeMiller,literature,0.95
+POLY_AMYLOSE,Amylose,Polysaccharides,Multi,fraction amidon,ingrédient,linéaire,lixiviation 60-70°C,soluble à chaud,LIT:BeMiller,literature,0.95
+POLY_AMYLOPEC,Amylopectine,Polysaccharides,Multi,fraction amidon,ingrédient,ramifié,gonflement <60°C,colloïde,LIT:BeMiller,literature,0.95
+POLY_PECTINE,Pectines,Polysaccharides,"Citrus, pomme",principal,ingrédient,anionique,gel HM/LM calcium,soluble,LIT:Sriamornsak,literature,0.95
+POLY_PEC_HM,Pectine haut méthoxyle (HM),Polysaccharides,Citrus,fraction pectine,ingrédient,anionique,gel sucre+acide,soluble,LIT:Sriamornsak,literature,0.95
+POLY_PEC_LM,Pectine bas méthoxyle (LM),Polysaccharides,Apple pomace,fraction pectine,ingrédient,anionique,gel calcium,soluble,LIT:Sriamornsak,literature,0.95
+POLY_AGAR,Agar-agar,Polysaccharides,Gelidium,principal,ingrédient,neutre,thermo-irréversible ~40°C,soluble à chaud,LIT:Phillips,literature,0.95
+POLY_CARRK,Carraghénane κ (kappa),Polysaccharides,Kappaphycus,principal,ingrédient,anionique,gel K+,soluble à chaud,LIT:Phillips,literature,0.95
+POLY_CARRI,Carraghénane ι (iota),Polysaccharides,Eucheuma,principal,ingrédient,anionique,gel Ca2+,soluble à chaud,LIT:Phillips,literature,0.95
+POLY_CARRL,Carraghénane λ (lambda),Polysaccharides,Gigartina,principal,ingrédient,anionique,"non gélifiant, épaississant",soluble à froid,LIT:Phillips,literature,0.95
+POLY_ALG,Alginate,Polysaccharides,Phaeophyceae,principal,ingrédient,anionique,gel Ca2+ (diffusion),soluble à froid,LIT:Phillips,literature,0.95
+POLY_XANTHAN,Gomme xanthane,Polysaccharides,Xanthomonas,principal,ingrédient,anionique,stable pH et T,soluble,LIT:GME,literature,0.95
+POLY_GUAR,Gomme guar,Polysaccharides,Cyamopsis,principal,ingrédient,neutre,synergie xanthane,soluble,LIT:GME,literature,0.95
+POLY_LBG,Gomme de caroube (LBG),Polysaccharides,Ceratonia,principal,ingrédient,neutre,"synergie xanthane, gel",soluble à chaud,LIT:GME,literature,0.95
+POLY_GACACIA,Gomme arabique,Polysaccharides,Acacia,principal,ingrédient,polaire,émulsifiant filmogène,soluble,LIT:GME,literature,0.95
+POLY_CELL,Cellulose (E460),Polysaccharides,Multi,principal,ingrédient,neutre,"non gélifiant, fibre insoluble",insoluble,LIT:BeMiller,literature,0.90
+POLY_HEMICELL,Hémicelluloses,Polysaccharides,Multi,principal,ingrédient,mixte,fibres solubles/insolubles,variables,LIT:GME,literature,0.85
+POLY_INULIN,Inuline,Polysaccharides,Cichorium,principal,ingrédient,polaire,"FOS, prébiotique",soluble,LIT:Niness,literature,0.90
+LIP_TRIGLY,Triglycérides,Lipides,Multi,principal,ingrédient,apolaire,"fusion, polymorphisme",insoluble,LIT:O'Brien,literature,0.95
+LIP_SAT,Acides gras saturés,Lipides,Multi,fraction,ingrédient,apolaire,MP élevés,insoluble,LIT:O'Brien,literature,0.95
+LIP_INS,Acides gras insaturés,Lipides,Multi,fraction,ingrédient,apolaire,"MP bas, oxydables",insoluble,LIT:O'Brien,literature,0.95
+LIP_PHOSPH,Phospholipides (lécithine),Lipides,Glycine max,tensioactif,ingrédient,amphiphile,HLD <0,insoluble / émulsifiant,LIT:McClements,literature,0.95
+LIP_MDG,Mono-/diglycérides (E471),Lipides,Multi,tensioactif,ingrédient,amphiphile,émulsifiant HLB 2-6,lipophile,LIT:McClements,literature,0.90
+SM_SALT,Sel (NaCl),Petites molécules,NaCl,ingrédient,ingrédient,ionique,force ionique,soluble,LIT:LWT,literature,0.95
+SM_ACET,Acide acétique,Petites molécules,Fermentation,ingrédient,ingrédient,acide faible,pKa 4.76,soluble,LIT:LWT,literature,0.95
+SM_CIT,Acide citrique,Petites molécules,Citrus,ingrédient,ingrédient,acide triprotique,pKa1 3.13,soluble,LIT:LWT,literature,0.95
+SM_GLU,Acide glutamique / glutamate,Petites molécules,Multi,ingrédient,ingrédient,zwitterion,umami,soluble,LIT:Kuninaka,literature,0.95
+SM_5GMP,5'-GMP,Petites molécules,Levure,ingrédient,ingrédient,nucléotide,synergie umami,soluble,LIT:Kuninaka,literature,0.95
+SM_GLU_AMINO_ACID,Glutamine,Petites molécules,Multi,ingrédient,ingrédient,polaire,précurseur glutamate,soluble,LIT:LWT,literature,0.90
+SM_CA,Calcium,Minéraux,Multi,ion,ingrédient,cation divalent,"coagulation, gel LM",soluble sous formes salines,LIT:LWT,literature,0.95
+SM_SUCROSE,Saccharose,Petites molécules,Saccharum,ingrédient,ingrédient,polaire,Tgel pectine HM,très soluble,LIT:LWT,literature,0.95
+SM_FRUCTOSE,Fructose,Petites molécules,Multi,ingrédient,ingrédient,polaire,caramel 110°C,très soluble,LIT:LWT,literature,0.95
+SM_GLU_MONO,Glucose,Petites molécules,Multi,ingrédient,ingrédient,polaire,caramel 160°C,très soluble,LIT:LWT,literature,0.95

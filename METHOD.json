@@ -1,0 +1,211 @@
+{
+  "schema_version": "1.0.0",
+  "version_methode": "1.0.0",
+  "document_id": "method-maestropesto",
+  "document_type": "methode_locale_projet",
+  "langue": "fr",
+  "source_markdown": "METHOD.md",
+  "objectif": "Definir la methode de travail locale du projet MaestroPesto (Flutter, local-first), heritee du template V5 et adaptee par Gui (Ge-LAG).",
+  "derniere_mise_a_jour_source": "2026-08-22",
+  "regles_absolues": {
+    "description": "Couches anti-derive inchangeables (A.0). Toute evolution passe par le protocole A.8.",
+    "liste": [
+      "R-01: pas de push vers origin sans confirmation explicite du PO dans la session courante.",
+      "R-02: pas de mutation Git destructrice (reset --hard, rebase d'historique publie, push --force, clean -fd) sans validation PO.",
+      "R-03: pas de secret, donnee reelle, ou fichier sensible dechiffre au commit.",
+      "R-04: pas de build si la suite de tests n'est pas verte juste avant.",
+      "R-05: pas de commit de PROJET.json sans PROJET.md strictement aligne, et inversement.",
+      "R-06: pas de modification de METHOD.md / METHOD.json sans validation PO (protocole A.8).",
+      "R-07: pas de tache 'terminee' sans verifications executees ou impossibilite signalee.",
+      "R-08: ne jamais inventer un etat, un resultat de test ou un hash : tout fait rapporte doit avoir ete observe.",
+      "R-09: ne jamais supprimer ou reecrire un document de suivi hors des mises a jour incrementales prevues.",
+      "R-10: en cas de contradiction, ordre de precedence : PO > METHOD > PROJET.json > PROJET.md > autres docs ; si non tranche, s'arreter et demander."
+    ],
+    "ordre_de_precedence": [
+      "Instruction explicite du PO dans la session courante",
+      "METHOD.json / METHOD.md (regles absolues d'abord)",
+      "PROJET.json",
+      "PROJET.md",
+      "ARCHITECTURE.md et autres documents"
+    ],
+    "regle_ecart": "Un ecart detecte entre deux niveaux doit etre signale au PO et consigne, jamais resolu silencieusement.",
+    "regle_extension_conditionnelle": "Une extension conditionnelle eventuellement active (cf. A.9 de METHOD.md) se place apres tous ces niveaux et ne peut jamais primer sur eux."
+  },
+  "politique_de_reference": {
+    "reference_machine_active_dans_un_projet": "METHOD.json",
+    "reference_humaine_compagnon_dans_un_projet": "METHOD.md",
+    "reference_bootstrap_humaine_legere_dans_un_projet": "METHOD-BOOTSTRAP.md",
+    "source_of_truth_projet": "PROJET.json",
+    "miroir_humain_projet": "PROJET.md",
+    "index_documentaire": "INDEX-docs.md",
+    "extension_conditionnelle": "safeguard-mistral/ (cf. A.9, jamais copiee par defaut)",
+    "regle_bootstrap_lecture": "Au demarrage d'une session, lire METHOD-BOOTSTRAP.md puis PROJET.json, puis METHOD.md si un detail manque."
+  },
+  "couche_machine_associee": {
+    "par_projet": {
+      "projet": "MaestroPesto",
+      "stack": "Flutter (Dart ^3.13.1), cibles Windows / macOS / Linux / Android / iOS, SQLite (cible via Drift), donnees Ciqual XML",
+      "manifeste": "pubspec.yaml"
+    }
+  },
+  "placeholders_obligatoires": {
+    "description": "Placeholders resolus lors de l'adaptation au projet MaestroPesto.",
+    "liste": {
+      "<NOM_DU_PROJET>": "MaestroPesto",
+      "<VERSION_METHODE>": "1.0.0",
+      "<DATE_ADAPTATION>": "2026-08-22",
+      "<STACK_TECHNIQUE>": "Flutter (Dart ^3.13.1), cibles Windows / macOS / Linux / Android / iOS, SQLite (cible via Drift), donnees Ciqual XML",
+      "<LANGAGE_PRINCIPAL>": "Dart",
+      "<DOSSIER_SOURCE>": "lib/",
+      "<DOSSIER_TEST>": "test/",
+      "<COMMANDE_BUILD>": "flutter build",
+      "<COMMANDE_TEST>": "flutter test",
+      "<DOSSIER_RELEASE>": "build/",
+      "<BRANCHE_PRINCIPALE>": "main",
+      "<ORIGIN>": "origin",
+      "<MANIFESTE_BUILD>": "pubspec.yaml",
+      "<NOM_ARTEFACT>": "maestropesto",
+      "<ROADMAP>": "ARCHITECTURE",
+      "<DOSSIER_REFERENCE>": "Architecture",
+      "<POINT_ENTREE_TEST>": "widget_test",
+      "<EXT>": ".dart",
+      "<SCRIPT_BUILD_WRAPPER>": "(a creer)",
+      "<SCRIPT_PRE_BUILD>": "(a creer)",
+      "<SCRIPT_RELEASE>": "(a creer)",
+      "<STACK_SECURITE>": "Flutter SDK, dependances pubspec.lock, assets Ciqual XML",
+      "<BASE_DONNEES_1>": "ciqual/ (sources XML Ciqual 2025-11-03)",
+      "<BASE_DONNEES_2>": "database/schema.sql (schema SQLite cible, a initialiser via Drift)",
+      "<EXTENSION_BACKUP>": ".sql"
+    }
+  },
+  "stable_reference": {
+    "bootstrap_session": "Voir METHOD.md section A.1 et METHOD-BOOTSTRAP.md.",
+    "conduite_en_cas_de_doute": "Voir METHOD.md section A.7.",
+    "protocole_revision_methode": "Voir METHOD.md section A.8 (proposition -> validation PO -> application -> versionnage -> journalisation -> commit dedie).",
+    "workflow_git": "Voir METHOD.md section B.6.",
+    "communication_humain_ia": "Voir METHOD.md section B.6.",
+    "qualite_du_code": "Voir METHOD.md section B.7.",
+    "extension_conditionnelle_safeguard_mistral": "Voir METHOD.md section A.9.",
+    "checklist_pre_commit": "Voir METHOD.md Annexe 1."
+  },
+  "project_specific_extension": {
+    "projet": {
+      "nom": "MaestroPesto",
+      "description_courte": "Application Flutter local-first de gestion de recettes de cuisine.",
+      "git_identity": "Ge-LAG",
+      "remote_url": "https://github.com/a-langlais/MaestroPesto"
+    },
+    "architecture": {
+      "stack": "Flutter (Dart ^3.13.1), cibles Windows / macOS / Linux / Android / iOS",
+      "langage_principal": "Dart",
+      "dossier_source": "lib/",
+      "dossier_test": "test/",
+      "dossier_release": "build/",
+      "cible_distribution": "Flutter Windows (POC), desktop/mobile ensuite",
+      "persistance_cible": "SQLite via Drift (cf. database/schema.sql)",
+      "donnees_metier": "Ciqual 2025-11-03 (XML)"
+    },
+    "securite": {
+      "stack_securite": "Flutter SDK, dependances pubspec.lock, assets Ciqual XML",
+      "posture": "Application locale; pas de backend; pas de secrets au commit (R-03).",
+      "donnees_sensibles": "Aucune donnee utilisateur chiffree au commit; logs sans chemin de fichier utilisateur (B.2-6)."
+    },
+    "conventions_de_code": {
+      "formatage": "dart format (defaut Flutter)",
+      "lint": "flutter analyze",
+      "style": "Suivre analysis_options.yaml; un fichier = une responsabilite; separe lib/features/<domaine>/{data,domain,presentation}.",
+      "tests": "flutter test; coverage minimal sur la logique pure (recipe, nutrition); widgets cles testes."
+    },
+    "variables_critiques": [
+      "ciqual/ (sources XML Ciqual)",
+      "database/schema.sql (schema SQLite cible)",
+      "pubspec.yaml (versions Dart et dependances Flutter)"
+    ],
+    "bonnes_pratiques_identifiees": [
+      "BP-08: PROTOCOLE A.8 STRICT pour toute revision METHOD.",
+      "BP-17: double-lecture PROJET.json <-> PROJET.md avant commit de suivi.",
+      "BP-18: backlog_audit_code distinct du backlog_test_dev.",
+      "BP-19: signaler tout reliquat non commite PROJET/METHOD/INDEX au bootstrap.",
+      "BP-20: METHOD protege par A.8.",
+      "BP-21: BRANCHE PR OBLIGATOIRE (override documente) - voir politique_de_branche.",
+      "BP-22: FORMAT COMMIT STRICT (theme + 2/3 mots) - voir politique_de_branche.",
+      "BP-23: BONNES PRATIQUES DEV ACTUELLES - voir politique_de_branche."
+    ],
+    "politique_de_branche": {
+      "override": true,
+      "mode": "branche_PR_obligatoire",
+      "regles": [
+        "Aucune modification directe sur main (ni commit, ni push, ni reset).",
+        "Toute evolution (feature, fix, doc, refactor, chore, method) ouvre une branche dediee au format : Ge-LAG/<theme>-<resume-2-3-mots> (prefixe obligatoire Ge-LAG/, slug en kebab-case, 2 a 3 mots significatifs).",
+        "La branche est poussee vers origin et la fusion dans main passe par une Pull Request (revue PO + checks CI au vert).",
+        "Aucun squash automatique qui masquerait le detail des commits : les commits restent visibles apres merge."
+      ],
+      "format_branche_exemples": [
+        "Ge-LAG/recipe-search",
+        "Ge-LAG/ciqual-import",
+        "Ge-LAG/method-bootstrap-v5-doc"
+      ],
+      "format_commit_exemples": [
+        "ui: recipe detail layout",
+        "backend: ciqual xml parser",
+        "db: drift schema initial",
+        "test: recipe search filter",
+        "docs: readme quickstart",
+        "build: pubspec bump 1.0.0",
+        "method: bootstrap v5 doc",
+        "chore: clean dead imports",
+        "fix: divide-by-zero guard"
+      ],
+      "format_commit_regles": [
+        "Theme au singulier (ex: ui, ux, backend, db, test, docs, build, method, chore, fix).",
+        "Separateur entre theme et resume : deux-points puis espace.",
+        "Resume : 2 a 3 mots significatifs, en minuscules, sans point final.",
+        "1 commit = 1 preoccupation atomique (1 feature, 1 fix, 1 refactor, 1 doc, 1 chore).",
+        "Pas de commit fourre-tout ; pas de WIP commite sans entente PO.",
+        "Ne jamais committer de secret, token, cle, dump ou donnee utilisateur reelle (R-03)."
+      ],
+      "bonnes_pratiques_dev": [
+        "Revue de code obligatoire avant merge : au moins le PO valide la PR.",
+        "Tests automatises verts avant tout build ou merge (R-04).",
+        "Anti-regression : tout fix de bug est accompagne d'un test (BP courant).",
+        "CI/CD : prebuild-checks.sh / release.sh a creer des qu'un pipeline local est necessaire (anti-pattern : scripts inutilises).",
+        "DRY, separation logique/effets de bord, lecture facile du code sensible.",
+        "Logs sans chemins utilisateur ni identifiants metier (B.2-6).",
+        "Dependances : flutter pub outdated au minimum une fois par release ; pas de dependance ajoutee sans justification documentee.",
+        "Versioning semver dans pubspec.yaml ; bump documente dans PROJET.json a chaque release.",
+        "Pas de merge --no-ff masque : historique lineaire lisible.",
+        "Pas de rebase d'historique publie ; pas de force-push (R-02)."
+      ],
+      "motifs": "Le PO (Ge-LAG) delegue 100% du code a des IA de dev et veut garder une trace explicite, branche par branche, de l'auteur et du sujet. Le prefixe Ge-LAG et le format de commit rendent l'historique lisible pour la revue PO et evitent les merges silencieux sur main."
+    },
+    "cycle_de_release": {
+      "versionnage": "SemVer (MAJOR.MINOR.PATCH) dans pubspec.yaml (champ version).",
+      "branche_release": "Pas de branche de release dediee au bootstrap ; ouverture envisageable si multi-version parallele.",
+      "tag": "Tag Git a la publication ; cree par le PO apres validation."
+    },
+    "test_dev": {
+      "dossier": "Test-Dev/ (a creer avec README.md + sous-dossier Traite/)",
+      "regle": "Aucun fichier de feature ne peut etre declare 'termine' sans test-dev traite ou impossibilite documentee (BP-09, R-07)."
+    },
+    "audit_code": {
+      "dossier": "PROJET.json champ backlog_audit_code (ac-NNN)",
+      "regle": "Toute remarque d'audit est consignee avant d'etre resolue ; jamais melangee au backlog_test_dev (BP-18)."
+    },
+    "tests_et_cicd": {
+      "commande_test": "flutter test",
+      "commande_build": "flutter build",
+      "scripts_locaux": "A creer (scripts/prebuild-checks.sh et scripts/release.sh sont references par INDEX-docs.md mais non crees au bootstrap ; respect de l'anti-pattern 'scripts inutilises')."
+    },
+    "verification_synchronisation_projet": {
+      "regle_BP_17": "Avant tout commit touchant PROJET.json ou PROJET.md : relire les deux, verifier focus_immediat, prochaines_etapes, journal_des_sessions, test_dev_en_cours, backlog_test_dev, backlog_audit_code, questions_ouvertes."
+    }
+  },
+  "journal_revisions": [
+    {
+      "date": "2026-08-22",
+      "version": "1.0.0",
+      "resume": "Adaptation du template Methode V5 au projet MaestroPesto (Flutter, local-first). Ajout des regles locales BP-21 branche PR obligatoire avec prefixe Ge-LAG/, BP-22 format de commit strict (theme + 2-3 mots), BP-23 bonnes pratiques dev actuelles. Aucun script CI/CD cree au bootstrap (anti-pattern). Override politique_de_branche documente (validation PO implicite par la demande initiale).",
+      "validation_po": true
+    }
+  ]
+}

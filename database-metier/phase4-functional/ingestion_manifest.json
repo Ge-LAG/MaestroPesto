@@ -1,0 +1,30 @@
+{
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-22",
+  "row_count": {
+    "functional_components": 40,
+    "functional_ingredients": 18,
+    "process_operations": 38,
+    "interaction_rules": 16,
+    "experimental_validation_cases": 10
+  },
+  "deliverables": [
+    "functional_components.csv",
+    "functional_ingredients.csv",
+    "process_operations.csv",
+    "interaction_rules.csv",
+    "experimental_validation_cases.csv",
+    "functional_schema.md",
+    "functional_rule_engine_spec.md",
+    "functional_confidence_method.md",
+    "functional_coverage_report.md",
+    "qa_report.md"
+  ],
+  "policy": {
+    "extrapolation_explicit": true,
+    "out_of_domain_flag": true,
+    "no_extrapolation_outside_domain": true,
+    "order_constraints_modeled": true
+  }
+}
