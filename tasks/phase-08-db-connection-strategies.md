@@ -26,7 +26,10 @@ SQLite sont reportés au Lot B, les tests fonctionnels au Lot C.
 ## 2. Dépendances ajoutées à `pubspec.yaml`
 
 Versions vérifiées le 2026-08-22 (API pub.dev + résolution réelle sur Dart 3.13.1
-dans un sandbox Dart pur `/tmp/opencode/drift-sandbox` — preuve R-08, voir §7).
+dans un sandbox Dart pur — preuve R-08, voir §7). Le sandbox a été déplacé de
+`/tmp/opencode/drift-sandbox` vers `/workspace/.opencode-sandbox` en cours de
+lot : `/tmp` est monté `noexec` et empêche l'exécution des snapshots AOT et du
+chargement de libsqlite3 (impossibilité contournée, documentée au rapport).
 
 | Package | Version | Rôle / justification |
 |---|---|---|
@@ -141,11 +144,16 @@ d'événements n'est écrit. Première version testable de sync = snapshot
   `flutter test` et `flutter analyze` impossibles (impossibilité documentée).
 - Lot A = schéma uniquement : **aucun test fonctionnel requis** (les tests
   arrivent avec les loaders Lot B ; `dart test` sera utilisé pour la logique pure).
-- Preuve réelle effectuée : sandbox Dart pur `/tmp/opencode/drift-sandbox`
-  (drift 2.34.3 + drift_dev 2.34.5 + build_runner 2.16.0) où le schéma a été
-  copié, **généré par build_runner** (les `.g.dart` produits ne sont PAS
-  commités — génération côté Gui prévue par le brief) puis **analysé sans
-  erreur** par `dart analyze`. Sorties complètes dans le rapport de fin de lot.
+- Preuve réelle effectuée : sandbox Dart pur (drift 2.34.3 + drift_dev 2.34.5 +
+  build_runner 2.16.0, `--force-jit` car AOT non exécutable sur tmpfs noexec)
+  où le schéma a été copié, **généré par build_runner** (les `.g.dart` produits
+  ne sont PAS commités — génération côté Gui prévue par le brief), **analysé
+  sans erreur** par `dart analyze` (`No issues found!`), puis **installé dans
+  un vrai SQLite in-memory** via Drift + libsqlite3 système : les 17
+  `CREATE TABLE` générés s'exécutent tous sans erreur et le SQL produit a été
+  comparé ligne à ligne à `database/schema.sql` (DEFAULT, UNIQUE, CHECK `kind`,
+  FK `ON DELETE CASCADE`, `value_per_100g` : conformes). Sorties complètes dans
+  le rapport de fin de lot.
 - `dart analyze lib/` dans le repo : bloqué sans `flutter pub get` (sortie
   réelle documentée dans le rapport).
 
