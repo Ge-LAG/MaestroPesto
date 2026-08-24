@@ -114,6 +114,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       ingredients: List<RecipeIngredient>.from(recipe.ingredients),
       steps: List<String>.from(recipe.steps),
       tags: List<String>.from(recipe.tags),
+      images: List<RecipeImage>.from(recipe.images),
     );
 
     setState(() {
@@ -174,6 +175,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
         fiber: 0,
         salt: 0,
       ),
+      images: const [],
     );
   }
 

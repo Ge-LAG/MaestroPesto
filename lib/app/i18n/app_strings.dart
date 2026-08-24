@@ -21,19 +21,20 @@ class AppStrings {
       'Crée une première recette ou ajuste les filtres du classeur.';
 
   String get exportPdfTodo => 'Export PDF à brancher';
+  String get settingsTodo => 'Paramètres à brancher';
   String get exportAction => 'Exporter';
+  String get settingsAction => 'Paramètres';
   String get deleteAction => 'Supprimer';
   String get duplicateAction => 'Dupliquer';
   String duplicateRecipeTitle(String title) => '$title copie';
   String get editAction => 'Modifier';
   String get ingredients => 'Ingrédients';
+  String get images => 'Images';
   String get preparation => 'Préparation';
   String get overview => 'Vue d’ensemble';
-  String get sources => 'Sources';
   String ingredientCount(int count) =>
       '$count ingrédient${count > 1 ? 's' : ''}';
   String stepCount(int count) => '$count étape${count > 1 ? 's' : ''}';
-  String sourceCount(String source, int count) => '$source · $count';
   String get ciqual => 'Ciqual';
   String get sourceRecipe => 'Recette';
   String get sourceFree => 'Libre';
@@ -66,6 +67,10 @@ class AppStrings {
   String get quantityField => 'Quantité';
   String get ingredientField => 'Ingrédient';
   String get sourceField => 'Source';
+  String get addImage => 'Ajouter une photo';
+  String get choosePhoto => 'Choisir une photo';
+  String get imageLabelField => 'Libellé photo';
+  String get imagePathField => 'Chemin de la photo';
   String get addStep => 'Ajouter une étape';
   String get stepField => 'Étape';
   String get nutritionPerServing => 'Nutrition par portion';

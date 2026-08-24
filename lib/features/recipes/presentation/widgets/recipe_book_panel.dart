@@ -128,7 +128,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
                             ),
                           );
                         },
-                        separatorBuilder: (_, __) => const SizedBox(width: 12),
+                        separatorBuilder: (_, _) => const SizedBox(width: 12),
                         itemCount: widget.recipes.length,
                       ),
               )
@@ -155,7 +155,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
                                       widget.onRecipeSelected(recipe.id),
                                 );
                         },
-                        separatorBuilder: (_, __) => SizedBox(
+                        separatorBuilder: (_, _) => SizedBox(
                           height: viewMode == RecipeBookViewMode.card ? 12 : 8,
                         ),
                         itemCount: widget.recipes.length,
@@ -371,6 +371,16 @@ class _BookHeader extends StatelessWidget {
             ],
           ),
         ),
+        IconButton.outlined(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(context.strings.settingsTodo)),
+            );
+          },
+          icon: const Icon(Icons.settings_outlined),
+          tooltip: context.strings.settingsAction,
+        ),
+        const SizedBox(width: 8),
         IconButton.filled(
           onPressed: onCreateRecipe,
           icon: const Icon(Icons.add),

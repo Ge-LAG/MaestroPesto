@@ -4,8 +4,7 @@ const demoRecipes = <Recipe>[
   Recipe(
     id: 'pesto',
     title: 'Pesto maison',
-    description:
-        'Une base dense et parfumée pour accompagner des pâtes, des légumes rôtis ou une soupe froide.',
+    description: 'Une base dense et parfumée pour accompagner des pâtes, des légumes rôtis ou une soupe froide.',
     tags: ['sauce', 'végétarien', 'rapide'],
     servings: 6,
     prepMinutes: 12,
@@ -45,12 +44,12 @@ const demoRecipes = <Recipe>[
       fiber: 1.0,
       salt: 0.14,
     ),
+    images: [],
   ),
   Recipe(
     id: 'pasta-pesto',
     title: 'Pâtes au pesto',
-    description:
-        'Une fiche composée qui utilise le pesto maison comme ingrédient réutilisable.',
+    description: 'Une fiche composée qui utilise le pesto maison comme ingrédient réutilisable.',
     tags: ['plat', 'végétarien'],
     servings: 2,
     prepMinutes: 5,
@@ -85,12 +84,12 @@ const demoRecipes = <Recipe>[
       fiber: 3.0,
       salt: 0.13,
     ),
+    images: [],
   ),
   Recipe(
     id: 'tomato-salad',
     title: 'Salade de tomates',
-    description:
-        'Une recette simple pour tester les tags, les ingrédients libres et la lecture rapide.',
+    description: 'Une recette simple pour tester les tags, les ingrédients libres et la lecture rapide.',
     tags: ['entrée', 'été', 'rapide'],
     servings: 4,
     prepMinutes: 8,
@@ -125,5 +124,6 @@ const demoRecipes = <Recipe>[
       fiber: 1.6,
       salt: 0.51,
     ),
+    images: [],
   ),
 ];

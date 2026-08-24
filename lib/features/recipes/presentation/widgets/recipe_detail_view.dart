@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
+import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
 
 class RecipeDetailView extends StatelessWidget {
@@ -143,7 +144,12 @@ class _RecipeOverviewPanel extends StatelessWidget {
               onDuplicate: onDuplicate,
               onDelete: onDelete,
             ),
-            const SizedBox(height: 18),
+            if (recipe.images.isNotEmpty) ...[
+              const SizedBox(height: 18),
+              _RecipeImageGallery(recipe: recipe),
+              const SizedBox(height: 20),
+            ] else
+              const SizedBox(height: 18),
             Text(
               recipe.title,
               style: Theme.of(context).textTheme.displaySmall
@@ -184,8 +190,81 @@ class _RecipeOverviewPanel extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 18),
-            _SourceSummary(recipe: recipe),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RecipeImageGallery extends StatelessWidget {
+  const _RecipeImageGallery({required this.recipe});
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 170,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: recipe.images.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final image = recipe.images[index];
+          return SizedBox(
+            width: index == 0 ? 280 : 210,
+            child: _RecipeImageTile(image: image),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _RecipeImageTile extends StatelessWidget {
+  const _RecipeImageTile({required this.image});
+
+  final RecipeImage image;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: buildRecipePhoto(image.path, fit: BoxFit.cover),
+            ),
+            const Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.transparent, Color(0x99000000)],
+                    stops: [0.46, 1],
+                  ),
+                ),
+              ),
+            ),
+            if (image.label.trim().isNotEmpty)
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 14,
+                child: Text(
+                  image.label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -268,87 +347,6 @@ class _RecipeToolbar extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class _SourceSummary extends StatelessWidget {
-  const _SourceSummary({required this.recipe});
-
-  final Recipe recipe;
-
-  @override
-  Widget build(BuildContext context) {
-    final counts = <IngredientSource, int>{
-      IngredientSource.ciqual: 0,
-      IngredientSource.recipe: 0,
-      IngredientSource.free: 0,
-    };
-    for (final ingredient in recipe.ingredients) {
-      counts[ingredient.source] = (counts[ingredient.source] ?? 0) + 1;
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.strings.sources,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: const Color(0xFF4E5349),
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final entry in counts.entries)
-              if (entry.value > 0)
-                _SourceCountBadge(
-                  label: context.strings.sourceCount(
-                    _sourceLabel(context, entry.key),
-                    entry.value,
-                  ),
-                ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-String _sourceLabel(BuildContext context, IngredientSource source) {
-  return switch (source) {
-    IngredientSource.ciqual => context.strings.ciqual,
-    IngredientSource.recipe => context.strings.sourceRecipe,
-    IngredientSource.free => context.strings.sourceFree,
-  };
-}
-
-class _SourceCountBadge extends StatelessWidget {
-  const _SourceCountBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF4F0E7),
-        border: Border.all(color: const Color(0xFFE2D6BF)),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: const Color(0xFF554B37),
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ),
     );
   }
 }
@@ -438,15 +436,9 @@ class _IngredientRow extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      ingredient.quantity,
-                      style: const TextStyle(fontWeight: FontWeight.w900),
-                    ),
-                    const SizedBox(width: 8),
-                    _SourceBadge(source: ingredient.source),
-                  ],
+                Text(
+                  ingredient.quantity,
+                  style: const TextStyle(fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(height: 4),
                 Text(ingredient.label),
@@ -464,41 +456,9 @@ class _IngredientRow extends StatelessWidget {
                 ),
               ),
               Expanded(child: Text(ingredient.label)),
-              const SizedBox(width: 10),
-              _SourceBadge(source: ingredient.source),
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _SourceBadge extends StatelessWidget {
-  const _SourceBadge({required this.source});
-
-  final IngredientSource source;
-
-  @override
-  Widget build(BuildContext context) {
-    final label = switch (source) {
-      IngredientSource.ciqual => context.strings.ciqual,
-      IngredientSource.recipe => context.strings.sourceRecipe,
-      IngredientSource.free => context.strings.sourceFree,
-    };
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0xFFE9ECE4),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.labelSmall
-              ?.copyWith(fontWeight: FontWeight.w800),
-        ),
       ),
     );
   }

@@ -10,6 +10,7 @@ class Recipe {
     required this.ingredients,
     required this.steps,
     required this.nutrition,
+    required this.images,
   });
 
   final String id;
@@ -22,6 +23,7 @@ class Recipe {
   final List<RecipeIngredient> ingredients;
   final List<String> steps;
   final NutritionSummary nutrition;
+  final List<RecipeImage> images;
 
   int get totalMinutes => prepMinutes + cookMinutes;
 
@@ -36,6 +38,7 @@ class Recipe {
     List<RecipeIngredient>? ingredients,
     List<String>? steps,
     NutritionSummary? nutrition,
+    List<RecipeImage>? images,
   }) {
     return Recipe(
       id: id ?? this.id,
@@ -48,8 +51,16 @@ class Recipe {
       ingredients: ingredients ?? this.ingredients,
       steps: steps ?? this.steps,
       nutrition: nutrition ?? this.nutrition,
+      images: images ?? this.images,
     );
   }
+}
+
+class RecipeImage {
+  const RecipeImage({required this.path, required this.label});
+
+  final String path;
+  final String label;
 }
 
 class RecipeIngredient {
@@ -76,11 +87,7 @@ class RecipeIngredient {
   }
 }
 
-enum IngredientSource {
-  ciqual,
-  recipe,
-  free,
-}
+enum IngredientSource { ciqual, recipe, free }
 
 class NutritionSummary {
   const NutritionSummary({
