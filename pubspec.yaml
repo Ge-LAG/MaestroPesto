@@ -66,10 +66,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  # Lot E — bundle the 4 metier databases as Flutter assets so the
+  # CsvImportService can read them at runtime via rootBundle.
+  assets:
+    - assets/database-metier/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
