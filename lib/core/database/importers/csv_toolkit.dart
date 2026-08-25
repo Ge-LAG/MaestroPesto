@@ -323,11 +323,33 @@ class CsvFingerprint {
   const CsvFingerprint(this.sha256Hex, this.lineCount);
 }
 
+/// Resolves a CSV source path to a chunked byte stream.
+///
+/// Default implementation reads from the local filesystem ([File]).
+/// For Flutter assets (Lot E), the `AppServices` layer passes a closure
+/// over `rootBundle.load(...)` so the rest of the toolkit stays
+/// platform-agnostic.
+typedef CsvBytesReader = Stream<List<int>> Function(String csvPath);
+
+Stream<List<int>> _defaultCsvBytesReader(String csvPath) {
+  return File(csvPath).openRead();
+}
+
+/// Thread-local override for the CSV reader (Lot E — Flutter assets).
+///
+/// The 4 loaders are constructed without dependency injection (Lot B
+/// choices), so this module-level variable is the cheapest way to swap
+/// the file-based reader for an asset-based reader without touching
+/// every loader signature. Reset to null between imports to avoid leaks
+/// across concurrent calls.
+CsvBytesReader? activeCsvReader;
+
 Future<CsvFingerprint> fingerprintFile(String csvPath) async {
   final sha = Sha256();
   var lines = 0;
   var endsWithNewline = true;
-  await for (final chunk in File(csvPath).openRead()) {
+  final open = activeCsvReader ?? _defaultCsvBytesReader;
+  await for (final chunk in open(csvPath)) {
     sha.add(chunk);
     for (final byte in chunk) {
       if (byte == 0x0a) lines++;
@@ -460,9 +482,10 @@ Future<CsvLoadOutcome> runCsvImport<T>({
     onProgress?.call(rowsDone, rowsTotal);
   }
 
-  await for (final line in File(
+  final open = activeCsvReader ?? _defaultCsvBytesReader;
+  await for (final line in open(
     csvPath,
-  ).openRead().transform(utf8.decoder).transform(const LineSplitter())) {
+  ).transform(utf8.decoder).transform(const LineSplitter())) {
     if (line.isEmpty) continue;
     if (!headerRead) {
       header = parseCsvHeader(line);

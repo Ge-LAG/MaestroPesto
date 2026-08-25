@@ -19,6 +19,11 @@ class CsvImportService {
   final AppDatabase db;
   final String databaseMetierRoot;
 
+  // Lot E — Flutter asset reading is handled via a module-level
+  // override (`activeCsvReader` in csv_toolkit.dart) so the loaders
+  // stay un-parametered. The AppServices layer sets that override
+  // before each import and clears it after.
+
   Future<ImportReport> importAll({
     void Function(String phase, int rowsDone)? onPhaseProgress,
   }) async {
