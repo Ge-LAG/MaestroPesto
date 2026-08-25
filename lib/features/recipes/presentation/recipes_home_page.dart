@@ -222,10 +222,11 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
         _metierLoaded = loaded;
         _importing = false;
       });
-      final totalImported = report.rowsImported.values
-          .fold<int>(0, (sum, n) => sum + n);
-      final allSkipped = report.skipped.values
-          .every((skipped) => skipped);
+      final totalImported = report.rowsImported.values.fold<int>(
+        0,
+        (sum, n) => sum + n,
+      );
+      final allSkipped = report.skipped.values.every((skipped) => skipped);
       messenger.showSnackBar(
         SnackBar(
           content: Text(
@@ -423,10 +424,10 @@ class _MetierStatusAction extends StatelessWidget {
       );
     }
     final scheme = Theme.of(context).colorScheme;
-    final IconData icon =
-        metierLoaded ? Icons.check_circle_outline : Icons.storage_outlined;
-    final Color color =
-        metierLoaded ? const Color(0xFF357A5B) : scheme.primary;
+    final IconData icon = metierLoaded
+        ? Icons.check_circle_outline
+        : Icons.storage_outlined;
+    final Color color = metierLoaded ? const Color(0xFF357A5B) : scheme.primary;
     final String tooltip = metierLoaded
         ? context.strings.importMetierReady
         : context.strings.importMetierPending;

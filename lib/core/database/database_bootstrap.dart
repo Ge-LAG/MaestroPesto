@@ -4,7 +4,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'app_database.dart';
 import 'connection/database_connection.dart';
 import 'importers/csv_import_service.dart';
-import 'importers/csv_toolkit.dart' show CsvBytesReader, CsvImportOutcome, ImportReport, activeCsvReader;
+import 'importers/csv_toolkit.dart'
+    show CsvBytesReader, CsvImportOutcome, ImportReport, activeCsvReader;
 
 /// Single entry point that owns the [AppDatabase] instance and exposes
 /// a fully wired [CsvImportService].
@@ -36,8 +37,10 @@ class AppServices {
   /// the [CsvImportService] strips the `assets/` part when joining.
   final String metierRoot;
 
-  late final CsvImportService importer =
-      CsvImportService(db, databaseMetierRoot: metierRoot);
+  late final CsvImportService importer = CsvImportService(
+    db,
+    databaseMetierRoot: metierRoot,
+  );
 
   /// Opens the database and prepares the metier service. `metierRoot`
   /// defaults to `assets/database-metier` which matches the assets
@@ -55,9 +58,9 @@ class AppServices {
   /// Checks whether the 4 metier databases have already been imported.
   /// `true` = at least one Phase 1 row is present, `false` = empty.
   Future<bool> isMetierLoaded() async {
-    final count = await db.customSelect(
-      'SELECT COUNT(*) AS n FROM ingredients',
-    ).getSingle();
+    final count = await db
+        .customSelect('SELECT COUNT(*) AS n FROM ingredients')
+        .getSingle();
     final n = count.data['n'] as int? ?? 0;
     return n > 0;
   }
@@ -106,9 +109,9 @@ extension AppServicesX on AppServices {
   /// Whether at least one phase CSV has been ingested at least once.
   /// (Distinct from `isMetierLoaded` which only checks Phase 1 rows.)
   Future<bool> hasAnyImportHistory() async {
-    final count = await db.customSelect(
-      'SELECT COUNT(*) AS n FROM import_state',
-    ).getSingle();
+    final count = await db
+        .customSelect('SELECT COUNT(*) AS n FROM import_state')
+        .getSingle();
     final n = count.data['n'] as int? ?? 0;
     return n > 0;
   }
