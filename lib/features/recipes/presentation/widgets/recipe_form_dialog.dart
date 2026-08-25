@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
+import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 
 Future<Recipe?> showRecipeFormDialog({
   required BuildContext context,
@@ -43,6 +45,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
   late final TextEditingController _saltController;
 
   late List<_IngredientDraft> _ingredients;
+  late List<_ImageDraft> _images;
   late List<TextEditingController> _stepControllers;
 
   @override
@@ -52,17 +55,40 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     _titleController = TextEditingController(text: recipe.title);
     _descriptionController = TextEditingController(text: recipe.description);
     _tagsController = TextEditingController(text: recipe.tags.join(', '));
-    _servingsController = TextEditingController(text: recipe.servings.toString());
-    _prepController = TextEditingController(text: recipe.prepMinutes.toString());
-    _cookController = TextEditingController(text: recipe.cookMinutes.toString());
-    _energyController = TextEditingController(text: recipe.nutrition.energyKcal.toStringAsFixed(0));
-    _proteinsController = TextEditingController(text: recipe.nutrition.proteins.toString());
-    _carbsController = TextEditingController(text: recipe.nutrition.carbs.toString());
-    _fatsController = TextEditingController(text: recipe.nutrition.fats.toString());
-    _fiberController = TextEditingController(text: recipe.nutrition.fiber.toString());
-    _saltController = TextEditingController(text: recipe.nutrition.salt.toString());
-    _ingredients = recipe.ingredients.map(_IngredientDraft.fromIngredient).toList();
-    _stepControllers = recipe.steps.map((step) => TextEditingController(text: step)).toList();
+    _servingsController = TextEditingController(
+      text: recipe.servings.toString(),
+    );
+    _prepController = TextEditingController(
+      text: recipe.prepMinutes.toString(),
+    );
+    _cookController = TextEditingController(
+      text: recipe.cookMinutes.toString(),
+    );
+    _energyController = TextEditingController(
+      text: recipe.nutrition.energyKcal.toStringAsFixed(0),
+    );
+    _proteinsController = TextEditingController(
+      text: recipe.nutrition.proteins.toString(),
+    );
+    _carbsController = TextEditingController(
+      text: recipe.nutrition.carbs.toString(),
+    );
+    _fatsController = TextEditingController(
+      text: recipe.nutrition.fats.toString(),
+    );
+    _fiberController = TextEditingController(
+      text: recipe.nutrition.fiber.toString(),
+    );
+    _saltController = TextEditingController(
+      text: recipe.nutrition.salt.toString(),
+    );
+    _ingredients = recipe.ingredients
+        .map(_IngredientDraft.fromIngredient)
+        .toList();
+    _images = recipe.images.map(_ImageDraft.fromImage).toList();
+    _stepControllers = recipe.steps
+        .map((step) => TextEditingController(text: step))
+        .toList();
     if (_ingredients.isEmpty) {
       _ingredients.add(_IngredientDraft.empty());
     }
@@ -88,6 +114,9 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     for (final ingredient in _ingredients) {
       ingredient.dispose();
     }
+    for (final image in _images) {
+      image.dispose();
+    }
     for (final controller in _stepControllers) {
       controller.dispose();
     }
@@ -107,6 +136,10 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
         .map((controller) => controller.text.trim())
         .where((step) => step.isNotEmpty)
         .toList();
+    final images = _images
+        .map((image) => image.toImage())
+        .where((image) => image.path.trim().isNotEmpty)
+        .toList();
     final tags = _tagsController.text
         .split(',')
         .map((tag) => tag.trim())
@@ -124,6 +157,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
         cookMinutes: _intValue(_cookController),
         ingredients: ingredients,
         steps: steps,
+        images: images,
         nutrition: NutritionSummary(
           energyKcal: _doubleValue(_energyController),
           proteins: _doubleValue(_proteinsController),
@@ -144,6 +178,22 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     return double.tryParse(controller.text.trim().replaceAll(',', '.')) ?? 0;
   }
 
+  Future<void> _pickPhoto() async {
+    const imageTypeGroup = XTypeGroup(
+      label: 'Images',
+      extensions: ['jpg', 'jpeg', 'png', 'webp', 'heic'],
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/heic'],
+    );
+    final file = await openFile(acceptedTypeGroups: const [imageTypeGroup]);
+    if (file == null) {
+      return;
+    }
+
+    setState(() {
+      _images.add(_ImageDraft.fromPickedPhoto(file));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -160,9 +210,8 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
                   Expanded(
                     child: Text(
                       widget.title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
+                      style: Theme.of(context).textTheme.titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                   ),
                   IconButton(
@@ -191,6 +240,12 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
                     const SizedBox(height: 22),
                     _IngredientsSection(
                       ingredients: _ingredients,
+                      onChanged: () => setState(() {}),
+                    ),
+                    const SizedBox(height: 22),
+                    _ImagesSection(
+                      images: _images,
+                      onAddImage: _pickPhoto,
                       onChanged: () => setState(() {}),
                     ),
                     const SizedBox(height: 22),
@@ -267,8 +322,9 @@ class _BasicsSection extends StatelessWidget {
               labelText: context.strings.titleField,
               prefixIcon: const Icon(Icons.title),
             ),
-            validator: (value) =>
-                value == null || value.trim().isEmpty ? context.strings.titleRequired : null,
+            validator: (value) => value == null || value.trim().isEmpty
+                ? context.strings.titleRequired
+                : null,
           ),
           const SizedBox(height: 12),
           TextFormField(
@@ -283,9 +339,7 @@ class _BasicsSection extends StatelessWidget {
           const SizedBox(height: 12),
           TextFormField(
             controller: tagsController,
-            decoration: InputDecoration(
-              labelText: context.strings.tagsField,
-            ),
+            decoration: InputDecoration(labelText: context.strings.tagsField),
           ),
           const SizedBox(height: 12),
           LayoutBuilder(
@@ -297,11 +351,19 @@ class _BasicsSection extends StatelessWidget {
                   label: context.strings.servingsField,
                   min: 1,
                 ),
-                _NumberField(controller: prepController, label: context.strings.prepField),
-                _NumberField(controller: cookController, label: context.strings.cookField),
+                _NumberField(
+                  controller: prepController,
+                  label: context.strings.prepField,
+                ),
+                _NumberField(
+                  controller: cookController,
+                  label: context.strings.cookField,
+                ),
               ];
               return compact
-                  ? Column(children: _withSpacing(children, axis: Axis.vertical))
+                  ? Column(
+                      children: _withSpacing(children, axis: Axis.vertical),
+                    )
                   : Row(children: _withExpandedSpacing(children));
             },
           ),
@@ -337,7 +399,9 @@ class _IngredientsSection extends StatelessWidget {
         children: [
           for (var index = 0; index < ingredients.length; index++)
             Padding(
-              padding: EdgeInsets.only(bottom: index == ingredients.length - 1 ? 0 : 10),
+              padding: EdgeInsets.only(
+                bottom: index == ingredients.length - 1 ? 0 : 10,
+              ),
               child: _IngredientEditorRow(
                 draft: ingredients[index],
                 onRemove: ingredients.length == 1
@@ -354,11 +418,59 @@ class _IngredientsSection extends StatelessWidget {
   }
 }
 
-class _StepsSection extends StatelessWidget {
-  const _StepsSection({
-    required this.controllers,
+class _ImagesSection extends StatelessWidget {
+  const _ImagesSection({
+    required this.images,
+    required this.onAddImage,
     required this.onChanged,
   });
+
+  final List<_ImageDraft> images;
+  final Future<void> Function() onAddImage;
+  final VoidCallback onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return _FormSection(
+      title: context.strings.images,
+      icon: Icons.photo_library_outlined,
+      trailing: IconButton.filledTonal(
+        onPressed: onAddImage,
+        icon: const Icon(Icons.add),
+        tooltip: context.strings.addImage,
+      ),
+      child: images.isEmpty
+          ? Align(
+              alignment: Alignment.centerLeft,
+              child: OutlinedButton.icon(
+                onPressed: onAddImage,
+                icon: const Icon(Icons.add_photo_alternate_outlined),
+                label: Text(context.strings.choosePhoto),
+              ),
+            )
+          : Column(
+              children: [
+                for (var index = 0; index < images.length; index++)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index == images.length - 1 ? 0 : 10,
+                    ),
+                    child: _ImageEditorRow(
+                      draft: images[index],
+                      onRemove: () {
+                        images.removeAt(index).dispose();
+                        onChanged();
+                      },
+                    ),
+                  ),
+              ],
+            ),
+    );
+  }
+}
+
+class _StepsSection extends StatelessWidget {
+  const _StepsSection({required this.controllers, required this.onChanged});
 
   final List<TextEditingController> controllers;
   final VoidCallback onChanged;
@@ -380,7 +492,9 @@ class _StepsSection extends StatelessWidget {
         children: [
           for (var index = 0; index < controllers.length; index++)
             Padding(
-              padding: EdgeInsets.only(bottom: index == controllers.length - 1 ? 0 : 10),
+              padding: EdgeInsets.only(
+                bottom: index == controllers.length - 1 ? 0 : 10,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -397,7 +511,9 @@ class _StepsSection extends StatelessWidget {
                       controller: controllers[index],
                       minLines: 1,
                       maxLines: 3,
-                      decoration: InputDecoration(labelText: context.strings.stepField),
+                      decoration: InputDecoration(
+                        labelText: context.strings.stepField,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -485,7 +601,10 @@ class _NutritionSection extends StatelessWidget {
                   runSpacing: 10,
                   children: [
                     for (final field in fields)
-                      SizedBox(width: (constraints.maxWidth - 20) / 3, child: field),
+                      SizedBox(
+                        width: (constraints.maxWidth - 20) / 3,
+                        child: field,
+                      ),
                   ],
                 );
         },
@@ -495,10 +614,7 @@ class _NutritionSection extends StatelessWidget {
 }
 
 class _IngredientEditorRow extends StatelessWidget {
-  const _IngredientEditorRow({
-    required this.draft,
-    required this.onRemove,
-  });
+  const _IngredientEditorRow({required this.draft, required this.onRemove});
 
   final _IngredientDraft draft;
   final VoidCallback? onRemove;
@@ -511,14 +627,18 @@ class _IngredientEditorRow extends StatelessWidget {
         final fields = [
           TextFormField(
             controller: draft.quantityController,
-            decoration: InputDecoration(labelText: context.strings.quantityField),
+            decoration: InputDecoration(
+              labelText: context.strings.quantityField,
+            ),
           ),
           TextFormField(
             controller: draft.labelController,
-            decoration: InputDecoration(labelText: context.strings.ingredientField),
+            decoration: InputDecoration(
+              labelText: context.strings.ingredientField,
+            ),
           ),
           DropdownButtonFormField<IngredientSource>(
-            value: draft.source,
+            initialValue: draft.source,
             decoration: InputDecoration(labelText: context.strings.sourceField),
             items: [
               DropdownMenuItem(
@@ -573,6 +693,99 @@ class _IngredientEditorRow extends StatelessWidget {
               tooltip: context.strings.deleteAction,
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+class _ImageEditorRow extends StatelessWidget {
+  const _ImageEditorRow({required this.draft, required this.onRemove});
+
+  final _ImageDraft draft;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < 620;
+        final fields = [
+          TextFormField(
+            controller: draft.labelController,
+            decoration: InputDecoration(
+              labelText: context.strings.imageLabelField,
+            ),
+          ),
+          TextFormField(
+            controller: draft.pathController,
+            decoration: InputDecoration(
+              labelText: context.strings.imagePathField,
+              prefixIcon: const Icon(Icons.folder_outlined),
+            ),
+          ),
+        ];
+        final preview = _PhotoPreview(controller: draft.pathController);
+
+        if (compact) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              preview,
+              const SizedBox(height: 10),
+              ..._withSpacing(fields, axis: Axis.vertical),
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: onRemove,
+                  icon: const Icon(Icons.delete_outline),
+                  tooltip: context.strings.deleteAction,
+                ),
+              ),
+            ],
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(width: 86, height: 86, child: preview),
+            const SizedBox(width: 10),
+            Expanded(child: fields[0]),
+            const SizedBox(width: 10),
+            Expanded(child: fields[1]),
+            const SizedBox(width: 8),
+            IconButton(
+              onPressed: onRemove,
+              icon: const Icon(Icons.delete_outline),
+              tooltip: context.strings.deleteAction,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PhotoPreview extends StatelessWidget {
+  const _PhotoPreview({required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, _) {
+        final path = controller.text.trim();
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: path.isEmpty
+              ? const ColoredBox(
+                  color: Color(0xFFE9ECE4),
+                  child: Center(child: Icon(Icons.photo_outlined)),
+                )
+              : buildRecipePhoto(path, fit: BoxFit.cover),
         );
       },
     );
@@ -641,12 +854,11 @@ class _FormSection extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w800),
                   ),
                 ),
-                if (trailing != null) trailing!,
+                ?trailing,
               ],
             ),
             const SizedBox(height: 16),
@@ -697,6 +909,46 @@ class _IngredientDraft {
     labelController.dispose();
     quantityController.dispose();
   }
+}
+
+class _ImageDraft {
+  _ImageDraft({required this.pathController, required this.labelController});
+
+  factory _ImageDraft.fromImage(RecipeImage image) {
+    return _ImageDraft(
+      pathController: TextEditingController(text: image.path),
+      labelController: TextEditingController(text: image.label),
+    );
+  }
+
+  factory _ImageDraft.fromPickedPhoto(XFile file) {
+    return _ImageDraft(
+      pathController: TextEditingController(text: file.path),
+      labelController: TextEditingController(
+        text: _photoLabelFromName(file.name),
+      ),
+    );
+  }
+
+  final TextEditingController pathController;
+  final TextEditingController labelController;
+
+  RecipeImage toImage() {
+    return RecipeImage(
+      path: pathController.text.trim(),
+      label: labelController.text.trim(),
+    );
+  }
+
+  void dispose() {
+    pathController.dispose();
+    labelController.dispose();
+  }
+}
+
+String _photoLabelFromName(String name) {
+  final withoutExtension = name.replaceFirst(RegExp(r'\.[^.]+$'), '');
+  return withoutExtension.replaceAll(RegExp(r'[_-]+'), ' ').trim();
 }
 
 List<Widget> _withSpacing(List<Widget> children, {required Axis axis}) {

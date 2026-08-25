@@ -3,10 +3,7 @@ import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
 
-enum RecipeBookViewMode {
-  card,
-  list,
-}
+enum RecipeBookViewMode { card, list }
 
 class RecipeBookPanel extends StatefulWidget {
   const RecipeBookPanel({
@@ -18,6 +15,7 @@ class RecipeBookPanel extends StatefulWidget {
     required this.onQueryChanged,
     required this.onRecipeSelected,
     required this.onTagsChanged,
+    required this.onClearFilters,
     required this.onCreateRecipe,
     this.compact = false,
     super.key,
@@ -31,6 +29,7 @@ class RecipeBookPanel extends StatefulWidget {
   final ValueChanged<String> onQueryChanged;
   final ValueChanged<String> onRecipeSelected;
   final ValueChanged<Set<String>> onTagsChanged;
+  final VoidCallback onClearFilters;
   final VoidCallback onCreateRecipe;
   final bool compact;
 
@@ -40,6 +39,27 @@ class RecipeBookPanel extends StatefulWidget {
 
 class _RecipeBookPanelState extends State<RecipeBookPanel> {
   RecipeBookViewMode _viewMode = RecipeBookViewMode.card;
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController(text: widget.query);
+  }
+
+  @override
+  void didUpdateWidget(covariant RecipeBookPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.query != _searchController.text) {
+      _searchController.text = widget.query;
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +73,25 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _BookHeader(compact: widget.compact, onCreateRecipe: widget.onCreateRecipe),
+            _BookHeader(
+              compact: widget.compact,
+              onCreateRecipe: widget.onCreateRecipe,
+            ),
             const SizedBox(height: 18),
             SearchBar(
+              controller: _searchController,
               elevation: const WidgetStatePropertyAll(0),
               backgroundColor: WidgetStatePropertyAll(colorScheme.surface),
               hintText: context.strings.search,
               leading: const Icon(Icons.search),
+              trailing: [
+                if (widget.query.trim().isNotEmpty)
+                  IconButton(
+                    onPressed: widget.onClearFilters,
+                    icon: const Icon(Icons.close),
+                    tooltip: context.strings.clearFilters,
+                  ),
+              ],
               padding: const WidgetStatePropertyAll(
                 EdgeInsets.symmetric(horizontal: 12),
               ),
@@ -74,6 +106,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
               tags: widget.tags,
               selectedTags: widget.selectedTags,
               onTagsChanged: widget.onTagsChanged,
+              onClearFilters: widget.onClearFilters,
               onViewModeChanged: (mode) => setState(() => _viewMode = mode),
             ),
             const SizedBox(height: 18),
@@ -95,7 +128,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
                             ),
                           );
                         },
-                        separatorBuilder: (_, __) => const SizedBox(width: 12),
+                        separatorBuilder: (_, _) => const SizedBox(width: 12),
                         itemCount: widget.recipes.length,
                       ),
               )
@@ -112,15 +145,17 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
                               ? _RecipeCardTile(
                                   recipe: recipe,
                                   selected: selected,
-                                  onTap: () => widget.onRecipeSelected(recipe.id),
+                                  onTap: () =>
+                                      widget.onRecipeSelected(recipe.id),
                                 )
                               : _RecipeLineTile(
                                   recipe: recipe,
                                   selected: selected,
-                                  onTap: () => widget.onRecipeSelected(recipe.id),
+                                  onTap: () =>
+                                      widget.onRecipeSelected(recipe.id),
                                 );
                         },
-                        separatorBuilder: (_, __) => SizedBox(
+                        separatorBuilder: (_, _) => SizedBox(
                           height: viewMode == RecipeBookViewMode.card ? 12 : 8,
                         ),
                         itemCount: widget.recipes.length,
@@ -142,6 +177,7 @@ class _BookResultBar extends StatelessWidget {
     required this.tags,
     required this.selectedTags,
     required this.onTagsChanged,
+    required this.onClearFilters,
     required this.onViewModeChanged,
   });
 
@@ -152,61 +188,89 @@ class _BookResultBar extends StatelessWidget {
   final List<String> tags;
   final Set<String> selectedTags;
   final ValueChanged<Set<String>> onTagsChanged;
+  final VoidCallback onClearFilters;
   final ValueChanged<RecipeBookViewMode> onViewModeChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final hasActiveFilters = query.trim().isNotEmpty || selectedTags.isNotEmpty;
+    final countLabel = query.trim().isEmpty
+        ? context.strings.recipeCount(count)
+        : context.strings.resultCount(count);
+    final countText = Text(
+      countLabel,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.bodySmall,
+    );
+    final controls = Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Expanded(
-          child: Text(
-            query.trim().isEmpty
-                ? context.strings.recipeCount(count)
-                : context.strings.resultCount(count),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _TagFilterMenu(
-              tags: tags,
-              selectedTags: selectedTags,
-              onChanged: onTagsChanged,
+        if (hasActiveFilters)
+          TextButton.icon(
+            onPressed: onClearFilters,
+            icon: const Icon(Icons.filter_alt_off_outlined, size: 18),
+            label: Text(context.strings.clearFilters),
+            style: TextButton.styleFrom(
+              visualDensity: VisualDensity.compact,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
             ),
-            if (!compact) ...[
-              const SizedBox(width: 8),
-              SegmentedButton<RecipeBookViewMode>(
-                showSelectedIcon: false,
-                style: ButtonStyle(
-                  visualDensity: VisualDensity.compact,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  minimumSize: const WidgetStatePropertyAll(Size(46, 32)),
-                  padding: const WidgetStatePropertyAll(
-                    EdgeInsets.symmetric(horizontal: 9),
-                  ),
-                ),
-                segments: [
-                  ButtonSegment(
-                    value: RecipeBookViewMode.card,
-                    label: Text(context.strings.cardView),
-                  ),
-                  ButtonSegment(
-                    value: RecipeBookViewMode.list,
-                    label: Text(context.strings.listView),
-                  ),
-                ],
-                selected: {viewMode},
-                onSelectionChanged: (selection) => onViewModeChanged(selection.first),
+          ),
+        _TagFilterMenu(
+          tags: tags,
+          selectedTags: selectedTags,
+          onChanged: onTagsChanged,
+        ),
+        if (!compact)
+          SegmentedButton<RecipeBookViewMode>(
+            showSelectedIcon: false,
+            style: ButtonStyle(
+              visualDensity: VisualDensity.compact,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              minimumSize: const WidgetStatePropertyAll(Size(46, 32)),
+              padding: const WidgetStatePropertyAll(
+                EdgeInsets.symmetric(horizontal: 9),
+              ),
+            ),
+            segments: [
+              ButtonSegment(
+                value: RecipeBookViewMode.card,
+                icon: const Icon(Icons.dashboard_outlined),
+                tooltip: context.strings.cardView,
+              ),
+              ButtonSegment(
+                value: RecipeBookViewMode.list,
+                icon: const Icon(Icons.view_list_outlined),
+                tooltip: context.strings.listView,
               ),
             ],
-          ],
-        ),
+            selected: {viewMode},
+            onSelectionChanged: (selection) =>
+                onViewModeChanged(selection.first),
+          ),
       ],
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (compact || constraints.maxWidth < 340 || hasActiveFilters) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [countText, const SizedBox(height: 8), controls],
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(child: countText),
+            const SizedBox(width: 10),
+            controls,
+          ],
+        );
+      },
     );
   }
 }
@@ -225,7 +289,9 @@ class _TagFilterMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = context.strings;
-    final label = selectedTags.isEmpty ? strings.tags : strings.tagsCount(selectedTags.length);
+    final label = selectedTags.isEmpty
+        ? strings.tags
+        : strings.tagsCount(selectedTags.length);
 
     return MenuAnchor(
       builder: (context, controller, child) {
@@ -277,10 +343,7 @@ class _TagFilterMenu extends StatelessWidget {
 }
 
 class _BookHeader extends StatelessWidget {
-  const _BookHeader({
-    required this.compact,
-    required this.onCreateRecipe,
-  });
+  const _BookHeader({required this.compact, required this.onCreateRecipe});
 
   final bool compact;
   final VoidCallback onCreateRecipe;
@@ -289,10 +352,7 @@ class _BookHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          Icons.local_dining,
-          color: Theme.of(context).colorScheme.primary,
-        ),
+        Icon(Icons.local_dining, color: Theme.of(context).colorScheme.primary),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -300,9 +360,8 @@ class _BookHeader extends StatelessWidget {
             children: [
               Text(
                 'MaestroPesto',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w900,
-                    ),
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w900),
               ),
               if (!compact)
                 Text(
@@ -312,6 +371,16 @@ class _BookHeader extends StatelessWidget {
             ],
           ),
         ),
+        IconButton.outlined(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(context.strings.settingsTodo)),
+            );
+          },
+          icon: const Icon(Icons.settings_outlined),
+          tooltip: context.strings.settingsAction,
+        ),
+        const SizedBox(width: 8),
         IconButton.filled(
           onPressed: onCreateRecipe,
           icon: const Icon(Icons.add),
@@ -336,10 +405,14 @@ class _RecipeCardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final borderColor = selected ? colorScheme.primary : const Color(0xFFE0DED7);
+    final borderColor = selected
+        ? colorScheme.primary
+        : const Color(0xFFE0DED7);
 
     return Material(
-      color: selected ? colorScheme.primaryContainer.withValues(alpha: 0.34) : colorScheme.surface,
+      color: selected
+          ? colorScheme.primaryContainer.withValues(alpha: 0.34)
+          : colorScheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(color: borderColor),
@@ -359,9 +432,8 @@ class _RecipeCardTile extends StatelessWidget {
                       recipe.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w900,
-                          ),
+                      style: Theme.of(context).textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -370,20 +442,20 @@ class _RecipeCardTile extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '${recipe.servings} portions · ${recipe.totalMinutes} min',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: 10),
-              Text(
                 recipe.description,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              const SizedBox(height: 10),
+              _RecipeQuickFacts(recipe: recipe),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 6,
-                children: recipe.tags.take(3).map((tag) => RecipeTagLabel(label: tag)).toList(),
+                children: recipe.tags
+                    .take(3)
+                    .map((tag) => RecipeTagLabel(label: tag))
+                    .toList(),
               ),
             ],
           ),
@@ -407,10 +479,14 @@ class _RecipeLineTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final borderColor = selected ? colorScheme.primary : const Color(0xFFE0DED7);
+    final borderColor = selected
+        ? colorScheme.primary
+        : const Color(0xFFE0DED7);
 
     return Material(
-      color: selected ? colorScheme.primaryContainer.withValues(alpha: 0.34) : colorScheme.surface,
+      color: selected
+          ? colorScheme.primaryContainer.withValues(alpha: 0.34)
+          : colorScheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(color: borderColor),
@@ -430,13 +506,12 @@ class _RecipeLineTile extends StatelessWidget {
                       recipe.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w900,
-                          ),
+                      style: Theme.of(context).textTheme.titleSmall
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${recipe.servings} portions · ${recipe.totalMinutes} min',
+                      '${recipe.totalMinutes} min · ${recipe.ingredients.length} ing.',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -456,6 +531,63 @@ class _RecipeLineTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _RecipeQuickFacts extends StatelessWidget {
+  const _RecipeQuickFacts({required this.recipe});
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 6,
+      children: [
+        _QuickFact(
+          icon: Icons.people_alt_outlined,
+          label: '${recipe.servings}',
+        ),
+        _QuickFact(
+          icon: Icons.timer_outlined,
+          label: '${recipe.totalMinutes} min',
+        ),
+        _QuickFact(
+          icon: Icons.format_list_bulleted,
+          label: '${recipe.ingredients.length}',
+        ),
+        _QuickFact(
+          icon: Icons.bolt_outlined,
+          label: '${recipe.nutrition.energyKcal.toStringAsFixed(0)} kcal',
+        ),
+      ],
+    );
+  }
+}
+
+class _QuickFact extends StatelessWidget {
+  const _QuickFact({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 15, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: const Color(0xFF43473F),
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -480,9 +612,7 @@ class _EmptyBookMessage extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 10),
-            Expanded(
-              child: Text(context.strings.noMatchingRecipes),
-            ),
+            Expanded(child: Text(context.strings.noMatchingRecipes)),
           ],
         ),
       ),

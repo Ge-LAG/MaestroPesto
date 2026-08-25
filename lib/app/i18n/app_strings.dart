@@ -10,20 +10,31 @@ class AppStrings {
   String get tags => 'Tags';
   String tagsCount(int count) => 'Tags ($count)';
   String get allTags => 'Tous les tags';
+  String get clearFilters => 'Réinitialiser';
   String recipeCount(int count) => '$count fiche${count > 1 ? 's' : ''}';
   String resultCount(int count) => '$count résultat${count > 1 ? 's' : ''}';
   String get cardView => 'Vignette';
   String get listView => 'Liste';
   String get noMatchingRecipes => 'Aucune recette ne correspond aux filtres.';
   String get noRecipeTitle => 'Aucune fiche';
-  String get noRecipeBody => 'Crée une première recette ou ajuste les filtres du classeur.';
+  String get noRecipeBody =>
+      'Crée une première recette ou ajuste les filtres du classeur.';
 
   String get exportPdfTodo => 'Export PDF à brancher';
+  String get settingsTodo => 'Paramètres à brancher';
   String get exportAction => 'Exporter';
+  String get settingsAction => 'Paramètres';
   String get deleteAction => 'Supprimer';
+  String get duplicateAction => 'Dupliquer';
+  String duplicateRecipeTitle(String title) => '$title copie';
   String get editAction => 'Modifier';
   String get ingredients => 'Ingrédients';
+  String get images => 'Images';
   String get preparation => 'Préparation';
+  String get overview => 'Vue d’ensemble';
+  String ingredientCount(int count) =>
+      '$count ingrédient${count > 1 ? 's' : ''}';
+  String stepCount(int count) => '$count étape${count > 1 ? 's' : ''}';
   String get ciqual => 'Ciqual';
   String get sourceRecipe => 'Recette';
   String get sourceFree => 'Libre';
@@ -39,7 +50,8 @@ class AppStrings {
   String get createRecipeDialogTitle => 'Nouvelle recette';
   String get editRecipeDialogTitle => 'Modifier la recette';
   String get deleteRecipeDialogTitle => 'Supprimer la recette';
-  String deleteRecipeConfirmation(String title) => 'Supprimer "$title" du classeur ?';
+  String deleteRecipeConfirmation(String title) =>
+      'Supprimer "$title" du classeur ?';
   String get cancel => 'Annuler';
   String get save => 'Enregistrer';
   String get close => 'Fermer';
@@ -55,6 +67,10 @@ class AppStrings {
   String get quantityField => 'Quantité';
   String get ingredientField => 'Ingrédient';
   String get sourceField => 'Source';
+  String get addImage => 'Ajouter une photo';
+  String get choosePhoto => 'Choisir une photo';
+  String get imageLabelField => 'Libellé photo';
+  String get imagePathField => 'Chemin de la photo';
   String get addStep => 'Ajouter une étape';
   String get stepField => 'Étape';
   String get nutritionPerServing => 'Nutrition par portion';
