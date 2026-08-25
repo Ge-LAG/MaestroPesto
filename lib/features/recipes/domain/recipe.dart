@@ -68,21 +68,29 @@ class RecipeIngredient {
     required this.label,
     required this.quantity,
     required this.source,
+    this.ingredientId,
   });
 
   final String label;
   final String quantity;
   final IngredientSource source;
 
+  /// Optional Phase 1 ingredient reference (added in Lot D). When set, the
+  /// UI can resolve the canonical name, allergens and nutrition profile
+  /// from the 4 metier databases.
+  final String? ingredientId;
+
   RecipeIngredient copyWith({
     String? label,
     String? quantity,
     IngredientSource? source,
+    String? ingredientId,
   }) {
     return RecipeIngredient(
       label: label ?? this.label,
       quantity: quantity ?? this.quantity,
       source: source ?? this.source,
+      ingredientId: ingredientId ?? this.ingredientId,
     );
   }
 }
