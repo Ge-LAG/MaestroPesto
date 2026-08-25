@@ -82,6 +82,14 @@ class AppStrings {
   String get saltGField => 'Sel g';
   String get numberRequired => 'Nombre requis';
   String minimumValue(num min) => 'Minimum $min';
+
+  // Lot D — added when wiring the CsvImportService into the UI shell.
+  String get importMetierAction => 'Importer BDD métier';
+  String get importMetierReady => 'BDD métier prêtes';
+  String get importMetierPending => 'BDD à importer';
+  String get importMetierRunning => 'Import en cours…';
+  String get importMetierSnackbar =>
+      'Import des 4 bases métier déclenché. Voir le dossier Test-Dev/ pour le détail.';
 }
 
 const appStrings = AppStrings();

@@ -179,9 +179,28 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     );
   }
 
+  // Lot D — stub wired into the AppBar action. Real implementation uses
+  // [CsvImportService.importAll] (lib/core/database/importers/csv_import_service.dart)
+  // once the caller provides an [AppDatabase] + the metier CSV root. For
+  // the UI shell we only show a snackbar so the wiring is visible; the
+  // actual import is meant to run from a dedicated settings screen.
+  Future<void> _importMetier(BuildContext context) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.strings.importMetierSnackbar)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const SizedBox.shrink(),
+        actions: [
+          _MetierStatusAction(
+            onImport: () => _importMetier(context),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -311,6 +330,22 @@ class _CompactLayout extends StatelessWidget {
                 ),
         ),
       ],
+    );
+  }
+}
+
+class _MetierStatusAction extends StatelessWidget {
+  const _MetierStatusAction({required this.onImport});
+
+  final VoidCallback onImport;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return IconButton(
+      tooltip: context.strings.importMetierAction,
+      icon: Icon(Icons.storage_outlined, color: scheme.primary),
+      onPressed: onImport,
     );
   }
 }
