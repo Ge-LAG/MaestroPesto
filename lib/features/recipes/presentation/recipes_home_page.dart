@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/database/database_bootstrap.dart';
 import 'package:maestropesto/features/recipes/data/demo_recipes.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_book_panel.dart';
@@ -7,7 +8,13 @@ import 'package:maestropesto/features/recipes/presentation/widgets/recipe_detail
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_form_dialog.dart';
 
 class RecipesHomePage extends StatefulWidget {
-  const RecipesHomePage({super.key});
+  const RecipesHomePage({required this.services, super.key});
+
+  /// Services bundle (Lot E): owns the [AppDatabase] and the
+  /// [CsvImportService]. The button in the AppBar uses this to import
+  /// the 4 metier CSVs and to expose the metier advisory panel in the
+  /// recipe detail view.
+  final AppServices services;
 
   @override
   State<RecipesHomePage> createState() => _RecipesHomePageState();
@@ -18,6 +25,21 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
   String _query = '';
   final Set<String> _selectedTags = {};
   String _selectedRecipeId = demoRecipes.first.id;
+
+  bool _importing = false;
+  bool _metierLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Refresh the metier status badge on entry (best-effort, no-op if
+    // the DB is empty or the import has never been run).
+    widget.services.isMetierLoaded().then((loaded) {
+      if (mounted) {
+        setState(() => _metierLoaded = loaded);
+      }
+    });
+  }
 
   List<String> get _tags {
     final tags = _recipes.expand((recipe) => recipe.tags).toSet().toList();
@@ -179,15 +201,53 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     );
   }
 
-  // Lot D — stub wired into the AppBar action. Real implementation uses
-  // [CsvImportService.importAll] (lib/core/database/importers/csv_import_service.dart)
-  // once the caller provides an [AppDatabase] + the metier CSV root. For
-  // the UI shell we only show a snackbar so the wiring is visible; the
-  // actual import is meant to run from a dedicated settings screen.
+  // Lot E — wires the AppBar button to the real [CsvImportService].
+  // The state of the icon reflects 3 phases:
+  //   * _importing=true   → spinner
+  //   * _metierLoaded=true → check_circle (green tint)
+  //   * else               → storage_outlined (neutral)
   Future<void> _importMetier(BuildContext context) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.strings.importMetierSnackbar)),
-    );
+    if (_importing) {
+      return;
+    }
+    setState(() => _importing = true);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final report = await widget.services.importMetier();
+      final loaded = await widget.services.isMetierLoaded();
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _metierLoaded = loaded;
+        _importing = false;
+      });
+      final totalImported = report.rowsImported.values
+          .fold<int>(0, (sum, n) => sum + n);
+      final allSkipped = report.skipped.values
+          .every((skipped) => skipped);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            allSkipped
+                ? 'BDD métier déjà à jour (4/4 phases skipped, hash inchangé).'
+                : 'Import OK : $totalImported lignes insérées sur 4 phases.',
+          ),
+        ),
+      );
+    } catch (e, st) {
+      debugPrint('CsvImportService failed: $e\n$st');
+      if (!mounted) {
+        return;
+      }
+      setState(() => _importing = false);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('Erreur import BDD métier : $e'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
   }
 
   @override
@@ -197,6 +257,8 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
         title: const SizedBox.shrink(),
         actions: [
           _MetierStatusAction(
+            importing: _importing,
+            metierLoaded: _metierLoaded,
             onImport: () => _importMetier(context),
           ),
         ],
@@ -251,6 +313,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                       : RecipeDetailView(
                           recipe: selectedRecipe,
                           isWide: isWide,
+                          db: widget.services.db,
                           onEdit: _editRecipe,
                           onDuplicate: _duplicateRecipe,
                           onDelete: _deleteRecipe,
@@ -324,6 +387,7 @@ class _CompactLayout extends StatelessWidget {
                   recipe: recipe,
                   isWide: false,
                   scrollable: false,
+                  db: widget.services.db,
                   onEdit: onEditRecipe,
                   onDuplicate: onDuplicateRecipe,
                   onDelete: onDeleteRecipe,
@@ -335,16 +399,40 @@ class _CompactLayout extends StatelessWidget {
 }
 
 class _MetierStatusAction extends StatelessWidget {
-  const _MetierStatusAction({required this.onImport});
+  const _MetierStatusAction({
+    required this.onImport,
+    required this.importing,
+    required this.metierLoaded,
+  });
 
   final VoidCallback onImport;
+  final bool importing;
+  final bool metierLoaded;
 
   @override
   Widget build(BuildContext context) {
+    if (importing) {
+      return IconButton(
+        tooltip: context.strings.importMetierRunning,
+        icon: const SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+        onPressed: null,
+      );
+    }
     final scheme = Theme.of(context).colorScheme;
+    final IconData icon =
+        metierLoaded ? Icons.check_circle_outline : Icons.storage_outlined;
+    final Color color =
+        metierLoaded ? const Color(0xFF357A5B) : scheme.primary;
+    final String tooltip = metierLoaded
+        ? context.strings.importMetierReady
+        : context.strings.importMetierPending;
     return IconButton(
-      tooltip: context.strings.importMetierAction,
-      icon: Icon(Icons.storage_outlined, color: scheme.primary),
+      tooltip: tooltip,
+      icon: Icon(icon, color: color),
       onPressed: onImport,
     );
   }
