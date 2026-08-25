@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/database/app_database.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
+import 'package:maestropesto/features/recipes/presentation/widgets/recipe_metier_advisory_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
@@ -13,6 +15,7 @@ class RecipeDetailView extends StatelessWidget {
     required this.onDuplicate,
     required this.onDelete,
     this.scrollable = true,
+    this.db,
     super.key,
   });
 
@@ -22,6 +25,11 @@ class RecipeDetailView extends StatelessWidget {
   final ValueChanged<Recipe> onDuplicate;
   final ValueChanged<Recipe> onDelete;
   final bool scrollable;
+
+  /// Optional Drift database. When provided, the metier advisory panel
+  /// is enabled (queries Phase 4 interaction rules for matching
+  /// ingredient ids). When null, the panel renders nothing.
+  final AppDatabase? db;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,14 @@ class RecipeDetailView extends StatelessWidget {
                   const SizedBox(width: 22),
                   SizedBox(
                     width: 330,
-                    child: RecipeNutritionPanel(nutrition: recipe.nutrition),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        RecipeNutritionPanel(nutrition: recipe.nutrition),
+                        if (db != null)
+                          RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
+                      ],
+                    ),
                   ),
                 ],
               )
@@ -54,6 +69,8 @@ class RecipeDetailView extends StatelessWidget {
                   content,
                   const SizedBox(height: 18),
                   RecipeNutritionPanel(nutrition: recipe.nutrition),
+                  if (db != null)
+                    RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
                 ],
               ),
       ),
