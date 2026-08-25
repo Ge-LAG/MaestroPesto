@@ -1,1 +1,40 @@
-../../database-metier/phase3-flavour/aroma_compounds.csv
+compound_id,canonical_name,cas_number,pubchem_cid,chebi_id,molecular_formula,molecular_weight,logp,vapor_pressure,boiling_point,functional_groups,odor_descriptors,taste_descriptors,odor_threshold,threshold_unit,threshold_matrix,source_refs,license_source,confidence
+HEXANAL,Hexanal,66-25-1,6184,CHEBBI:24518,C6H12O,100.16,1.78,150,130,,green|grassy|leafy,,0.0045,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+E2HEXENAL,trans-2-Hexenal,6728-26-3,5281168,CHEBI:28913,C6H10O,98.14,1.58,50,146,,green|leafy|bitter,,0.017,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.90
+OCTENAL,1-Octen-3-ol,3391-86-4,18827,CHEBI:17943,C8H16O,128.21,2.79,100,174,,mushroom|earthy,,0.001,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+DECANAL,Decanal,112-31-2,8175,CHEBI:31457,C10H20O,156.27,4.01,3,209,,waxy|soapy|citrus,,0.0001,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+CINNAMAL,Cinnamaldehyde,104-55-2,637511,CHEBI:16731,C9H8O,132.16,2.41,4,248,,cinnamon|spicy|warm,warm,0.075,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+VANILLIN,Vanillin,121-33-5,1183,CHEBI:18346,C8H8O3,152.15,1.21,0.5,285,,vanillic|sweet|creamy,sweet,0.02,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.98
+BENZALDH,Benzaldehyde,100-52-7,240,CHEBI:17169,C7H6O,106.12,1.48,39,178,,almond|cherry|nutty,bitter,0.35,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.90
+CITRAL,Citral,5392-40-5,638011,CHEBI:16980,C10H16O,152.23,3.17,7,226,,lemon|citrus,,0.04,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+CITRONEL,Citronellol,106-22-9,8842,CHEBI:15300,C10H20O,156.27,3.3,1.3,224,,rose|citrus|floral,,0.03,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+LIMONENE,Limonene,138-86-3,22311,CHEBI:15383,C10H16,136.23,4.57,200,176,,citrus|orange|lemon,,0.034,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+LINALOOL,Linalool,78-70-6,6549,CHEBI:17580,C10H18O,154.25,2.97,11,198,,floral|orange|woody,,0.006,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+GERANIOL,Geraniol,106-24-1,637566,CHEBI:15347,C10H18O,154.25,3.28,1.5,230,,rose|floral|citrus,,0.0035,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.90
+MENTHOL,Menthol,89-78-1,16666,CHEBI:15409,C10H20O,156.27,3.3,8,212,,mint|cooling,cooling,0.03,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.98
+EUGENOL,Eugenol,97-53-0,3314,CHEBI:4917,C10H12O2,164.2,2.27,4,253,,clove|spicy|warm,warm,0.005,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+CARVONE,Carvone,99-49-0,7439,CHEBI:15399,C10H14O,150.22,3.07,8,230,,caraway|spearmint,,0.066,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.92
+ALDEHYDE_C9,Nonanal,124-19-6,31289,CHEBI:19302,C9H18O,142.24,3.27,4,191,,waxy|citrus|green,,0.001,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+ETHBUTY,Ethyl butyrate,105-54-4,7762,CHEBI:16602,C6H12O2,116.16,1.94,2700,121,,fruity|pineapple,sweet,0.001,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+ETHOCTAN,Ethyl octanoate,106-32-1,7799,CHEBI:16830,C10H20O2,172.27,3.81,60,207,,fruity|winy|pear,fruity,0.005,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.90
+ETHACET,Ethyl acetate,141-78-6,8857,CHEBI:27750,C4H8O2,88.11,0.73,13000,77,,fruity|solvent|sweet,sweet,5.0,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+ISOAMYLACET,Isoamyl acetate,123-92-2,31276,CHEBI:16725,C7H14O2,130.19,2.26,530,142,,banana|sweet|fruity,sweet,0.005,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+METHANTH,Methyl anthranilate,134-20-3,8635,CHEBI:16628,C8H9NO2,151.16,1.39,0.5,252,,grape|fruity|floral,,0.003,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+BUTYRIC,Butyric acid,107-92-6,264,CHEBI:30772,C4H8O2,88.11,0.79,110,163,,cheese|buttery|sour,sour,2.4,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+CAPROIC,Caproic acid,142-62-1,8892,CHEBI:30776,C6H12O2,116.16,1.92,24,205,,cheesy|sweaty|goaty,sour,4.0,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.90
+GAMMALA,gamma-Decalactone,706-14-9,60960,CHEBI:18997,C10H18O2,170.25,3.1,2,297,,peach|fruity|creamy,sweet,0.005,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+MEPYRAZ,2-Methylpyrazine,109-08-0,7976,CHEBI:30516,C5H6N2,94.12,0.21,2000,135,,nutty|roasted|cocoa,,0.06,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+TMPYRZ,"2,3,5-Trimethylpyrazine",14667-55-1,26819,CHEBI:14818,C7H10N2,122.17,1.32,70,171,,nutty|roasted|roasted_peanut,,0.04,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+H2S,Hydrogen sulfide,7783-06-4,402,CHEBI:16636,H2S,34.08,0.23,20000000,-60,,sulfurous|rotten_egg,,0.0007,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+DMS,Dimethyl sulfide,75-18-3,1068,CHEBI:14182,C2H6S,62.13,0.92,64000,37,,marine|cabbage|sulfurous,,0.012,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.90
+MSG,Monosodium glutamate,142-47-2,23657,CHEBI:15972,C5H8NNaO4,169.11,-3.05,0,,,umami|broth|savory,umami,300,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.98
+GUANOS5,GMP (5'-guanosine monophosphate),85-32-5,135398635,CHEBI:17345,C10H14N5O8P,363.22,-2.5,0,,,umami|enhancer,umami,12.5,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+GUAIACOL,Guaiacol,90-05-1,460,CHEBI:28591,C7H8O2,124.14,1.32,50,205,,smoky|medicinal|spicy,,0.001,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.95
+CAPSAICIN,Capsaicin,404-86-4,1548943,CHEBI:22541,C18H27NO3,305.41,3.04,1e-05,280,,spicy|hot|burning,pungent,0.01,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.98
+SUCROSE,Sucrose,57-50-1,5988,CHEBI:17992,C12H22O11,342.3,-3.7,0,,,sweet,sweet,10000,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.98
+GLUCOSE,Glucose,50-99-7,5793,CHEBI:17234,C6H12O6,180.16,-2.6,0,,,sweet,sweet,10000,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.98
+FRUCTOSE,Fructose,57-48-7,5984,CHEBI:28645,C6H12O6,180.16,-1.55,0,,,sweet,sweet,4000,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.98
+TETRAMPYR,Tetramethylpyrazine,1124-11-4,14296,CHEBI:13303,C8H12N2,136.19,1.4,6,174,,nutty|roasted|cocoa,,0.14,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+UNDECALACT,gamma-Undecalactone,104-67-6,7714,CHEBI:16973,C11H20O2,184.28,3.5,0.5,286,,peach|fruity|creamy,sweet,0.006,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+SYRINGOL,Syringol,91-10-1,7041,CHEBI:18126,C8H10O3,154.16,1.0,8,261,,smoky|woody|spicy,,0.02,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85
+ISOEUGENOL,Isoeugenol,97-54-1,3324,CHEBI:18360,C10H12O2,164.2,2.65,2,266,,clove|spicy|floral,,0.005,mg/L,water,FLAVORDB2|PUBCHEM|CHEBI,approved,0.85

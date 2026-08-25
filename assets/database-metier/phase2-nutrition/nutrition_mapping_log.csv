@@ -1,1 +1,65 @@
-../../database-metier/phase2-nutrition/nutrition_mapping_log.csv
+ingredient_id,source_id,source_food_id,source_food_name,match_type,match_score,matched_features,conflicting_features,review_required,review_notes
+ING-PLANT-POMME-000001,CIQUAL,13000,"Pomme, crue, avec peau",semantic_state_match,0.95,espèce=Malus domestica;partie=fruit entier;état=fresh;forme=whole,,false,"Match direct CIQUAL — pomme crue avec peau, générique non variétale."
+ING-PLANT-POMME-000001,USDAFDC,171688,"Apples, raw, with skin (Includes foods for USDA Food Distribution Program)",semantic_state_match,0.85,espèce=Malus domestica;partie=fruit entier;état=raw;forme=whole,méthode analytique différente (proche),false,"USDA SR Legacy — pomme avec peau. Valeurs cohérentes avec CIQUAL, légères variations attendues sur eau et fibres."
+ING-PLANT-TOMATE-000001,CIQUAL,13040,"Tomate, crue",semantic_state_match,0.95,espèce=Solanum lycopersicum;partie=fruit;état=fresh,,false,Match direct CIQUAL.
+ING-ANIMAL-UFDEPOULE-000001,CIQUAL,22000,"Œuf, entier",semantic_state_match,0.95,espèce=Gallus gallus;partie=œuf entier;état=fresh,,false,Match direct CIQUAL — œuf entier cru.
+ING-DAIRY-BEURREDOUX-000001,CIQUAL,16400,Beurre doux,semantic_state_match,0.95,espèce=Bos taurus;processing=churned;form=solid,,false,Match direct CIQUAL — beurre doux (matière grasse laitière).
+ING-DAIRY-LAITENTIER-000001,CIQUAL,19000,"Lait entier, UHT",semantic_state_match,0.95,espèce=Bos taurus;processing=pasteurized/UHT;form=liquid,,false,Match direct CIQUAL — lait entier UHT.
+ING-TECH-HUILEDOLIVEV-000001,CIQUAL,17010,Huile d'olive vierge extra,semantic_state_match,0.95,espèce=Olea europaea;processing=first cold press;form=liquid,,false,Match direct CIQUAL — huile d'olive vierge extra.
+ING-TECH-FARINEDEBLTE-000001,CIQUAL,15020+100,Farine de blé tendre type 55/65,semantic_state_match,0.90,espèce=Triticum aestivum;processing=milled;form=powder;type=55,Taux d'extraction variable selon type (45-80%),false,Farine type 55-65 générique ; valeurs indicatives.
+ING-TECH-SUCREBLANC-000001,CIQUAL,13100,Sucre blanc,semantic_state_match,0.95,espèce=Saccharum officinarum;processing=crystallized;form=granular,,false,Saccharose cristallisé pur.
+ING-TECH-MIEL-000001,CIQUAL,13120,Miel,semantic_state_match,0.95,source=Apis mellifera;form=liquid,,false,Miel toutes fleurs générique.
+ING-TECH-CHOCOLATNOIR-000001,USDAFDC,170271,Dark chocolate 70-85% cacao,semantic_state_match,0.90,espèce=Theobroma cacao;cocoa%=70-85;form=solid,,false,USDA FDC — gamme 70-85% considérée comme générique 70%.
+ING-DAIRY-CRMELIQUIDEE-000001,CIQUAL,19450,Crème liquide entière (30% MG),semantic_state_match,0.95,espèce=Bos taurus;processing=pasteurized;form=emulsion,,false,Crème à 30% matière grasse générique.
+ING-BEV-CAFESPRESSO-000001,USDAFDC,171688,"Coffee, espresso",semantic_state_match,0.85,espèce=Coffea arabica;processing=espresso;form=liquid,concentration variable selon extraction,false,"Espresso 30 mL par shot, valeurs typiques."
+ING-BEV-VINROUGE-000001,CIQUAL,52000,Vin rouge,semantic_state_match,0.95,espèce=Vitis vinifera;processing=fermented;form=liquid,,false,Vin rouge 12% vol. ABV.
+ING-ANIMAL-POULETVIANDE-000001,CIQUAL,52900,"Poulet, viande crue (moyenne)",semantic_state_match,0.90,espèce=Gallus gallus;processing=raw;form=whole,Composition variable selon découpe (blanc vs cuisse),false,"Moyenne poulet entier, viande maigre."
+ING-MARINE-THON-000001,USDAFDC,173713,"Fish, tuna, fresh, raw",semantic_state_match,0.85,espèce=Thunnus;processing=raw;form=filet,"espèce précise variable (yellowfin, albacore, etc.)",true,Variabilité espèce → conservateur ; valeurs à valider au cas par cas.
+ING-PLANT-CAROTTE-000001,CIQUAL,13090,"Carotte, crue",semantic_state_match,0.95,espèce=Daucus carota;partie=racine;état=fresh,,false,Carotte crue moyenne générique.
+ING-PLANT-AMANDE-000001,USDAFDC,170567,"Nuts, almonds, raw, whole",semantic_state_match,0.90,espèce=Prunus dulcis;processing=raw;form=whole,,false,"Amande crue entière, USDA."
+ING-PLANT-BANANE-000001,CIQUAL,13000-banane,"Banane, crue, pulpe et peau",semantic_state_match,0.95,espèce=Musa paradisiaca;partie=fruit;état=fresh,,false,"Banane crue entière, générique."
+ING-PLANT-FRAISE-000001,CIQUAL,13007-fraise,"Fraise, crue",semantic_state_match,0.95,espèce=Fragaria × ananassa;partie=fruit;état=fresh,,false,Fraise crue générique.
+ING-PLANT-CITRONJAUNE-000001,CIQUAL,13036-citron,"Citron, cru, jus et pulpe",semantic_state_match,0.95,espèce=Citrus limon;partie=pulpe+jus;état=fresh,,false,"Citron jaune cru, jus et pulpe."
+ING-PLANT-ANANAS-000001,USDAFDC,169124,"Pineapple, raw, all varieties",semantic_state_match,0.90,espèce=Ananas comosus;partie=fruit;état=raw,,false,Ananas générique toutes variétés.
+ING-PLANT-RAISIN-000001,CIQUAL,13002,"Raisin, cru",semantic_state_match,0.95,espèce=Vitis vinifera;partie=baie;état=fresh,,false,Raisin frais générique.
+ING-PLANT-POMME-000002,CIQUAL,13001,"Pomme, cuite au four",semantic_state_match,0.95,espèce=Malus domestica;processing=cooked,,false,"Pomme cuite au four, sans ajout."
+ING-PLANT-PCHE-000001,USDAFDC,169928,"Peaches, yellow, raw",semantic_state_match,0.90,espèce=Prunus persica;partie=fruit;état=raw,,false,Pêche jaune crue générique.
+ING-PLANT-PAMPLEMOUSSE-000001,USDAFDC,173946,"Grapefruit, raw, pink and red, all areas",semantic_state_match,0.90,espèce=Citrus paradisi;partie=pulpe;état=raw,,false,Pamplemousse rose générique.
+ING-PLANT-POMMEDETERRE-000001,CIQUAL,13054,"Pomme de terre, crue, épluchée",semantic_state_match,0.95,espèce=Solanum tuberosum;partie=tubercule;processing=raw,,false,"Pomme de terre crue moyenne, épluchée."
+ING-PLANT-OIGNON-000001,CIQUAL,13098,"Oignon, cru",semantic_state_match,0.95,espèce=Allium cepa;partie=bulbe;processing=raw,,false,Oignon cru moyen.
+ING-PLANT-AIL-000001,CIQUAL,13099,"Ail, cru",semantic_state_match,0.95,espèce=Allium sativum;partie=bulbe;processing=raw,,false,"Ail cru, gousse épluchée."
+ING-PLANT-BROCOLI-000001,USDAFDC,170379,"Broccoli, raw",semantic_state_match,0.90,espèce=Brassica oleracea var. italica;partie=inflorescence;processing=raw,,false,Brocoli cru générique.
+ING-PLANT-PINARD-000001,USDAFDC,168409,"Spinach, raw",semantic_state_match,0.90,espèce=Spinacia oleracea;partie=feuille;processing=raw,,false,"Épinard cru, générique."
+ING-FUNGUS-CHAMPIGNONDE-000001,CIQUAL,13130,"Champignon de Paris, cru",semantic_state_match,0.95,espèce=Agaricus bisporus;processing=raw,,false,Champignon de Paris cru générique.
+ING-PLANT-MAS-000001,USDAFDC,170288,"Corn, sweet, yellow, raw",semantic_state_match,0.90,espèce=Zea mays;partie=grain;processing=raw,considéré comme céréale vs légume,false,Maïs doux en grain.
+ING-PLANT-POISCHICHE-000001,CIQUAL,13110,"Pois chiche, sec",semantic_state_match,0.95,espèce=Cicer arietinum;processing=dried,,false,Pois chiche sec cru.
+ING-PLANT-LENTILLEVERT-000001,CIQUAL,13111,"Lentille, sèche",semantic_state_match,0.95,espèce=Lens culinaris;processing=dried,,false,Lentille verte sèche.
+ING-PLANT-HARICOTROUGE-000001,USDAFDC,173757,"Beans, kidney, all types, mature seeds, raw",semantic_state_match,0.90,espèce=Phaseolus vulgaris;processing=dried,,false,Haricot rouge sec cru.
+ING-PLANT-SOJA-000001,USDAFDC,174270,"Soybeans, mature seeds, raw",semantic_state_match,0.90,espèce=Glycine max;processing=dried,,false,Soja sec cru.
+ING-ANIMAL-BUFVIANDE-000001,CIQUAL,61000,"Bœuf, viande crue, moyenne (5-10% MG)",semantic_state_match,0.90,espèce=Bos taurus;partie=muscle;processing=raw,"Composition variable selon race, morceau, persillage",true,"Bœuf viande moyenne, 5-10% MG. Variabilité élevée ; à affiner par morceau."
+ING-ANIMAL-PORCVIANDE-000001,CIQUAL,61500,"Porc, viande crue, moyenne",semantic_state_match,0.90,espèce=Sus scrofa;partie=muscle;processing=raw,Composition très variable selon morceau,true,Porc moyenne toutes pièces.
+ING-ANIMAL-AGNEAUVIANDE-000001,USDAFDC,170609,"Lamb, domestic, composite of trimmed retail cuts, separable lean and fat, trimmed to 1/4"" fat, choice, raw",semantic_state_match,0.85,espèce=Ovis aries;processing=raw,Morceau variable,true,Agneau moyenne US.
+ING-MARINE-SAUMON-000001,USDAFDC,173686,"Fish, salmon, atlantic, wild, raw",semantic_state_match,0.85,espèce=Salmo salar;processing=raw;form=filet,espèce précise variable (Atlantique vs Pacifique),true,Wild atlantic generic. Variabilité inter-espèces à valider.
+ING-MARINE-THON-000001,USDAFDC,173713,"Fish, tuna, fresh, raw",semantic_state_match,0.85,espèce=Thunnus;processing=raw;form=filet,"espèce précise variable (yellowfin, albacore, etc.)",true,Variabilité espèce → conservateur ; valeurs à valider au cas par cas.
+ING-MARINE-CABILLAUD-000001,USDAFDC,175117,"Fish, cod, atlantic, raw",semantic_state_match,0.85,espèce=Gadus morhua;processing=raw,,false,Cabillaud cru générique.
+ING-PLANT-NOISETTE-000001,USDAFDC,170581,"Nuts, hazelnuts or filberts, raw",semantic_state_match,0.90,espèce=Corylus avellana;processing=raw,,false,Noisette crue générique.
+ING-PLANT-NOIX-000001,USDAFDC,170569,"Nuts, walnuts, english, raw",semantic_state_match,0.90,espèce=Juglans regia;processing=raw,,false,Noix crue générique.
+ING-PLANT-PISTACHE-000001,USDAFDC,170574,"Nuts, pistachio nuts, raw",semantic_state_match,0.90,espèce=Pistacia vera;processing=raw,,false,Pistache crue générique.
+ING-PLANT-AVOINE-000001,USDAFDC,173904,"Oats, raw, whole",semantic_state_match,0.85,espèce=Avena sativa;processing=raw grain,,false,Avoine grain entier cru.
+ING-PLANT-QUINOA-000001,USDAFDC,169736,"Quinoa, raw, white",semantic_state_match,0.85,espèce=Chenopodium quinoa;processing=raw grain,,false,Quinoa blanc grain cru.
+ING-FERMENT-YAOURTNATURE-000001,CIQUAL,19500,"Yaourt nature, non sucré, au lait entier",semantic_state_match,0.95,espèce=Bos taurus;processing=fermented,,false,Yaourt nature non sucré au lait entier.
+ING-DAIRY-MOZZARELLA-000001,CIQUAL,19600,"Mozzarella, au lait de vache",semantic_state_match,0.90,espèce=Bos taurus;processing=filée,,false,Mozzarella vache générique.
+ING-DAIRY-PARMIGIANORE-000001,USDAFDC,170892,"Cheese, parmesan, hard",semantic_state_match,0.85,espèce=Bos taurus;processing=aged hard,,false,"Parmesan générique (équivalent Parmigiano Reggiano, AOP)."
+ING-DAIRY-CHEDDAR-000001,USDAFDC,173420,"Cheese, cheddar",semantic_state_match,0.90,espèce=Bos taurus;processing=aged,,false,Cheddar générique.
+ING-TECH-HUILEDETOURN-000001,CIQUAL,17020,Huile de tournesol,semantic_state_match,0.95,espèce=Helianthus annuus;processing=refined,,false,Huile de tournesol raffinée.
+ING-TECH-HUILEDECOLZA-000001,CIQUAL,17030,Huile de colza,semantic_state_match,0.95,espèce=Brassica napus;processing=refined,,false,Huile de colza raffinée.
+ING-COND-SAUCESOJA-000001,USDAFDC,171115,Soy sauce made from soy and wheat (shoyu),semantic_state_match,0.85,espèce=Glycine max;processing=fermented,,false,Shoyu générique.
+ING-COND-MOUTARDEDEDI-000001,CIQUAL,11000,Moutarde de Dijon,semantic_state_match,0.90,espèce=Sinapis;processing=ground,,false,Moutarde de Dijon générique.
+ING-BEV-BIREBLONDELA-000001,USDAFDC,170485,"Alcoholic beverage, beer, regular, all",semantic_state_match,0.80,espèce=Hordeum vulgare;processing=fermented;forme=liquid,Teneur en alcool variable selon style (3-7%),true,"Bière moyenne, ABV ~5%. Considérer variabilité."
+ING-BEV-VINBLANCSEC-000001,CIQUAL,52100,Vin blanc sec,semantic_state_match,0.95,espèce=Vitis vinifera;processing=fermented,,false,Vin blanc sec 12% vol.
+ING-TECH-SIROPDRABLE-000001,USDAFDC,169711,"Syrups, maple",semantic_state_match,0.90,espèce=Acer saccharum;processing=boiled down,,false,Sirop d'érable pur.
+ING-TECH-CHOCOLATNOIR-000002,USDAFDC,170272,Dark chocolate 70-85% cacao,semantic_state_match,0.85,espèce=Theobroma cacao;cocoa%=70-85,,false,"Chocolat noir 70-85% générique, USDA."
+ING-TECH-CACAOENPOUDR-000001,USDAFDC,169592,"Cocoa, dry powder, unsweetened",semantic_state_match,0.90,espèce=Theobroma cacao;processing=beans defatted dried ground,,false,Cacao en poudre non sucré.
+ING-MARINE-CREVETTE-000001,USDAFDC,175170,"Crustaceans, shrimp, raw",semantic_state_match,0.85,espèce=Penaeus;processing=raw,,false,Crevette crue générique.
+ING-MARINE-MOULE-000001,CIQUAL,81100,"Moule, crue",semantic_state_match,0.90,espèce=Mytilus edulis;processing=raw,,false,Moule crue générique.
+ING-MARINE-ANCHOIS-000001,USDAFDC,174163,"Fish, anchovy, european, raw",semantic_state_match,0.85,espèce=Engraulis encrasicolus;processing=raw,,false,Anchois cru générique.
