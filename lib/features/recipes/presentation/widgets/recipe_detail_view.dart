@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
-import 'package:maestropesto/core/database/app_database.dart';
+import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_metier_advisory_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';

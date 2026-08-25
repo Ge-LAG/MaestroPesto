@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
-import 'package:maestropesto/core/database/app_database.dart';
+import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 /// Lot D — small advisory panel that surfaces Phase 3 + Phase 4
@@ -90,12 +90,13 @@ class RecipeMetierAdvisoryPanel extends StatelessWidget {
     if (ingredientIds.isEmpty) {
       return const <InteractionRule>[];
     }
-    // The schema stores reactant_or_component_ids as a `|`-separated list.
-    // Match a rule if any of our ingredient ids appears in that list.
+    // The schema stores reactant_or_component_ids as a `|`-separated list
+    // (nullable). Match a rule if any of our ingredient ids appears in
+    // that list.
     final all = await db.select(db.interactionRules).get();
     final matches = <InteractionRule>[];
     for (final rule in all) {
-      final reactants = rule.reactantOrComponentIds.split('|');
+      final reactants = (rule.reactantOrComponentIds ?? '').split('|');
       for (final id in ingredientIds) {
         if (reactants.contains(id)) {
           matches.add(rule);
