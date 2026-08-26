@@ -26,15 +26,19 @@ const ruleAcid = InteractionRule(
 
 void main() {
   group('FunctionalRepository.fromRules (no Drift)', () {
-    test('alertsFor évalue les règles injectées, triées par sévérité',
-        () async {
-      final repo = FunctionalRepository.fromRules(const [ruleGel, ruleAcid]);
-      final alerts = await repo.alertsFor(const ['PROT_GEL']);
-      expect(alerts.map((a) => a.alertId).toList(),
-          ['RULE-GELATIN-ACID', 'RULE-GEL-GELATINE']);
-      expect(alerts.first.severity, FunctionalSeverity.warning);
-      expect(alerts.first.confidence, closeTo(0.425, 1e-9));
-    });
+    test(
+      'alertsFor évalue les règles injectées, triées par sévérité',
+      () async {
+        final repo = FunctionalRepository.fromRules(const [ruleGel, ruleAcid]);
+        final alerts = await repo.alertsFor(const ['PROT_GEL']);
+        expect(alerts.map((a) => a.alertId).toList(), [
+          'RULE-GELATIN-ACID',
+          'RULE-GEL-GELATINE',
+        ]);
+        expect(alerts.first.severity, FunctionalSeverity.warning);
+        expect(alerts.first.confidence, closeTo(0.425, 1e-9));
+      },
+    );
 
     test('alertsFor sans match → vide', () async {
       final repo = FunctionalRepository.fromRules(const [ruleGel]);
@@ -44,10 +48,7 @@ void main() {
 
     test('profileFor renvoie null sans DB injectée', () async {
       final repo = FunctionalRepository.fromRules(const [ruleGel]);
-      expect(
-        await repo.profileFor('ING-A', stateId: 'raw'),
-        isNull,
-      );
+      expect(await repo.profileFor('ING-A', stateId: 'raw'), isNull);
     });
   });
 
@@ -64,17 +65,18 @@ void main() {
       await db.close();
     });
 
-    Future<void> insertRule(String ruleId, String reactants) =>
-        db.into(db.interactionRules).insert(
-              InteractionRulesCompanion.insert(
-                ruleId: ruleId,
-                ruleFamily: const Value('gelling'),
-                reactantOrComponentIds: Value(reactants),
-                predictedEffect: const Value('gel'),
-                effectDirection: const Value('increase'),
-                confidence: const Value(0.9),
-              ),
-            );
+    Future<void> insertRule(String ruleId, String reactants) => db
+        .into(db.interactionRules)
+        .insert(
+          InteractionRulesCompanion.insert(
+            ruleId: ruleId,
+            ruleFamily: const Value('gelling'),
+            reactantOrComponentIds: Value(reactants),
+            predictedEffect: const Value('gel'),
+            effectDirection: const Value('increase'),
+            confidence: const Value(0.9),
+          ),
+        );
 
     test('alertsFor lit les règles depuis la DB', () async {
       await insertRule('RULE-A', 'PROT_GEL|SM_CA');
@@ -94,7 +96,20 @@ void main() {
     });
 
     test('profileFor trouve le profil par ingrédient + état', () async {
-      await db.into(db.functionalIngredients).insert(
+      // `functional_ingredients` référence `ingredients` (FK) : insérer
+      // d'abord la ligne parent du référentiel Phase 1.
+      await db
+          .into(db.ingredients)
+          .insert(
+            IngredientsCompanion.insert(
+              ingredientId: 'ING-A',
+              canonicalNameFr: 'Ail',
+              categoryLevel1: 'vegetal',
+            ),
+          );
+      await db
+          .into(db.functionalIngredients)
+          .insert(
             FunctionalIngredientsCompanion.insert(
               ingredientId: 'ING-A',
               ingredientStateId: 'raw',

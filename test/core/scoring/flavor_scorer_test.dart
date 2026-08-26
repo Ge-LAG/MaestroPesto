@@ -4,13 +4,13 @@ import 'package:maestropesto/core/models/flavor_match.dart';
 import 'package:maestropesto/core/scoring/flavor_scorer.dart';
 
 FlavorMatch pair(String a, String b, double score) => FlavorMatch(
-      ingredientAId: a,
-      ingredientBId: b,
-      combinationSize: 2,
-      overallScore: score,
-      aromaSimilarity: score,
-      culinarySupport: score,
-    );
+  ingredientAId: a,
+  ingredientBId: b,
+  combinationSize: 2,
+  overallScore: score,
+  aromaSimilarity: score,
+  culinarySupport: score,
+);
 
 /// Lookup en mémoire : clé = ids triés jointes par '|'.
 FlavorLookup lookupOf(Map<String, FlavorMatch> data) =>
@@ -36,11 +36,13 @@ void main() {
         overallScore: 0.91,
         explanation: 'Combinaison validée en base',
       );
-      final lookup = lookupOf({'$basilic|$mozzarella|$tomate': direct});
-      final result = FlavorScorer.scoreCombination(
-        const [tomate, basilic, mozzarella],
-        lookup,
-      );
+      // Clé = ids triés (contrat du lookup, cf. FlavorRepository._keyFor).
+      final lookup = lookupOf({'$mozzarella|$basilic|$tomate': direct});
+      final result = FlavorScorer.scoreCombination(const [
+        tomate,
+        basilic,
+        mozzarella,
+      ], lookup);
       expect(result, same(direct));
     });
 
@@ -50,10 +52,11 @@ void main() {
         'ING-A|ING-C': pair('ING-A', 'ING-C', 0.60),
         'ING-B|ING-C': pair('ING-B', 'ING-C', 0.40),
       });
-      final result = FlavorScorer.scoreCombination(
-        const ['ING-A', 'ING-B', 'ING-C'],
-        lookup,
-      );
+      final result = FlavorScorer.scoreCombination(const [
+        'ING-A',
+        'ING-B',
+        'ING-C',
+      ], lookup);
       expect(result, isNotNull);
       expect(result!.overallScore, closeTo(0.60, 1e-9));
       expect(result.combinationSize, 3);
@@ -62,13 +65,12 @@ void main() {
     });
 
     test('partial pairs: averages only the pairs found', () {
-      final lookup = lookupOf({
-        'ING-A|ING-B': pair('ING-A', 'ING-B', 0.90),
-      });
-      final result = FlavorScorer.scoreCombination(
-        const ['ING-A', 'ING-B', 'ING-C'],
-        lookup,
-      );
+      final lookup = lookupOf({'ING-A|ING-B': pair('ING-A', 'ING-B', 0.90)});
+      final result = FlavorScorer.scoreCombination(const [
+        'ING-A',
+        'ING-B',
+        'ING-C',
+      ], lookup);
       expect(result, isNotNull);
       expect(result!.overallScore, closeTo(0.90, 1e-9));
     });
@@ -85,29 +87,38 @@ void main() {
       const basilic = 'ING-PLANT-BASILIC-000001';
       const mozzarella = 'ING-DAIRY-MOZZARELLA-000001';
       final lookup = lookupOf({
+        // Clés = ids triés (contrat du lookup, cf. FlavorRepository._keyFor).
         '$basilic|$tomate': pair(tomate, basilic, 0.87),
         '$mozzarella|$tomate': pair(tomate, mozzarella, 0.85),
-        '$basilic|$mozzarella': pair(basilic, mozzarella, 0.80),
+        '$mozzarella|$basilic': pair(basilic, mozzarella, 0.80),
       });
-      final result = FlavorScorer.scoreCombination(
-        const [tomate, basilic, mozzarella],
-        lookup,
-      );
+      final result = FlavorScorer.scoreCombination(const [
+        tomate,
+        basilic,
+        mozzarella,
+      ], lookup);
       expect(result, isNotNull);
       expect(result!.overallScore, closeTo(0.84, 1e-9));
       expect(result.category, FlavorMatchCategory.good);
     });
 
     test('synthetic match merges evidence refs without duplicates', () {
-      final a = pair('ING-A', 'ING-B', 0.8)
-          .copyWith(evidenceRefs: const ['REF-1', 'REF-2']);
-      final b = pair('ING-A', 'ING-C', 0.7)
-          .copyWith(evidenceRefs: const ['REF-2', 'REF-3']);
+      final a = pair(
+        'ING-A',
+        'ING-B',
+        0.8,
+      ).copyWith(evidenceRefs: const ['REF-1', 'REF-2']);
+      final b = pair(
+        'ING-A',
+        'ING-C',
+        0.7,
+      ).copyWith(evidenceRefs: const ['REF-2', 'REF-3']);
       final lookup = lookupOf({'ING-A|ING-B': a, 'ING-A|ING-C': b});
-      final result = FlavorScorer.scoreCombination(
-        const ['ING-A', 'ING-B', 'ING-C'],
-        lookup,
-      );
+      final result = FlavorScorer.scoreCombination(const [
+        'ING-A',
+        'ING-B',
+        'ING-C',
+      ], lookup);
       expect(result!.evidenceRefs, containsAll(['REF-1', 'REF-2', 'REF-3']));
       expect(result.evidenceRefs.length, 3);
     });
@@ -121,10 +132,10 @@ void main() {
           overallScore: 0.7,
         ),
       });
-      final result = FlavorScorer.scoreCombination(
-        const ['ING-A', 'ING-B'],
-        lookup,
-      );
+      final result = FlavorScorer.scoreCombination(const [
+        'ING-A',
+        'ING-B',
+      ], lookup);
       expect(result, isNotNull);
       expect(result!.aromaSimilarity, isNull);
       expect(result.tasteBalance, isNull);
