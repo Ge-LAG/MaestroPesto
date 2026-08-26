@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/models/ingredient_summary.dart';
 import '../../recommendations/data/recommender.dart';
+import 'ingredient_alias_index.dart';
 import 'ingredient_mapping.dart';
 
 /// Read-only repository for Phase 1 ingredients. Used by the recipe
@@ -49,17 +50,21 @@ class IngredientsRepository implements IngredientCandidatesSource {
   }
 
   /// Phase 09 (§6.3, câblage picker) — toutes les summaries Phase 1
-  /// triées par nom canonique FR. Alimente le picker du formulaire de
-  /// recette. Liste vide tant que l'import CSV n'a pas été fait.
+  /// triées par nom canonique FR (tri naturel français — retour PO
+  /// n°4 : « Œuf de poule » doit apparaître entre « Noix » et
+  /// « Orange », pas en fin de liste). Alimente le picker du
+  /// formulaire de recette. Liste vide tant que l'import CSV n'a pas
+  /// été fait.
   Future<List<IngredientSummary>> allSummaries() async {
     final rows = await (db.select(
       db.ingredients,
     )..orderBy([(t) => OrderingTerm.asc(t.canonicalNameFr)])).get();
-    return [
+    final summaries = [
       for (final row in rows)
         IngredientMapping.toSummary(row)
             .copyWith(confidence: row.confidence ?? 1.0),
-    ];
+    ]..sort((a, b) => compareNaturalFr(a.canonicalNameFr, b.canonicalNameFr));
+    return summaries;
   }
 
   /// Phase 09 Lot H (§9.1) — résumé Phase 1 d'un ingrédient, avec la
@@ -96,6 +101,6 @@ class IngredientsRepository implements IngredientCandidatesSource {
       for (final row in rows)
         IngredientMapping.toSummary(row)
             .copyWith(confidence: row.confidence ?? 1.0),
-    ];
+    ]..sort((a, b) => compareNaturalFr(a.canonicalNameFr, b.canonicalNameFr));
   }
 }

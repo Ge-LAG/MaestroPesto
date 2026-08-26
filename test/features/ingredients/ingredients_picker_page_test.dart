@@ -99,4 +99,19 @@ void main() {
     expect(result!.ingredientId, 'ING-PLANT-BASILIC-000001');
     expect(result.canonicalNameFr, 'Basilic');
   });
+
+  testWidgets('chips de filtre lisibles : texte noir (retour PO n°4)', (
+    tester,
+  ) async {
+    await openPicker(tester);
+    final chips = find.byType(FilterChip);
+    // « Toutes » + les catégories du corpus.
+    expect(chips, findsNWidgets(3));
+    for (final chip in tester.widgetList<FilterChip>(chips)) {
+      final label = chip.label;
+      expect(label, isA<Text>(), reason: 'label Text attendu');
+      final style = (label as Text).style;
+      expect(style?.color, Colors.black87, reason: 'texte noir sur fond clair');
+    }
+  });
 }

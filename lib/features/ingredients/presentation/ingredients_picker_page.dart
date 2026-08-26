@@ -186,10 +186,21 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
               itemCount: categories.length + 1,
               separatorBuilder: (_, _) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
+                // Retour PO n°4 : texte noir explicite — le style par
+                // défaut du thème rendait le label blanc sur fond
+                // clair (illisible).
+                final chipLabelStyle = const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w600,
+                );
                 if (index == 0) {
                   return FilterChip(
-                    label: Text(strings.pickIngredientCategoryAll),
+                    label: Text(
+                      strings.pickIngredientCategoryAll,
+                      style: chipLabelStyle,
+                    ),
                     selected: _categoryFilter == null,
+                    selectedColor: Colors.green.shade100,
                     onSelected: (_) {
                       setState(() => _categoryFilter = null);
                     },
@@ -197,8 +208,9 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
                 }
                 final cat = categories[index - 1];
                 return FilterChip(
-                  label: Text(cat),
+                  label: Text(cat, style: chipLabelStyle),
                   selected: _categoryFilter == cat,
+                  selectedColor: Colors.green.shade100,
                   onSelected: (_) {
                     setState(() => _categoryFilter = cat);
                   },

@@ -240,6 +240,14 @@ String normalize(String input) {
   return decomposed.replaceAll(_whitespacePattern, ' ').trim();
 }
 
+/// Comparateur de tri « naturel français » (retour PO n°4) : le tri
+/// SQL par codepoint place « Œ » (U+0152) après « Z », ce qui relègue
+/// « Œuf de poule » en fin de liste et donne l'impression d'une liste
+/// tronquée. On compare les formes normalisées (œ→oe, accents pliés)
+/// pour que « Œuf » arrive à sa place, entre « Noix » et « Orange ».
+int compareNaturalFr(String a, String b) =>
+    normalize(a).compareTo(normalize(b));
+
 /// Table de décomposition des diacritiques latins courants (fold
 /// d'accents). Dart n'expose pas de NFD natif : on décompose les
 /// caractères précomposés vers leur base, puis les marques combinantes

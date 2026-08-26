@@ -230,5 +230,26 @@ void main() {
         'Tomate cerise',
       ]);
     });
+
+    test(
+      'compareNaturalFr : « Œ » à sa place entre N et O (retour PO n°4)',
+      () {
+        final names = [
+          'Zeste de orange',
+          'Orange',
+          'Œuf de poule',
+          'Noix de coco',
+          'Zeste de citron jaune',
+        ];
+        names.sort(compareNaturalFr);
+        expect(names, [
+          'Noix de coco',
+          'Œuf de poule',
+          'Orange',
+          'Zeste de citron jaune',
+          'Zeste de orange',
+        ]);
+      },
+    );
   });
 }
