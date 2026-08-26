@@ -17,6 +17,7 @@ import 'package:maestropesto/core/models/flavor_match.dart';
 import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/core/models/ingredient_summary.dart';
 import 'package:maestropesto/core/models/recommendation.dart';
+import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/flavor/presentation/widgets/flavor_compatibility_heatmap.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
@@ -68,17 +69,21 @@ Future<RecommendationAnalysis> analyzeRecipeProblems({
 }) async {
   final ids = <String>[];
   final labels = <String, String>{};
+  final grams = <String, double>{};
   for (final ingredient in ingredients) {
     final id = ingredient.ingredientId;
     if (id == null || id.isEmpty || labels.containsKey(id)) continue;
     ids.add(id);
     labels[id] = ingredient.label;
+    final g = NutritionAggregator.quantityToGrams(ingredient.quantity);
+    if (g != null && g > 0) grams[id] = g;
   }
 
   final pairs = await flavor.incompatiblePairs(ids);
-  final alerts = (await functional.alertsFor(ids))
-      .where((a) => a.severity == FunctionalSeverity.danger)
-      .toList();
+  final alerts = (await functional.alertsFor(
+    ids,
+    gramsByIngredient: grams,
+  )).where((a) => a.severity == FunctionalSeverity.danger).toList();
 
   final problems = <RecommendationProblem>[];
   final seen = <String>{};

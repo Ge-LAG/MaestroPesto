@@ -390,5 +390,56 @@ void main() {
       final ids = alerts.map((a) => a.alertId).toList();
       expect(ids.toSet().length, ids.length);
     });
+
+    // Retour PO n°3 : part massique du mix des ingrédients déclencheurs.
+    test('mixShare : part du mix calculée à partir des grammes', () {
+      const rule = InteractionRule(
+        ruleId: 'RULE-PEC-HM-001',
+        ruleFamily: 'gelling',
+        reactantOrComponentIds: 'POLY_PEC_HM|SM_SUCROSE',
+        predictedEffect: 'gel_formation',
+        effectDirection: 'increase_gel_strength',
+        confidence: 0.9,
+      );
+      final alerts = FunctionalConstraintSolver.evaluate(
+        recipeIngredientIds: const ['POLY_PEC_HM', 'ING-X'],
+        allRules: const [rule],
+        gramsByIngredient: const {'POLY_PEC_HM': 10.0, 'ING-X': 90.0},
+      );
+      expect(alerts.single.triggerIngredientIds, ['POLY_PEC_HM']);
+      expect(alerts.single.mixShare, closeTo(0.10, 1e-9));
+    });
+
+    test('mixShare : plusieurs déclencheurs cumulés + null sans grammes', () {
+      const rule = InteractionRule(
+        ruleId: 'RULE-DUO',
+        ruleFamily: 'gelling',
+        reactantOrComponentIds: 'POLY_PEC_HM|SM_SUCROSE',
+        predictedEffect: 'gel',
+        effectDirection: 'increase',
+        confidence: 0.9,
+      );
+      final withGrams = FunctionalConstraintSolver.evaluate(
+        recipeIngredientIds: const ['POLY_PEC_HM', 'SM_SUCROSE', 'ING-X'],
+        allRules: const [rule],
+        gramsByIngredient: const {
+          'POLY_PEC_HM': 25.0,
+          'SM_SUCROSE': 25.0,
+          'ING-X': 50.0,
+        },
+      );
+      expect(
+        withGrams.single.triggerIngredientIds,
+        containsAll(['POLY_PEC_HM', 'SM_SUCROSE']),
+      );
+      expect(withGrams.single.mixShare, closeTo(0.50, 1e-9));
+
+      final withoutGrams = FunctionalConstraintSolver.evaluate(
+        recipeIngredientIds: const ['POLY_PEC_HM', 'SM_SUCROSE'],
+        allRules: const [rule],
+      );
+      expect(withoutGrams.single.mixShare, isNull);
+      expect(withoutGrams.single.triggerIngredientIds, isNotEmpty);
+    });
   });
 }

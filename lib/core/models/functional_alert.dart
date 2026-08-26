@@ -26,6 +26,8 @@ class FunctionalAlert {
     required this.confidence,
     this.evidenceType = 'expert_rule_with_literature',
     this.sourceRefs = const <String>[],
+    this.triggerIngredientIds = const <String>[],
+    this.mixShare,
   });
 
   /// Identifiant de la règle source (ex. `RULE-PEC-HM-001`).
@@ -53,6 +55,14 @@ class FunctionalAlert {
   /// — citées in-app (retour PO 2026-08-26).
   final List<String> sourceRefs;
 
+  /// Ingrédients de la recette qui déclenchent la règle (retour PO
+  /// n°3 : expliciter l'influence selon le mix).
+  final List<String> triggerIngredientIds;
+
+  /// Part massique des ingrédients déclencheurs dans le mix (0..1).
+  /// Null quand les quantités ne sont pas exploitables.
+  final double? mixShare;
+
   FunctionalAlert copyWith({
     String? alertId,
     FunctionalSeverity? severity,
@@ -62,6 +72,8 @@ class FunctionalAlert {
     double? confidence,
     String? evidenceType,
     List<String>? sourceRefs,
+    List<String>? triggerIngredientIds,
+    Object? mixShare = _shareSentinel,
   }) {
     return FunctionalAlert(
       alertId: alertId ?? this.alertId,
@@ -72,6 +84,10 @@ class FunctionalAlert {
       confidence: confidence ?? this.confidence,
       evidenceType: evidenceType ?? this.evidenceType,
       sourceRefs: sourceRefs ?? this.sourceRefs,
+      triggerIngredientIds: triggerIngredientIds ?? this.triggerIngredientIds,
+      mixShare: identical(mixShare, _shareSentinel)
+          ? this.mixShare
+          : mixShare as double?,
     );
   }
 
@@ -86,7 +102,9 @@ class FunctionalAlert {
         other.predictedEffect == predictedEffect &&
         other.confidence == confidence &&
         other.evidenceType == evidenceType &&
-        _listEq(other.sourceRefs, sourceRefs);
+        _listEq(other.sourceRefs, sourceRefs) &&
+        _listEq(other.triggerIngredientIds, triggerIngredientIds) &&
+        other.mixShare == mixShare;
   }
 
   @override
@@ -99,6 +117,8 @@ class FunctionalAlert {
     confidence,
     evidenceType,
     Object.hashAll(sourceRefs),
+    Object.hashAll(triggerIngredientIds),
+    mixShare,
   );
 
   @override
@@ -106,6 +126,8 @@ class FunctionalAlert {
       'FunctionalAlert($alertId, ${severity.name}, "$title", '
       'confidence=$confidence)';
 }
+
+const Object _shareSentinel = Object();
 
 bool _listEq<T>(List<T> a, List<T> b) {
   if (identical(a, b)) return true;

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/functional_alert.dart';
+import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
@@ -79,21 +80,48 @@ class FunctionalAlertCard extends StatelessWidget {
     final repo = repository ?? (db != null ? FunctionalRepository(db!) : null);
     if (repo == null) return const SizedBox.shrink();
 
+    // Retour PO n°3 : les quantités alimentent le calcul de part du
+    // mix de chaque alerte (influence potentielle).
+    final grams = <String, double>{};
+    final labels = <String, String>{};
+    for (final ingredient in ingredients) {
+      final id = ingredient.ingredientId;
+      if (id == null || id.isEmpty) continue;
+      labels.putIfAbsent(id, () => ingredient.label);
+      final g = NutritionAggregator.quantityToGrams(ingredient.quantity);
+      if (g != null && g > 0) grams.putIfAbsent(id, () => g);
+    }
+
     return FutureBuilder<List<FunctionalAlert>>(
-      future: repo.alertsFor(ids),
+      future: repo.alertsFor(ids, gramsByIngredient: grams),
       builder: (context, snapshot) {
         final alerts = snapshot.data ?? const <FunctionalAlert>[];
         if (alerts.isEmpty) return const SizedBox.shrink();
-        return _AlertsCard(alerts: alerts);
+        return _AlertsCard(
+          alerts: alerts,
+          labels: labels,
+          mixQuantified: grams.isNotEmpty,
+        );
       },
     );
   }
 }
 
 class _AlertsCard extends StatelessWidget {
-  const _AlertsCard({required this.alerts});
+  const _AlertsCard({
+    required this.alerts,
+    required this.labels,
+    required this.mixQuantified,
+  });
 
   final List<FunctionalAlert> alerts;
+
+  /// Labels d'affichage par id d'ingrédient.
+  final Map<String, String> labels;
+
+  /// Vrai si au moins une quantité exploitable existe (la part du mix
+  /// peut être calculée).
+  final bool mixQuantified;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +146,8 @@ class _AlertsCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            for (final alert in alerts) _AlertTile(alert: alert),
+            for (final alert in alerts)
+              _AlertTile(alert: alert, labels: labels),
           ],
         ),
       ),
@@ -129,14 +158,23 @@ class _AlertsCard extends StatelessWidget {
 /// Une alerte : icône + couleur par sévérité, expansion au tap
 /// (conditions + effet prédit). Pas dismissable (plan §8.3).
 class _AlertTile extends StatelessWidget {
-  const _AlertTile({required this.alert});
+  const _AlertTile({required this.alert, required this.labels});
 
   final FunctionalAlert alert;
+
+  /// Labels d'affichage par id (noms vus par l'utilisateur).
+  final Map<String, String> labels;
 
   @override
   Widget build(BuildContext context) {
     final strings = context.strings;
     final color = functionalSeverityColor(alert.severity);
+    final share = alert.mixShare;
+    final subtitle = StringBuffer(
+      '${alert.alertId} — ${strings.functionalConfidence(alert.confidence)}',
+    );
+    if (share != null)
+      subtitle.write(' — ${strings.functionalMixShare(share)}');
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
@@ -154,7 +192,7 @@ class _AlertTile extends StatelessWidget {
                   ?.copyWith(fontWeight: FontWeight.w700),
             ),
             subtitle: Text(
-              '${alert.alertId} — ${strings.functionalConfidence(alert.confidence)}',
+              subtitle.toString(),
               style: Theme.of(context).textTheme.labelSmall,
             ),
             children: [
@@ -163,6 +201,27 @@ class _AlertTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (alert.triggerIngredientIds.isNotEmpty) ...[
+                      Text(
+                        strings.functionalTriggersLabel,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      for (final id in alert.triggerIngredientIds)
+                        Text(
+                          '• ${labels[id] ?? id}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      if (share != null && share < 0.05) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          strings.functionalLowShareNote,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                      const SizedBox(height: 8),
+                    ],
                     if (alert.conditions.isNotEmpty) ...[
                       Text(
                         strings.functionalConditions,

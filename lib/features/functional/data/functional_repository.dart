@@ -44,12 +44,20 @@ class FunctionalRepository {
 
   /// Renvoie les alertes applicables aux ingrédients donnés, triées
   /// par sévérité décroissante (cf. [FunctionalConstraintSolver]).
-  Future<List<FunctionalAlert>> alertsFor(List<String> ingredientIds) async {
+  ///
+  /// [gramsByIngredient] (retour PO n°3) : quantités en grammes par
+  /// id — active le calcul de part du mix (`mixShare`) sur chaque
+  /// alerte.
+  Future<List<FunctionalAlert>> alertsFor(
+    List<String> ingredientIds, {
+    Map<String, double>? gramsByIngredient,
+  }) async {
     if (ingredientIds.isEmpty) return const <FunctionalAlert>[];
     final rules = await _ensureRules();
     return FunctionalConstraintSolver.evaluate(
       recipeIngredientIds: ingredientIds,
       allRules: rules,
+      gramsByIngredient: gramsByIngredient,
     );
   }
 

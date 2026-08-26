@@ -35,18 +35,41 @@ abstract final class FunctionalConstraintSolver {
   /// alertes applicables triées par sévérité décroissante
   /// (danger > warning > info > outOfDomain), puis par `alertId` pour
   /// un ordre déterministe.
+  ///
+  /// [gramsByIngredient] (retour PO n°3) : quantités en grammes par
+  /// ingrédient lié. Quand elles sont exploitables, chaque alerte
+  /// porte la **part massique du mix** de ses ingrédients déclencheurs
+  /// (`mixShare`) pour évaluer l'influence potentielle.
   static List<FunctionalAlert> evaluate({
     required List<String> recipeIngredientIds,
     required List<InteractionRule> allRules,
+    Map<String, double>? gramsByIngredient,
   }) {
     final ids = recipeIngredientIds.toSet();
+    final grams = gramsByIngredient;
+    final totalGrams = grams?.entries
+        .where((e) => ids.contains(e.key) && e.value > 0)
+        .map((e) => e.value)
+        .fold<double>(0, (a, b) => a + b);
     final alerts = <FunctionalAlert>[];
     for (final rule in allRules) {
       final reactants = _splitPipe(rule.reactantOrComponentIds);
       if (reactants.isEmpty) continue; // règle « any » : non déclenchée en v1
-      final matches = reactants.any(ids.contains);
-      if (!matches) continue;
-      alerts.add(_toAlert(rule, reactants));
+      final triggers = reactants.where(ids.contains).toList();
+      if (triggers.isEmpty) continue;
+      alerts.add(
+        _toAlert(
+          rule,
+          reactants,
+          triggers: triggers,
+          mixShare: (totalGrams != null && totalGrams > 0 && grams != null)
+              ? (triggers
+                        .map((t) => grams[t] ?? 0)
+                        .fold<double>(0, (a, b) => a + b)) /
+                    totalGrams
+              : null,
+        ),
+      );
     }
     alerts.sort((a, b) {
       final bySeverity = _severityRank(b.severity) - _severityRank(a.severity);
@@ -57,8 +80,10 @@ abstract final class FunctionalConstraintSolver {
 
   static FunctionalAlert _toAlert(
     InteractionRule rule,
-    List<String> reactants,
-  ) {
+    List<String> reactants, {
+    List<String> triggers = const <String>[],
+    double? mixShare,
+  }) {
     return FunctionalAlert(
       alertId: rule.ruleId,
       severity: _severityFor(rule),
@@ -69,6 +94,8 @@ abstract final class FunctionalConstraintSolver {
           (rule.confidence ?? 1.0) * kFunctionalDegradedConfidenceFactor,
       evidenceType: rule.evidenceType ?? 'expert_rule_with_literature',
       sourceRefs: _splitPipe(rule.sourceRefs),
+      triggerIngredientIds: triggers,
+      mixShare: mixShare,
     );
   }
 
