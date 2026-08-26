@@ -68,6 +68,7 @@ abstract final class FunctionalConstraintSolver {
       confidence:
           (rule.confidence ?? 1.0) * kFunctionalDegradedConfidenceFactor,
       evidenceType: rule.evidenceType ?? 'expert_rule_with_literature',
+      sourceRefs: _splitPipe(rule.sourceRefs),
     );
   }
 

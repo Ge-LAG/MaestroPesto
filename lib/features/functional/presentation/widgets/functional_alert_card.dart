@@ -186,6 +186,20 @@ class _AlertTile extends StatelessWidget {
                         alert.predictedEffect,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
+                      const SizedBox(height: 8),
+                    ],
+                    if (alert.sourceRefs.isNotEmpty) ...[
+                      Text(
+                        strings.nutritionSources,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      for (final ref in alert.sourceRefs)
+                        Text(
+                          '• $ref',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(fontStyle: FontStyle.italic),
+                        ),
                     ],
                   ],
                 ),

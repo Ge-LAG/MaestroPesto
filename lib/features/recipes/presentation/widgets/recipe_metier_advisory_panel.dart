@@ -119,6 +119,12 @@ class _RecommendationBannerState extends State<_RecommendationBanner> {
         }
         final strings = context.strings;
         final colorScheme = Theme.of(context).colorScheme;
+        // Retour PO 2026-08-26 : la bannière nomme les ingrédients en
+        // cause (les paires incompatibles, comme dans le sheet).
+        final pairDetail = analysis.problems
+            .take(2)
+            .map((p) => p.explanation)
+            .join(' · ');
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 12),
           color: colorScheme.errorContainer,
@@ -132,12 +138,23 @@ class _RecommendationBannerState extends State<_RecommendationBanner> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    strings.recommendationSheetTitle,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: colorScheme.onErrorContainer,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        strings.recommendationSheetTitle,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: colorScheme.onErrorContainer,
+                        ),
+                      ),
+                      if (pairDetail.isNotEmpty)
+                        Text(
+                          pairDetail,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: colorScheme.onErrorContainer),
+                        ),
+                    ],
                   ),
                 ),
                 TextButton(

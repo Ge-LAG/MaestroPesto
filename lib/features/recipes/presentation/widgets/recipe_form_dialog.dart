@@ -133,6 +133,9 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     if (_stepControllers.isEmpty) {
       _stepControllers.add(TextEditingController());
     }
+    // Recette déjà liée à des ingrédients en conflit : montrer le
+    // warning dès l'ouverture (pas seulement au prochain pick).
+    _refreshCombinationWarning();
   }
 
   @override
@@ -303,12 +306,57 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
       return;
     }
 
-    final warningMessage = context.strings.ingredientBadCombinationWarning;
+    // Retour PO 2026-08-26 : le warning nomme les ingrédients en cause.
+    // Les noms viennent des labels des drafts (l'utilisateur les voit),
+    // avec fallback sur le nom canonique Phase 1 en base.
+    final strings = context.strings;
+    final labels = <String, String>{};
+    for (final draft in _ingredients) {
+      final id = draft.ingredientId;
+      if (id != null && id.isNotEmpty && labels[id] == null) {
+        labels[id] = draft.labelController.text.trim();
+      }
+    }
     final badPairs = await flavor.incompatiblePairs(ids);
     final hasDanger = (await functional.alertsFor(ids))
         .any((a) => a.severity == FunctionalSeverity.danger);
     if (!mounted) return;
-    final warning = (badPairs.isNotEmpty || hasDanger) ? warningMessage : null;
+
+    String? warning;
+    if (badPairs.isNotEmpty || hasDanger) {
+      final parts = <String>[];
+      if (badPairs.isNotEmpty) {
+        final pairTexts = <String>[];
+        for (final pair in badPairs.take(3)) {
+          var nameA = labels[pair.ingredientAId];
+          String? nameB = labels[pair.ingredientBId];
+          if (widget.db != null) {
+            final repo = IngredientsRepository(widget.db!);
+            nameA ??= (await repo.summaryFor(pair.ingredientAId))
+                ?.canonicalNameFr;
+            final idB = pair.ingredientBId;
+            if (idB != null && nameB == null) {
+              nameB = (await repo.summaryFor(idB))?.canonicalNameFr;
+            }
+          }
+          pairTexts.add(
+            '${nameA ?? pair.ingredientAId} × '
+            '${nameB ?? pair.ingredientBId} '
+            '(${pair.overallScore.toStringAsFixed(2)})',
+          );
+        }
+        parts.add(
+          '${strings.flavorIncompatibilitiesLabel} : '
+          '${pairTexts.join(' · ')}'
+          '${badPairs.length > 3 ? ' …' : ''}',
+        );
+      }
+      if (hasDanger) {
+        parts.add(strings.functionalSeverityDanger);
+      }
+      warning = parts.join(' + ');
+    }
+    if (!mounted) return;
     if (warning != _combinationWarning) {
       setState(() => _combinationWarning = warning);
     }
@@ -806,11 +854,37 @@ class _IngredientEditorRow extends StatelessWidget {
         }
 
         final fields = [
-          TextFormField(
-            controller: draft.quantityController,
-            decoration: InputDecoration(
-              labelText: context.strings.quantityField,
-            ),
+          // Retour PO 2026-08-26 : quantité « nombre + unité (g/ml) ».
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: draft.quantityController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: context.strings.quantityField,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              SizedBox(
+                width: 84,
+                child: DropdownButtonFormField<String>(
+                  initialValue: draft.unit,
+                  items: [
+                    DropdownMenuItem(value: 'g', child: Text('g')),
+                    DropdownMenuItem(value: 'ml', child: Text('ml')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      draft.unit = value;
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
           Row(
             children: [
@@ -880,7 +954,7 @@ class _IngredientEditorRow extends StatelessWidget {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: 120, child: fields[0]),
+            SizedBox(width: 190, child: fields[0]),
             const SizedBox(width: 10),
             Expanded(child: fields[1]),
             const SizedBox(width: 10),
@@ -1074,10 +1148,28 @@ class _IngredientDraft {
     required this.labelController,
     required this.quantityController,
     required this.source,
+    this.unit = 'g',
     this.ingredientId,
   });
 
   factory _IngredientDraft.fromIngredient(RecipeIngredient ingredient) {
+    // Retour PO 2026-08-26 : quantité « nombre + unité g/ml » — on
+    // sépare le suffixe connu, le reste (texte libre « 2 branches »)
+    // reste tel quel dans le champ.
+    final quantity = ingredient.quantity.trim();
+    final match = RegExp(
+      r'^(\d+(?:[.,]\d+)?)\s*(g|ml)$',
+      caseSensitive: false,
+    ).firstMatch(quantity);
+    if (match != null) {
+      return _IngredientDraft(
+        labelController: TextEditingController(text: ingredient.label),
+        quantityController: TextEditingController(text: match.group(1)),
+        source: ingredient.source,
+        unit: match.group(2)!.toLowerCase(),
+        ingredientId: ingredient.ingredientId,
+      );
+    }
     return _IngredientDraft(
       labelController: TextEditingController(text: ingredient.label),
       quantityController: TextEditingController(text: ingredient.quantity),
@@ -1098,13 +1190,20 @@ class _IngredientDraft {
   final TextEditingController quantityController;
   IngredientSource source;
 
+  /// Unité de quantité saisie ('g' ou 'ml') — appliquée quand le champ
+  /// contient un nombre pur ; 'ml' est converti en grammes avec une
+  /// densité de 1 par l'agrégateur (approximation v1 documentée).
+  String unit;
+
   /// Phase 09 Lot F : identifiant Phase 1 si lié à la DB.
   String? ingredientId;
 
   RecipeIngredient toIngredient() {
+    final raw = quantityController.text.trim();
+    final isPlainNumber = RegExp(r'^\d+(?:[.,]\d+)?$').hasMatch(raw);
     return RecipeIngredient(
       label: labelController.text.trim(),
-      quantity: quantityController.text.trim(),
+      quantity: isPlainNumber ? '$raw $unit' : raw,
       source: source,
       ingredientId: ingredientId,
     );

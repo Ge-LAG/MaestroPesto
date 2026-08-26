@@ -25,6 +25,7 @@ class FunctionalAlert {
     required this.predictedEffect,
     required this.confidence,
     this.evidenceType = 'expert_rule_with_literature',
+    this.sourceRefs = const <String>[],
   });
 
   /// Identifiant de la règle source (ex. `RULE-PEC-HM-001`).
@@ -48,6 +49,10 @@ class FunctionalAlert {
   /// Type de preuve de la règle source (colonne `evidence_type`).
   final String evidenceType;
 
+  /// Références sources de la règle (colonne `source_refs`, split `|`)
+  /// — citées in-app (retour PO 2026-08-26).
+  final List<String> sourceRefs;
+
   FunctionalAlert copyWith({
     String? alertId,
     FunctionalSeverity? severity,
@@ -56,6 +61,7 @@ class FunctionalAlert {
     String? predictedEffect,
     double? confidence,
     String? evidenceType,
+    List<String>? sourceRefs,
   }) {
     return FunctionalAlert(
       alertId: alertId ?? this.alertId,
@@ -65,6 +71,7 @@ class FunctionalAlert {
       predictedEffect: predictedEffect ?? this.predictedEffect,
       confidence: confidence ?? this.confidence,
       evidenceType: evidenceType ?? this.evidenceType,
+      sourceRefs: sourceRefs ?? this.sourceRefs,
     );
   }
 
@@ -78,7 +85,8 @@ class FunctionalAlert {
         _listEq(other.conditions, conditions) &&
         other.predictedEffect == predictedEffect &&
         other.confidence == confidence &&
-        other.evidenceType == evidenceType;
+        other.evidenceType == evidenceType &&
+        _listEq(other.sourceRefs, sourceRefs);
   }
 
   @override
@@ -90,6 +98,7 @@ class FunctionalAlert {
     predictedEffect,
     confidence,
     evidenceType,
+    Object.hashAll(sourceRefs),
   );
 
   @override
