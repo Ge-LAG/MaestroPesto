@@ -9,11 +9,13 @@
 > plan de produit (et non un cahier de phase technique). Implémentation
 > prévue : **multi-lots** sur la branche `Ge-LAG/phase-09-metier-ux`
 > (à créer après push de la branche actuelle par Gui).
-> Date : 2026-08-25. Statut : plan rédigé, en relecture PO.
-> Note de traçabilité (R-08) : ce plan **n'implémente rien**. Aucune
-> ligne de code n'a été modifiée. Le code livré dans la branche
-> `Ge-LAG/db-connection-strategies` (Lots A+B+C+D+E) reste la vérité
-> technique à enrichir.
+> Date : 2026-08-25. Statut : **Lots F+G+H implémentés** (2026-08-26,
+> 28 commits atomiques sur `Ge-LAG/db-connection-strategies`, 0 push).
+> Lot I (optionnel) non implémenté. Validation `flutter test/analyze`
+> déferrée au PO sur Windows (R-07 : aucun SDK dans les sessions agents).
+> Note de traçabilité (R-08) : les amendements de lots sont consignés
+> en §14 (dp-108 à dp-110) et §15 (ac-107 à ac-110) — voir aussi
+> `PROJET.json` (backlog_audit_code ac-G-*/ac-H-*).
 
 ## 1. Résumé exécutif
 
@@ -741,6 +743,21 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   dégradé (50% confidence) car les `composition_constraints` et
   `process_constraints` ne sont pas encore parsables. C'est
   explicitement noté dans la `FunctionalAlert.confidence`.
+- **dp-108** (Lot G, Kimi 2026-08-26) : le fallback du `FlavorScorer`
+  (combinaison n-aire absente) est une **moyenne arithmétique simple**
+  des paires 2×2, et non une « moyenne pondérée » (§7.1) : aucun poids
+  n'existe dans le modèle `FlavorMatch` §5.4, et l'annexe §19 (0.84)
+  est validée par moyenne simple.
+- **dp-109** (Lot H, Kimi 2026-08-26) : la formule de score du
+  `Recommender` est `clamp(moyenne(paires candidat↔restants) + 0.15
+  si résout un conflit − 0.20 si nouvelle alerte, 0, 1)`, tout candidat
+  introduisant une paire < 0.40 étant écarté. Les bonus de l'annexe
+  §20 étaient illustratifs et incohérents entre eux ; l'ordre §20
+  (Poulet > Agneau > Porc) est reproduit par les tests.
+- **dp-110** (Lot H, Kimi 2026-08-26) : la sévérité des `FunctionalAlert`
+  est déduite par heuristique (famille `safety` → danger,
+  `effect_direction` `decrease*` → warning, sinon info) faute de
+  colonne dédiée dans `interaction_rules.csv`. À valider métier par le PO.
 
 ## 15. Dette et risques connus
 
@@ -765,6 +782,20 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
 - **ac-106** (High) : le projet n'a **aucun test d'intégration**
   (`integration_test/`) aujourd'hui. Lot H introduit les premiers
   → dette à résorber dans un lot "qualité" dédié.
+- **ac-107** (Low, Lot G) : `waterContent` est agrégé en **somme**
+  comme les autres nutriments dans `NutritionAggregator` — sémantique
+  à revoir au lot qualité (moyenne pondérée par la masse ?).
+- **ac-108** (Medium, Lot H) : le warning live H4 du formulaire est
+  implémenté mais **inactif en production** tant que les repositories
+  ne sont pas injectés par l'appelant de `showRecipeFormDialog`
+  (lié au câblage DB du picker, ac-F-002 dans `PROJET.json`).
+- **ac-109** (Low, Lot H) : le dismiss du `RecommendationSheet` est en
+  mémoire de session seulement (Set statique) — pas de sessionStorage
+  en Flutter desktop ; persistance Drift éventuelle = lot séparé (bump
+  schema).
+- **ac-110** (High, Lots G+H) : ~90 cas de tests écrits mais **jamais
+  exécutés** (R-07 : aucun SDK Flutter/Dart dans la session agent).
+  Validation Windows obligatoire avant push (R-04/BP-14).
 
 ### 15.2 Risques
 - **r-101** (Medium) : **temps de chargement au boot**. Si la DB

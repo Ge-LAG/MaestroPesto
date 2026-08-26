@@ -7,32 +7,45 @@
 | Champ | Valeur |
 |-------|--------|
 | **Projet** | MaestroPesto |
-| **Phase courante** | P0 - bootstrap methodologique (validation en attente) | Lot E livre - Phase 09 planifiee |
-| **Etat general** | Bootstrap V5 en cours sur la branche PR Ge-LAG/bootstrap-v5-doc (non pushé). Lots A+B+C+D+E livrés sur Ge-LAG/db-connection-strategies (15+9+2+2+6+2 = 36 commits, 0 push). Phase 09 planifiée (plan détaillé dans `plans/phase-09-metier-driven-ux.md`) mais non implémentée. |
+| **Phase courante** | Phase 09 Lots F+G+H livrés sur Ge-LAG/db-connection-strategies (28 commits atomiques, 0 push). Lot I (optionnel) non implémenté. |
+| **Etat general** | Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits, 0 push). Phase 09 Lot F livré (11 commits). Phase 09 Lots G+H livrés le 2026-08-26 par Kimi Code CLI (17 commits) : nutrition agrégée par portion, FlavorRepository/FlavorScorer + heatmap aromatique, FunctionalConstraintSolver/FunctionalRepository + alertes physico-chimiques, Recommender + RecommendationSheet, warning live formulaire. ~90 cas de tests écrits mais NON exécutés (aucun SDK Flutter/Dart sur la machine de session, R-07). Aucun push (R-01 strict). |
 
 ## Focus immediat
 
-Relire et valider le plan Phase 09 (`plans/phase-09-metier-driven-ux.md`) — en particulier §2 (deps), §10 (phasage F/G/H) et §11 (pas de bump schemaVersion).
+Valider Lots F+G+H sur Windows avec SDK Flutter : `dart analyze`, `flutter test`, `dart format`. Smoke tests DoD §13.3 (nutrition calculée + heatmap) et §13.4 (recommandation Bœuf+Bleu+Thym). Push après validation PO (R-01).
 
 ## Prochaines etapes
 
-- PO : relire `plans/phase-09-metier-driven-ux.md` (≈1h) et trancher les questions ouvertes.
-- Pousser `Ge-LAG/db-connection-strategies` vers origin/main après validation PO finale (R-01).
-- Ouvrir la branche `Ge-LAG/phase-09-metier-driven-ux` depuis main.
-- Lancer Lot F (référentiel ingrédients + picker + IngredientDetailCard) — implémentation GLM 5.3 ou autre IA dev selon préférence PO.
-- Listening gate UX Picker après Lot F (sélection d'ingrédient dans une recette type).
-- Lancer Lot G (NutritionRepository.aggregate + FlavorCompatibilityHeatmap) puis Lot H (FunctionalConstraintSolver + Recommender).
+- PO : valider Lots F+G+H sur Windows — flutter analyze, flutter test, dart format --set-exit-if-changed (0 issue attendu, §12.4).
+- PO : smoke test DoD §13.3 — recette ≥2 ingrédients liés : nutrition calculée (badge « Calculé depuis N ingrédients sur M ») + heatmap aromatique.
+- PO : smoke test DoD §13.4 — recette Bœuf+Bleu+Thym avec DB importée : bannière recommandation + sheet + substituts (Agneau/Poulet/Porc).
+- PO : pousser Ge-LAG/db-connection-strategies vers origin après validation finale (R-01), ouvrir la PR vers main.
+- Session dédiée : câblage DB du picker (ac-F-002), intégration IngredientDetailCard (ac-F-003), injection des repositories pour le warning H4 (ac-H-002).
+- Décider Lot I (mode batch, §10.4) et l'audit indépendant des Lots G+H.
+- Listening gate UX Picker toujours en attente (validation Lot F).
 
 ## Questions ouvertes
 
-- Valider le format de branche `Ge-LAG/<resume-2-3-mots>` propose pour toutes les futures branches PR.
-- Confirmer la liste des themes de commit acceptes (UI, UX, backend, db, test, docs, build, method, chore, fix).
-- Decider si on garde un seul commit par PR ou si on accepte les commits de merge.
-- Decider du calendrier d'activation de l'override politique_de_branche.
-- Plan Phase 09 : valider le scope des Lots F (référentiel ingrédients), G (nutrition+flavour) et H (functional+recommandations), ainsi que l'ajout de `flutter_riverpod` en dep.
-- Plan Phase 09 : trancher l'arbitrage dp-107 (règles Phase 4 v1 en mode dégradé 50% confidence, ou implémenter le parser composition/process dès le Lot H).
+- Validation Windows : flutter analyze / flutter test / dart format non exécutables dans la session Kimi (aucun SDK détecté). Tous les tests Lots F+G+H sont écrits mais jamais exécutés.
+- Lot F v1 : picker ingrédients toujours en fallback AlertDialog (ac-F-002) — câblage DB complet non traité en Lots G/H, session dédiée ?
+- IngredientDetailCard toujours NON intégré à recipe_detail_view._IngredientRow (ac-F-003) — session dédiée ?
+- H4 : warning live formulaire implémenté mais inactif tant que les repositories ne sont pas injectés par l'appelant (ac-H-002).
+- Recommender : candidatesForCategory exclut les lignes Phase 1 sans confidence — vérifier sur données réelles importées.
+- Lot I (mode batch CSV de recettes externes, §10.4) : à planifier ou abandonner ?
+- Audit du code Lots G+H (comme ac-F-001 pour le Lot F) : par quel harness IA ?
+- Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01).
 
 ## Journal des sessions
+
+#### 2026-08-26 - phase-09-lots-G-H
+*Phase 09 Lots G+H livrés : 17 commits atomiques BP-22 (69cebe3..cc1e4ce). Lot G (8 commits) : FlavorMatch + catégories, NutritionAggregator synchrone (dp-105) + aggregateForRecipe, FlavorScorer (dp-106, fallback moyenne simple documenté), FlavorRepository (cache), badge source nutrition (calculé N/M vs manuel), FlavorCompatibilityHeatmap (max 5, bottom sheet), intégration advisory panel. Lot H (9 commits) : FunctionalAlert + Recommendation, FunctionalConstraintSolver (dp-107 confidence ×0.5, sévérité heuristique documentée), FunctionalRepository (cache), FunctionalAlertCard (non dismissable), Recommender (formule v1 déterministe, ordre §20 reproduit), RecommendationSheet (dismiss session), warning live formulaire (repositories optionnels), 27 clés i18n cumulées. ~90 cas de tests écrits mais AUCUN exécuté (aucun SDK Flutter/Dart sur la machine, R-07) — validation déferrée au PO sur Windows. Aucun push (R-01). Lot I non implémenté.*
+- PO : Ge-LAG
+- Agent : Kimi Code CLI (K2)
+
+#### 2026-08-26 - phase-09-lot-F
+*Phase 09 Lot F livré : 11 commits atomiques BP-22 sur Ge-LAG/db-connection-strategies (55d5bfb..462f6c2). Modèles purs IngredientSummary/IngredientDetail/NutritionProfile + IngredientAliasIndex (recherche floue) + NutritionRepository.forIngredient + IngredientsPickerPage + IngredientDetailCard + intégration recipe_form_dialog + 16 clés FR. Pivots : opencode CLI KO (UnknownError) → Z.AI API directe ; GLM 5.3 produit du reasoning sans content structuré → Hermes implémente directement. Aucun push (R-01).*
+- PO : Ge-LAG
+- Agent : Hermes (MiniMax-M3)
 
 #### 2026-08-22 - bootstrap-v5
 *Bootstrap de la Methode V5 sur MaestroPesto. Creation des fichiers racine + amend METHOD.md (branche PR + commits structures). Branche dediee Ge-LAG/bootstrap-v5-doc, 1 seul commit 'method: bootstrap v5 doc'. Aucun fichier source modifie, aucun push.*
@@ -64,7 +77,25 @@ Vide. Format attendu : `td-NNN` (retours de test manuel), voir BP-10.
 
 ## Backlog audit code
 
-Vide. Format attendu : `ac-NNN` (constats d'audit de code), voir BP-18.
+Format `ac-NNN` (constats d'audit de code), voir BP-18. Détail complet dans `PROJET.json` (source de vérité).
+
+### Lot F (hérité)
+- **ac-F-001** (Medium) — Audit Lot F NON dispatché (opencode KO, GLM reasoning-only). Statut : a_traiter.
+- **ac-F-002** (High) — Picker ingrédients en fallback AlertDialog, pas de vrai picker DB. TOUJOURS OUVERT après G+H. Statut : a_traiter.
+- **ac-F-003** (Medium) — IngredientDetailCard non intégré à recipe_detail_view._IngredientRow. TOUJOURS OUVERT après G+H. Statut : a_traiter.
+- **ac-F-004** (Low) — Cache global IngredientAliasIndex non implémenté (reconstruit à chaque recherche). Statut : a_traiter.
+- **ac-F-005** (Medium) — Tests widget picker/detail card + models F toujours absents (G+H ont ajouté leurs propres tests). Statut : a_traiter.
+- **ac-F-006** (Low) — Wrapper dispatch GLM : content vide quand reasoning substantiel. Statut : a_traiter.
+- **ac-F-007** (Critical) — Opencode CLI KO côté Z.AI (UnknownError persistante). Statut : a_traiter.
+
+### Lots G+H (2026-08-26, Kimi)
+- **ac-G-001** (High) — ~90 cas de tests Lots G+H écrits mais JAMAIS exécutés (aucun SDK Flutter/Dart, R-07). Validation Windows requise avant push. Statut : a_traiter.
+- **ac-G-002** (Low) — Fallback FlavorScorer en moyenne simple (écart « moyenne pondérée » du plan, dp-108). Statut : a_traiter.
+- **ac-G-003** (Low) — waterContent agrégé en somme (sémantique à revoir au lot qualité). Statut : a_traiter.
+- **ac-H-001** (Medium) — Sévérité Phase 4 déduite par heuristique (famille safety → danger, decrease* → warning, sinon info) — pas de colonne dédiée dans le CSV. Statut : a_traiter.
+- **ac-H-002** (Medium) — Warning live H4 inactif en production : repositories optionnels jamais injectés par l'appelant (lié à ac-F-002). Statut : a_traiter.
+- **ac-H-003** (Medium) — Formule score Recommender v1 déterministe ≠ chiffres illustratifs §20 (ordre Poulet>Agneau>Porc reproduit, dp-109). Statut : a_traiter.
+- **ac-H-004** (Low) — Dismiss recommandation en mémoire de session seulement (pas de sessionStorage Flutter desktop). Statut : a_traiter.
 
 ## Backlog idees produit
 
