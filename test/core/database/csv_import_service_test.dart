@@ -294,12 +294,21 @@ void main() {
       },
     );
 
-    expect(phases, ['phase1', 'phase2', 'phase3', 'phase4']);
+    expect(phases, ['phase1', 'phase2', 'phase3', 'phase4', 'enrichment']);
     expect(report.rowsImported['phase1'], 2);
     expect(report.rowsImported['phase2'], 3);
     expect(report.rowsImported['phase3'], 2);
     expect(report.rowsImported['phase4'], 3);
-    expect(report.skipped.values, everyElement(isFalse));
+    // L'enrichissement Ciqual est une phase optionnelle : sans CSV à
+    // côté du root (dossier de test), il est skippé sans erreur.
+    expect(report.rowsImported['enrichment'], 0);
+    expect(report.skipped['enrichment'], isTrue);
+    expect(
+      report.skipped.entries
+          .where((e) => e.key != 'enrichment')
+          .map((e) => e.value),
+      everyElement(isFalse),
+    );
 
     expect(await count('ingredients'), 2);
     expect(await count('nutrition_components'), 1);

@@ -5,6 +5,7 @@ import '../../../features/flavor/data/flavor_loader.dart';
 import '../../../features/ingredients/data/ingredient_registry_loader.dart';
 import '../../../features/nutrition/data/nutrition_loader.dart';
 import '../app_database.dart';
+import 'ciqual_enrichment_loader.dart';
 
 /// Orchestrates the import of the four database-metier phases, in FK order:
 /// phase 1 referentiel, phase 2 nutrition (components then records),
@@ -100,6 +101,38 @@ class CsvImportService {
               skipped['phase4'] = (skipped['phase4'] ?? true) && s,
         ),
       );
+
+      // Enrichissement nutritionnel Ciqual (complément sourcé, session
+      // 2026-08-26) : fichier dérivé hors database-metier/ — absent des
+      // dossiers de fichiers de test, son absence est un skip silencieux.
+      try {
+        await _runPhase(
+          'enrichment',
+          rowsImported,
+          skipped,
+          onPhaseProgress,
+          () async {
+            final outcome = await CiqualEnrichmentLoader().loadInto(
+              db,
+              csvPath: p.join(
+                p.dirname(databaseMetierRoot),
+                'database-enrichment',
+                'ciqual_nutrition.csv',
+              ),
+              onFileSkipped: (s) =>
+                  skipped['enrichment'] = (skipped['enrichment'] ?? true) && s,
+            );
+            return outcome.insertedRows;
+          },
+        );
+      } catch (_) {
+        // Fichier d'enrichissement indisponible (ex. import depuis un
+        // dossier de test sans les assets) : phase optionnelle, on
+        // continue sans échouer l'import des 4 phases métier.
+        rowsImported['enrichment'] = 0;
+        skipped['enrichment'] = true;
+        onPhaseProgress?.call('enrichment', 0);
+      }
     });
 
     return ImportReport(
