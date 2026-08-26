@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
+import 'package:maestropesto/features/functional/presentation/widgets/functional_alert_card.dart';
 import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_metier_advisory_panel.dart';
@@ -56,6 +57,11 @@ class RecipeDetailView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        if (db != null)
+                          FunctionalAlertCard(
+                            ingredients: recipe.ingredients,
+                            db: db,
+                          ),
                         _NutritionPanel(recipe: recipe, db: db),
                         if (db != null)
                           RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
@@ -69,6 +75,11 @@ class RecipeDetailView extends StatelessWidget {
                 children: [
                   content,
                   const SizedBox(height: 18),
+                  if (db != null)
+                    FunctionalAlertCard(
+                      ingredients: recipe.ingredients,
+                      db: db,
+                    ),
                   _NutritionPanel(recipe: recipe, db: db),
                   if (db != null)
                     RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
