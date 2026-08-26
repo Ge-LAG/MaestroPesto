@@ -109,6 +109,39 @@ class FlavorRepository {
   FlavorMatch? cachedMatchFor(List<String> ingredientIds) =>
       _cache?[_keyFor(ingredientIds)];
 
+  /// Retour PO n°3 (vraie heatmap) : meilleure donnée connue pour une
+  /// paire {a, b} :
+  /// 1. l'enregistrement 2×2 direct s'il existe ;
+  /// 2. sinon, à titre d'approximation documentée, la plus petite
+  ///    combinaison N-aire connue contenant les deux ingrédients
+  ///    (score le plus élevé à taille égale).
+  /// Null si aucune donnée ne couvre la paire.
+  Future<({FlavorMatch match, int size})?> bestKnownMatchFor(
+    String a,
+    String b,
+  ) async {
+    final cache = await _ensureCache();
+    final pairKey = _keyFor([a, b]);
+    final direct = cache[pairKey];
+    if (direct != null) return (match: direct, size: 2);
+
+    ({FlavorMatch match, int size})? best;
+    for (final entry in cache.entries) {
+      if (entry.key == pairKey) continue;
+      final ids = entry.key.split('|');
+      if (ids.length < 3 || !ids.contains(a) || !ids.contains(b)) continue;
+      final size = ids.length;
+      final current = best;
+      final better =
+          current == null ||
+          size < current.size ||
+          (size == current.size &&
+              entry.value.overallScore > current.match.overallScore);
+      if (better) best = (match: entry.value, size: size);
+    }
+    return best;
+  }
+
   ({List<String> ids, FlavorMatch match})? _fromRow(
     FlavorCompatibilityData row,
   ) {

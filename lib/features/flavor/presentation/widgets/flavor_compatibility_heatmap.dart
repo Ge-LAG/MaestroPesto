@@ -82,24 +82,50 @@ class FlavorCompatibilityHeatmap extends StatelessWidget {
     if (repo == null) return const SizedBox.shrink();
 
     final ids = [for (final i in linked) i.ingredientId!];
-    return FutureBuilder(
-      // Réchauffe le cache et vérifie qu'au moins une donnée existe.
-      future: repo.bestMatchFor(ids),
+    return FutureBuilder<Map<String, ({FlavorMatch match, int size})>>(
+      // Retour PO n°3 : TOUTES les cellules sont résolues (paire directe
+      // ou plus petite combinaison N-aire connue) pour une vraie
+      // heatmap, pas seulement les incompatibilités.
+      future: _loadCells(repo, ids),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox.shrink();
         }
-        return _HeatmapCard(linked: linked, repository: repo);
+        final cells = snapshot.data ?? const {};
+        if (cells.isEmpty) return const SizedBox.shrink();
+        return _HeatmapCard(linked: linked, repository: repo, cells: cells);
       },
     );
+  }
+
+  static Future<Map<String, ({FlavorMatch match, int size})>> _loadCells(
+    FlavorRepository repo,
+    List<String> ids,
+  ) async {
+    final cells = <String, ({FlavorMatch match, int size})>{};
+    for (var i = 0; i < ids.length; i++) {
+      for (var j = i + 1; j < ids.length; j++) {
+        final match = await repo.bestKnownMatchFor(ids[i], ids[j]);
+        if (match != null) {
+          cells['$i-$j'] = match;
+          cells['$j-$i'] = match;
+        }
+      }
+    }
+    return cells;
   }
 }
 
 class _HeatmapCard extends StatelessWidget {
-  const _HeatmapCard({required this.linked, required this.repository});
+  const _HeatmapCard({
+    required this.linked,
+    required this.repository,
+    required this.cells,
+  });
 
   final List<RecipeIngredient> linked;
   final FlavorRepository repository;
+  final Map<String, ({FlavorMatch match, int size})> cells;
 
   @override
   Widget build(BuildContext context) {
@@ -131,14 +157,12 @@ class _HeatmapCard extends StatelessWidget {
                 children: [
                   _HeaderRow(linked: linked),
                   for (var row = 0; row < linked.length; row++)
-                    _MatrixRow(
-                      rowIndex: row,
-                      linked: linked,
-                      repository: repository,
-                    ),
+                    _MatrixRow(rowIndex: row, linked: linked, cells: cells),
                 ],
               ),
             ),
+            const SizedBox(height: 10),
+            _Legend(),
           ],
         ),
       ),
@@ -182,12 +206,12 @@ class _MatrixRow extends StatelessWidget {
   const _MatrixRow({
     required this.rowIndex,
     required this.linked,
-    required this.repository,
+    required this.cells,
   });
 
   final int rowIndex;
   final List<RecipeIngredient> linked;
-  final FlavorRepository repository;
+  final Map<String, ({FlavorMatch match, int size})> cells;
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +232,7 @@ class _MatrixRow extends StatelessWidget {
             rowIngredient: rowIngredient,
             colIngredient: linked[col],
             isDiagonal: rowIndex == col,
-            repository: repository,
+            match: cells['$rowIndex-$col'],
           ),
       ],
     );
@@ -223,13 +247,13 @@ class _HeatmapCell extends StatelessWidget {
     required this.rowIngredient,
     required this.colIngredient,
     required this.isDiagonal,
-    required this.repository,
+    required this.match,
   });
 
   final RecipeIngredient rowIngredient;
   final RecipeIngredient colIngredient;
   final bool isDiagonal;
-  final FlavorRepository repository;
+  final ({FlavorMatch match, int size})? match;
 
   @override
   Widget build(BuildContext context) {
@@ -245,14 +269,10 @@ class _HeatmapCell extends StatelessWidget {
       );
     }
 
-    final match = repository.cachedMatchFor([
-      rowIngredient.ingredientId!,
-      colIngredient.ingredientId!,
-    ]);
-
-    final color = match == null
+    final m = match;
+    final color = m == null
         ? Theme.of(context).colorScheme.surfaceContainerHighest
-        : flavorCategoryColor(match.category);
+        : flavorCategoryColor(m.match.category);
 
     return Padding(
       padding: const EdgeInsets.all(2),
@@ -261,17 +281,17 @@ class _HeatmapCell extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         child: InkWell(
           borderRadius: BorderRadius.circular(6),
-          onTap: match == null
+          onTap: m == null
               ? null
-              : () => _showDetail(context, match, rowIngredient, colIngredient),
+              : () => _showDetail(context, m, rowIngredient, colIngredient),
           child: SizedBox(
             width: _kCellSize - 4,
             height: _kCellSize - 4,
             child: Center(
-              child: match == null
+              child: m == null
                   ? const SizedBox.shrink()
                   : Text(
-                      match.overallScore.toStringAsFixed(2),
+                      m.match.overallScore.toStringAsFixed(2),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 11,
@@ -287,7 +307,7 @@ class _HeatmapCell extends StatelessWidget {
 
   void _showDetail(
     BuildContext context,
-    FlavorMatch match,
+    ({FlavorMatch match, int size}) m,
     RecipeIngredient a,
     RecipeIngredient b,
   ) {
@@ -314,24 +334,34 @@ class _HeatmapCell extends StatelessWidget {
                     width: 14,
                     height: 14,
                     decoration: BoxDecoration(
-                      color: flavorCategoryColor(match.category),
+                      color: flavorCategoryColor(m.match.category),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    '${strings.flavorOverallScore} : '
-                    '${match.overallScore.toStringAsFixed(2)} — '
-                    '${_categoryLabel(strings, match.category)}',
-                    style: Theme.of(context).textTheme.titleSmall,
+                  Expanded(
+                    child: Text(
+                      '${strings.flavorOverallScore} : '
+                      '${m.match.overallScore.toStringAsFixed(2)} — '
+                      '${_categoryLabel(strings, m.match.category)}',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
                 ],
               ),
-              if (match.explanation != null &&
-                  match.explanation!.trim().isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                m.size == 2
+                    ? strings.flavorSourceDirectPair
+                    : strings.flavorSourceCombination(m.size),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(fontStyle: FontStyle.italic),
+              ),
+              if (m.match.explanation != null &&
+                  m.match.explanation!.trim().isNotEmpty) ...[
                 const SizedBox(height: 12),
                 Text(
-                  match.explanation!,
+                  m.match.explanation!,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
@@ -355,5 +385,62 @@ class _HeatmapCell extends StatelessWidget {
       case FlavorMatchCategory.avoid:
         return strings.flavorCategoryAvoid;
     }
+  }
+}
+
+/// Légende des couleurs de la matrice (retour PO n°3 : expliciter la
+/// lecture de la heatmap, y compris les cellules sans donnée).
+class _Legend extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    final entries = <(Color, String)>[
+      (
+        flavorCategoryColor(FlavorMatchCategory.excellent),
+        strings.flavorCategoryExcellent,
+      ),
+      (
+        flavorCategoryColor(FlavorMatchCategory.good),
+        strings.flavorCategoryGood,
+      ),
+      (
+        flavorCategoryColor(FlavorMatchCategory.average),
+        strings.flavorCategoryAverage,
+      ),
+      (
+        flavorCategoryColor(FlavorMatchCategory.questionable),
+        strings.flavorCategoryQuestionable,
+      ),
+      (
+        flavorCategoryColor(FlavorMatchCategory.avoid),
+        strings.flavorCategoryAvoid,
+      ),
+      (
+        Theme.of(context).colorScheme.surfaceContainerHighest,
+        strings.flavorPairUnknown,
+      ),
+    ];
+    return Wrap(
+      spacing: 12,
+      runSpacing: 4,
+      children: [
+        for (final (color, label) in entries)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(label, style: Theme.of(context).textTheme.labelSmall),
+            ],
+          ),
+      ],
+    );
   }
 }

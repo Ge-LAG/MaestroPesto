@@ -142,6 +142,49 @@ void main() {
         );
       },
     );
+
+    // Retour PO n°3 (vraie heatmap) : paire directe, sinon la plus
+    // petite combinaison N-aire connue contenant la paire.
+    test('bestKnownMatchFor: paire directe', () async {
+      await insertPair('REC-1', 'ING-A', 'ING-B', 0.87);
+      final r = await repo.bestKnownMatchFor('ING-A', 'ING-B');
+      expect(r, isNotNull);
+      expect(r!.match.overallScore, 0.87);
+      expect(r.size, 2);
+    });
+
+    test('bestKnownMatchFor: fallback sur la combinaison N-aire', () async {
+      // Pas de paire directe A-B, mais une combinaison à 3 connue.
+      await db
+          .into(db.flavorCompatibility)
+          .insert(
+            FlavorCompatibilityCompanion.insert(
+              recordId: 'REC-N3',
+              combinationSize: const Value(3),
+              ingredientIds: const Value('ING-A|ING-B|ING-C'),
+              overallScore: const Value(0.75),
+            ),
+          );
+      // Et une combinaison à 4, moins précise, qui doit perdre.
+      await db
+          .into(db.flavorCompatibility)
+          .insert(
+            FlavorCompatibilityCompanion.insert(
+              recordId: 'REC-N4',
+              combinationSize: const Value(4),
+              ingredientIds: const Value('ING-A|ING-B|ING-C|ING-D'),
+              overallScore: const Value(0.95),
+            ),
+          );
+      final r = await repo.bestKnownMatchFor('ING-B', 'ING-A');
+      expect(r, isNotNull);
+      expect(r!.size, 3, reason: 'la plus petite combinaison gagne');
+      expect(r.match.overallScore, 0.75);
+    });
+
+    test('bestKnownMatchFor: null sans aucune donnée', () async {
+      expect(await repo.bestKnownMatchFor('ING-X', 'ING-Y'), isNull);
+    });
   });
 
   group('FlavorRepository.fromMatches (no Drift)', () {
