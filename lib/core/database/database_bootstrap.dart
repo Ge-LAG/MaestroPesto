@@ -5,7 +5,7 @@ import 'app_database.dart';
 import 'connection/database_connection.dart';
 import 'importers/csv_import_service.dart';
 import 'importers/csv_toolkit.dart'
-    show CsvBytesReader, CsvImportOutcome, ImportReport, activeCsvReader;
+    show CsvBytesReader, ImportReport, activeCsvReader;
 
 /// Single entry point that owns the [AppDatabase] instance and exposes
 /// a fully wired [CsvImportService].
@@ -94,8 +94,8 @@ class AppServices {
     yield bytes.buffer.asUint8List();
   };
 
-  /// Last import outcome exposed for the UI badge.
-  CsvImportOutcome? lastOutcome;
+  /// Last import timestamp (ISO 8601). Updated by [importMetier].
+  DateTime? lastImportedAt;
 
   Future<void> close() async {
     await db.close();

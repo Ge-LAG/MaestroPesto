@@ -1,6 +1,7 @@
+import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
-DatabaseConnection openConnection() {
+QueryExecutor openConnection() {
   return driftDatabase(
     name: 'maestropesto',
     native: DriftNativeOptions(
