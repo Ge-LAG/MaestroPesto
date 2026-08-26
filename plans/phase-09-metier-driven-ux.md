@@ -860,6 +860,46 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   **totalité** du référentiel sur « Toutes » (603, ListView
   virtualisée) — la limite de pertinence (50) ne s'applique qu'aux
   recherches.
+- **dp-124** (Retour PO n°4, 2026-08-26) : l'enrichissement Ciqual est
+  étendu à **TOUS** les ingrédients du registre (résolution par nom,
+  plus seulement les 172 avec `ciqual_ids`) avec des garde-fous
+  durcis, itérés sur le log de résolution : un match partiel ne doit
+  apporter **aucun aliment nouveau** ni porter une tête de catégorie
+  générique (beurre/huile/lait…) ; un match complet est borné en
+  longueur (anti « Sucre glace » → « Corne de gazelle »), exclut les
+  transformations (jus, zeste, pomme cajou, coco, fourré, mélange) et
+  exige la **cohérence du mot-tête** (anti « Chèvre frais » → « Pizza
+  au chèvre »), sauf énumérations de synonymes (« Champignon,
+  chanterelle ou girolle ») et têtes hypernymes (« Champignon, cèpe,
+  cru ») ; l'**égalité exacte du nom complet** domine le classement
+  (« Raisin sec » bat « Raisin noir, cru ») ; le perdant d'une
+  collision de dédoublonnage **replie sur son candidat suivant**
+  (torréfiés → entrées grillées) ; enfin quelques **standins curatés**
+  manuels couvrent les génériques sans entrée directe (Bœuf → steak
+  cru, sels, cajou, chèvre frais, chocolat 70 %, calvados…). Résultat :
+  **367 ingrédients / 18 339 records** sourcés, union avec la Phase 2
+  = **371/603** ; les 221 restants sont **absents de la table Ciqual
+  2025-11-03** (algues, zestes d'agrumes, beurres de noix, épices
+  exotiques, céréales mineures, huile d'olive générique…) — aucune
+  donnée honnête n'existe pour eux dans cette source.
+- **dp-125** (Retour PO n°4, 2026-08-26) : l'agrégation nutritionnelle
+  distingue `resolvedCount` (liés, même sans records) de
+  **`withDataCount`** (ayant réellement contribué des données). L'UI
+  n'affiche plus « Calculée automatiquement (4/4) » avec des zéros :
+  sans données, le formulaire **explique** (« Aucune donnée
+  nutritionnelle en base pour les N ingrédients liés — la table
+  Ciqual ne couvre pas encore ces aliments ») et propose la saisie
+  manuelle ; avec données, le compteur affiche les contributeurs
+  réels.
+- **dp-126** (Retour PO n°4, 2026-08-26) : tri **naturel français**
+  (`compareNaturalFr` sur la forme normalisée œ→oe) du registre dans
+  `allSummaries()`/`candidatesForCategory()` — le tri codepoint SQL
+  plaçait « Œuf de poule » (Œ = U+0152 > Z) en DERNIER, donnant
+  l'impression d'une liste tronquée alors qu'elle était complète.
+- **dp-127** (Retour PO n°4, 2026-08-26) : les chips de filtre du
+  picker (« Toutes » + catégories) passent en **texte noir explicite**
+  (labelStyle black87, sélection vert clair) — le style hérité du
+  thème rendait le label blanc sur fond clair.
 
 ## 15. Dette et risques connus
 
@@ -935,6 +975,13 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   la sauvegarde est un instantané (macros seules) ; les micronutriments
   détaillés ne sont pas stockés dans `Recipe` (modèle §5) — recalculés
   live dans la vue détail. Stockage = évolution du modèle Recipe.
+- **ac-119** (High, Retour PO n°4) : **221/603 ingrédients restent
+  sans nutrition** (dp-124) — absents de Ciqual 2025-11-03 (algues,
+  zestes, beurres de noix, épices exotiques, céréales mineures,
+  huile d'olive générique, vins cuits…). Les couvrir exige une
+  SECONDE source sourcée (USDA FoodData Central, tables nationales)
+  avec son propre pipeline de résolution — chantier dédié, décision
+  PO. L'app l'affiche honnêtement (dp-125).
 
 ### 15.2 Risques
 - **r-101** (Medium) : **temps de chargement au boot**. Si la DB

@@ -2,25 +2,33 @@
   "schema_version": "1.0.0",
   "document_id": "projet-maestropesto",
   "projet": "MaestroPesto",
-  "phase_courante": "Phase 09 : Lots F+G+H livrés, audités, validés Windows + retours PO n°2 et n°3 traités (237/237 tests, build OK). Dernier lot (n°3) : nutrition exhaustive et AUTOMATIQUE (vitamines/minéraux/alcool, calculée depuis les quantités du mix), heatmap complète avec légende, alertes physico-chimiques proportionnées au mix (%), picker listant la totalité du référentiel.",
-  "etat_general": "Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 complète + retours PO successifs (GLM 5.3/Zcode). Retour n°3 (2026-08-26) : (1) NUTRITION AUTOMATIQUE ET EXHAUSTIVE — le formulaire calcule la nutrition par portion dès qu'un ingrédient lié a un profil (aperçu live 'Calculée automatiquement N/M', saisie manuelle en repli explicite, valeurs calculées embarquées à la sauvegarde) ; le CSV d'enrichissement Ciqual exporte désormais TOUS les constituants du dictionnaire (71 retenus, 7 564 records : vitamines A-K/B1-B12, minéraux, omégas, cholestérol, alcool, amidon, polyols) ; le modèle expose micronutrients (tags canoniques fusionnant Phase 2 et Ciqual 2025) + alcohol ; le panneau affiche les sections repliables Minéraux/Vitamines/Autres par portion ; (2) HEATMAP VRAIE — chaque cellule montre la meilleure donnée connue (paire directe, sinon plus petite combinaison n-aire, approximation signalée), légende 5 catégories + 'Pas de donnée' ; (3) PHYSICO-CHIMIE PROPORTIONNÉE — les alertes portent leurs ingrédients déclencheurs et leur part massique du mix ('Part du mix : 45 %', note 'influence faible' < 5 %), alimentées par les quantités de la recette ; (4) PICKER COMPLET — 'Toutes' affiche les 603 ingrédients (limite 50 seulement pour les recherches). Diagnostic du retour : couverture flavour 97/603 (Pignon de pin, zestes, huiles essentielles sans données — ac-115 chantier dédié). 237/237 tests verts (+10), analyze 0, format 0, build windows OK. Aucun push (R-01 strict).",
+  "phase_courante": "Phase 09 : Lots F+G+H livrés, audités, validés Windows + retours PO n°2, n°3 et n°4 traités (244/244 tests, build OK). Dernier lot (n°4) : enrichissement Ciqual étendu aux 603 (union 371/603 couverts, 221 absents de Ciqual), compteur nutrition honnête (liés-avec-données vs sans-données), tri naturel FR du picker (Œuf à sa place), chips lisibles.",
+  "etat_general": "Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 complète + retours PO successifs (GLM 5.3/Zcode). Retour n°4 (2026-08-26) : (1) NUTRITION 371/603 — le générateur Ciqual résout par nom TOUS les ingrédients (garde-fous durcis + repli collision + standins curatés : dp-124), CSV 18 339 records/367 ingrédients ; 221 restants absents de Ciqual 2025-11-03 (ac-119) ; (2) COMPTEUR HONNÊTE — withDataCount distingue liés-sans-données des contributeurs réels, plus de '4/4' à zéros (dp-125) ; (3) TRI NATUREL FR — 'Œuf de poule' n'est plus relégué après Z par le tri codepoint, la liste 603 est complète et lisible (dp-126) ; (4) CHIPS DU PICKER en texte noir (dp-127). Flavour inchangée : 97/603 (composés d'arômes = 9 ingrédients, ac-115). 244/244 tests verts, analyze 0, format 0, build windows OK. Aucun push (R-01 strict).",
   "focus_immediat": "Smoke test MANUEL du PO sur le retour n°3 : relancer l'import (5 phases, l'enrichissement exhaustif s'ajoute), éditer une recette avec girolle → nutrition auto dans le formulaire + Minéraux/Vitamines dans le panneau détail, vérifier la légende de la heatmap et les parts du mix dans les alertes, scroller le picker jusqu'à Z. Puis décision push (R-01).",
   "questions_ouvertes": [
-    "Smoke test manuel PO : valider enrichissement + sources citées + warning nommé + quantités ml en conditions réelles.",
+    "Smoke test manuel PO : valider le retour n°4 en conditions réelles — relancer l'import (couverture 371/603), vérifier bœuf/poulet/crème liquide enrichis, le message 'Aucune donnée nutritionnelle en base' sur un non-couvert (wakamé), le tri du picker (Œuf de poule entre Noix et Orange), les chips lisibles.",
     "Couverture flavour 97/603 (ac-115) : lancer un chantier données dédié sourcé (FlavourDB, littérature food-pairing) pour 'documenter toutes les interactions' ? Décision PO requise.",
+    "Couverture nutrition 371/603 (ac-119) : 221 ingrédients absents de Ciqual 2025-11-03 (algues, zestes, beurres de noix, épices exotiques…) — deuxième source sourcée (USDA FDC) ? Décision PO.",
     "ciqual_ids du référentiel Phase 1 incohérents avec l'édition 2025 (ac-114) : corriger le fichier source un jour (database-metier/ intouchable par défaut) ou maintenir la résolution par nom ?",
-    "Approximations de résolution Ciqual (Banane→plantain, Tomate→verte, ac-116) : acceptable ou table d'alias manuelle ?",
+    "Approximations de résolution Ciqual (Banane→plantain, Tomate→verte, ac-116 ; standins curatés dp-124 type Bœuf→steak cru) : acceptable ou table d'alias manuelle ?",
     "Lot I (mode batch, §10.4) : à planifier ou abandonner ?",
     "Sévérité Phase 4 heuristique (dp-110/ac-H-001) : validation métier par Gui sur les 16 règles réelles.",
     "Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01)."
   ],
   "prochaines_etapes": [
-    "PO : smoke test manuel du retour n°2 — relancer l'import (5 phases), éditer une recette avec un ingrédient enrichi (girolle : 24,7 kcal/100 g, source citée), tester ml et le warning nommé.",
-    "PO : décider du chantier données flavour (ac-115) et du traitement des ciqual_ids sources (ac-114).",
+    "PO : smoke test manuel du retour n°4 — relancer l'import, bœuf/poulet/crème liquide enrichis, message honnête sur un non-couvert, tri du picker, chips lisibles.",
+    "PO : décider des chantiers données (flavour ac-115, nutrition 2e source ac-119) et du traitement des ciqual_ids sources (ac-114).",
     "PO : pousser Ge-LAG/db-connection-strategies vers origin après validation finale (R-01), ouvrir la PR vers main.",
     "Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss (ac-H-004), qualité (ac-107/113), traduction catégories (ac-111)."
   ],
   "journal_des_sessions": [
+    {
+      "date": "2026-08-26",
+      "session": "retour-po-4-metier",
+      "resume": "Retour PO n°4 (capture '4/4 sans score nutrition') : (1) ENRICHISSEMENT ÉTENDU AUX 603 — tool/generate_ciqual_enrichment.dart résout désormais PAR NOM tous les ingrédients du registre (plus seulement les 172 avec ciqual_ids) via des garde-fous durcis et itérés sur le log : matchs partiels sans aliment nouveau ni tête de catégorie (anti 'Huile de carthame'→'Huile d'amande', 'Beurre de cajou'→beurre laitier), match complet borné en longueur (anti 'Sucre glace'→'Corne de gazelle'), exclusions de transformations (jus/zeste/pomme cajou/coco/fourré/mélange), cohérence du mot-tête (anti 'Chèvre frais'→'Pizza au chèvre') sauf énumérations ('Champignon, chanterelle ou girolle') et hypernymes ('Champignon, cèpe'), égalité exacte dominante ('Raisin sec'), repli du perdant de collision sur son 2e candidat (torréfiés→grillées), standins curatés manuels (Bœuf→steak cru, sels, cajou, chèvre frais, chocolat 70 %, café, calvados) → CSV 18 339 records/367 ingrédients, union Phase 2 = 371/603 ; les 221 restants sont absents de Ciqual 2025-11-03 (ac-119, décision PO pour 2e source). (2) COMPTEUR HONNÊTE — NutritionAggregation distingue resolvedCount (liés) de withDataCount (avec données) : le formulaire n'affiche plus 'Calculée automatiquement (4/4)' à zéros mais explique ('Aucune donnée nutritionnelle en base pour les N ingrédients liés') et propose la saisie manuelle ; les compteurs affichent les contributeurs réels. (3) TRI NATUREL FR — compareNaturalFr (œ→oe) dans allSummaries/candidatesForCategory : le tri codepoint SQL plaçait 'Œuf de poule' (U+0152 > Z) en DERNIER, fausse impression de liste tronquée alors qu'elle est complète (603). (4) CHIPS LISIBLES — texte noir explicite sur les chips du picker. Diagnostic flavour inchangé : 97/603, composés d'arômes = 9 ingrédients (ac-115). 244/244 tests verts (+7 : tri FR, withDataCount×2, chips, message honnête, couverture 371, Œuf trié), analyze 0, format 0, build windows OK. Aucun push (R-01 strict).",
+      "agent": "Hermes (GLM 5.3/Zcode)",
+      "po": "Ge-LAG"
+    },
     {
       "date": "2026-08-26",
       "session": "retour-po-3-metier",
@@ -257,6 +265,16 @@
       "recommandation": "Au lot qualité : moyenner r.confidence des records utilisés (colonne confidence de nutrition_records).",
       "statut": "a_traiter",
       "tags": ["phase-09", "audit", "nutrition"]
+    },
+    {
+      "id": "ac-119",
+      "priorite": "High",
+      "libelle": "221/603 ingrédients sans nutrition (absents de Ciqual)",
+      "description": "Retour PO n°4 ('compléter à 100 %') : après extension de la résolution par nom aux 603 (dp-124, union 371/603), 221 ingrédients restent sans donnée car absents de la table Ciqual 2025-11-03 (algues, zestes d'agrumes, beurres de noix, épices exotiques et mélanges, céréales mineures, huile d'olive générique, vins cuits…). L'app l'affiche honnêtement (dp-125).",
+      "localisation": "assets/database-enrichment/ciqual_nutrition.csv, tool/generate_ciqual_enrichment.dart",
+      "recommandation": "Deuxième source sourcée (USDA FoodData Central ou tables nationales) avec pipeline de résolution dédié — chantier PO. Diagnostic complet dans le log du générateur (liste des non résolus).",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "retour-po-4", "nutrition", "donnees"]
     }
   ],
   "backlog_idees_produit": [

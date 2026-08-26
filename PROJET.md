@@ -7,31 +7,37 @@
 | Champ | Valeur |
 |-------|--------|
 | **Projet** | MaestroPesto |
-| **Phase courante** | Phase 09 : Lots F+G+H livrés, audités, validés Windows + retours PO n°2 et n°3 traités (237/237 tests, build OK). Dernier lot : nutrition exhaustive et AUTOMATIQUE, heatmap complète avec légende, alertes physico-chimiques proportionnées au mix, picker complet. |
-| **Etat general** | Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 complète + retours PO successifs. Retour n°3 (2026-08-26) : nutrition calculée automatiquement depuis les quantités du mix (aperçu live dans le formulaire, saisie manuelle en repli, valeurs sauvegardées) + exhaustivité (CSV Ciqual 7 564 records : vitamines A-K/B1-B12, minéraux, omégas, cholestérol, alcool ; sections repliables Minéraux/Vitamines/Autres dans le panneau) ; heatmap « vraie » (meilleure donnée connue par cellule — paire directe ou plus petite combinaison n-aire — + légende) ; alertes physico-chimiques avec part massique du mix des déclencheurs (« Part du mix : 45 % », note « influence faible » < 5 %) ; picker « Toutes » liste les 603 ingrédients. 237/237 tests verts (+10), analyze 0, format 0, build windows OK. Aucun push (R-01). |
+| **Phase courante** | Phase 09 : Lots F+G+H livrés, audités, validés Windows + retours PO n°2, n°3 et n°4 traités (244/244 tests, build OK). Dernier lot (n°4) : enrichissement Ciqual étendu aux 603 (union 371/603), compteur nutrition honnête, tri naturel FR du picker, chips lisibles. |
+| **Etat general** | Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 complète + retours PO successifs. Retour n°4 (2026-08-26) : (1) enrichissement Ciqual étendu à TOUS les ingrédients via résolution par nom durcie (garde-fous anti faux-amis, repli du perdant de collision, standins curatés — dp-124) → 18 339 records/367 ingrédients, union Phase 2 = 371/603, les 221 restants étant absents de Ciqual 2025-11-03 (ac-119) ; (2) compteur honnête withDataCount : plus de « Calculée automatiquement (4/4) » à zéros — message explicite + saisie manuelle quand les liés n'ont pas de données (dp-125) ; (3) tri naturel français du registre : « Œuf de poule » n'est plus après Z, la liste 603 est complète (dp-126) ; (4) chips du picker en texte noir (dp-127). 244/244 tests verts (+7), analyze 0, format 0, build windows OK. Aucun push (R-01). |
 
 ## Focus immediat
 
-Smoke test MANUEL du PO sur le retour n°3 : relancer l'import (5 phases, l'enrichissement exhaustif s'ajoute), éditer une recette avec girolle → nutrition auto dans le formulaire + Minéraux/Vitamines dans le panneau détail, vérifier la légende de la heatmap et les parts du mix dans les alertes, scroller le picker jusqu'à Z. Puis décision push (R-01).
+Smoke test MANUEL du PO sur le retour n°4 : relancer l'import BDD métier (couverture 371/603), éditer une recette avec bœuf/poulet/crème liquide (enrichis), lier un non-couvert (wakamé) pour lire le message « Aucune donnée nutritionnelle en base », scroller le picker (Œuf de poule entre Noix et Orange, chips lisibles). Puis décision push (R-01).
 
 ## Prochaines etapes
 
-- PO : smoke test manuel du retour n°3 (nutrition auto, micros par portion, légende heatmap, parts du mix, picker complet).
-- PO : décider du chantier données flavour (ac-115, couverture 97/603 — Pignon de pin/zestes/huiles essentielles sans données) et du traitement des ciqual_ids sources (ac-114).
+- PO : smoke test manuel du retour n°4 (couverture 371, message honnête, tri du picker, chips).
+- PO : décider des chantiers données (flavour ac-115 97/603 ; nutrition 2e source ac-119 221/603 absents Ciqual) et des ciqual_ids sources (ac-114).
 - PO : pousser Ge-LAG/db-connection-strategies vers origin après validation finale (R-01), ouvrir la PR vers main.
 - Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss (ac-H-004), qualité (ac-107/113/118), traduction catégories (ac-111).
 
 ## Questions ouvertes
 
-- Smoke test manuel PO : valider nutrition auto + micros + heatmap légendée + parts du mix en conditions réelles.
+- Smoke test manuel PO : valider enrichissement étendu + message honnête + tri picker + chips en conditions réelles.
 - Couverture flavour 97/603 (ac-115) : chantier données dédié sourcé (FlavourDB, littérature food-pairing) pour « documenter toutes les interactions » ? Décision PO.
+- Couverture nutrition 371/603 (ac-119) : 221 ingrédients absents de Ciqual (algues, zestes, beurres de noix, épices exotiques…) — deuxième source sourcée (USDA FDC) ? Décision PO.
 - ciqual_ids du référentiel Phase 1 incohérents avec l'édition Ciqual 2025 (ac-114) : corriger la source un jour ou maintenir la résolution par nom ?
-- Approximations de résolution Ciqual (Banane→plantain, Tomate→verte, ac-116) : acceptable ou table d'alias ?
+- Approximations de résolution Ciqual (Banane→plantain, ac-116 ; standins curatés dp-124 type Bœuf→steak cru) : acceptable ou table d'alias ?
 - Lot I (mode batch, §10.4) : à planifier ou abandonner ?
 - Sévérité Phase 4 heuristique (dp-110/ac-H-001) : validation métier Gui.
 - Pousser la branche vers origin/main après validation PO finale (R-01).
 
 ## Journal des sessions
+
+#### 2026-08-26 - retour-po-4-metier
+*Traitement du retour PO n°4 (capture « 4/4 sans score nutrition ») : (1) NUTRITION 371/603 — le générateur Ciqual résout désormais par nom TOUS les ingrédients du registre avec des garde-fous durcis et itérés sur le log de résolution (matchs partiels sans aliment nouveau ni tête de catégorie — anti « Huile de carthame »→« Huile d'amande » et « Beurre de cajou »→beurre laitier ; match complet borné en longueur — anti « Sucre glace »→« Corne de gazelle » ; exclusions jus/zeste/pomme cajou/coco/fourré/mélange ; cohérence du mot-tête — anti « Chèvre frais »→« Pizza au chèvre » — sauf énumérations « Champignon, chanterelle ou girolle » et hypernymes « Champignon, cèpe » ; égalité exacte dominante — « Raisin sec » ; repli du perdant de collision sur son 2ᵉ candidat — torréfiés→grillées ; standins curatés manuels — Bœuf→steak cru, sels, cajou, chèvre frais, chocolat 70 %, café, calvados) → CSV 18 339 records/367 ingrédients, union Phase 2 = 371/603 ; les 221 restants sont absents de Ciqual 2025-11-03 (ac-119, décision PO pour une 2ᵉ source). (2) COMPTEUR HONNÊTE — NutritionAggregation distingue resolvedCount (liés) de withDataCount (avec données réelles) : le formulaire n'affiche plus « Calculée automatiquement (4/4) » à zéros mais explique (« Aucune donnée nutritionnelle en base pour les N ingrédients liés ») et propose la saisie manuelle. (3) TRI NATUREL FR — compareNaturalFr (œ→oe) dans allSummaries/candidatesForCategory : le tri codepoint SQL plaçait « Œuf de poule » (U+0152 > Z) en DERNIER — la liste était complète mais paraissait tronquée. (4) CHIPS LISIBLES — texte noir explicite sur « Toutes » et catégories. Flavour inchangée (97/603, composés d'arômes = 9 ingrédients — ac-115). 244/244 tests verts (+7), analyze 0, format 0, build windows OK. Cahier dp-124→127, dette ac-119. Commits BP-22. Aucun push (R-01).*
+- PO : Ge-LAG
+- Agent : GLM 5.3 (Zcode)
 
 #### 2026-08-26 - retour-po-3-metier
 *Traitement du retour PO n°3 (4 points, avec capture d'écran) : nutrition AUTOMATIQUE (aperçu live « Calculée automatiquement — N/M » dans le formulaire, saisie manuelle en repli explicite qui prime si éditée, valeurs calculées sauvegardées) et EXHAUSTIVE (générateur Ciqual tous constituants : 71 retenus, 7 564 records CSV — vitamines A-K/B1-B12, minéraux, omégas, cholestérol, alcool, amidon, polyols ; modèle Micronutrient à tags canoniques fusionnant Phase 2/Ciqual 2025 ; agrégateur pondéré par quantité/portions ; panneau avec sections repliables Minéraux/Vitamines/Autres) ; heatmap « vraie » (bestKnownMatchFor : paire directe sinon plus petite combinaison n-aire, approximation signalée, toutes cellules préchargées, légende 5 catégories + « Pas de donnée ») — diagnostic honnête : Pignon de pin/Zeste d'orange/Huile essentielle ont 0 donnée en base Phase 3 (couverture 97/603) ; alertes physico-chimiques proportionnées (triggerIngredientIds + mixShare des grammes, « Part du mix : X % », note influence faible < 5 %) ; picker « Toutes » complet (603). 237/237 tests verts (+10), smoke réel étendu (fer girolle 3,47 mg/portion), analyze 0, format 0, build windows OK. Cahier dp-120/121/122/123, dette ac-117/118. Commits BP-22. Aucun push (R-01).*
