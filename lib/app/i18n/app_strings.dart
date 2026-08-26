@@ -118,6 +118,7 @@ class AppStrings {
       'Calculé depuis $resolved ingrédient${resolved > 1 ? 's' : ''} '
       'sur $total';
   String get nutritionManualEntry => 'Valeur saisie manuellement';
+  String get nutritionSources => 'Sources';
   String get flavorHeatmapTitle => 'Compatibilités aromatiques';
   String get flavorPairUnknown => 'Pas de donnée';
   String get flavorOverallScore => 'Score global';
@@ -156,6 +157,7 @@ class AppStrings {
   String get recommendationNoSubstitute => 'Aucun substitut trouvé.';
   String get ingredientBadCombinationWarning =>
       'Cet ingrédient crée une mauvaise combinaison avec la recette.';
+  String get flavorIncompatibilitiesLabel => 'Incompatibilités aromatiques';
 }
 
 const appStrings = AppStrings();

@@ -24,9 +24,11 @@ void main() {
 
   setUpAll(() async {
     db = AppDatabase(NativeDatabase.memory());
+    // Root « assets/ » : les CSV métier réels ET le CSV d'enrichissement
+    // Ciqual (assets/database-enrichment/) sont lus en fichiers.
     final report = await CsvImportService(
       db,
-      databaseMetierRoot: 'database-metier',
+      databaseMetierRoot: 'assets/database-metier',
     ).importAll();
     expect(
       report.rowsImported['phase1'],
@@ -38,10 +40,67 @@ void main() {
       greaterThan(4000),
       reason: 'la base flavour réelle compte ~4 562 paires',
     );
+    expect(
+      report.rowsImported['enrichment'],
+      greaterThan(1000),
+      reason:
+          'l\'enrichissement Ciqual apporte ~1 500 records sourcés '
+          '(retour PO 2026-08-26)',
+    );
   });
 
   tearDownAll(() async {
     await db.close();
+  });
+
+  group('Enrichissement Ciqual (retour PO 2026-08-26)', () {
+    test(
+      'un ingrédient non couvert par la Phase 2 est enrichi et sourcé',
+      () async {
+        // La girolle n'a AUCUN record Phase 2 : elle n'est couverte que
+        // par l'enrichissement Ciqual (résolu par nom vers « Champignon,
+        // chanterelle ou girolle, crue », Ciqual 20103).
+        const girolle = 'ING-FUNGUS-GIROLLE-000001';
+        final profile = await NutritionRepository(db).forIngredient(girolle);
+        expect(profile, isNotNull);
+        expect(
+          profile!.energyKcal,
+          closeTo(24.7, 0.5),
+          reason:
+              '« Champignon, chanterelle ou girolle, crue » = '
+              '24,7 kcal/100 g (Ciqual 2025-11-03)',
+        );
+        expect(profile.recordCount, greaterThan(5));
+
+        final aggregation = await NutritionRepository(db).aggregateForRecipe(
+          ingredients: const [
+            RecipeIngredient(
+              label: 'Girolle',
+              quantity: '200 g',
+              source: IngredientSource.ciqual,
+              ingredientId: girolle,
+            ),
+          ],
+          servings: 2,
+        );
+        expect(aggregation.hasData, isTrue);
+        expect(
+          aggregation.profilePerServing.energyKcal,
+          closeTo(24.7, 0.5),
+          reason: '200 g ÷ 2 portions = 100 g → 24,7 kcal/portion',
+        );
+        expect(aggregation.sources, isNotEmpty);
+        expect(
+          aggregation.sources.map((s) => s.displayLabel),
+          contains('ANSES Ciqual 2025-11-03'),
+          reason: 'la source est citée in-app',
+        );
+        final citation = aggregation.sources
+            .firstWhere((s) => s.id == 'ciqual_2025_11_03')
+            .citation;
+        expect(citation, contains('ANSES Ciqual'));
+      },
+    );
   });
 
   group('DoD §13.3 — nutrition calculée + associations aromatiques', () {

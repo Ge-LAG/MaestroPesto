@@ -65,8 +65,8 @@ class NutritionRepository {
   /// (dp-105). Les edge cases (ingrédient libre sans id, sous-recette,
   /// profil manquant) sont gérés par l'agrégateur — voir ses warnings.
   ///
-  /// Renvoie un résultat avec `resolvedCount == 0` (fallback gracieux)
-  /// si aucun ingrédient n'est résolvable.
+  /// Les sources des records consommés sont collectées pour être citées
+  /// in-app (retour PO 2026-08-26).
   Future<NutritionAggregation> aggregateForRecipe({
     required List<RecipeIngredient> ingredients,
     required int servings,
@@ -75,16 +75,56 @@ class NutritionRepository {
     // Résolution async en amont : un seul passage par ingrédient lié,
     // avec cache local pour ne pas requêter deux fois le même id.
     final cache = <String, NutritionProfile?>{};
+    final sources = <String, NutritionSource>{};
     for (final ingredient in ingredients) {
       final id = ingredient.ingredientId;
       if (id == null || id.isEmpty || cache.containsKey(id)) continue;
-      cache[id] = await forIngredient(id, stateId: stateId);
+      final records = await _loadRecords(id, stateId: stateId);
+      for (final r in records) {
+        final sid = r.sourceId;
+        if (sid == null || sid.isEmpty) continue;
+        sources.putIfAbsent(
+          sid,
+          () => NutritionSource(
+            id: sid,
+            label: sourceLabel(sid),
+            citation: r.notes,
+          ),
+        );
+      }
+      if (records.isEmpty) {
+        cache[id] = (await _ingredientExists(id))
+            ? NutritionProfile.empty
+            : null;
+      } else {
+        cache[id] = _aggregate(records, stateId: stateId);
+      }
     }
-    return NutritionAggregator.aggregate(
+    final aggregation = NutritionAggregator.aggregate(
       ingredients: ingredients,
       lookup: (id) => cache[id],
       servings: servings,
     );
+    if (sources.isEmpty) return aggregation;
+    final sorted = sources.values.toList()
+      ..sort((a, b) => a.id.compareTo(b.id));
+    return NutritionAggregation(
+      profilePerServing: aggregation.profilePerServing,
+      resolvedCount: aggregation.resolvedCount,
+      totalCount: aggregation.totalCount,
+      warnings: aggregation.warnings,
+      sources: sorted,
+    );
+  }
+
+  /// Libellé lisible d'un `source_id` (null → id brut affiché).
+  @visibleForTesting
+  static String? sourceLabel(String sourceId) {
+    final lower = sourceId.toLowerCase();
+    if (lower.startsWith('ciqual_2025')) return 'ANSES Ciqual 2025-11-03';
+    if (lower.contains('ciqual')) return 'ANSES Ciqual';
+    if (lower.contains('usda')) return 'USDA FoodData Central';
+    return null;
   }
 
   Future<bool> _ingredientExists(String ingredientId) async {

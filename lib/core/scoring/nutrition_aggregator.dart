@@ -32,6 +32,23 @@ typedef NutritionProfileLookup = NutritionProfile? Function(
   String ingredientId,
 );
 
+/// Source d'une donnée nutritionnelle (traçabilité in-app, retour PO
+/// 2026-08-26 : citer les sources).
+class NutritionSource {
+  const NutritionSource({required this.id, this.label, this.citation});
+
+  /// Identifiant technique (ex. `ciqual_2025_11_03`).
+  final String id;
+
+  /// Libellé court lisible (ex. `ANSES Ciqual 2025-11-03`).
+  final String? label;
+
+  /// Citation complète (tooltip).
+  final String? citation;
+
+  String get displayLabel => label ?? id;
+}
+
 /// Résultat de l'agrégation : profil **par portion** + métadonnées
 /// d'explicabilité (affichées par `RecipeNutritionPanel`, G2).
 class NutritionAggregation {
@@ -40,6 +57,7 @@ class NutritionAggregation {
     required this.resolvedCount,
     required this.totalCount,
     this.warnings = const <String>[],
+    this.sources = const <NutritionSource>[],
   });
 
   /// Profil nutritionnel par portion (total ÷ servings).
@@ -54,6 +72,10 @@ class NutritionAggregation {
   /// Warnings non bloquants (skip d'ingrédient, unité inconnue…).
   /// Aucune donnée sensible : uniquement des libellés techniques courts.
   final List<String> warnings;
+
+  /// Sources distinctes des records nutritionnels consommés
+  /// (remplies par le repository, pas par l'agrégateur pur).
+  final List<NutritionSource> sources;
 
   /// Vrai si au moins un ingrédient a contribué.
   bool get hasData => resolvedCount > 0;

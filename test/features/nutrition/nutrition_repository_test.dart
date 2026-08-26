@@ -7,6 +7,8 @@ import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maestropesto/core/database/app_database.dart';
+import 'package:maestropesto/core/database/importers/ciqual_enrichment_loader.dart';
+import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 
@@ -52,6 +54,76 @@ void main() {
           normalizedValue: Value(value),
         ),
       );
+
+  test('aggregateForRecipe cite les sources des records consommés', () async {
+    // Deux sources distinctes + une sans source (ignorée).
+    await db
+        .into(db.nutritionRecords)
+        .insert(
+          NutritionRecordsCompanion.insert(
+            nutritionRecordId: 'A_1',
+            ingredientId: 'ING-A',
+            ingredientStateId: const Value('raw'),
+            sourceId: const Value(CiqualEnrichmentLoader.sourceId),
+            componentId: const Value('ENERCKCAL'),
+            normalizedValue: const Value(44),
+            notes: const Value('ANSES Ciqual 2025-11-03 — USDA SR27'),
+          ),
+        );
+    await db
+        .into(db.nutritionRecords)
+        .insert(
+          NutritionRecordsCompanion.insert(
+            nutritionRecordId: 'B_1',
+            ingredientId: 'ING-B',
+            ingredientStateId: const Value('raw'),
+            sourceId: const Value('ciqual_2020'),
+            componentId: const Value('ENERCKCAL'),
+            normalizedValue: const Value(30),
+          ),
+        );
+
+    final aggregation = await repo.aggregateForRecipe(
+      ingredients: const [
+        RecipeIngredient(
+          label: 'A',
+          quantity: '100 g',
+          source: IngredientSource.ciqual,
+          ingredientId: 'ING-A',
+        ),
+        RecipeIngredient(
+          label: 'B',
+          quantity: '100 g',
+          source: IngredientSource.ciqual,
+          ingredientId: 'ING-B',
+        ),
+      ],
+      servings: 2,
+    );
+
+    expect(aggregation.hasData, isTrue);
+    expect(aggregation.sources, hasLength(2));
+    final labels = aggregation.sources.map((s) => s.displayLabel).toList();
+    expect(labels, contains('ANSES Ciqual 2025-11-03'));
+    expect(labels, contains('ANSES Ciqual'));
+    final ciqual2025 = aggregation.sources.firstWhere(
+      (s) => s.id == CiqualEnrichmentLoader.sourceId,
+    );
+    expect(ciqual2025.citation, contains('USDA SR27'));
+  });
+
+  test('sourceLabel mappe les identifiants connus', () {
+    expect(
+      NutritionRepository.sourceLabel('ciqual_2025_11_03'),
+      'ANSES Ciqual 2025-11-03',
+    );
+    expect(NutritionRepository.sourceLabel('ciqual_2020'), 'ANSES Ciqual');
+    expect(
+      NutritionRepository.sourceLabel('usda_fdc'),
+      'USDA FoodData Central',
+    );
+    expect(NutritionRepository.sourceLabel('source_inconnue'), isNull);
+  });
 
   test(
     'mappe les tags Ciqual réels (ENERCKCAL, PROTEIN, FAT, CARB…)',

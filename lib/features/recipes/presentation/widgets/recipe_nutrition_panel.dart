@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 class RecipeNutritionPanel extends StatelessWidget {
@@ -7,6 +8,7 @@ class RecipeNutritionPanel extends StatelessWidget {
     required this.nutrition,
     this.computedFromIngredients,
     this.totalIngredients,
+    this.sources = const <NutritionSource>[],
     super.key,
   });
 
@@ -20,6 +22,10 @@ class RecipeNutritionPanel extends StatelessWidget {
 
   /// Nombre total d'ingrédients de la recette (M du badge G2).
   final int? totalIngredients;
+
+  /// Sources des records nutritionnels consommés (retour PO
+  /// 2026-08-26 : citer les sources in-app). Vide → ligne masquée.
+  final List<NutritionSource> sources;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +68,33 @@ class RecipeNutritionPanel extends StatelessWidget {
                   : context.strings.nutritionManualEntry,
               style: Theme.of(context).textTheme.bodySmall,
             ),
+            if (sources.isNotEmpty) ...[
+              const SizedBox(height: 2),
+              Wrap(
+                spacing: 4,
+                runSpacing: 2,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(
+                    '${context.strings.nutritionSources} :',
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                  for (final source in sources)
+                    Tooltip(
+                      message: source.citation ?? source.displayLabel,
+                      child: Text(
+                        source.displayLabel,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontStyle: FontStyle.italic,
+                          decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.dotted,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
             const SizedBox(height: 18),
             _EnergyBlock(value: nutrition.energyKcal),
             const SizedBox(height: 16),
