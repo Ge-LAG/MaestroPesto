@@ -2,7 +2,8 @@
 //
 // Cahier §6.2 :
 // - forIngredient(ingredientId, stateId='raw') → Future<NutritionProfile?>
-// - aggregate(...)  : SYNCHRONE (Lot G, pas dans Lot F)
+// - aggregateForRecipe(...) : async (résolution) puis calcul pur synchrone
+//   via NutritionAggregator (Lot G, dp-105)
 //
 // Source de vérité : table `nutrition_records` (Lot A schéma Drift).
 // Mapping component_id → champ NutritionProfile :
@@ -21,6 +22,8 @@ import 'package:meta/meta.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../core/models/nutrition_profile.dart';
+import '../../../core/scoring/nutrition_aggregator.dart';
+import '../../recipes/domain/recipe.dart';
 
 /// Repository pour la Phase 2 (nutrition).
 ///
@@ -49,6 +52,35 @@ class NutritionRepository {
       return exists ? NutritionProfile.empty : null;
     }
     return _aggregate(records, stateId: stateId);
+  }
+
+  /// Lot G (G1) — agrège la nutrition d'une recette entière, par portion.
+  ///
+  /// Résout les profils de chaque ingrédient lié (`forIngredient`, async),
+  /// puis délègue le calcul au [NutritionAggregator] pur et synchrone
+  /// (dp-105). Les edge cases (ingrédient libre sans id, sous-recette,
+  /// profil manquant) sont gérés par l'agrégateur — voir ses warnings.
+  ///
+  /// Renvoie un résultat avec `resolvedCount == 0` (fallback gracieux)
+  /// si aucun ingrédient n'est résolvable.
+  Future<NutritionAggregation> aggregateForRecipe({
+    required List<RecipeIngredient> ingredients,
+    required int servings,
+    String stateId = 'raw',
+  }) async {
+    // Résolution async en amont : un seul passage par ingrédient lié,
+    // avec cache local pour ne pas requêter deux fois le même id.
+    final cache = <String, NutritionProfile?>{};
+    for (final ingredient in ingredients) {
+      final id = ingredient.ingredientId;
+      if (id == null || id.isEmpty || cache.containsKey(id)) continue;
+      cache[id] = await forIngredient(id, stateId: stateId);
+    }
+    return NutritionAggregator.aggregate(
+      ingredients: ingredients,
+      lookup: (id) => cache[id],
+      servings: servings,
+    );
   }
 
   Future<bool> _ingredientExists(String ingredientId) async {
