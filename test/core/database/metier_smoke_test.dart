@@ -99,6 +99,24 @@ void main() {
             .firstWhere((s) => s.id == 'ciqual_2025_11_03')
             .citation;
         expect(citation, contains('ANSES Ciqual'));
+
+        // Retour PO n°3 (exhaustivité) : minéraux et vitamines par
+        // portion. Girolle : fer 3,47 mg/100 g — 200 g ÷ 2 portions =
+        // 3,47 mg/portion.
+        final micros = aggregation.profilePerServing.micronutrients;
+        expect(
+          micros,
+          isNotEmpty,
+          reason: 'l\'enrichissement exhaustif apporte les micros',
+        );
+        expect(micros['FE']!.value, closeTo(3.47, 0.05));
+        expect(micros['FE']!.unit, 'mg');
+        expect(micros['CA']!.value, closeTo(15, 0.5));
+        expect(
+          micros.keys,
+          anyElement(contains('VIT')),
+          reason: 'au moins une vitamine canonisée est présente',
+        );
       },
     );
   });

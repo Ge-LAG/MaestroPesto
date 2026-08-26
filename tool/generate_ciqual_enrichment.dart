@@ -28,17 +28,16 @@ const Map<String, (String tag, String unit)> selectedByCode = {
   '10004': ('SALT', 'g'),
 };
 
-/// code_INFOODS → (tag interne, unité).
-const Map<String, (String tag, String unit)> selectedByInfoods = {
-  'PROCNT': ('PROTEIN', 'g'),
-  'FAT': ('FAT', 'g'),
-  'FASAT': ('FAT_SAT', 'g'),
-  'CHOAVL': ('CARB', 'g'),
-  'SUGAR': ('SUGAR', 'g'),
-  'FIBT': ('FIBER', 'g'),
-  'NA': ('NA', 'mg'),
-  'WATER': ('WATER', 'g'),
-};
+/// Codes écartés : autres expressions de l'énergie (N x facteur de
+/// Jones — le règlement UE 1169/2011 est retenu via 327/328) et
+/// protéines Jones (25000 ; on garde 25003 = N x 6.25).
+const Set<String> deniedCodes = {'25000', '332', '333'};
+
+/// Retour PO n°3 (exhaustivité) : TOUS les autres constituants du
+/// dictionnaire sont exportés (vitamines, minéraux, alcool, AG
+/// détaillés, sucres individuels, amidon, polyols, cholestérol…).
+/// Tag = code_INFOODS s'il existe, sinon const_code. L'unité est
+/// extraite du nom FR (« …(mg/100 g) »).
 
 /// Mots trop génériques ignorés par le garde-fou de cohérence
 /// nom d'ingrédient ↔ nom d'aliment Ciqual.
@@ -77,11 +76,6 @@ const _stopwords = {
   '100',
   'g',
 };
-
-/// Codes écartés malgré un tag INFOODS valide : 25000 = « Protéines,
-/// N x facteur de Jones » — on privilégie 25003 « Protéines, N x 6.25 »
-/// (facteur du règlement UE 1169/2011, cohérent avec l'énergie 327/328).
-const Set<String> deniedCodes = {'25000'};
 
 /// Code de confiance Ciqual → confiance [0,1] (mapping documenté,
 /// conservateur).
@@ -122,22 +116,17 @@ void main(List<String> args) {
       selected[code] = byCode;
       continue;
     }
-    final byInfoods = selectedByInfoods[constInfoods[code]];
-    if (byInfoods != null) selected[code] = byInfoods;
-  }
-  // Certaines éditions Ciqual taguent les fibres autrement (FIB-) :
-  // fallback par nom FR.
-  if (!selected.values.any((s) => s.$1 == 'FIBER')) {
-    constNames.forEach((code, name) {
-      if (name.toLowerCase().startsWith('fibres') &&
-          !selected.containsKey(code)) {
-        selected[code] = selectedByInfoods['FIBT']!;
-      }
-    });
+    // Exhaustivité (retour PO n°3) : tous les autres constituants.
+    // Tag = code_INFOODS s'il existe, sinon const_code ; l'unité est
+    // extraite du nom FR (« Fibres alimentaires (g/100 g) » → g).
+    final name = constNames[code] ?? '';
+    final infoods = constInfoods[code] ?? '';
+    final tag = infoods.isNotEmpty ? infoods : code;
+    selected[code] = (tag, _unitFromName(name));
   }
   stdout.writeln(
-    'Constituants retenus : '
-    '${selected.entries.map((e) => '${e.key}→${e.value.$1}').join(', ')}',
+    'Constituants retenus : ${selected.length} '
+    '(exhaustif — retour PO n°3)',
   );
 
   // 3. Citations sources : source_code → référence complète.
@@ -523,4 +512,11 @@ String _csvCell(String value) {
     return '"${value.replaceAll('"', '""')}"';
   }
   return value;
+}
+
+/// Extrait l'unité du nom FR d'un constituant Ciqual
+/// (« Énergie … (kcal/100 g) » → kcal). Défaut : g.
+String _unitFromName(String name) {
+  final m = RegExp(r'\(([a-zA-Zµμ]+)\s*/\s*100\s*g\)').firstMatch(name);
+  return m?.group(1) ?? 'g';
 }
