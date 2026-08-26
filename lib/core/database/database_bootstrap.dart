@@ -1,11 +1,10 @@
-import 'package:drift/drift.dart' show Value;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:meta/meta.dart';
 
 import 'app_database.dart';
 import 'connection/database_connection.dart';
 import 'importers/csv_import_service.dart';
-import 'importers/csv_toolkit.dart'
-    show CsvBytesReader, ImportReport, activeCsvReader;
+import 'importers/csv_toolkit.dart' show activeCsvReader;
 
 /// Single entry point that owns the [AppDatabase] instance and exposes
 /// a fully wired [CsvImportService].
@@ -29,6 +28,11 @@ import 'importers/csv_toolkit.dart'
 /// runtime.
 class AppServices {
   AppServices._(this.db, this.metierRoot);
+
+  /// Test-only constructor: wraps an already-built database (typically an
+  /// in-memory `NativeDatabase.memory()`) without touching the filesystem.
+  @visibleForTesting
+  AppServices.forTesting(this.db, {this.metierRoot = 'assets/database-metier'});
 
   final AppDatabase db;
 
@@ -85,14 +89,14 @@ class AppServices {
 
   /// Stream a Flutter asset as chunked bytes. The asset path must
   /// match the prefix declared in `pubspec.yaml` (here: `assets/`).
-  static final CsvBytesReader _assetReader = (String csvPath) async* {
+  static Stream<List<int>> _assetReader(String csvPath) async* {
     // csvPath is something like
     // `assets/database-metier/phase1-referentiel/ingredient_registry_v1.csv`.
     // rootBundle.loadString returns a single chunk so we wrap it as a
     // single-element stream to match the byte-stream signature.
     final bytes = await rootBundle.load(csvPath);
     yield bytes.buffer.asUint8List();
-  };
+  }
 
   /// Last import timestamp (ISO 8601). Updated by [importMetier].
   DateTime? lastImportedAt;

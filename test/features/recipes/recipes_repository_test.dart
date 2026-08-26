@@ -1,10 +1,9 @@
 // Lot D test — RecipesRepository round-trip + cascade + lookup.
-import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/features/recipes/data/recipes_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Recipe _sample({String id = 'r1'}) {
   return Recipe(
@@ -62,13 +61,15 @@ void main() {
       // Setup: insert the Phase 1 ingredient referenced by the recipe
       // (FK target). In production, the loader creates these rows; for
       // the test we mirror that setup.
-      await db.into(db.ingredients).insert(
-        IngredientsCompanion.insert(
-          ingredientId: 'ING-PLANT-BASILIC-000001',
-          canonicalNameFr: 'Basilic',
-          categoryLevel1: 'vegetal',
-        ),
-      );
+      await db
+          .into(db.ingredients)
+          .insert(
+            IngredientsCompanion.insert(
+              ingredientId: 'ING-PLANT-BASILIC-000001',
+              canonicalNameFr: 'Basilic',
+              categoryLevel1: 'vegetal',
+            ),
+          );
 
       await repo.save(_sample());
 
@@ -88,35 +89,39 @@ void main() {
     });
 
     test('save twice replaces children (not duplicates)', () async {
-      await db.into(db.ingredients).insert(
-        IngredientsCompanion.insert(
-          ingredientId: 'ING-PLANT-BASILIC-000001',
-          canonicalNameFr: 'Basilic',
-          categoryLevel1: 'vegetal',
-        ),
-      );
+      await db
+          .into(db.ingredients)
+          .insert(
+            IngredientsCompanion.insert(
+              ingredientId: 'ING-PLANT-BASILIC-000001',
+              canonicalNameFr: 'Basilic',
+              categoryLevel1: 'vegetal',
+            ),
+          );
 
       await repo.save(_sample());
-      await repo.save(Recipe(
-        id: 'r1',
-        title: 'Pesto v2',
-        description: '',
-        tags: const [],
-        servings: 1,
-        prepMinutes: 0,
-        cookMinutes: 0,
-        ingredients: const [],
-        steps: const ['Seule étape'],
-        nutrition: const NutritionSummary(
-          energyKcal: 0,
-          proteins: 0,
-          carbs: 0,
-          fats: 0,
-          fiber: 0,
-          salt: 0,
+      await repo.save(
+        Recipe(
+          id: 'r1',
+          title: 'Pesto v2',
+          description: '',
+          tags: const [],
+          servings: 1,
+          prepMinutes: 0,
+          cookMinutes: 0,
+          ingredients: const [],
+          steps: const ['Seule étape'],
+          nutrition: const NutritionSummary(
+            energyKcal: 0,
+            proteins: 0,
+            carbs: 0,
+            fats: 0,
+            fiber: 0,
+            salt: 0,
+          ),
+          images: const [],
         ),
-        images: const [],
-      ));
+      );
 
       final got = await repo.getById('r1');
       expect(got!.title, 'Pesto v2');
@@ -127,13 +132,15 @@ void main() {
     });
 
     test('delete cascades to children', () async {
-      await db.into(db.ingredients).insert(
-        IngredientsCompanion.insert(
-          ingredientId: 'ING-PLANT-BASILIC-000001',
-          canonicalNameFr: 'Basilic',
-          categoryLevel1: 'vegetal',
-        ),
-      );
+      await db
+          .into(db.ingredients)
+          .insert(
+            IngredientsCompanion.insert(
+              ingredientId: 'ING-PLANT-BASILIC-000001',
+              canonicalNameFr: 'Basilic',
+              categoryLevel1: 'vegetal',
+            ),
+          );
       await repo.save(_sample());
       await repo.delete('r1');
 
@@ -148,13 +155,15 @@ void main() {
     });
 
     test('tag lookup is shared across recipes (label UNIQUE)', () async {
-      await db.into(db.ingredients).insert(
-        IngredientsCompanion.insert(
-          ingredientId: 'ING-PLANT-BASILIC-000001',
-          canonicalNameFr: 'Basilic',
-          categoryLevel1: 'vegetal',
-        ),
-      );
+      await db
+          .into(db.ingredients)
+          .insert(
+            IngredientsCompanion.insert(
+              ingredientId: 'ING-PLANT-BASILIC-000001',
+              canonicalNameFr: 'Basilic',
+              categoryLevel1: 'vegetal',
+            ),
+          );
       await repo.save(_sample(id: 'r1'));
       await repo.save(_sample(id: 'r2'));
 
@@ -165,13 +174,15 @@ void main() {
     });
 
     test('listAll returns every saved recipe', () async {
-      await db.into(db.ingredients).insert(
-        IngredientsCompanion.insert(
-          ingredientId: 'ING-PLANT-BASILIC-000001',
-          canonicalNameFr: 'Basilic',
-          categoryLevel1: 'vegetal',
-        ),
-      );
+      await db
+          .into(db.ingredients)
+          .insert(
+            IngredientsCompanion.insert(
+              ingredientId: 'ING-PLANT-BASILIC-000001',
+              canonicalNameFr: 'Basilic',
+              categoryLevel1: 'vegetal',
+            ),
+          );
       await repo.save(_sample(id: 'r1'));
       await repo.save(_sample(id: 'r2'));
       await repo.save(_sample(id: 'r3'));

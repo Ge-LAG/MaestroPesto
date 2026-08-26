@@ -1,6 +1,6 @@
 // Phase 09 Lot F — tests unitaires pour IngredientSummary.
 
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:maestropesto/core/models/ingredient_summary.dart';
 
 void main() {
@@ -131,14 +131,14 @@ void main() {
         allergenTags: <String>['b', 'a'],
       );
       expect(a, equals(b));
-      expect(a, isNot(equals(c))); // ordre différent = différent (List equality)
+      expect(
+        a,
+        isNot(equals(c)),
+      ); // ordre différent = différent (List equality)
     });
 
     test('toString inclut id + nom + catégorie', () {
-      expect(
-        tomate.toString(),
-        contains('ING-PLANT-TOMATE-000001'),
-      );
+      expect(tomate.toString(), contains('ING-PLANT-TOMATE-000001'));
       expect(tomate.toString(), contains('Tomate'));
       expect(tomate.toString(), contains('vegetal'));
     });
