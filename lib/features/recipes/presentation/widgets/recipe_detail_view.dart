@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
+import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_metier_advisory_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
@@ -55,7 +56,7 @@ class RecipeDetailView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        RecipeNutritionPanel(nutrition: recipe.nutrition),
+                        _NutritionPanel(recipe: recipe, db: db),
                         if (db != null)
                           RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
                       ],
@@ -68,7 +69,7 @@ class RecipeDetailView extends StatelessWidget {
                 children: [
                   content,
                   const SizedBox(height: 18),
-                  RecipeNutritionPanel(nutrition: recipe.nutrition),
+                  _NutritionPanel(recipe: recipe, db: db),
                   if (db != null)
                     RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
                 ],
@@ -83,8 +84,51 @@ class RecipeDetailView extends StatelessWidget {
   }
 }
 
-class _RecipeContent extends StatelessWidget {
-  const _RecipeContent({
+/// Lot G (G2) — panneau nutrition : calcule depuis la DB métier quand
+/// [db] est fournie et que des ingrédients sont liés (badge « Calculé
+/// depuis N ingrédients sur M »), sinon affiche la valeur saisie
+/// manuellement (badge « Valeur saisie manuellement »).
+class _NutritionPanel extends StatelessWidget {
+  const _NutritionPanel({required this.recipe, required this.db});
+
+  final Recipe recipe;
+  final AppDatabase? db;
+
+  @override
+  Widget build(BuildContext context) {
+    final db = this.db;
+    if (db == null) {
+      return RecipeNutritionPanel(nutrition: recipe.nutrition);
+    }
+    return FutureBuilder(
+      future: NutritionRepository(db).aggregateForRecipe(
+        ingredients: recipe.ingredients,
+        servings: recipe.servings,
+      ),
+      builder: (context, snapshot) {
+        final aggregation = snapshot.data;
+        if (aggregation == null || !aggregation.hasData) {
+          return RecipeNutritionPanel(nutrition: recipe.nutrition);
+        }
+        final profile = aggregation.profilePerServing;
+        return RecipeNutritionPanel(
+          nutrition: NutritionSummary(
+            energyKcal: profile.energyKcal,
+            proteins: profile.proteins,
+            carbs: profile.carbs,
+            fats: profile.fats,
+            fiber: profile.fiber,
+            salt: profile.salt,
+          ),
+          computedFromIngredients: aggregation.resolvedCount,
+          totalIngredients: aggregation.totalCount,
+        );
+      },
+    );
+  }
+}
+
+class _RecipeContent extends StatelessWidget {  const _RecipeContent({
     required this.recipe,
     required this.onEdit,
     required this.onDuplicate,

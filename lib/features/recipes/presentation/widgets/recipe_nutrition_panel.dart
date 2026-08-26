@@ -3,9 +3,23 @@ import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 class RecipeNutritionPanel extends StatelessWidget {
-  const RecipeNutritionPanel({required this.nutrition, super.key});
+  const RecipeNutritionPanel({
+    required this.nutrition,
+    this.computedFromIngredients,
+    this.totalIngredients,
+    super.key,
+  });
 
   final NutritionSummary nutrition;
+
+  /// Lot G (G2) — nombre d'ingrédients dont le profil a été résolu en
+  /// base et agrégé. Quand non null, le panneau affiche
+  /// « Calculé depuis N ingrédients sur M » ; sinon
+  /// « Valeur saisie manuellement ».
+  final int? computedFromIngredients;
+
+  /// Nombre total d'ingrédients de la recette (M du badge G2).
+  final int? totalIngredients;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +39,28 @@ class RecipeNutritionPanel extends StatelessWidget {
               children: [
                 const Icon(Icons.monitor_heart_outlined, size: 19),
                 const SizedBox(width: 8),
-                Text(
-                  context.strings.nutrition,
-                  style: Theme.of(context).textTheme.titleMedium
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                Expanded(
+                  child: Text(
+                    context.strings.nutrition,
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w800),
+                  ),
+                ),
+                _SourceBadge(
+                  computedFrom: computedFromIngredients,
+                  total: totalIngredients,
                 ),
               ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              computedFromIngredients != null && computedFromIngredients! > 0
+                  ? context.strings.nutritionComputedFrom(
+                      computedFromIngredients!,
+                      totalIngredients ?? computedFromIngredients!,
+                    )
+                  : context.strings.nutritionManualEntry,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 18),
             _EnergyBlock(value: nutrition.energyKcal),
@@ -73,6 +103,32 @@ class RecipeNutritionPanel extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SourceBadge extends StatelessWidget {
+  const _SourceBadge({required this.computedFrom, required this.total});
+
+  final int? computedFrom;
+  final int? total;
+
+  @override
+  Widget build(BuildContext context) {
+    final computed = computedFrom != null && computedFrom! > 0;
+    final label = computed
+        ? context.strings.nutritionComputedFrom(
+            computedFrom!,
+            total ?? computedFrom!,
+          )
+        : context.strings.nutritionManualEntry;
+    return Tooltip(
+      message: label,
+      child: Icon(
+        computed ? Icons.calculate_outlined : Icons.edit_note,
+        size: 16,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }
