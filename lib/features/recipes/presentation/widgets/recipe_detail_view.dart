@@ -140,6 +140,8 @@ class _NutritionPanel extends StatelessWidget {
           computedFromIngredients: aggregation.resolvedCount,
           totalIngredients: aggregation.totalCount,
           sources: aggregation.sources,
+          alcoholPerServing: profile.alcohol,
+          micronutrientsPerServing: profile.micronutrients,
         );
       },
     );

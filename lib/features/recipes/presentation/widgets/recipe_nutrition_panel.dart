@@ -1,7 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
+
+/// Tags des micronutriments par groupe d'affichage.
+const Set<String> kMineralTags = {
+  'CA',
+  'FE',
+  'K',
+  'MG',
+  'P',
+  'ZN',
+  'CU',
+  'MN',
+  'SE',
+  'I',
+  'CL',
+};
+const Set<String> kVitaminTags = {
+  'VITA',
+  'CAROTENE_B',
+  'VITD',
+  'VITE',
+  'VITK',
+  'VITC',
+  'THIAMIN',
+  'RIBOFLAVINE',
+  'NIACINE',
+  'VITB5',
+  'VITB6',
+  'FOLATES',
+  'VITB12',
+  'BIOTINE',
+  'CHOLINE',
+};
 
 class RecipeNutritionPanel extends StatelessWidget {
   const RecipeNutritionPanel({
@@ -9,6 +42,8 @@ class RecipeNutritionPanel extends StatelessWidget {
     this.computedFromIngredients,
     this.totalIngredients,
     this.sources = const <NutritionSource>[],
+    this.alcoholPerServing = 0,
+    this.micronutrientsPerServing = const <String, Micronutrient>{},
     super.key,
   });
 
@@ -26,6 +61,13 @@ class RecipeNutritionPanel extends StatelessWidget {
   /// Sources des records nutritionnels consommés (retour PO
   /// 2026-08-26 : citer les sources in-app). Vide → ligne masquée.
   final List<NutritionSource> sources;
+
+  /// Alcool (g) par portion — affiché si > 0 (retour PO n°3).
+  final double alcoholPerServing;
+
+  /// Minéraux / vitamines / autres constituants par portion (retour PO
+  /// n°3 : exhaustivité), clé = tag canonique.
+  final Map<String, Micronutrient> micronutrientsPerServing;
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +174,91 @@ class RecipeNutritionPanel extends StatelessWidget {
                   value: nutrition.salt,
                   unit: 'g',
                 ),
+                if (alcoholPerServing > 0)
+                  _NutrientLine(
+                    label: context.strings.alcoholLabel,
+                    value: alcoholPerServing,
+                    unit: 'g',
+                  ),
               ],
             ),
+            if (micronutrientsPerServing.isNotEmpty) ...[
+              _MicroSection(
+                title: context.strings.mineralsTitle,
+                entries: _sortedMicros(
+                  micronutrientsPerServing,
+                  where: (tag) => kMineralTags.contains(tag),
+                ),
+              ),
+              _MicroSection(
+                title: context.strings.vitaminsTitle,
+                entries: _sortedMicros(
+                  micronutrientsPerServing,
+                  where: (tag) => kVitaminTags.contains(tag),
+                ),
+              ),
+              _MicroSection(
+                title: context.strings.otherConstituentsTitle,
+                entries: _sortedMicros(
+                  micronutrientsPerServing,
+                  where: (tag) =>
+                      !kMineralTags.contains(tag) &&
+                      !kVitaminTags.contains(tag),
+                ),
+              ),
+            ],
           ],
         ),
       ),
+    );
+  }
+
+  static List<Micronutrient> _sortedMicros(
+    Map<String, Micronutrient> micros, {
+    required bool Function(String tag) where,
+  }) {
+    final list = micros.values.where((m) => where(m.tag)).toList()
+      ..sort((a, b) => a.tag.compareTo(b.tag));
+    return list;
+  }
+}
+
+/// Section repliable de micronutriments (valeurs par portion).
+class _MicroSection extends StatelessWidget {
+  const _MicroSection({required this.title, required this.entries});
+
+  final String title;
+  final List<Micronutrient> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    if (entries.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(height: 22),
+        Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            tilePadding: EdgeInsets.zero,
+            childrenPadding: EdgeInsets.zero,
+            dense: true,
+            title: Text(
+              '$title (${entries.length})',
+              style: Theme.of(context).textTheme.labelLarge
+                  ?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            children: [
+              for (final micro in entries)
+                _NutrientLine(
+                  label: micro.name,
+                  value: micro.value,
+                  unit: micro.unit,
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
