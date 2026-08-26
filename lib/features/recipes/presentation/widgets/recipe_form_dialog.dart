@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/models/functional_alert.dart';
+import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
+import 'package:maestropesto/features/functional/data/functional_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/ingredients/presentation/ingredients_picker_page.dart';
@@ -9,10 +12,17 @@ Future<Recipe?> showRecipeFormDialog({
   required BuildContext context,
   required Recipe recipe,
   required String title,
+  FlavorRepository? flavorRepository,
+  FunctionalRepository? functionalRepository,
 }) {
   return showDialog<Recipe>(
     context: context,
-    builder: (context) => RecipeFormDialog(recipe: recipe, title: title),
+    builder: (context) => RecipeFormDialog(
+      recipe: recipe,
+      title: title,
+      flavorRepository: flavorRepository,
+      functionalRepository: functionalRepository,
+    ),
   );
 }
 
@@ -20,11 +30,20 @@ class RecipeFormDialog extends StatefulWidget {
   const RecipeFormDialog({
     required this.recipe,
     required this.title,
+    this.flavorRepository,
+    this.functionalRepository,
     super.key,
   });
 
   final Recipe recipe;
   final String title;
+
+  /// Phase 09 Lot H (H4) — repositories optionnels pour le warning live
+  /// « mauvaise combinaison » pendant la saisie. Si absents (câblage DB
+  /// non fait côté appelant, ex. picker en fallback Lot F), le warning
+  /// est simplement désactivé — la saisie n'est jamais interrompue.
+  final FlavorRepository? flavorRepository;
+  final FunctionalRepository? functionalRepository;
 
   @override
   State<RecipeFormDialog> createState() => _RecipeFormDialogState();
@@ -48,6 +67,11 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
   late List<_IngredientDraft> _ingredients;
   late List<_ImageDraft> _images;
   late List<TextEditingController> _stepControllers;
+
+  /// Phase 09 Lot H (H4) — warning live non bloquant affiché sous la
+  /// section ingrédients quand l'ingrédient ajouté crée une mauvaise
+  /// combinaison. Null = pas de warning.
+  String? _combinationWarning;
 
   @override
   void initState() {
@@ -221,6 +245,39 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
       draft.labelController.text = picked.label;
       draft.ingredientId = picked.ingredientId;
     });
+    await _refreshCombinationWarning();
+  }
+
+  /// Phase 09 Lot H (H4) — recalcule le warning live (non bloquant) :
+  /// l'un des ingrédients liés forme une paire flavour < 0.40 ou
+  /// déclenche une alerte Phase 4 danger. Sans repositories injectés,
+  /// no-op (warning désactivé, cf. doc du widget).
+  Future<void> _refreshCombinationWarning() async {
+    final flavor = widget.flavorRepository;
+    final functional = widget.functionalRepository;
+    if (flavor == null || functional == null) return;
+
+    final ids = [
+      for (final draft in _ingredients)
+        if (draft.ingredientId != null && draft.ingredientId!.isNotEmpty)
+          draft.ingredientId!,
+    ];
+    if (ids.length < 2) {
+      if (_combinationWarning != null) {
+        setState(() => _combinationWarning = null);
+      }
+      return;
+    }
+
+    final warningMessage = context.strings.ingredientBadCombinationWarning;
+    final badPairs = await flavor.incompatiblePairs(ids);
+    final hasDanger = (await functional.alertsFor(ids))
+        .any((a) => a.severity == FunctionalSeverity.danger);
+    if (!mounted) return;
+    final warning = (badPairs.isNotEmpty || hasDanger) ? warningMessage : null;
+    if (warning != _combinationWarning) {
+      setState(() => _combinationWarning = warning);
+    }
   }
 
   @override
@@ -272,6 +329,10 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
                       onPickIngredient: _pickIngredient,
                       onChanged: () => setState(() {}),
                     ),
+                    if (_combinationWarning != null) ...[
+                      const SizedBox(height: 8),
+                      _CombinationWarningBanner(message: _combinationWarning!),
+                    ],
                     const SizedBox(height: 22),
                     _ImagesSection(
                       images: _images,
@@ -322,8 +383,48 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
   }
 }
 
-class _BasicsSection extends StatelessWidget {
-  const _BasicsSection({
+/// Phase 09 Lot H (H4) — bandeau warning live, non bloquant : affiché
+/// sous la section ingrédients sans interrompre la saisie.
+class _CombinationWarningBanner extends StatelessWidget {
+  const _CombinationWarningBanner({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.errorContainer.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        child: Row(
+          children: [
+            Icon(
+              Icons.warning_amber_outlined,
+              size: 18,
+              color: colorScheme.onErrorContainer,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onErrorContainer,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BasicsSection extends StatelessWidget {  const _BasicsSection({
     required this.titleController,
     required this.descriptionController,
     required this.tagsController,
