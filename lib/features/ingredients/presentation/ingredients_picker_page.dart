@@ -146,10 +146,13 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
         ? all
         : all.where((s) => s.categoryLevel1 == _categoryFilter).toList();
 
-    // Index à la volée (le cahier §11.2 prévoit un cache, mais ici on
-    // rebuild à chaque frappe pour la simplicité de Lot F).
-    final index = IngredientAliasIndex.fromSummaries(filtered);
-    final results = index.search(_query, limit: 50);
+    // Retour PO n°3 : sans recherche, la liste COMPLÈTE est affichée
+    // (« Toutes » = tout le référentiel, ListView virtualisée) ; la
+    // limite de pertinence ne s'applique qu'aux recherches.
+    final results = _query.trim().isEmpty
+        ? filtered
+        : IngredientAliasIndex.fromSummaries(filtered)
+              .search(_query, limit: 50);
 
     return Scaffold(
       appBar: AppBar(
