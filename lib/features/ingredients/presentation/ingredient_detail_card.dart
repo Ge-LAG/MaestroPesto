@@ -1,8 +1,8 @@
 // Phase 09 Lot F — IngredientDetailCard (§6.4 du cahier Phase 09).
 //
 // Card Material 3 affichant le détail d'un ingrédient Phase 1 dans la
-// vue détail recette. Remplace/affiche en plus du `_IngredientRow`
-// existant quand `ingredientId` est lié à la DB.
+// vue détail recette. Affichée sous le `_IngredientRow` existant quand
+// `ingredientId` est lié à la DB.
 //
 // Contenu :
 // - Nom canonique + nom scientifique (italique)
@@ -10,36 +10,27 @@
 // - Allergènes (chips rouges)
 // - Mini nutrition (top 4 : énergie, protéines, lipides, glucides)
 // - Badges alcoolisé / fermenté
-//
-// R-07 : widget tests rédigés mais non exécutables en sandbox.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:maestropesto/app/i18n/app_strings.dart';
 
 import '../../../core/models/ingredient_detail.dart';
 import '../../../core/models/nutrition_profile.dart';
 import '../../nutrition/data/nutrition_repository.dart';
 
 /// Card de détail d'un ingrédient.
-class IngredientDetailCard extends ConsumerWidget {
-  const IngredientDetailCard({
-    super.key,
-    required this.detail,
-    this.nutrition,
-    this.strings = const _IngredientDetailStrings.fr(),
-  });
+class IngredientDetailCard extends StatelessWidget {
+  const IngredientDetailCard({super.key, required this.detail, this.nutrition});
 
   final IngredientDetail detail;
 
-  /// Optionnel : nutrition agrégée pour 100 g (déjà chargée).
+  /// Optionnel : nutrition pour 100 g (déjà chargée).
   final NutritionProfile? nutrition;
 
-  /// Strings localisées (FR par défaut).
-  final _IngredientDetailStrings strings;
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final strings = context.strings;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: Padding(
@@ -55,14 +46,16 @@ class IngredientDetailCard extends ConsumerWidget {
                     children: [
                       Text(
                         detail.canonicalNameFr,
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w800),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       if (detail.scientificName != null)
                         Text(
                           detail.scientificName!,
-                          style: theme.textTheme.bodySmall
-                              ?.copyWith(fontStyle: FontStyle.italic),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                     ],
                   ),
@@ -73,27 +66,27 @@ class IngredientDetailCard extends ConsumerWidget {
                     if (detail.isAlcoholic)
                       _Badge(
                         icon: Icons.local_bar_outlined,
-                        label: strings.alcoholBadge,
+                        label: strings.ingredientDetailAlcoholBadge,
                       ),
                     if (detail.isFermented)
                       _Badge(
                         icon: Icons.eco_outlined,
-                        label: strings.fermentedBadge,
+                        label: strings.ingredientDetailFermentedBadge,
                       ),
                   ],
                 ),
               ],
             ),
             const SizedBox(height: 6),
-            Text(
-              detail.categoryBreadcrumb,
-              style: theme.textTheme.bodySmall,
-            ),
+            Text(detail.categoryBreadcrumb, style: theme.textTheme.bodySmall),
             if (detail.hasAllergens) ...[
               const SizedBox(height: 10),
-              Text(strings.allergensTitle,
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(fontWeight: FontWeight.w700)),
+              Text(
+                strings.ingredientDetailAllergensTitle,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               const SizedBox(height: 4),
               Wrap(
                 spacing: 6,
@@ -102,7 +95,9 @@ class IngredientDetailCard extends ConsumerWidget {
                   for (final a in detail.allergenTags)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.red.shade50,
                         borderRadius: BorderRadius.circular(4),
@@ -120,15 +115,15 @@ class IngredientDetailCard extends ConsumerWidget {
               ),
             ] else ...[
               const SizedBox(height: 6),
-              Text(strings.noAllergens,
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(fontStyle: FontStyle.italic)),
+              Text(
+                strings.ingredientDetailNoAllergens,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
             ],
             const SizedBox(height: 12),
-            _MiniNutritionSection(
-              nutrition: nutrition,
-              strings: strings,
-            ),
+            _MiniNutritionSection(nutrition: nutrition),
           ],
         ),
       ),
@@ -156,8 +151,10 @@ class _Badge extends StatelessWidget {
         children: [
           Icon(icon, size: 12, color: Colors.amber.shade900),
           const SizedBox(width: 2),
-          Text(label,
-              style: TextStyle(fontSize: 11, color: Colors.amber.shade900)),
+          Text(
+            label,
+            style: TextStyle(fontSize: 11, color: Colors.amber.shade900),
+          ),
         ],
       ),
     );
@@ -165,16 +162,16 @@ class _Badge extends StatelessWidget {
 }
 
 class _MiniNutritionSection extends StatelessWidget {
-  const _MiniNutritionSection({required this.nutrition, required this.strings});
+  const _MiniNutritionSection({required this.nutrition});
 
   final NutritionProfile? nutrition;
-  final _IngredientDetailStrings strings;
 
   @override
   Widget build(BuildContext context) {
+    final strings = context.strings;
     if (nutrition == null) {
       return Text(
-        strings.nutritionUnavailable,
+        strings.ingredientDetailNutritionUnavailable,
         style: Theme.of(context).textTheme.bodySmall,
       );
     }
@@ -183,7 +180,7 @@ class _MiniNutritionSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          strings.nutritionTitle,
+          strings.ingredientDetailNutritionTitle,
           style: Theme.of(context).textTheme.bodySmall
               ?.copyWith(fontWeight: FontWeight.w700),
         ),
@@ -192,14 +189,22 @@ class _MiniNutritionSection extends StatelessWidget {
           spacing: 12,
           runSpacing: 4,
           children: [
-            _nutritionChip(strings.energy,
-                '${n.energyKcal.toStringAsFixed(0)} kcal'),
-            _nutritionChip(strings.proteins,
-                '${n.proteins.toStringAsFixed(1)} g'),
-            _nutritionChip(strings.fats,
-                '${n.fats.toStringAsFixed(1)} g'),
-            _nutritionChip(strings.carbs,
-                '${n.carbs.toStringAsFixed(1)} g'),
+            _nutritionChip(
+              strings.ingredientDetailEnergy,
+              '${n.energyKcal.toStringAsFixed(0)} kcal',
+            ),
+            _nutritionChip(
+              strings.ingredientDetailProteins,
+              '${n.proteins.toStringAsFixed(1)} g',
+            ),
+            _nutritionChip(
+              strings.ingredientDetailFats,
+              '${n.fats.toStringAsFixed(1)} g',
+            ),
+            _nutritionChip(
+              strings.ingredientDetailCarbs,
+              '${n.carbs.toStringAsFixed(1)} g',
+            ),
           ],
         ),
       ],
@@ -213,41 +218,9 @@ class _MiniNutritionSection extends StatelessWidget {
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(
-        '$label: $value',
-        style: const TextStyle(fontSize: 11),
-      ),
+      child: Text('$label: $value', style: const TextStyle(fontSize: 11)),
     );
   }
-}
-
-/// Strings localisées (FR par défaut).
-class _IngredientDetailStrings {
-  const _IngredientDetailStrings({
-    this.alcoholBadge = 'Alcoolisé',
-    this.fermentedBadge = 'Fermenté',
-    this.allergensTitle = 'Allergènes',
-    this.noAllergens = 'Aucun allergène déclaré',
-    this.nutritionTitle = 'Nutrition · pour 100 g',
-    this.nutritionUnavailable = 'Nutrition non disponible',
-    this.energy = 'Énergie',
-    this.proteins = 'Protéines',
-    this.fats = 'Lipides',
-    this.carbs = 'Glucides',
-  });
-
-  const _IngredientDetailStrings.fr();
-
-  final String alcoholBadge;
-  final String fermentedBadge;
-  final String allergensTitle;
-  final String noAllergens;
-  final String nutritionTitle;
-  final String nutritionUnavailable;
-  final String energy;
-  final String proteins;
-  final String fats;
-  final String carbs;
 }
 
 /// Helper public pour FutureBuilder d'un NutritionProfile depuis un

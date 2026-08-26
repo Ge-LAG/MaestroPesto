@@ -108,6 +108,10 @@ class AppStrings {
   String get ingredientDetailNoAllergens => 'Aucun allergène déclaré';
   String get ingredientDetailNutritionTitle => 'Nutrition · pour 100 g';
   String get ingredientDetailNutritionUnavailable => 'Nutrition non disponible';
+  String get ingredientDetailEnergy => 'Énergie';
+  String get ingredientDetailProteins => 'Protéines';
+  String get ingredientDetailFats => 'Lipides';
+  String get ingredientDetailCarbs => 'Glucides';
 
   // Phase 09 Lot G — nutrition calculée + heatmap flavour.
   String nutritionComputedFrom(int resolved, int total) =>

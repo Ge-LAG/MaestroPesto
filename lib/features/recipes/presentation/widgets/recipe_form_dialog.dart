@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/functional_alert.dart';
+import 'package:maestropesto/core/models/ingredient_summary.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
+import 'package:maestropesto/features/ingredients/data/ingredients_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/ingredients/presentation/ingredients_picker_page.dart';
@@ -12,16 +15,16 @@ Future<Recipe?> showRecipeFormDialog({
   required BuildContext context,
   required Recipe recipe,
   required String title,
-  FlavorRepository? flavorRepository,
-  FunctionalRepository? functionalRepository,
+  AppDatabase? db,
 }) {
   return showDialog<Recipe>(
     context: context,
     builder: (context) => RecipeFormDialog(
       recipe: recipe,
       title: title,
-      flavorRepository: flavorRepository,
-      functionalRepository: functionalRepository,
+      db: db,
+      flavorRepository: db == null ? null : FlavorRepository(db),
+      functionalRepository: db == null ? null : FunctionalRepository(db),
     ),
   );
 }
@@ -30,6 +33,7 @@ class RecipeFormDialog extends StatefulWidget {
   const RecipeFormDialog({
     required this.recipe,
     required this.title,
+    this.db,
     this.flavorRepository,
     this.functionalRepository,
     super.key,
@@ -38,10 +42,15 @@ class RecipeFormDialog extends StatefulWidget {
   final Recipe recipe;
   final String title;
 
+  /// Phase 09 (câblage ac-F-002) — base Drift optionnelle. Quand elle
+  /// est fournie et que le référentiel Phase 1 est importé, le slot
+  /// ingrédient ouvre le vrai picker métier au lieu du fallback.
+  final AppDatabase? db;
+
   /// Phase 09 Lot H (H4) — repositories optionnels pour le warning live
-  /// « mauvaise combinaison » pendant la saisie. Si absents (câblage DB
-  /// non fait côté appelant, ex. picker en fallback Lot F), le warning
-  /// est simplement désactivé — la saisie n'est jamais interrompue.
+  /// « mauvaise combinaison » pendant la saisie. Si absents (pas de DB),
+  /// le warning est simplement désactivé — la saisie n'est jamais
+  /// interrompue.
   final FlavorRepository? flavorRepository;
   final FunctionalRepository? functionalRepository;
 
@@ -72,6 +81,10 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
   /// section ingrédients quand l'ingrédient ajouté crée une mauvaise
   /// combinaison. Null = pas de warning.
   String? _combinationWarning;
+
+  /// Phase 09 (câblage ac-F-002) — cache des summaries Phase 1 pour le
+  /// picker, chargées une seule fois par dialogue.
+  List<IngredientSummary>? _pickerSummaries;
 
   @override
   void initState() {
@@ -221,20 +234,34 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
 
   /// Phase 09 Lot F — ouvre le picker ingrédients pour le draft à l'index [index].
   ///
-  /// Si l'utilisateur sélectionne un ingrédient Phase 1, on met à jour :
-  /// - `draft.label` → canonical name FR
-  /// - `draft.ingredientId` → identifiant Phase 1 (FK)
+  /// Si la DB est fournie et que le référentiel Phase 1 est importé, on
+  /// ouvre le vrai picker métier (§6.3) : la sélection met à jour
+  /// `draft.label` (nom canonique FR) et `draft.ingredientId` (FK Phase 1).
+  /// Sinon, fallback de saisie libre (aucun référentiel disponible).
   Future<void> _pickIngredient(int index) async {
     if (index < 0 || index >= _ingredients.length) return;
     final draft = _ingredients[index];
+    final db = widget.db;
 
-    // Pour Lot F v1, on lit directement via IngredientsRepository
-    // si le contexte parent a injecté un picker. Sinon on tombe sur
-    // un fallback qui demande juste un label.
-    //
-    // Le câblage complet avec AppDatabase sera fait dans l'integration
-    // RecipeBookPanel (Lot suivant) — ici on garde le slot fonctionnel
-    // avec une liste vide par défaut.
+    if (db != null) {
+      var summaries = _pickerSummaries;
+      if (summaries == null) {
+        summaries = await IngredientsRepository(db).allSummaries();
+        if (!mounted) return;
+        _pickerSummaries = summaries;
+      }
+      if (summaries.isNotEmpty) {
+        final picked = await showIngredientsPicker(context, all: summaries);
+        if (picked == null) return;
+        setState(() {
+          draft.labelController.text = picked.canonicalNameFr;
+          draft.ingredientId = picked.ingredientId;
+        });
+        await _refreshCombinationWarning();
+        return;
+      }
+    }
+
     final picked = await showIngredientsPickerFallback(
       context,
       currentLabel: draft.labelController.text,
@@ -246,6 +273,13 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
       draft.ingredientId = picked.ingredientId;
     });
     await _refreshCombinationWarning();
+  }
+
+  /// Phase 09 (H4) — recalcul du warning après ajout/suppression d'un
+  /// slot ingrédient (fire-and-forget, jamais bloquant).
+  void _onIngredientsChanged() {
+    setState(() {});
+    _refreshCombinationWarning();
   }
 
   /// Phase 09 Lot H (H4) — recalcule le warning live (non bloquant) :
@@ -327,7 +361,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
                     _IngredientsSection(
                       ingredients: _ingredients,
                       onPickIngredient: _pickIngredient,
-                      onChanged: () => setState(() {}),
+                      onChanged: _onIngredientsChanged,
                     ),
                     if (_combinationWarning != null) ...[
                       const SizedBox(height: 8),
@@ -412,9 +446,9 @@ class _CombinationWarningBanner extends StatelessWidget {
               child: Text(
                 message,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onErrorContainer,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: colorScheme.onErrorContainer,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],
@@ -424,7 +458,8 @@ class _CombinationWarningBanner extends StatelessWidget {
   }
 }
 
-class _BasicsSection extends StatelessWidget {  const _BasicsSection({
+class _BasicsSection extends StatelessWidget {
+  const _BasicsSection({
     required this.titleController,
     required this.descriptionController,
     required this.tagsController,
@@ -787,7 +822,8 @@ class _IngredientEditorRow extends StatelessWidget {
                     // Phase 09 Lot F : affiche l'ID Phase 1 sélectionné
                     // si lié à la DB.
                     helperText: draft.ingredientId != null
-                        ? 'Phase 1 : ${draft.ingredientId}'
+                        ? '${context.strings.ingredientPhase1Helper} : '
+                              '${draft.ingredientId}'
                         : null,
                   ),
                 ),
@@ -796,7 +832,7 @@ class _IngredientEditorRow extends StatelessWidget {
               IconButton(
                 onPressed: () => openPicker(),
                 icon: const Icon(Icons.search),
-                tooltip: 'Choisir depuis le référentiel Phase 1',
+                tooltip: context.strings.pickIngredientTooltip,
               ),
             ],
           ),

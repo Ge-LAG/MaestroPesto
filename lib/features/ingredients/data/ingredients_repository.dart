@@ -42,10 +42,24 @@ class IngredientsRepository implements IngredientCandidatesSource {
 
   /// Total ingredient count — used by the metier status indicator.
   Future<int> count() async {
-    final row = await (db.selectOnly(db.ingredients)
-          ..addColumns([db.ingredients.ingredientId.count()]))
-        .getSingle();
+    final row = await (db.selectOnly(
+      db.ingredients,
+    )..addColumns([db.ingredients.ingredientId.count()])).getSingle();
     return row.read(db.ingredients.ingredientId.count()) ?? 0;
+  }
+
+  /// Phase 09 (§6.3, câblage picker) — toutes les summaries Phase 1
+  /// triées par nom canonique FR. Alimente le picker du formulaire de
+  /// recette. Liste vide tant que l'import CSV n'a pas été fait.
+  Future<List<IngredientSummary>> allSummaries() async {
+    final rows = await (db.select(
+      db.ingredients,
+    )..orderBy([(t) => OrderingTerm.asc(t.canonicalNameFr)])).get();
+    return [
+      for (final row in rows)
+        IngredientMapping.toSummary(row)
+            .copyWith(confidence: row.confidence ?? 1.0),
+    ];
   }
 
   /// Phase 09 Lot H (§9.1) — résumé Phase 1 d'un ingrédient, avec la
@@ -68,15 +82,16 @@ class IngredientsRepository implements IngredientCandidatesSource {
     String categoryLevel1, {
     double minConfidence = 0.7,
   }) async {
-    final rows = await (db.select(db.ingredients)
-          ..where((t) => t.categoryLevel1.equals(categoryLevel1))
-          ..where(
-            (t) => minConfidence <= 0
-                ? const Constant(true)
-                : t.confidence.isBiggerOrEqualValue(minConfidence),
-          )
-          ..orderBy([(t) => OrderingTerm.asc(t.canonicalNameFr)]))
-        .get();
+    final rows =
+        await (db.select(db.ingredients)
+              ..where((t) => t.categoryLevel1.equals(categoryLevel1))
+              ..where(
+                (t) => minConfidence <= 0
+                    ? const Constant(true)
+                    : t.confidence.isBiggerOrEqualValue(minConfidence),
+              )
+              ..orderBy([(t) => OrderingTerm.asc(t.canonicalNameFr)]))
+            .get();
     return [
       for (final row in rows)
         IngredientMapping.toSummary(row)

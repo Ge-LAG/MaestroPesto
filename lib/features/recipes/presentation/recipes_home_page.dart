@@ -97,6 +97,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       context: context,
       title: context.strings.createRecipeDialogTitle,
       recipe: _emptyRecipe(),
+      db: widget.services.db,
     );
     if (recipe == null) {
       return;
@@ -115,6 +116,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       context: context,
       title: context.strings.editRecipeDialogTitle,
       recipe: recipe,
+      db: widget.services.db,
     );
     if (edited == null) {
       return;
@@ -245,7 +247,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       messenger.showSnackBar(
         SnackBar(
           content: Text('Erreur import BDD métier : $e'),
-          backgroundColor: Theme.of(context).colorScheme.error,
+          backgroundColor: Theme.of(this.context).colorScheme.error,
         ),
       );
     }

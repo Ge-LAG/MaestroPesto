@@ -16,6 +16,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:maestropesto/app/i18n/app_strings.dart';
 
 import '../../../core/models/ingredient_summary.dart';
 import '../data/ingredient_alias_index.dart';
@@ -33,19 +34,18 @@ final ingredientsRawProvider = Provider<List<IngredientSummary>>(
   (ref) => const <IngredientSummary>[],
 );
 
-/// Ouvre le picker en modal et renvoie l'`ingredientId` sélectionné, ou null.
-Future<String?> showIngredientsPicker(
+/// Ouvre le picker en modal et renvoie l'ingrédient sélectionné (résumé
+/// complet : nom canonique + identifiant Phase 1), ou null si annulé.
+Future<IngredientSummary?> showIngredientsPicker(
   BuildContext context, {
   required List<IngredientSummary> all,
   String? initialCategoryFilter,
 }) {
-  return Navigator.of(context).push<String>(
+  return Navigator.of(context).push<IngredientSummary>(
     MaterialPageRoute(
       fullscreenDialog: true,
       builder: (_) => ProviderScope(
-        overrides: [
-          ingredientsRawProvider.overrideWithValue(all),
-        ],
+        overrides: [ingredientsRawProvider.overrideWithValue(all)],
         child: IngredientsPickerPage(
           initialCategoryFilter: initialCategoryFilter,
         ),
@@ -62,39 +62,39 @@ class PickedIngredient {
 }
 
 /// Fallback simple : un AlertDialog avec un TextField pour le label,
-/// utilisé quand l'AppDatabase n'est pas accessible (Lot F v1 hors
-/// contexte DB). Renvoie `null` si annulé.
+/// utilisé quand l'AppDatabase n'est pas accessible (pas de référentiel
+/// importé). Renvoie `null` si annulé.
 Future<PickedIngredient?> showIngredientsPickerFallback(
   BuildContext context, {
   String? currentLabel,
 }) async {
+  final strings = context.strings;
   final controller = TextEditingController(text: currentLabel ?? '');
   final result = await showDialog<PickedIngredient>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: const Text('Saisir un ingrédient'),
+      title: Text(strings.pickIngredientFallbackTitle),
       content: TextField(
         controller: controller,
         autofocus: true,
-        decoration: const InputDecoration(
-          labelText: 'Nom de l\'ingrédient',
-          hintText: 'Tomate, Basilic, …',
+        decoration: InputDecoration(
+          labelText: strings.pickIngredientFallbackLabel,
+          hintText: strings.pickIngredientFallbackHint,
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(),
-          child: const Text('Annuler'),
+          child: Text(strings.cancel),
         ),
         FilledButton(
           onPressed: () {
             final label = controller.text.trim();
             if (label.isEmpty) return;
-            Navigator.of(ctx).pop(
-              PickedIngredient(label: label, ingredientId: null),
-            );
+            Navigator.of(ctx)
+                .pop(PickedIngredient(label: label, ingredientId: null));
           },
-          child: const Text('OK'),
+          child: Text(strings.pickIngredientFallbackOk),
         ),
       ],
     ),
@@ -105,10 +105,7 @@ Future<PickedIngredient?> showIngredientsPickerFallback(
 
 /// Page picker principale.
 class IngredientsPickerPage extends ConsumerStatefulWidget {
-  const IngredientsPickerPage({
-    super.key,
-    this.initialCategoryFilter,
-  });
+  const IngredientsPickerPage({super.key, this.initialCategoryFilter});
 
   final String? initialCategoryFilter;
 
@@ -137,12 +134,11 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = context.strings;
     final all = ref.watch(ingredientsRawProvider);
 
     // Liste des catégories distinctes
-    final categories = <String>{
-      for (final s in all) s.categoryLevel1,
-    }.toList()
+    final categories = <String>{for (final s in all) s.categoryLevel1}.toList()
       ..sort();
 
     // Filtre catégorie
@@ -157,12 +153,12 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Choisir un ingrédient'),
+        title: Text(strings.pickIngredientTitle),
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.close),
-            tooltip: 'Fermer',
+            tooltip: strings.close,
           ),
         ],
       ),
@@ -172,7 +168,7 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             child: SearchBar(
               controller: _searchController,
-              hintText: 'Rechercher (tomate, basilic…)',
+              hintText: strings.pickIngredientSearchHint,
               leading: const Icon(Icons.search),
               onChanged: (value) {
                 setState(() => _query = value);
@@ -189,7 +185,7 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return FilterChip(
-                    label: const Text('Toutes'),
+                    label: Text(strings.pickIngredientCategoryAll),
                     selected: _categoryFilter == null,
                     onSelected: (_) {
                       setState(() => _categoryFilter = null);
@@ -210,19 +206,18 @@ class _IngredientsPickerPageState extends ConsumerState<IngredientsPickerPage> {
           const Divider(height: 1),
           Expanded(
             child: results.isEmpty
-                ? const Center(
+                ? Center(
                     child: Padding(
-                      padding: EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(24),
                       child: Text(
-                        'Aucun ingrédient ne correspond.',
+                        strings.pickIngredientNoResult,
                         textAlign: TextAlign.center,
                       ),
                     ),
                   )
                 : ListView.separated(
                     itemCount: results.length,
-                    separatorBuilder: (_, _) =>
-                        const Divider(height: 1),
+                    separatorBuilder: (_, _) => const Divider(height: 1),
                     itemBuilder: (context, index) {
                       final s = results[index];
                       return _IngredientRow(summary: s);
@@ -253,17 +248,19 @@ class _IngredientRow extends StatelessWidget {
         children: [
           if (summary.isAlcoholic)
             const Icon(Icons.local_bar_outlined, size: 18),
-          if (summary.isFermented)
-            const Icon(Icons.eco_outlined, size: 18),
+          if (summary.isFermented) const Icon(Icons.eco_outlined, size: 18),
           if (summary.hasAllergens)
             Tooltip(
               message: 'Allergènes : ${summary.allergenTags.join(", ")}',
-              child: const Icon(Icons.warning_amber_outlined,
-                  color: Colors.orange, size: 18),
+              child: const Icon(
+                Icons.warning_amber_outlined,
+                color: Colors.orange,
+                size: 18,
+              ),
             ),
         ],
       ),
-      onTap: () => Navigator.of(context).pop(summary.ingredientId),
+      onTap: () => Navigator.of(context).pop(summary),
     );
   }
 }
