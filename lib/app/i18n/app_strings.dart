@@ -108,6 +108,20 @@ class AppStrings {
   String get ingredientDetailNoAllergens => 'Aucun allergène déclaré';
   String get ingredientDetailNutritionTitle => 'Nutrition · pour 100 g';
   String get ingredientDetailNutritionUnavailable => 'Nutrition non disponible';
+
+  // Phase 09 Lot G — nutrition calculée + heatmap flavour.
+  String nutritionComputedFrom(int resolved, int total) =>
+      'Calculé depuis $resolved ingrédient${resolved > 1 ? 's' : ''} '
+      'sur $total';
+  String get nutritionManualEntry => 'Valeur saisie manuellement';
+  String get flavorHeatmapTitle => 'Compatibilités aromatiques';
+  String get flavorPairUnknown => 'Pas de donnée';
+  String get flavorOverallScore => 'Score global';
+  String get flavorCategoryExcellent => 'Excellente';
+  String get flavorCategoryGood => 'Bonne';
+  String get flavorCategoryAverage => 'Moyenne';
+  String get flavorCategoryQuestionable => 'Discutable';
+  String get flavorCategoryAvoid => 'À éviter';
 }
 
 const appStrings = AppStrings();
