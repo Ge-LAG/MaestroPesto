@@ -3,6 +3,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
+import 'package:maestropesto/features/ingredients/presentation/ingredients_picker_page.dart';
 
 Future<Recipe?> showRecipeFormDialog({
   required BuildContext context,
@@ -194,6 +195,34 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     });
   }
 
+  /// Phase 09 Lot F — ouvre le picker ingrédients pour le draft à l'index [index].
+  ///
+  /// Si l'utilisateur sélectionne un ingrédient Phase 1, on met à jour :
+  /// - `draft.label` → canonical name FR
+  /// - `draft.ingredientId` → identifiant Phase 1 (FK)
+  Future<void> _pickIngredient(int index) async {
+    if (index < 0 || index >= _ingredients.length) return;
+    final draft = _ingredients[index];
+
+    // Pour Lot F v1, on lit directement via IngredientsRepository
+    // si le contexte parent a injecté un picker. Sinon on tombe sur
+    // un fallback qui demande juste un label.
+    //
+    // Le câblage complet avec AppDatabase sera fait dans l'integration
+    // RecipeBookPanel (Lot suivant) — ici on garde le slot fonctionnel
+    // avec une liste vide par défaut.
+    final picked = await showIngredientsPickerFallback(
+      context,
+      currentLabel: draft.labelController.text,
+    );
+    if (picked == null) return;
+
+    setState(() {
+      draft.labelController.text = picked.label;
+      draft.ingredientId = picked.ingredientId;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -240,6 +269,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
                     const SizedBox(height: 22),
                     _IngredientsSection(
                       ingredients: _ingredients,
+                      onPickIngredient: _pickIngredient,
                       onChanged: () => setState(() {}),
                     ),
                     const SizedBox(height: 22),
@@ -377,10 +407,12 @@ class _IngredientsSection extends StatelessWidget {
   const _IngredientsSection({
     required this.ingredients,
     required this.onChanged,
+    required this.onPickIngredient,
   });
 
   final List<_IngredientDraft> ingredients;
   final VoidCallback onChanged;
+  final Future<void> Function(int index) onPickIngredient;
 
   @override
   Widget build(BuildContext context) {
@@ -404,6 +436,7 @@ class _IngredientsSection extends StatelessWidget {
               ),
               child: _IngredientEditorRow(
                 draft: ingredients[index],
+                onPickIngredient: (ctx) => onPickIngredient(index),
                 onRemove: ingredients.length == 1
                     ? null
                     : () {
@@ -614,16 +647,28 @@ class _NutritionSection extends StatelessWidget {
 }
 
 class _IngredientEditorRow extends StatelessWidget {
-  const _IngredientEditorRow({required this.draft, required this.onRemove});
+  const _IngredientEditorRow({
+    required this.draft,
+    required this.onRemove,
+    required this.onPickIngredient,
+  });
 
   final _IngredientDraft draft;
   final VoidCallback? onRemove;
+
+  /// Callback Lot F — ouvre le picker ingrédients (cf. §6.3 du cahier Phase 09).
+  final Future<void> Function(BuildContext context) onPickIngredient;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final compact = constraints.maxWidth < 650;
+
+        Future<void> openPicker() async {
+          await onPickIngredient(context);
+        }
+
         final fields = [
           TextFormField(
             controller: draft.quantityController,
@@ -631,11 +676,28 @@ class _IngredientEditorRow extends StatelessWidget {
               labelText: context.strings.quantityField,
             ),
           ),
-          TextFormField(
-            controller: draft.labelController,
-            decoration: InputDecoration(
-              labelText: context.strings.ingredientField,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: draft.labelController,
+                  decoration: InputDecoration(
+                    labelText: context.strings.ingredientField,
+                    // Phase 09 Lot F : affiche l'ID Phase 1 sélectionné
+                    // si lié à la DB.
+                    helperText: draft.ingredientId != null
+                        ? 'Phase 1 : ${draft.ingredientId}'
+                        : null,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                onPressed: () => openPicker(),
+                icon: const Icon(Icons.search),
+                tooltip: 'Choisir depuis le référentiel Phase 1',
+              ),
+            ],
           ),
           DropdownButtonFormField<IngredientSource>(
             initialValue: draft.source,
@@ -875,6 +937,7 @@ class _IngredientDraft {
     required this.labelController,
     required this.quantityController,
     required this.source,
+    this.ingredientId,
   });
 
   factory _IngredientDraft.fromIngredient(RecipeIngredient ingredient) {
@@ -882,6 +945,7 @@ class _IngredientDraft {
       labelController: TextEditingController(text: ingredient.label),
       quantityController: TextEditingController(text: ingredient.quantity),
       source: ingredient.source,
+      ingredientId: ingredient.ingredientId,
     );
   }
 
@@ -897,11 +961,15 @@ class _IngredientDraft {
   final TextEditingController quantityController;
   IngredientSource source;
 
+  /// Phase 09 Lot F : identifiant Phase 1 si lié à la DB.
+  String? ingredientId;
+
   RecipeIngredient toIngredient() {
     return RecipeIngredient(
       label: labelController.text.trim(),
       quantity: quantityController.text.trim(),
       source: source,
+      ingredientId: ingredientId,
     );
   }
 
