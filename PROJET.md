@@ -7,23 +7,23 @@
 | Champ | Valeur |
 |-------|--------|
 | **Projet** | MaestroPesto |
-| **Phase courante** | Phase 09 : Lots F+G+H livrés, audités, validés Windows + RETOUR PO n°2 traité (enrichissement Ciqual sourcé, sources in-app, incompatibilités nommées, quantités g/ml). |
-| **Etat general** | Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 complète puis retour PO n°2 (GLM 5.3/Zcode, 2026-08-26) : diagnostic (nutrition 62/603, flavour 97/603 → « ça ne produit rien » expliqué), enrichissement Ciqual complémentaire et sourcé (générateur tool/ + CSV 1 668 records/153 ingrédients avec citations sources.xml, résolution par nom car les ciqual_ids du référentiel sont d'une ancienne numérotation, loader intégré au bouton import), panneau nutrition cite les sources (tooltip citation), warning live + bannière nomment les paires incompatibles avec score, alertes Phase 4 citent leurs références, champ quantité nombre + unité g/ml. flutter test 227/227, analyze 0, format 0, build windows OK. Aucun push (R-01). |
+| **Phase courante** | Phase 09 : Lots F+G+H livrés, audités, validés Windows + retours PO n°2 et n°3 traités (237/237 tests, build OK). Dernier lot : nutrition exhaustive et AUTOMATIQUE, heatmap complète avec légende, alertes physico-chimiques proportionnées au mix, picker complet. |
+| **Etat general** | Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 complète + retours PO successifs. Retour n°3 (2026-08-26) : nutrition calculée automatiquement depuis les quantités du mix (aperçu live dans le formulaire, saisie manuelle en repli, valeurs sauvegardées) + exhaustivité (CSV Ciqual 7 564 records : vitamines A-K/B1-B12, minéraux, omégas, cholestérol, alcool ; sections repliables Minéraux/Vitamines/Autres dans le panneau) ; heatmap « vraie » (meilleure donnée connue par cellule — paire directe ou plus petite combinaison n-aire — + légende) ; alertes physico-chimiques avec part massique du mix des déclencheurs (« Part du mix : 45 % », note « influence faible » < 5 %) ; picker « Toutes » liste les 603 ingrédients. 237/237 tests verts (+10), analyze 0, format 0, build windows OK. Aucun push (R-01). |
 
 ## Focus immediat
 
-Smoke test MANUEL du PO : relancer l'import BDD métier (le bouton importe maintenant AUSSI l'enrichissement Ciqual — 5e phase), éditer une recette avec girolle (nutrition apparaît + source « ANSES Ciqual 2025-11-03 » citée), saisir une quantité en ml, provoquer une incompatibilité (Abricot+Aneth) pour lire les noms dans le warning. Puis décision push (R-01).
+Smoke test MANUEL du PO sur le retour n°3 : relancer l'import (5 phases, l'enrichissement exhaustif s'ajoute), éditer une recette avec girolle → nutrition auto dans le formulaire + Minéraux/Vitamines dans le panneau détail, vérifier la légende de la heatmap et les parts du mix dans les alertes, scroller le picker jusqu'à Z. Puis décision push (R-01).
 
 ## Prochaines etapes
 
-- PO : smoke test manuel du retour n°2 — relancer l'import (5 phases), éditer une recette avec un ingrédient enrichi (girolle : 24,7 kcal/100 g, source citée), tester ml et le warning nommé.
-- PO : décider du chantier données flavour (ac-115, couverture 97/603) et du traitement des ciqual_ids sources (ac-114).
+- PO : smoke test manuel du retour n°3 (nutrition auto, micros par portion, légende heatmap, parts du mix, picker complet).
+- PO : décider du chantier données flavour (ac-115, couverture 97/603 — Pignon de pin/zestes/huiles essentielles sans données) et du traitement des ciqual_ids sources (ac-114).
 - PO : pousser Ge-LAG/db-connection-strategies vers origin après validation finale (R-01), ouvrir la PR vers main.
-- Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss (ac-H-004), qualité (ac-107/113), traduction catégories (ac-111).
+- Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss (ac-H-004), qualité (ac-107/113/118), traduction catégories (ac-111).
 
 ## Questions ouvertes
 
-- Smoke test manuel PO : valider enrichissement + sources citées + warning nommé + quantités ml en conditions réelles.
+- Smoke test manuel PO : valider nutrition auto + micros + heatmap légendée + parts du mix en conditions réelles.
 - Couverture flavour 97/603 (ac-115) : chantier données dédié sourcé (FlavourDB, littérature food-pairing) pour « documenter toutes les interactions » ? Décision PO.
 - ciqual_ids du référentiel Phase 1 incohérents avec l'édition Ciqual 2025 (ac-114) : corriger la source un jour ou maintenir la résolution par nom ?
 - Approximations de résolution Ciqual (Banane→plantain, Tomate→verte, ac-116) : acceptable ou table d'alias ?
@@ -32,6 +32,11 @@ Smoke test MANUEL du PO : relancer l'import BDD métier (le bouton importe maint
 - Pousser la branche vers origin/main après validation PO finale (R-01).
 
 ## Journal des sessions
+
+#### 2026-08-26 - retour-po-3-metier
+*Traitement du retour PO n°3 (4 points, avec capture d'écran) : nutrition AUTOMATIQUE (aperçu live « Calculée automatiquement — N/M » dans le formulaire, saisie manuelle en repli explicite qui prime si éditée, valeurs calculées sauvegardées) et EXHAUSTIVE (générateur Ciqual tous constituants : 71 retenus, 7 564 records CSV — vitamines A-K/B1-B12, minéraux, omégas, cholestérol, alcool, amidon, polyols ; modèle Micronutrient à tags canoniques fusionnant Phase 2/Ciqual 2025 ; agrégateur pondéré par quantité/portions ; panneau avec sections repliables Minéraux/Vitamines/Autres) ; heatmap « vraie » (bestKnownMatchFor : paire directe sinon plus petite combinaison n-aire, approximation signalée, toutes cellules préchargées, légende 5 catégories + « Pas de donnée ») — diagnostic honnête : Pignon de pin/Zeste d'orange/Huile essentielle ont 0 donnée en base Phase 3 (couverture 97/603) ; alertes physico-chimiques proportionnées (triggerIngredientIds + mixShare des grammes, « Part du mix : X % », note influence faible < 5 %) ; picker « Toutes » complet (603). 237/237 tests verts (+10), smoke réel étendu (fer girolle 3,47 mg/portion), analyze 0, format 0, build windows OK. Cahier dp-120/121/122/123, dette ac-117/118. Commits BP-22. Aucun push (R-01).*
+- PO : Ge-LAG
+- Agent : GLM 5.3 (Zcode)
 
 #### 2026-08-26 - retour-po-2-metier
 *Traitement du retour PO n°2 : diagnostic couverture (nutrition 62/603, flavour 97/603) ; enrichissement Ciqual sourcé (découverte : ciqual_ids du référentiel d'une ancienne numérotation → résolution par nom avec garde-fous ; générateur tool/ + CSV 1 668 records/153 ingrédients avec citations exactes ; loader en 5e phase du bouton import, complément seulement si non couvert) ; sources citées in-app (panel nutrition + tooltip citation, alertes Phase 4 avec source_refs) ; incompatibilités nommées (« Abricot × Aneth (0.03) » dans le warning live dès l'ouverture + sous-titre de la bannière) ; quantités nombre + unité g/ml. 227/227 tests verts (+8), analyze 0, format 0, build windows OK. Cahier : dp-117/118/119, dette ac-114/115/116. Commits BP-22. Aucun push (R-01).*

@@ -828,6 +828,38 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   recette déjà en conflit), sous-titre de la bannière de
   recommandation (reprend les paires du sheet) ; les alertes Phase 4
   citent leurs `source_refs` dans la card dépliée.
+- **dp-120** (Retour PO n°3, 2026-08-26) : **nutrition exhaustive et
+  automatique**. (a) Le CSV d'enrichissement Ciqual exporte TOUS les
+  constituants du dictionnaire (71 retenus : vitamines A-K/B1-B12,
+  minéraux, omégas, cholestérol, alcool, sucres individuels, amidon,
+  polyols… ; unités extraites des noms FR ; 7 564 records). (b) Le
+  modèle expose les macros nommés + `micronutrients` (tag canonique
+  fusionnant les tags Phase 2 et Ciqual 2025, ex. FOL/FOLFD→FOLATES)
+  + `alcohol` ; l'agrégateur les pondère par quantité et par portion.
+  (c) Le panneau nutrition affiche des sections repliables
+  Minéraux / Vitamines / Autres constituants. (d) Le formulaire
+  **calcule la nutrition automatiquement** (aperçu live « Calculée
+  automatiquement — N/M ingrédients ») dès qu'un ingrédient lié a un
+  profil ; la saisie manuelle devient un repli explicite (« Forcer la
+  saisie manuelle ») et prime sur le calcul si l'utilisateur l'édite ;
+  la sauvegarde embarque les valeurs calculées.
+- **dp-121** (Retour PO n°3, 2026-08-26) : heatmap « vraie » — chaque
+  cellule affiche la **meilleure donnée connue** : paire 2×2 directe,
+  sinon la plus petite combinaison N-aire connue contenant la paire
+  (approximation signalée dans le bottom sheet : « Score approximé… »).
+  Une **légende** sous la matrice explicite les 5 catégories + « Pas
+  de donnée » (les paires réellement sans donnée restent grises — la
+  couverture Phase 3 est de 97/603 ingrédients, cf. ac-115).
+- **dp-122** (Retour PO n°3, 2026-08-26) : les alertes physico-chimiques
+  sont **proportionnées au mix** — `FunctionalConstraintSolver.evaluate`
+  reçoit les grammes par ingrédient (parsés des quantités), chaque
+  alerte porte ses ingrédients déclencheurs et leur **part massique du
+  mix** (« Part du mix : 45 % »), avec la note « Influence probablement
+  faible » sous 5 %.
+- **dp-123** (Retour PO n°3, 2026-08-26) : le picker affiche la
+  **totalité** du référentiel sur « Toutes » (603, ListView
+  virtualisée) — la limite de pertinence (50) ne s'applique qu'aux
+  recherches.
 
 ## 15. Dette et risques connus
 
@@ -895,6 +927,14 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   Tomate fraîche → « Tomate verte, crue » car pas de tomate générique
   crue). L'aliment retenu est TOUJOURS visible in-app
   (`source_food_name`) ; perfectible via une table d'alias manuelle.
+- **ac-117** (Low, Retour PO n°3) : les cellules de heatmap sans paire
+  directe utilisent la plus petite combinaison N-aire connue
+  (approximation signalée dans le bottom sheet). Amélioration future :
+  modèle de composition de paires (moyenne pondérée des combinaisons).
+- **ac-118** (Low, Retour PO n°3) : la nutrition calculée embarquée à
+  la sauvegarde est un instantané (macros seules) ; les micronutriments
+  détaillés ne sont pas stockés dans `Recipe` (modèle §5) — recalculés
+  live dans la vue détail. Stockage = évolution du modèle Recipe.
 
 ### 15.2 Risques
 - **r-101** (Medium) : **temps de chargement au boot**. Si la DB
