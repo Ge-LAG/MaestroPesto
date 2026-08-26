@@ -173,8 +173,9 @@ class _AlertTile extends StatelessWidget {
     final subtitle = StringBuffer(
       '${alert.alertId} — ${strings.functionalConfidence(alert.confidence)}',
     );
-    if (share != null)
+    if (share != null) {
       subtitle.write(' — ${strings.functionalMixShare(share)}');
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
