@@ -55,6 +55,7 @@ class NutritionAggregation {
   const NutritionAggregation({
     required this.profilePerServing,
     required this.resolvedCount,
+    required this.withDataCount,
     required this.totalCount,
     this.warnings = const <String>[],
     this.sources = const <NutritionSource>[],
@@ -63,8 +64,16 @@ class NutritionAggregation {
   /// Profil nutritionnel par portion (total ÷ servings).
   final NutritionProfile profilePerServing;
 
-  /// Nombre d'ingrédients dont le profil a été résolu et agrégé.
+  /// Nombre d'ingrédients dont le profil a été résolu et agrégé
+  /// (y compris les profils vides — ingrédient référencé mais sans
+  /// records en base).
   final int resolvedCount;
+
+  /// Nombre d'ingrédients ayant réellement CONTRIBUTÉ des données
+  /// (profil avec records). Retour PO n°4 : « 4/4 » avec toutes les
+  /// valeurs à zéro était trompeur — l'UI distingue désormais les
+  /// liés sans données de ceux qui alimentent le calcul.
+  final int withDataCount;
 
   /// Nombre total d'ingrédients de la recette.
   final int totalCount;
@@ -77,8 +86,8 @@ class NutritionAggregation {
   /// (remplies par le repository, pas par l'agrégateur pur).
   final List<NutritionSource> sources;
 
-  /// Vrai si au moins un ingrédient a contribué.
-  bool get hasData => resolvedCount > 0;
+  /// Vrai si au moins un ingrédient a contribué des données réelles.
+  bool get hasData => withDataCount > 0;
 }
 
 /// Agrégateur nutritionnel pur (plan Phase 09 §6.2, dp-105).
@@ -100,6 +109,7 @@ abstract final class NutritionAggregator {
     final safeServings = servings > 0 ? servings : 1;
     final warnings = <String>[];
     var resolved = 0;
+    var withData = 0;
 
     var energy = 0.0;
     var proteins = 0.0;
@@ -166,6 +176,7 @@ abstract final class NutritionAggregator {
       confidenceSum += profile.confidence;
       recordCountSum += profile.recordCount;
       resolved++;
+      if (profile.recordCount > 0) withData++;
     }
 
     final micros = <String, Micronutrient>{
@@ -200,6 +211,7 @@ abstract final class NutritionAggregator {
     return NutritionAggregation(
       profilePerServing: profile,
       resolvedCount: resolved,
+      withDataCount: withData,
       totalCount: ingredients.length,
       warnings: warnings,
     );

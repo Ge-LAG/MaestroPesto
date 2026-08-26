@@ -137,7 +137,7 @@ class _NutritionPanel extends StatelessWidget {
             fiber: profile.fiber,
             salt: profile.salt,
           ),
-          computedFromIngredients: aggregation.resolvedCount,
+          computedFromIngredients: aggregation.withDataCount,
           totalIngredients: aggregation.totalCount,
           sources: aggregation.sources,
           alcoholPerServing: profile.alcohol,

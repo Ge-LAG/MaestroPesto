@@ -252,5 +252,32 @@ void main() {
       // 250 g × 8 g/100g = 20 g / 2 portions = 10 g/portion.
       expect(result.profilePerServing.alcohol, closeTo(10, 1e-9));
     });
+
+    test('lié sans données : compté mais hasData faux (retour PO n°4)', () {
+      // Un ingrédient référencé SANS records nutritionnels renvoie un
+      // profil vide : il est « résolu » (lié) mais ne contribue pas —
+      // l'UI doit distinguer les deux pour ne plus afficher « 4/4 »
+      // avec des zéros.
+      final result = NutritionAggregator.aggregate(
+        ingredients: [linked('i1', '100 g')],
+        lookup: (_) => NutritionProfile.empty,
+        servings: 2,
+      );
+      expect(result.resolvedCount, 1);
+      expect(result.withDataCount, 0);
+      expect(result.hasData, isFalse);
+    });
+
+    test('mélange liés avec et sans données : withDataCount partiel', () {
+      final result = NutritionAggregator.aggregate(
+        ingredients: [linked('i1', '100 g'), linked('i2', '100 g')],
+        lookup: (id) =>
+            id == 'i1' ? profile(energyKcal: 200) : NutritionProfile.empty,
+        servings: 1,
+      );
+      expect(result.resolvedCount, 2);
+      expect(result.withDataCount, 1);
+      expect(result.hasData, isTrue);
+    });
   });
 }

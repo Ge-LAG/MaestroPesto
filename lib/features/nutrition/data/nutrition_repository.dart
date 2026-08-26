@@ -111,6 +111,7 @@ class NutritionRepository {
     return NutritionAggregation(
       profilePerServing: aggregation.profilePerServing,
       resolvedCount: aggregation.resolvedCount,
+      withDataCount: aggregation.withDataCount,
       totalCount: aggregation.totalCount,
       warnings: aggregation.warnings,
       sources: sorted,

@@ -264,4 +264,43 @@ void main() {
     );
     expect(saved!.nutrition.proteins, closeTo(5, 0.5));
   });
+
+  testWidgets(
+    'liés sans données nutritionnelles : message honnête, pas de 4/4 à zéros (retour PO n°4)',
+    (tester) async {
+      bigSurface(tester);
+      // _seededDb référence les ingrédients SANS records nutritionnels.
+      final db = await _seededDb();
+      addTearDown(db.close);
+
+      await openForm(
+        tester,
+        db,
+        opener: (context) => showRecipeFormDialog(
+          context: context,
+          title: 'Éditer',
+          recipe: _linkedRecipe(),
+          db: db,
+        ),
+      );
+      await tester.drag(find.byType(ListView).first, const Offset(0, -1500));
+      await tester.pump();
+      await tester.pump();
+      await tester.pumpAndSettle();
+
+      // Plus d'aperçu « calculée automatiquement » trompeur : le
+      // formulaire explique et propose la saisie manuelle.
+      expect(
+        find.textContaining('Calculée automatiquement', skipOffstage: false),
+        findsNothing,
+      );
+      expect(
+        find.textContaining(
+          'Aucune donnée nutritionnelle en base',
+          skipOffstage: false,
+        ),
+        findsOneWidget,
+      );
+    },
+  );
 }

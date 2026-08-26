@@ -853,9 +853,43 @@ class _NutritionSection extends StatelessWidget {
       return FutureBuilder<NutritionAggregation?>(
         future: future,
         builder: (context, snapshot) {
+          final strings = context.strings;
           final aggregation = snapshot.data;
           if (aggregation != null && aggregation.hasData) {
             return _autoSection(context, aggregation);
+          }
+          // Retour PO n°4 : des ingrédients liés mais sans aucune
+          // donnée en base ne doivent pas afficher un calcul à zéro —
+          // on explique et on propose la saisie manuelle.
+          if (aggregation != null && aggregation.resolvedCount > 0) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          strings.nutritionNoDataForLinked(
+                            aggregation.resolvedCount,
+                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _formSection(context, strings.nutritionPerServing),
+              ],
+            );
           }
           return _formSection(context, context.strings.nutritionPerServing);
         },
@@ -906,7 +940,7 @@ class _NutritionSection extends StatelessWidget {
               Expanded(
                 child: Text(
                   '${strings.nutritionAutoComputed} '
-                  '(${aggregation.resolvedCount}/'
+                  '(${aggregation.withDataCount}/'
                   '${aggregation.totalCount})',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontStyle: FontStyle.italic,

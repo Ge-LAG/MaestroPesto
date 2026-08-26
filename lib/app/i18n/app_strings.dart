@@ -118,6 +118,13 @@ class AppStrings {
       'Calculé depuis $resolved ingrédient${resolved > 1 ? 's' : ''} '
       'sur $total';
   String get nutritionManualEntry => 'Valeur saisie manuellement';
+  String nutritionNoDataForLinked(int count) => count > 1
+      ? 'Aucune donnée nutritionnelle en base pour les $count '
+            'ingrédients liés — la table Ciqual ne couvre pas encore '
+            'ces aliments. Saisie manuelle ci-dessous.'
+      : 'Aucune donnée nutritionnelle en base pour cet ingrédient '
+            'lié — la table Ciqual ne le couvre pas encore. '
+            'Saisie manuelle ci-dessous.';
   String get nutritionSources => 'Sources';
   String get mineralsTitle => 'Minéraux';
   String get vitaminsTitle => 'Vitamines';
