@@ -16,13 +16,13 @@ import '../../../core/scoring/flavor_scorer.dart';
 
 /// Repository pour la Phase 3 (flavour / associations aromatiques).
 class FlavorRepository {
-  FlavorRepository(this._db);
+  FlavorRepository(this._db) : _preloaded = null;
 
   /// Constructeur de test : injecte directement des matches (pas de Drift).
   @visibleForTesting
   FlavorRepository.fromMatches(List<FlavorMatch> matches)
-      : _db = null,
-        _preloaded = matches;
+    : _db = null,
+      _preloaded = matches;
 
   final AppDatabase? _db;
   final List<FlavorMatch>? _preloaded;
@@ -40,17 +40,32 @@ class FlavorRepository {
     final preloaded = _preloaded;
     if (preloaded != null) {
       for (final m in preloaded) {
-        built[_keyFor(m.allIngredientIds)] = m;
+        _putBest(built, _keyFor(m.allIngredientIds), m);
       }
     } else {
       final rows = await _db!.select(_db.flavorCompatibility).get();
       for (final row in rows) {
         final parsed = _fromRow(row);
-        if (parsed != null) built[_keyFor(parsed.ids)] = parsed.match;
+        if (parsed != null) _putBest(built, _keyFor(parsed.ids), parsed.match);
       }
     }
     _cache = built;
     return built;
+  }
+
+  /// Cahier §7.2 : « le **meilleur** FlavorMatch pour une combinaison ».
+  /// Les données réelles contiennent plusieurs enregistrements par clé
+  /// (contextes prédits/observés) : on garde le score le plus élevé de
+  /// façon déterministe, indépendante de l'ordre de lecture en base.
+  static void _putBest(
+    Map<String, FlavorMatch> map,
+    String key,
+    FlavorMatch match,
+  ) {
+    final existing = map[key];
+    if (existing == null || match.overallScore > existing.overallScore) {
+      map[key] = match;
+    }
   }
 
   /// Invalide le cache mémoire (appelé après un import CSV, §11.3).
@@ -127,8 +142,5 @@ class FlavorRepository {
 
 /// Extension interne : tous les ids couverts par un match.
 extension on FlavorMatch {
-  List<String> get allIngredientIds => [
-        ingredientAId,
-        if (ingredientBId != null) ingredientBId!,
-      ];
+  List<String> get allIngredientIds => [ingredientAId, ?ingredientBId];
 }

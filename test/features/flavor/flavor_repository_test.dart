@@ -4,7 +4,7 @@ import 'package:drift/native.dart';
 import 'package:maestropesto/core/database/app_database.dart';
 import 'package:maestropesto/core/models/flavor_match.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('FlavorRepository (in-memory Drift)', () {
@@ -25,16 +25,17 @@ void main() {
       String a,
       String b,
       double score,
-    ) =>
-        db.into(db.flavorCompatibility).insert(
-              FlavorCompatibilityCompanion.insert(
-                recordId: recordId,
-                combinationSize: const Value(2),
-                ingredientIds: Value('$a|$b'),
-                overallScore: Value(score),
-                explanation: const Value('Accord test'),
-              ),
-            );
+    ) => db
+        .into(db.flavorCompatibility)
+        .insert(
+          FlavorCompatibilityCompanion.insert(
+            recordId: recordId,
+            combinationSize: const Value(2),
+            ingredientIds: Value('$a|$b'),
+            overallScore: Value(score),
+            explanation: const Value('Accord test'),
+          ),
+        );
 
     test('bestMatchFor returns null on empty DB', () async {
       expect(await repo.bestMatchFor(const ['A', 'B']), isNull);
@@ -63,7 +64,9 @@ void main() {
 
     test('direct n-ary record wins over pair fallback', () async {
       await insertPair('REC-1', 'ING-A', 'ING-B', 0.50);
-      await db.into(db.flavorCompatibility).insert(
+      await db
+          .into(db.flavorCompatibility)
+          .insert(
             FlavorCompatibilityCompanion.insert(
               recordId: 'REC-N',
               combinationSize: const Value(3),
@@ -79,7 +82,11 @@ void main() {
       await insertPair('REC-1', 'ING-A', 'ING-B', 0.32);
       await insertPair('REC-2', 'ING-A', 'ING-C', 0.71);
       await insertPair('REC-3', 'ING-B', 'ING-C', 0.58);
-      final bad = await repo.incompatiblePairs(const ['ING-A', 'ING-B', 'ING-C']);
+      final bad = await repo.incompatiblePairs(const [
+        'ING-A',
+        'ING-B',
+        'ING-C',
+      ]);
       expect(bad.length, 1);
       expect(bad.single.overallScore, 0.32);
       expect(bad.single.category, FlavorMatchCategory.avoid);
@@ -92,6 +99,49 @@ void main() {
       final m = await repo.bestMatchFor(const ['ING-A', 'ING-B']);
       expect(m, isNotNull);
     });
+
+    // Cahier §7.2 : « le MEILLEUR FlavorMatch » — les données réelles
+    // contiennent des doublons de clé (contextes prédits/observés), le
+    // résultat ne doit pas dépendre de l'ordre d'insertion.
+    test(
+      'duplicate keys: best score wins regardless of insert order',
+      () async {
+        await insertPair('REC-1', 'ING-A', 'ING-B', 0.08);
+        await insertPair('REC-2', 'ING-A', 'ING-B', 0.92);
+        expect(
+          (await repo.bestMatchFor(const ['ING-A', 'ING-B']))!.overallScore,
+          0.92,
+        );
+
+        final db2 = AppDatabase(NativeDatabase.memory());
+        addTearDown(db2.close);
+        final repo2 = FlavorRepository(db2);
+        await db2
+            .into(db2.flavorCompatibility)
+            .insert(
+              FlavorCompatibilityCompanion.insert(
+                recordId: 'REC-1',
+                combinationSize: const Value(2),
+                ingredientIds: const Value('ING-A|ING-B'),
+                overallScore: const Value(0.92),
+              ),
+            );
+        await db2
+            .into(db2.flavorCompatibility)
+            .insert(
+              FlavorCompatibilityCompanion.insert(
+                recordId: 'REC-2',
+                combinationSize: const Value(2),
+                ingredientIds: const Value('ING-A|ING-B'),
+                overallScore: const Value(0.08),
+              ),
+            );
+        expect(
+          (await repo2.bestMatchFor(const ['ING-B', 'ING-A']))!.overallScore,
+          0.92,
+        );
+      },
+    );
   });
 
   group('FlavorRepository.fromMatches (no Drift)', () {
@@ -125,7 +175,11 @@ void main() {
           overallScore: 0.90,
         ),
       ]);
-      final bad = await repo.incompatiblePairs(const ['ING-A', 'ING-B', 'ING-C']);
+      final bad = await repo.incompatiblePairs(const [
+        'ING-A',
+        'ING-B',
+        'ING-C',
+      ]);
       expect(bad.length, 1);
       expect(bad.single.overallScore, 0.30);
     });
