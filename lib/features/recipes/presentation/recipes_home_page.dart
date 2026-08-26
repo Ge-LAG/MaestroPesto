@@ -274,6 +274,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
 
             if (isCompact) {
               return _CompactLayout(
+                services: widget.services,
                 recipes: _filteredRecipes,
                 selectedRecipe: selectedRecipe,
                 selectedTags: _selectedTags,
@@ -331,6 +332,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
 
 class _CompactLayout extends StatelessWidget {
   const _CompactLayout({
+    required this.services,
     required this.recipes,
     required this.selectedRecipe,
     required this.selectedTags,
@@ -346,6 +348,7 @@ class _CompactLayout extends StatelessWidget {
     required this.onDeleteRecipe,
   });
 
+  final AppServices services;
   final List<Recipe> recipes;
   final Recipe? selectedRecipe;
   final Set<String> selectedTags;
@@ -388,7 +391,7 @@ class _CompactLayout extends StatelessWidget {
                   recipe: recipe,
                   isWide: false,
                   scrollable: false,
-                  db: widget.services.db,
+                  db: services.db,
                   onEdit: onEditRecipe,
                   onDuplicate: onDuplicateRecipe,
                   onDelete: onDeleteRecipe,
