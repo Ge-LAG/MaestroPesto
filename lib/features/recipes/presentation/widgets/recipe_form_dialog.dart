@@ -4,9 +4,11 @@ import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/core/models/ingredient_summary.dart';
+import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
 import 'package:maestropesto/features/ingredients/data/ingredients_repository.dart';
+import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/ingredients/presentation/ingredients_picker_page.dart';
@@ -82,6 +84,10 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
   /// combinaison. Null = pas de warning.
   String? _combinationWarning;
 
+  /// Retour PO n°3 : vrai dès que l'utilisateur modifie un champ de la
+  /// nutrition manuelle — sa saisie prime alors sur le calcul auto.
+  bool _manualNutritionEdited = false;
+
   /// Phase 09 (câblage ac-F-002) — cache des summaries Phase 1 pour le
   /// picker, chargées une seule fois par dialogue.
   List<IngredientSummary>? _pickerSummaries;
@@ -133,10 +139,25 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     if (_stepControllers.isEmpty) {
       _stepControllers.add(TextEditingController());
     }
+    // Retour PO n°3 : toute édition manuelle de la nutrition fait
+    // passer la section en mode « saisie forcée » (le calcul auto ne
+    // l'écrasera pas à la sauvegarde).
+    for (final controller in [
+      _energyController,
+      _proteinsController,
+      _carbsController,
+      _fatsController,
+      _fiberController,
+      _saltController,
+    ]) {
+      controller.addListener(_markManualNutritionEdited);
+    }
     // Recette déjà liée à des ingrédients en conflit : montrer le
     // warning dès l'ouverture (pas seulement au prochain pick).
     _refreshCombinationWarning();
   }
+
+  void _markManualNutritionEdited() => _manualNutritionEdited = true;
 
   @override
   void dispose() {
@@ -164,7 +185,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     super.dispose();
   }
 
-  void _save() {
+  Future<void> _save() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -188,6 +209,33 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
         .toSet()
         .toList();
 
+    // Retour PO n°3 : nutrition calculée automatiquement quand des
+    // ingrédients liés ont un profil en base (sauf saisie manuelle
+    // explicite de l'utilisateur).
+    var nutrition = NutritionSummary(
+      energyKcal: _doubleValue(_energyController),
+      proteins: _doubleValue(_proteinsController),
+      carbs: _doubleValue(_carbsController),
+      fats: _doubleValue(_fatsController),
+      fiber: _doubleValue(_fiberController),
+      salt: _doubleValue(_saltController),
+    );
+    if (!_manualNutritionEdited && widget.db != null) {
+      final aggregation = await _autoNutrition(ingredients: ingredients);
+      if (aggregation != null && aggregation.hasData) {
+        final p = aggregation.profilePerServing;
+        nutrition = NutritionSummary(
+          energyKcal: p.energyKcal,
+          proteins: p.proteins,
+          carbs: p.carbs,
+          fats: p.fats,
+          fiber: p.fiber,
+          salt: p.salt,
+        );
+      }
+    }
+    if (!mounted) return;
+
     Navigator.of(context).pop(
       widget.recipe.copyWith(
         title: _titleController.text.trim(),
@@ -199,15 +247,34 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
         ingredients: ingredients,
         steps: steps,
         images: images,
-        nutrition: NutritionSummary(
-          energyKcal: _doubleValue(_energyController),
-          proteins: _doubleValue(_proteinsController),
-          carbs: _doubleValue(_carbsController),
-          fats: _doubleValue(_fatsController),
-          fiber: _doubleValue(_fiberController),
-          salt: _doubleValue(_saltController),
-        ),
+        nutrition: nutrition,
       ),
+    );
+  }
+
+  /// Vrai si au moins un draft est lié au référentiel Phase 1.
+  bool get _anyIngredientLinked => _ingredients.any(
+    (d) => d.ingredientId != null && d.ingredientId!.isNotEmpty,
+  );
+
+  /// Agrégation nutritionnelle live des drafts (null sans DB ou sans
+  /// ingrédient lié). [ingredients] permet de réutiliser la liste
+  /// filtrée au moment de la sauvegarde.
+  Future<NutritionAggregation?> _autoNutrition({
+    List<RecipeIngredient>? ingredients,
+  }) async {
+    final db = widget.db;
+    if (db == null) return null;
+    final list =
+        ingredients ??
+        _ingredients
+            .map((d) => d.toIngredient())
+            .where((i) => i.label.trim().isNotEmpty)
+            .toList();
+    if (!list.any((i) => i.ingredientId != null)) return null;
+    return NutritionRepository(db).aggregateForRecipe(
+      ingredients: list,
+      servings: _intValue(_servingsController, fallback: 1),
     );
   }
 
@@ -434,6 +501,9 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
                       fatsController: _fatsController,
                       fiberController: _fiberController,
                       saltController: _saltController,
+                      autoFuture: widget.db != null && _anyIngredientLinked
+                          ? _autoNutrition()
+                          : null,
                     ),
                   ],
                 ),
@@ -761,6 +831,7 @@ class _NutritionSection extends StatelessWidget {
     required this.fatsController,
     required this.fiberController,
     required this.saltController,
+    this.autoFuture,
   });
 
   final TextEditingController energyController;
@@ -770,8 +841,116 @@ class _NutritionSection extends StatelessWidget {
   final TextEditingController fiberController;
   final TextEditingController saltController;
 
+  /// Retour PO n°3 : quand des ingrédients sont liés à la base, la
+  /// nutrition est **calculée automatiquement** (aperçu live par
+  /// portion) — la saisie manuelle devient un repli explicite.
+  final Future<NutritionAggregation?>? autoFuture;
+
   @override
   Widget build(BuildContext context) {
+    final future = autoFuture;
+    if (future != null) {
+      return FutureBuilder<NutritionAggregation?>(
+        future: future,
+        builder: (context, snapshot) {
+          final aggregation = snapshot.data;
+          if (aggregation != null && aggregation.hasData) {
+            return _autoSection(context, aggregation);
+          }
+          return _formSection(context, context.strings.nutritionPerServing);
+        },
+      );
+    }
+    return _formSection(context, context.strings.nutritionPerServing);
+  }
+
+  /// Aperçu calculé + saisie manuelle en repli repliable.
+  Widget _autoSection(BuildContext context, NutritionAggregation aggregation) {
+    final strings = context.strings;
+    final p = aggregation.profilePerServing;
+
+    Widget line(String label, double value, String unit) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+          Text(
+            '${value.toStringAsFixed(value < 10 ? 1 : 0)} $unit',
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(fontWeight: FontWeight.w900),
+          ),
+        ],
+      ),
+    );
+
+    return _FormSection(
+      title: strings.nutritionPerServing,
+      icon: Icons.monitor_heart_outlined,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.calculate_outlined,
+                size: 16,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  '${strings.nutritionAutoComputed} '
+                  '(${aggregation.resolvedCount}/'
+                  '${aggregation.totalCount})',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          line(strings.energy, p.energyKcal, 'kcal'),
+          line(strings.proteins, p.proteins, 'g'),
+          line(strings.carbs, p.carbs, 'g'),
+          line(strings.fats, p.fats, 'g'),
+          line(strings.fiber, p.fiber, 'g'),
+          line(strings.salt, p.salt, 'g'),
+          if (p.alcohol > 0) line(strings.alcoholLabel, p.alcohol, 'g'),
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              childrenPadding: EdgeInsets.zero,
+              dense: true,
+              title: Text(
+                strings.nutritionManualOverride,
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              children: [_manualFields(context)],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _FormSection _formSection(BuildContext context, String title) {
+    return _FormSection(
+      title: title,
+      icon: Icons.monitor_heart_outlined,
+      child: _manualFields(context),
+    );
+  }
+
+  Widget _manualFields(BuildContext context) {
     final fields = [
       _NumberField(
         controller: energyController,
@@ -805,27 +984,23 @@ class _NutritionSection extends StatelessWidget {
       ),
     ];
 
-    return _FormSection(
-      title: context.strings.nutritionPerServing,
-      icon: Icons.monitor_heart_outlined,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final compact = constraints.maxWidth < 620;
-          return compact
-              ? Column(children: _withSpacing(fields, axis: Axis.vertical))
-              : Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: [
-                    for (final field in fields)
-                      SizedBox(
-                        width: (constraints.maxWidth - 20) / 3,
-                        child: field,
-                      ),
-                  ],
-                );
-        },
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < 620;
+        return compact
+            ? Column(children: _withSpacing(fields, axis: Axis.vertical))
+            : Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  for (final field in fields)
+                    SizedBox(
+                      width: (constraints.maxWidth - 20) / 3,
+                      child: field,
+                    ),
+                ],
+              );
+      },
     );
   }
 }

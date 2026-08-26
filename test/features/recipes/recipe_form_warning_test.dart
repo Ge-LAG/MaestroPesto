@@ -74,6 +74,35 @@ Future<AppDatabase> _seededDb() async {
   return db;
 }
 
+/// DB avec un profil nutritionnel pour l'abricot (retour PO n°3 :
+/// nutrition calculée automatiquement dans le formulaire).
+Future<AppDatabase> _dbWithNutrition() async {
+  final db = await _seededDb();
+  await db
+      .into(db.nutritionRecords)
+      .insert(
+        NutritionRecordsCompanion.insert(
+          nutritionRecordId: 'N1',
+          ingredientId: _abricot,
+          ingredientStateId: const Value('raw'),
+          componentId: const Value('ENERCKCAL'),
+          normalizedValue: const Value(100),
+        ),
+      );
+  await db
+      .into(db.nutritionRecords)
+      .insert(
+        NutritionRecordsCompanion.insert(
+          nutritionRecordId: 'N2',
+          ingredientId: _abricot,
+          ingredientStateId: const Value('raw'),
+          componentId: const Value('PROTEIN'),
+          normalizedValue: const Value(10),
+        ),
+      );
+  return db;
+}
+
 Future<void> openForm(
   WidgetTester tester,
   AppDatabase db, {
@@ -191,5 +220,48 @@ void main() {
       '150 ml',
       reason: 'nombre + unité concaténés à la sauvegarde',
     );
+  });
+
+  testWidgets('nutrition calculée automatiquement (retour PO n°3)', (
+    tester,
+  ) async {
+    bigSurface(tester);
+    final db = await _dbWithNutrition();
+    addTearDown(db.close);
+
+    Recipe? saved;
+    await openForm(
+      tester,
+      db,
+      opener: (context) => showRecipeFormDialog(
+        context: context,
+        title: 'Éditer',
+        recipe: _linkedRecipe(),
+        db: db,
+      ).then((r) => saved = r),
+    );
+    // L'aperçu auto remplace la demande de saisie (badge + valeurs).
+    // La section nutrition est en bas du ListView lazy : scroller.
+    await tester.drag(find.byType(ListView).first, const Offset(0, -1500));
+    await tester.pump();
+    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('Calculée automatiquement', skipOffstage: false),
+      findsOneWidget,
+    );
+    // 100 g d'abricot à 100 kcal/100 g ÷ 2 portions = 50 kcal/portion.
+    expect(find.textContaining('50 kcal', skipOffstage: false), findsWidgets);
+
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    expect(saved, isNotNull);
+    expect(
+      saved!.nutrition.energyKcal,
+      closeTo(50, 0.5),
+      reason: 'la sauvegarde embarque la nutrition calculée',
+    );
+    expect(saved!.nutrition.proteins, closeTo(5, 0.5));
   });
 }
