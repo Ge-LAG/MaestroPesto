@@ -224,4 +224,43 @@ void main() {
       expect(scores, orderedEquals(sorted));
     });
   });
+
+  group('Retour PO n°4 — couverture nutrition et tri naturel', () {
+    test(
+      'la couverture nutrition dépasse 380/603 (enrichissement Ciqual)',
+      () async {
+        final rows = await db.select(db.nutritionRecords).get();
+        final covered = rows.map((r) => r.ingredientId).toSet().length;
+        expect(
+          covered,
+          greaterThan(365),
+          reason:
+              'Phase 2 (62) ∪ enrichissement Ciqual (367), union mesurée '
+              '371 — retour PO n°4 : « compléter à 100 % pour ne plus avoir de '
+              'trous ». Les non-couverts restants sont absents de la table '
+              'Ciqual 2025-11-03.',
+        );
+      },
+    );
+
+    test(
+      "« Œuf de poule » n'est plus le dernier du registre (tri naturel FR)",
+      () async {
+        final names = (await IngredientsRepository(
+          db,
+        ).allSummaries()).map((s) => s.canonicalNameFr).toList();
+        expect(names.length, 603, reason: 'la liste « Toutes » est complète');
+        final oeuf = names.indexOf('Œuf de poule');
+        expect(oeuf, greaterThanOrEqualTo(0));
+        final lastZ = names.lastIndexWhere((n) => n.startsWith('Z'));
+        expect(
+          oeuf < lastZ,
+          isTrue,
+          reason:
+              'le tri codepoint SQL reléguait Œ (U+0152) après Z — le '
+              'tri naturel FR place « Œuf » entre « Noix » et « Orange »',
+        );
+      },
+    );
+  });
 }
