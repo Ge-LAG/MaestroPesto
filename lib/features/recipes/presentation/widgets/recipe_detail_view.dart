@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
+import 'package:maestropesto/core/models/ingredient_detail.dart';
+import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/features/functional/presentation/widgets/functional_alert_card.dart';
+import 'package:maestropesto/features/ingredients/data/ingredient_mapping.dart';
+import 'package:maestropesto/features/ingredients/data/ingredients_repository.dart';
+import 'package:maestropesto/features/ingredients/presentation/ingredient_detail_card.dart';
 import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_metier_advisory_panel.dart';
@@ -37,6 +42,7 @@ class RecipeDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final content = _RecipeContent(
       recipe: recipe,
+      db: db,
       onEdit: onEdit,
       onDuplicate: onDuplicate,
       onDelete: onDelete,
@@ -139,14 +145,17 @@ class _NutritionPanel extends StatelessWidget {
   }
 }
 
-class _RecipeContent extends StatelessWidget {  const _RecipeContent({
+class _RecipeContent extends StatelessWidget {
+  const _RecipeContent({
     required this.recipe,
     required this.onEdit,
     required this.onDuplicate,
     required this.onDelete,
+    this.db,
   });
 
   final Recipe recipe;
+  final AppDatabase? db;
   final ValueChanged<Recipe> onEdit;
   final ValueChanged<Recipe> onDuplicate;
   final ValueChanged<Recipe> onDelete;
@@ -169,7 +178,7 @@ class _RecipeContent extends StatelessWidget {  const _RecipeContent({
           child: Column(
             children: [
               for (final ingredient in recipe.ingredients)
-                _IngredientRow(ingredient: ingredient),
+                _IngredientRow(ingredient: ingredient, db: db),
             ],
           ),
         ),
@@ -492,13 +501,18 @@ class _SectionPanel extends StatelessWidget {
 }
 
 class _IngredientRow extends StatelessWidget {
-  const _IngredientRow({required this.ingredient});
+  const _IngredientRow({required this.ingredient, this.db});
 
   final RecipeIngredient ingredient;
 
+  /// Phase 09 (§6.4, intégration ac-F-003) — base Drift optionnelle :
+  /// quand elle est fournie et que l'ingrédient est lié au référentiel
+  /// Phase 1, une [IngredientDetailCard] est affichée sous la ligne.
+  final AppDatabase? db;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    final row = Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -532,6 +546,57 @@ class _IngredientRow extends StatelessWidget {
           );
         },
       ),
+    );
+
+    final db = this.db;
+    final ingredientId = ingredient.ingredientId;
+    if (db == null || ingredientId == null) {
+      return row;
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        row,
+        _IngredientMetierDetail(db: db, ingredientId: ingredientId),
+      ],
+    );
+  }
+}
+
+/// Phase 09 (§6.4) — résout le détail Phase 1 + nutrition d'un
+/// ingrédient lié et rend une [IngredientDetailCard]. Rien pendant le
+/// chargement ou si l'ingrédient n'est pas dans le référentiel
+/// (fallback gracieux).
+class _IngredientMetierDetail extends StatelessWidget {
+  const _IngredientMetierDetail({required this.db, required this.ingredientId});
+
+  final AppDatabase db;
+  final String ingredientId;
+
+  Future<({IngredientDetail? detail, NutritionProfile? nutrition})>
+  _load() async {
+    final row = await IngredientsRepository(db).getById(ingredientId);
+    if (row == null) {
+      return (detail: null, nutrition: null);
+    }
+    final nutrition = await NutritionRepository(db).forIngredient(ingredientId);
+    return (detail: IngredientMapping.toDetail(row), nutrition: nutrition);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<
+      ({IngredientDetail? detail, NutritionProfile? nutrition})
+    >(
+      future: _load(),
+      builder: (context, snapshot) {
+        final data = snapshot.data;
+        final detail = data?.detail;
+        if (detail == null) {
+          return const SizedBox.shrink();
+        }
+        return IngredientDetailCard(detail: detail, nutrition: data?.nutrition);
+      },
     );
   }
 }
