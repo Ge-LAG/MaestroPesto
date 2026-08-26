@@ -122,6 +122,36 @@ class AppStrings {
   String get flavorCategoryAverage => 'Moyenne';
   String get flavorCategoryQuestionable => 'Discutable';
   String get flavorCategoryAvoid => 'À éviter';
+
+  // Phase 09 Lot H — Phase 4 functional.
+  String get functionalAlertsTitle => 'Alertes physico-chimiques';
+  String get functionalSeverityInfo => 'Info';
+  String get functionalSeverityWarning => 'Attention';
+  String get functionalSeverityDanger => 'Danger';
+  String get functionalSeverityOutOfDomain => 'Hors domaine';
+  String get functionalConditions => 'Conditions';
+  String get functionalPredictedEffect => 'Effet prédit';
+  String functionalConfidence(double confidence) =>
+      'Confiance ${(confidence * 100).round()} %';
+
+  // Phase 09 Lot H — recommandations.
+  String get recommendationSheetTitle => 'Mauvaise combinaison détectée';
+  String get recommendationSheetBody =>
+      'Certains ingrédients de cette recette s’opposent aromatiquement '
+      'ou déclenchent une alerte physico-chimique.';
+  String recommendationProblemPair(String a, String b, double score) =>
+      '$a × $b : score ${score.toStringAsFixed(2)}';
+  String recommendationSubstitutesFor(String name) =>
+      'Substituts proposés pour $name';
+  String get recommendationReasonBetterAffinity =>
+      'Meilleure affinité aromatique';
+  String get recommendationReasonResolvesConflict =>
+      'Résout une incompatibilité existante';
+  String get recommendationIgnore => 'Ignorer';
+  String get recommendationShowSubstitutes => 'Voir les substituts';
+  String get recommendationNoSubstitute => 'Aucun substitut trouvé.';
+  String get ingredientBadCombinationWarning =>
+      'Cet ingrédient crée une mauvaise combinaison avec la recette.';
 }
 
 const appStrings = AppStrings();
