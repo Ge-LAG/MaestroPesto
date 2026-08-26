@@ -7,8 +7,9 @@
 //
 //   assets/database-enrichment/ciqual_nutrition.csv
 //
-// couvrant uniquement les ingrédients Phase 1 qui ont un `ciqual_ids`
-// (104 mappings). Chaque valeur transporte sa citation exacte
+// couvrant TOUS les ingrédients Phase 1 (retour PO n°4 : « compléter
+// à 100 % ») — par code Ciqual direct s'il est cohérent, sinon par
+// résolution de nom. Chaque valeur transporte sa citation exacte
 // (`sources.xml`) et son code de confiance Ciqual, restitués in-app
 // par le panneau nutrition. `database-metier/` et `ciqual/` restent
 // intacts (données dérivées versionnées à part).
@@ -75,7 +76,98 @@ const _stopwords = {
   'pour',
   '100',
   'g',
+  // Qualificatifs d'état/procédé (retour n°4 : gardés hors tokens pour
+  // ne pas bloquer les matchs — « Amande torréfiée » → amande crue,
+  // « Soja cuit » → « Soja, graine entière », « Melon, chair sans
+  // peau, sans pépins, cru » → « Melon »).
+  'non',
+  'iode',
+  'iodee',
+  'fluore',
+  'fluoree',
+  'grille',
+  'grillee',
+  'torrefie',
+  'torrefiee',
+  'fume',
+  'fumee',
+  'sale',
+  'salee',
+  'moulu',
+  'moulue',
+  'chair',
+  'peau',
+  'pepins',
+  'graine',
+  'graines',
+  'entiere',
+  'entier',
+  'pasteurise',
+  'pasteurisee',
+  'dehydrate',
+  'dehydratee',
+  'preemballe',
+  'preemballee',
+  'appertise',
+  'appertisee',
 };
+
+/// Mots qui désignent un AUTRE aliment que l'ingrédient cherché : un
+/// candidat Ciqual qui en contient un (hors tokens de l'ingrédient
+/// lui-même) est écarté (« Citron vert cru » doit ignorer « Jus de
+/// citron vert, frais » et « Citron, zeste, cru »).
+const _transformationDenylist = {
+  'jus',
+  'zeste',
+  'pomme',
+  'coco',
+  'multifruit',
+  'fourrage',
+  'fourre',
+  'praline',
+  'melange',
+  'combinee',
+};
+
+/// Têtes génériques pour lesquelles un match PARTIEL (seule la tête
+/// correspond) est trompeur : « Beurre de cajou » ne doit jamais
+/// résoudre vers le beurre laitier, « Huile de carthame » vers une
+/// autre huile. Seul le match complet reste admis pour ces têtes.
+const _categoryHeads = {
+  'beurre',
+  'huile',
+  'lait',
+  'farine',
+  'creme',
+  'fromage',
+  'fond',
+  'bouillon',
+  'sirop',
+  'pate',
+  'sucre',
+  'sel',
+  'miel',
+  'cafe',
+  'the',
+  'vin',
+  'vinaigre',
+  'moutarde',
+  'sauce',
+  'poudre',
+  'flocon',
+  'graisse',
+  'levure',
+  'gelee',
+  'confiture',
+  'chocolat',
+  'cacao',
+};
+
+/// Têtes hypernymes : l'aliment Ciqual nomme la CATÉGORIE puis le
+/// membre (« Champignon, cèpe, cru », « Haricot flageolet, sec ») —
+/// la tête ne peut pas être un mot de l'ingrédient, ce n'est pas une
+/// erreur de résolution.
+const _hypernymHeads = {'champignon', 'haricot', 'clam', 'praire'};
 
 /// Code de confiance Ciqual → confiance [0,1] (mapping documenté,
 /// conservateur).
@@ -154,21 +246,24 @@ void main(List<String> args) {
   for (final row in registry.skip(1)) {
     if (row.length <= ciqualCol) continue;
     final id = row[idCol].trim();
+    if (id.isEmpty) continue;
+    final name = row[nameCol].trim();
+    if (name.isEmpty) continue;
+    // Retour PO n°4 : TOUS les ingrédients du registre sont traités
+    // (les 450 sans ciqual_ids passent par la résolution par nom).
+    ingredientNames[id] = name;
     final ciqual = row[ciqualCol].trim();
-    if (id.isEmpty || ciqual.isEmpty) continue;
     // Plusieurs codes possibles séparés par '|' : on garde le premier
     // (l'aliment Ciqual le plus proche du canonique).
     final first = ciqual
         .split('|')
         .map((s) => s.trim())
         .firstWhere((s) => s.isNotEmpty, orElse: () => '');
-    if (first.isNotEmpty) {
-      ingredientCiqual[id] = first;
-      ingredientNames[id] = row[nameCol].trim();
-    }
+    if (first.isNotEmpty) ingredientCiqual[id] = first;
   }
   stdout.writeln(
-    'Registre : ${ingredientCiqual.length} ingrédients avec ciqual_ids',
+    'Registre : ${ingredientNames.length} ingrédients, dont '
+    '${ingredientCiqual.length} avec ciqual_ids',
   );
 
   // 5. Noms des aliments Ciqual (traçabilité humaine du CSV).
@@ -195,14 +290,61 @@ void main(List<String> args) {
   final alimTokens = <String, Set<String>>{
     for (final e in alimNames.entries) e.key: _significantTokens(e.value),
   };
-  // Meilleur candidat par ingrédient, avant dédoublonnage.
-  final candidate =
-      <String, ({String code, int score, bool full, int prefix})>{};
-  for (final entry in ingredientCiqual.entries) {
+  // Pré-affectations curatées AVANT la résolution par nom, quand
+  // l'entrée Ciqual évidente risque d'être captée par un autre
+  // ingrédient (« Chocolat noir 70% » doit prendre l'entrée 70 % de
+  // cacao, pas le 50 %).
+  const preAssignments = {
+    'Chocolat noir 70%': 'Chocolat noir 70 % de cacao environ, de dégustation',
+  };
+  for (final pre in preAssignments.entries) {
+    String? ingredientId;
+    for (final e in ingredientNames.entries) {
+      if (e.value == pre.key) {
+        ingredientId = e.key;
+        break;
+      }
+    }
+    if (ingredientId == null) continue;
+    final target = _normalizeText(pre.value);
+    for (final alim in alimNames.entries) {
+      final n = _normalizeText(alim.value);
+      if (n == target || n.startsWith(target)) {
+        resolvedAlim[ingredientId] = alim.key;
+        stdout.writeln(
+          '  ⌂ pré-affectation curatée : ${pre.key} → '
+          '"${alim.value}" (${alim.key})',
+        );
+        break;
+      }
+    }
+  }
+  // Tous les candidats qualifiés par ingrédient, triés par qualité —
+  // le dédoublonnage pourra replier le perdant d'une collision sur
+  // son candidat suivant (ex. « Amande torréfiée » → « Amande,
+  // grillée, salée » quand « Amande crue » a pris l'amande crue).
+  final candidates =
+      <
+        String,
+        List<
+          ({
+            String code,
+            int score,
+            bool full,
+            int prefix,
+            int rawBias,
+            int length,
+            bool exact,
+          })
+        >
+      >{};
+  for (final entry in ingredientNames.entries) {
     final ingredientId = entry.key;
-    final ingredientName = ingredientNames[ingredientId] ?? '';
-    final code = entry.value;
-    if (alimNames.containsKey(code) &&
+    final ingredientName = entry.value;
+    if (resolvedAlim.containsKey(ingredientId)) continue;
+    final code = ingredientCiqual[ingredientId];
+    if (code != null &&
+        alimNames.containsKey(code) &&
         _namesCoherent(ingredientName, alimNames[code]!)) {
       resolvedAlim[ingredientId] = code;
       byCode++;
@@ -216,59 +358,99 @@ void main(List<String> args) {
       continue;
     }
     final head = wantedOrdered.first;
-    String? bestCode;
-    var bestScore = 0;
-    var bestFull = false;
-    var bestPrefix = 0;
-    var bestRawBias = -1;
-    var bestLength = 1 << 30;
+    final ingredientNorm = _normalizeText(ingredientName).trim();
+    final list =
+        <
+          ({
+            String code,
+            int score,
+            bool full,
+            int prefix,
+            int rawBias,
+            int length,
+            bool exact,
+          })
+        >[];
     alimTokens.forEach((alimCode, tokens) {
       final score = wanted.where(tokens.contains).length;
       if (score == 0) return;
+      final prefix =
+          _significantTokensInOrder(alimNames[alimCode] ?? '').first == head
+          ? 1
+          : 0;
+      // Les huiles ne doivent résoudre que vers des entrées d'huile
+      // (« Huile d'olive » → « Olive noire, à l'huile (grecque) »
+      // rejeté : la tête Ciqual doit être « huile »).
+      if (head == 'huile' && prefix == 0) return;
       // Match complet (tous les tokens) OU match partiel à 1 mot près
       // mais porté par le mot-tête de l'ingrédient (ex. « Œuf de
       // poule » → « Oeuf cru » : tête « oeuf » ; « Anis vert » →
       // « Haricot vert » rejeté : tête « anis » absente).
       final full = score == wanted.length;
-      final partialOk = score == wanted.length - 1 && tokens.contains(head);
+      final extras = tokens.difference(wanted);
+      // Garde-fous retour n°4 : un match partiel ne doit apporter
+      // AUCUN aliment nouveau (« Huile de carthame » → « Huile
+      // d'amande » rejeté) ni porter une tête de catégorie générique
+      // (« Beurre de cajou » → « Beurre à 80% MG » rejeté) ; un match
+      // complet ne doit pas tomber sur un plat composé long
+      // (« Sucre glace » → « Corne de gazelle … sucre glace ») ni sur
+      // un aliment transformé interdit (jus, zeste, pomme cajou).
+      final partialOk =
+          score == wanted.length - 1 &&
+          tokens.contains(head) &&
+          extras.isEmpty &&
+          !_categoryHeads.contains(head);
       if (!full && !partialOk) return;
-      final prefix =
-          _significantTokensInOrder(alimNames[alimCode] ?? '').first == head
-          ? 1
-          : 0;
-      final rawBias = _isRawName(alimNames[alimCode] ?? '') ? 1 : 0;
-      final length = tokens.length;
-      final better =
-          score > bestScore ||
-          (score == bestScore && full && !bestFull) ||
-          (score == bestScore &&
-              full == bestFull &&
-              (prefix > bestPrefix ||
-                  (prefix == bestPrefix &&
-                      (rawBias > bestRawBias ||
-                          (rawBias == bestRawBias && length < bestLength)))));
-      if (better) {
-        bestCode = alimCode;
-        bestScore = score;
-        bestFull = full;
-        bestPrefix = prefix;
-        bestRawBias = rawBias;
-        bestLength = length;
+      if (full && tokens.length > wanted.length + 3) return;
+      if (extras.any(_transformationDenylist.contains)) return;
+      // La tête du nom Ciqual doit être un mot de l'ingrédient : sans
+      // cela « Chèvre frais » replie sur « Pizza au chèvre » et
+      // « Graine de cumin » sur « Gouda au cumin ». Deux relâchements
+      // assumés : les énumérations de synonymes (« Champignon,
+      // chanterelle ou girolle », « Lieu ou colin d'Alaska ») et les
+      // têtes hypernymes (« Champignon, cèpe, cru »).
+      final alimNorm = _normalizeText(alimNames[alimCode] ?? '').trim();
+      final alimHead = _significantTokensInOrder(alimNames[alimCode] ?? '')
+          .first;
+      final enumeration = alimNorm.contains(' ou ');
+      final hypernym = _hypernymHeads.contains(alimHead);
+      if (alimHead != head &&
+          !wanted.contains(alimHead) &&
+          !enumeration &&
+          !hypernym) {
+        return;
       }
+      list.add((
+        code: alimCode,
+        score: score,
+        full: full,
+        prefix: prefix,
+        rawBias: _isRawName(alimNames[alimCode] ?? '') ? 1 : 0,
+        length: tokens.length,
+        // Égalité du nom COMPLET normalisé (pas seulement des tokens
+        // joints) : « Raisin sec » doit battre « Raisin noir, cru »
+        // sans que « Raisin frais » ne vole l'entrée exacte.
+        exact: alimNorm == ingredientNorm,
+      ));
     });
-    if (bestCode != null) {
-      candidate[ingredientId] = (
-        code: bestCode!,
-        score: bestScore,
-        full: bestFull,
-        prefix: bestPrefix,
-      );
-    } else {
+    if (list.isEmpty) {
       unresolved++;
-      stdout.writeln(
-        '  ✗ non résolu : $ingredientName (code $code → '
-        '"${alimNames[code] ?? 'inconnu'}")',
-      );
+      final hint = code == null
+          ? ''
+          : ' (code $code → "${alimNames[code] ?? 'inconnu'}")';
+      stdout.writeln('  ✗ non résolu : $ingredientName$hint');
+    } else {
+      list.sort((a, b) {
+        // L'égalité parfaite du nom complet domine tout : « Raisin
+        // sec » doit battre « Raisin noir, cru » même cru.
+        if (a.exact != b.exact) return a.exact ? -1 : 1;
+        final qualityA = a.score * 4 + (a.full ? 2 : 0) + a.prefix;
+        final qualityB = b.score * 4 + (b.full ? 2 : 0) + b.prefix;
+        if (qualityA != qualityB) return qualityB.compareTo(qualityA);
+        if (a.rawBias != b.rawBias) return b.rawBias.compareTo(a.rawBias);
+        return a.length.compareTo(b.length);
+      });
+      candidates[ingredientId] = list;
     }
   }
   // Dédoublonnage : deux ingrédients ne doivent pas résoudre vers le
@@ -276,10 +458,11 @@ void main(List<String> args) {
   // candidat au meilleur match garde l'aliment, l'autre est écarté.
   final alimOwner = <String, String>{};
   final ownerQuality = <String, int>{};
-  final sortedIds = candidate.keys.toList()..sort();
+  final sortedIds = candidates.keys.toList()..sort();
   for (final id in sortedIds) {
-    final c = candidate[id]!;
-    final quality = c.score * 4 + (c.full ? 2 : 0) + c.prefix;
+    final c = candidates[id]!.first;
+    final quality =
+        (c.exact ? 1 << 20 : 0) + c.score * 4 + (c.full ? 2 : 0) + c.prefix;
     final owner = alimOwner[c.code];
     if (owner == null || quality > ownerQuality[owner]!) {
       if (owner != null) {
@@ -297,19 +480,112 @@ void main(List<String> args) {
       );
     }
   }
+  // Repli : le perdant d'une collision tente son candidat suivant
+  // encore libre (retour n°4 — « torréfié » doit trouver l'entrée
+  // grillée plutôt que rien).
+  for (final id in sortedIds) {
+    if (alimOwner.containsValue(id)) continue;
+    for (final c in candidates[id]!.skip(1)) {
+      if (alimOwner.containsKey(c.code)) continue;
+      alimOwner[c.code] = id;
+      ownerQuality[id] =
+          (c.exact ? 1 << 20 : 0) + c.score * 4 + (c.full ? 2 : 0) + c.prefix;
+      stdout.writeln(
+        '  ↻ repli collision : "${ingredientNames[id]}" → '
+        '"${alimNames[c.code]}" (${c.code})',
+      );
+      break;
+    }
+  }
   for (final e in alimOwner.entries) {
     resolvedAlim[e.value] = e.key;
     byName++;
+    final registryCode = ingredientCiqual[e.value];
+    final hint = registryCode == null
+        ? ''
+        : ' [code registre $registryCode incohérent : '
+              '"${alimNames[registryCode] ?? '?'}"]';
     stdout.writeln(
       '  ↻ résolu par nom : ${ingredientNames[e.value]} → '
-      '"${alimNames[e.key]}" (${e.key}, score ${candidate[e.value]!.score})'
-      ' [code registre ${ingredientCiqual[e.value]} incohérent : '
-      '"${alimNames[ingredientCiqual[e.value]] ?? '?'}"]',
+      '"${alimNames[e.key]}" (${e.key}, score '
+      '${candidates[e.value]!.first.score})'
+      '$hint',
     );
+  }
+  // 6 bis. Standins curatés (retour PO n°4) : quelques ingrédients
+  // génériques du référentiel n'ont pas d'entrée Ciqual directe (les
+  // viandes y sont déclarées par morceau). On leur associe
+  // MANUELLEMENT l'entrée la plus représentative ; l'approximation
+  // reste traçable (colonne aliment_name du CSV, visible in-app).
+  const standins = <String, String>{
+    'Bœuf (viande)': 'Boeuf, steak ou bifteck cru',
+    'Agneau (viande)': 'Agneau, gigot cru',
+    'Veau (viande)': 'Veau, escalope crue',
+    'Canard (viande)': 'Canard, viande et peau crues',
+    'Blanc de volaille': 'Poulet, poitrine, viande et peau crues',
+    'Crème liquide entière': 'Crème 30% MG, fluide, UHT',
+    'Coulis de tomate': 'Tomate, coulis, appertisé',
+    'Chèvre frais': 'Fromage de chèvre frais',
+    'Melon': 'Melon cantaloup',
+    'Sel': 'Sel blanc alimentaire, non iodé, non fluoré',
+    'Sel fin': 'Sel blanc alimentaire, non iodé, non fluoré',
+    'Sel de Guérande': 'Sel marin gris, non iodé, non fluoré',
+    "Sel rose de l'Himalaya": 'Sel blanc alimentaire, non iodé, non fluoré',
+    'Cajou crue': 'Noix de cajou, grillée, salée',
+    'Cajou torréfiée': 'Noix de cajou, grillée, salée',
+    'Pécan crue': 'Noix de pécan, sans sel ajouté',
+    'Pécan torréfiée': 'Noix de pécan, sans sel ajouté',
+    'Café espresso': 'Café, moulu',
+    'Calvados': 'Eau de vie type calvados',
+    'Vin doux naturel': 'Vin doux',
+  };
+  var byStandin = 0;
+  for (final entry in standins.entries) {
+    String? ingredientId;
+    for (final e in ingredientNames.entries) {
+      if (e.value == entry.key) {
+        ingredientId = e.key;
+        break;
+      }
+    }
+    if (ingredientId == null || resolvedAlim.containsKey(ingredientId)) {
+      continue;
+    }
+    final target = _normalizeText(entry.value);
+    String? bestCode;
+    var bestName = '';
+    for (final alim in alimNames.entries) {
+      final n = _normalizeText(alim.value);
+      if (n != target && !n.startsWith(target)) continue;
+      // Préférence à l'état cru puis au nom le plus court.
+      final isBetter =
+          bestCode == null ||
+          (_isRawName(alim.value) && !_isRawName(bestName)) ||
+          (_isRawName(alim.value) == _isRawName(bestName) &&
+              alim.value.length < bestName.length);
+      if (isBetter) {
+        bestCode = alim.key;
+        bestName = alim.value;
+      }
+    }
+    if (bestCode != null) {
+      if (resolvedAlim.containsValue(bestCode)) {
+        stdout.writeln(
+          '  ⌂ standin ignoré pour ${entry.key} : "$bestName" déjà '
+          'attribué',
+        );
+        continue;
+      }
+      resolvedAlim[ingredientId] = bestCode;
+      byStandin++;
+      stdout.writeln(
+        '  ⌂ standin curaté : ${entry.key} → "$bestName" ($bestCode)',
+      );
+    }
   }
   stdout.writeln(
     'Résolution : $byCode par code direct, $byName par nom, '
-    '$unresolved non résolus',
+    '$byStandin standins curatés, $unresolved non résolus',
   );
 
   final ciqualToIngredient = <String, String>{
