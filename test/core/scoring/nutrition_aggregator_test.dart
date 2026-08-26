@@ -210,4 +210,47 @@ void main() {
       expect(NutritionAggregator.quantityToGrams(''), isNull);
     });
   });
+
+  group('NutritionAggregator — micronutriments (retour PO n°3)', () {
+    test('somme pondérée par quantité puis division par portions', () {
+      final a = profile().copyWith(
+        micronutrients: const {
+          'FE': Micronutrient(tag: 'FE', name: 'Fer', value: 3.5, unit: 'mg'),
+        },
+      );
+      final b = profile(energyKcal: 50).copyWith(
+        micronutrients: const {
+          'FE': Micronutrient(tag: 'FE', name: 'Fer', value: 1.5, unit: 'mg'),
+          'VITC': Micronutrient(
+            tag: 'VITC',
+            name: 'Vitamine C',
+            value: 10,
+            unit: 'mg',
+          ),
+        },
+      );
+      final result = NutritionAggregator.aggregate(
+        ingredients: [linked('A', '200 g'), linked('B', '100 g')],
+        lookup: (id) => id == 'A' ? a : b,
+        servings: 2,
+      );
+      final micros = result.profilePerServing.micronutrients;
+      // FE : (200/100 × 3.5 + 100/100 × 1.5) / 2 = (7 + 1.5) / 2 = 4.25
+      expect(micros['FE']!.value, closeTo(4.25, 1e-9));
+      expect(micros['FE']!.unit, 'mg');
+      // VITC : (100/100 × 10) / 2 = 5
+      expect(micros['VITC']!.value, closeTo(5, 1e-9));
+    });
+
+    test('alcool agrégé comme un macronutriment', () {
+      final a = profile().copyWith(alcohol: 8); // g/100g
+      final result = NutritionAggregator.aggregate(
+        ingredients: [linked('A', '250 g')],
+        lookup: (_) => a,
+        servings: 2,
+      );
+      // 250 g × 8 g/100g = 20 g / 2 portions = 10 g/portion.
+      expect(result.profilePerServing.alcohol, closeTo(10, 1e-9));
+    });
+  });
 }

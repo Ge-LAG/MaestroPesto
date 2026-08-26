@@ -163,6 +163,10 @@ class NutritionRepository {
 
     // Bucket par component_id (lowercased)
     final byComponent = <String, List<double>>{};
+    // Micronutriments (retour PO n°3) : tag canonique → valeurs + le
+    // libellé/unité d'un record source.
+    final microValues = <String, List<double>>{};
+    final microMeta = <String, (String name, String unit)>{};
     var sampleCount = 0;
     for (final r in records) {
       final cid = (r.componentId ?? '').toLowerCase();
@@ -171,6 +175,18 @@ class NutritionRepository {
       if (v == null) continue;
       byComponent.putIfAbsent(cid, () => <double>[]).add(v);
       sampleCount++;
+      // Tout composant ni macro ni alcool devient un micronutriment.
+      final canonical = canonicalMicroTag(cid);
+      if (canonical != null && !_macroTags.contains(cid)) {
+        microValues.putIfAbsent(canonical, () => <double>[]).add(v);
+        microMeta.putIfAbsent(
+          canonical,
+          () => (
+            _cleanComponentName(r.componentName ?? canonical),
+            r.normalizedUnit ?? _unitForMicro(canonical),
+          ),
+        );
+      }
     }
 
     double mean(String cid) {
@@ -193,6 +209,15 @@ class NutritionRepository {
     }
 
     final water = mean('water');
+    final micros = <String, Micronutrient>{
+      for (final e in microValues.entries)
+        e.key: Micronutrient(
+          tag: e.key,
+          name: microMeta[e.key]?.$1 ?? e.key,
+          value: e.value.reduce((a, b) => a + b) / e.value.length,
+          unit: microMeta[e.key]?.$2 ?? 'mg',
+        ),
+    }..removeWhere((_, m) => m.value <= 0);
 
     return NutritionProfile(
       energyKcal: _readEnergy(byComponent),
@@ -207,7 +232,9 @@ class NutritionRepository {
       ]),
       fiber: meanOf(const ['fiber', 'fibre', 'fibres', 'dietary_fiber']),
       salt: _readSalt(byComponent, meanOf),
+      alcohol: meanOf(const ['alc', 'alcohol', 'ethanol']),
       waterContent: water > 0 ? water : null,
+      micronutrients: micros,
       ingredientStateId: stateId,
       confidence: 0.8, // Lot F v1 simplifiée
       recordCount: sampleCount,
@@ -242,6 +269,115 @@ class NutritionRepository {
     if (direct > 0) return direct;
     final naMg = meanOf(const ['na', 'sodium']);
     return naMg * 2.5 / 1000;
+  }
+
+  /// Tags des macronutriments (champs nommés du NutritionProfile) —
+  /// exclus des micronutriments.
+  static const Set<String> _macroTags = {
+    'enerckcal',
+    'energy_kcal',
+    'energy',
+    'enerc',
+    'energy_kj',
+    'kj',
+    'protein',
+    'proteins',
+    'fat',
+    'fats',
+    'lipid',
+    'lipids',
+    'fat_sat',
+    'saturated_fat',
+    'saturated_fats',
+    'carb',
+    'carbohydrate',
+    'carbs',
+    'carbohydrates',
+    'sugar',
+    'sugars',
+    'fiber',
+    'fibre',
+    'fibres',
+    'dietary_fiber',
+    'salt',
+    'na',
+    'sodium',
+    'water',
+    'alc',
+    'alcohol',
+    'ethanol',
+  };
+
+  /// Canonicalise un tag de micronutriment entre les deux familles de
+  /// sources : dictionnaire Phase 2 (VITA, THIAMIN, VITB6, FOL, VITD,
+  /// VITE, VITK…) et Ciqual 2025-11-03 (RETOL, RAE, THIA, VITB6-,
+  /// FOL*, TOCPHA, VITD-, VITK1/2…). Retourne null pour les tags
+  /// inconnus à ignorer.
+  @visibleForTesting
+  static String? canonicalMicroTag(String rawTag) {
+    final t = rawTag.toLowerCase();
+    return switch (t) {
+      'thia' || 'thiamin' => 'THIAMIN',
+      'ribf' || 'ribfl' => 'RIBOFLAVINE',
+      'nia' => 'NIACINE',
+      'pant' || 'pantac' => 'VITB5',
+      'vitb6-' || 'vitb6' => 'VITB6',
+      'vitb12' => 'VITB12',
+      'fol' || 'folac' || 'foldfe' || 'folfd' => 'FOLATES',
+      'vitc' => 'VITC',
+      'retol' || 'rae' || 'vita' || 'retinol' => 'VITA',
+      'cartb' || 'carotene_b' => 'CAROTENE_B',
+      'vitd-' || 'vitd' || 'ergcal' => 'VITD',
+      'tocpha' || 'vite' || 'vite-' => 'VITE',
+      'vitk1' || 'vitk2' || 'vitk' => 'VITK',
+      'biot' => 'BIOTINE',
+      'choline' => 'CHOLINE',
+      'k' => 'K',
+      'ca' => 'CA',
+      'mg' => 'MG',
+      'p' => 'P',
+      'fe' => 'FE',
+      'zn' => 'ZN',
+      'cu' => 'CU',
+      'mn' => 'MN',
+      'se' => 'SE',
+      'id' || 'i' => 'I',
+      'cl' || 'cld' => 'CL',
+      'chol-' || 'cholest' => 'CHOLEST',
+      'starch' => 'STARCH',
+      'polyl' || 'polyol' || 'polyols' => 'POLYOLS',
+      'oa' || 'orgacid' => 'ACIDES_ORGANIQUES',
+      'ash' || 'cendres' => 'CENDRES',
+      'fams' || 'fat_mono' => 'AG_MONO',
+      'fapu' || 'fat_poly' => 'AG_POLY',
+      'frus' || 'fructose' => 'FRUCTOSE',
+      'glus' || 'glucose' => 'GLUCOSE',
+      'lacs' || 'lactose' => 'LACTOSE',
+      'mals' || 'maltose' => 'MALTOSE',
+      _ => null,
+    };
+  }
+
+  /// Retire le suffixe d'unité du libellé source (« Fer (mg/100 g) » →
+  /// « Fer ») pour l'affichage.
+  static String _cleanComponentName(String name) {
+    return name.replaceFirst(RegExp(r'\s*\([^)]*/\s*100\s*g\)\s*$'), '').trim();
+  }
+
+  /// Unité par défaut d'un micronutriment quand le record n'en porte
+  /// pas (minéraux en mg, iode/sélénium en µg — réf. Ciqual).
+  static String _unitForMicro(String canonical) {
+    return switch (canonical) {
+      'I' ||
+      'SE' ||
+      'VITA' ||
+      'VITD' ||
+      'VITK' ||
+      'VITB12' ||
+      'FOLATES' ||
+      'CAROTENE_B' => 'µg',
+      _ => 'mg',
+    };
   }
 }
 

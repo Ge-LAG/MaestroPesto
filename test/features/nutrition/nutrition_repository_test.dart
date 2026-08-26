@@ -125,6 +125,58 @@ void main() {
     expect(NutritionRepository.sourceLabel('source_inconnue'), isNull);
   });
 
+  // Retour PO n°3 (exhaustivité) : minéraux, vitamines et alcool.
+  test('micronutriments : tags canoniques, unités, libellés, alcool', () async {
+    Future<void> micro(
+      String id,
+      String component,
+      String name,
+      double value,
+      String unit,
+    ) => db
+        .into(db.nutritionRecords)
+        .insert(
+          NutritionRecordsCompanion.insert(
+            nutritionRecordId: '${id}_$component',
+            ingredientId: id,
+            ingredientStateId: const Value('raw'),
+            componentId: Value(component),
+            componentName: Value(name),
+            normalizedValue: Value(value),
+            normalizedUnit: Value(unit),
+          ),
+        );
+
+    await micro('ING-A', 'FE', 'Fer (mg/100 g)', 3.5, 'mg');
+    await micro('ING-A', 'CA', 'Calcium (mg/100 g)', 15, 'mg');
+    await micro('ING-A', 'THIA', 'Vitamine B1 (mg/100 g)', 0.07, 'mg');
+    await micro('ING-A', 'FOLFD', 'Folates (µg/100 g)', 42, 'µg');
+    await micro('ING-A', 'ALC', 'Alcool (éthanol) (g/100 g)', 5.0, 'g');
+    await micro('ING-A', 'STARCH', 'Amidon (g/100 g)', 12.0, 'g');
+
+    final p = await repo.forIngredient('ING-A');
+    expect(p, isNotNull);
+    expect(p!.alcohol, 5.0);
+    expect(p.micronutrients.keys, containsAll(['FE', 'CA', 'THIAMIN']));
+    // FOLFD (Ciqual) et FOL (Phase 2) fusionnent vers FOLATES.
+    expect(p.micronutrients.keys, contains('FOLATES'));
+    expect(p.micronutrients['FE']!.value, 3.5);
+    expect(p.micronutrients['FE']!.unit, 'mg');
+    expect(
+      p.micronutrients['FE']!.name,
+      'Fer',
+      reason: 'le suffixe d\'unité est retiré du libellé',
+    );
+    // Les macronutriments restent des champs nommés, pas des micros.
+    expect(p.micronutrients.containsKey('SALT'), isFalse);
+  });
+
+  test('micronutrients vides sans données détaillées', () async {
+    await insertRecord('ING-B', 'ENERCKCAL', 100);
+    final p = await repo.forIngredient('ING-B');
+    expect(p!.micronutrients, isEmpty);
+  });
+
   test(
     'mappe les tags Ciqual réels (ENERCKCAL, PROTEIN, FAT, CARB…)',
     () async {

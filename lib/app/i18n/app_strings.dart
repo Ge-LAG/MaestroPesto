@@ -119,8 +119,21 @@ class AppStrings {
       'sur $total';
   String get nutritionManualEntry => 'Valeur saisie manuellement';
   String get nutritionSources => 'Sources';
+  String get mineralsTitle => 'Minéraux';
+  String get vitaminsTitle => 'Vitamines';
+  String get otherConstituentsTitle => 'Autres constituants';
+  String get alcoholLabel => 'Alcool';
+  String get nutritionAutoComputed =>
+      'Calculée automatiquement depuis les ingrédients liés';
+  String get nutritionManualOverride => 'Forcer la saisie manuelle';
   String get flavorHeatmapTitle => 'Compatibilités aromatiques';
   String get flavorPairUnknown => 'Pas de donnée';
+  String get flavorSourceDirectPair =>
+      'Score d\'accord direct (paire documentée en base Phase 3).';
+  String flavorSourceCombination(int size) =>
+      'Score approximé : accord connu pour une combinaison de $size '
+      'ingrédients contenant cette paire (pas de donnée directe pour la '
+      'paire seule).';
   String get flavorOverallScore => 'Score global';
   String get flavorCategoryExcellent => 'Excellente';
   String get flavorCategoryGood => 'Bonne';
@@ -138,6 +151,11 @@ class AppStrings {
   String get functionalPredictedEffect => 'Effet prédit';
   String functionalConfidence(double confidence) =>
       'Confiance ${(confidence * 100).round()} %';
+  String functionalMixShare(double share) =>
+      'Part du mix : ${(share * 100).round()} %';
+  String get functionalTriggersLabel => 'Ingrédients concernés';
+  String get functionalLowShareNote =>
+      'Influence probablement faible : moins de 5 % du mix.';
 
   // Phase 09 Lot H — recommandations.
   String get recommendationSheetTitle => 'Mauvaise combinaison détectée';

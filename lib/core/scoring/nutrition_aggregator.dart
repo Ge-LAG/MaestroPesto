@@ -109,10 +109,17 @@ abstract final class NutritionAggregator {
     var saturatedFats = 0.0;
     var fiber = 0.0;
     var salt = 0.0;
+    var alcohol = 0.0;
     var water = 0.0;
     var hasWater = false;
     var confidenceSum = 0.0;
     var recordCountSum = 0;
+
+    // Micronutriments (retour PO n°3) : somme des contributions par
+    // tag canonique, premier libellé/unité rencontré comme référence.
+    final microTotals = <String, double>{};
+    final microNames = <String, String>{};
+    final microUnits = <String, String>{};
 
     for (final ingredient in ingredients) {
       if (ingredient.source == IngredientSource.recipe) {
@@ -144,15 +151,32 @@ abstract final class NutritionAggregator {
       saturatedFats += profile.saturatedFats * factor;
       fiber += profile.fiber * factor;
       salt += profile.salt * factor;
+      alcohol += profile.alcohol * factor;
       final w = profile.waterContent;
       if (w != null) {
         water += w * factor;
         hasWater = true;
       }
+      for (final micro in profile.micronutrients.values) {
+        microTotals[micro.tag] =
+            (microTotals[micro.tag] ?? 0) + micro.value * factor;
+        microNames.putIfAbsent(micro.tag, () => micro.name);
+        microUnits.putIfAbsent(micro.tag, () => micro.unit);
+      }
       confidenceSum += profile.confidence;
       recordCountSum += profile.recordCount;
       resolved++;
     }
+
+    final micros = <String, Micronutrient>{
+      for (final e in microTotals.entries)
+        e.key: Micronutrient(
+          tag: e.key,
+          name: microNames[e.key] ?? e.key,
+          value: e.value / safeServings,
+          unit: microUnits[e.key] ?? 'mg',
+        ),
+    };
 
     final profile = resolved == 0
         ? NutritionProfile.empty
@@ -165,7 +189,9 @@ abstract final class NutritionAggregator {
             saturatedFats: saturatedFats / safeServings,
             fiber: fiber / safeServings,
             salt: salt / safeServings,
+            alcohol: alcohol / safeServings,
             waterContent: hasWater ? water / safeServings : null,
+            micronutrients: micros,
             ingredientStateId: 'raw',
             confidence: confidenceSum / resolved,
             recordCount: recordCountSum,

@@ -3,8 +3,55 @@
 // Toutes les valeurs sont en grammes (ou kcal pour énergie) **pour 100 g**
 // d'ingrédient. La conversion à la portion est faite par
 // NutritionRepository.aggregate (cf. §6.2 du cahier Phase 09).
+//
+// Retour PO n°3 (2026-08-26, exhaustivité) : les macronutriments restent
+// des champs nommés ; minéraux, vitamines, alcool et constituants
+// détaillés sont exposés dans [NutritionProfile.micronutrients] (clé =
+// tag canonique) pour l'affichage groupé.
 
 import 'package:meta/meta.dart';
+
+/// Un micronutriment (minéral, vitamine ou constituant détaillé) :
+/// valeur pour 100 g, avec l'unité et le libellé de la source.
+@immutable
+class Micronutrient {
+  const Micronutrient({
+    required this.tag,
+    required this.name,
+    required this.value,
+    required this.unit,
+  });
+
+  /// Tag canonique (ex. `FE`, `VITC`, `THIAMIN`…).
+  final String tag;
+
+  /// Libellé lisible de la source (ex. « Fer (mg/100 g) »).
+  final String name;
+
+  /// Valeur pour 100 g.
+  final double value;
+
+  /// Unité (g, mg, µg…).
+  final String unit;
+
+  Micronutrient copyWith({double? value}) => Micronutrient(
+    tag: tag,
+    name: name,
+    value: value ?? this.value,
+    unit: unit,
+  );
+
+  @override
+  bool operator ==(Object other) =>
+      other is Micronutrient &&
+      other.tag == tag &&
+      other.name == name &&
+      other.value == value &&
+      other.unit == unit;
+
+  @override
+  int get hashCode => Object.hash(tag, name, value, unit);
+}
 
 /// Profil nutritionnel d'un ingrédient (par 100 g, état `raw` par défaut).
 ///
@@ -21,7 +68,9 @@ class NutritionProfile {
     required this.saturatedFats,
     required this.fiber,
     required this.salt,
+    this.alcohol = 0,
     this.waterContent,
+    this.micronutrients = const <String, Micronutrient>{},
     required this.ingredientStateId,
     required this.confidence,
     required this.recordCount,
@@ -51,8 +100,15 @@ class NutritionProfile {
   /// Sel en grammes pour 100 g (= Na × 2.5, ANSES-Ciqual).
   final double salt;
 
+  /// Alcool (éthanol) en grammes pour 100 g.
+  final double alcohol;
+
   /// Teneur en eau (%) — nullable car pas toujours renseigné.
   final double? waterContent;
+
+  /// Minéraux, vitamines et constituants détaillés (tag canonique →
+  /// valeur pour 100 g avec unité et libellé source).
+  final Map<String, Micronutrient> micronutrients;
 
   /// État de l'ingrédient (`raw`, `boiled`, etc. — réf. table
   /// `ingredient_states` Phase 1).
@@ -89,7 +145,9 @@ class NutritionProfile {
     double? saturatedFats,
     double? fiber,
     double? salt,
+    double? alcohol,
     Object? waterContent = _sentinel,
+    Map<String, Micronutrient>? micronutrients,
     String? ingredientStateId,
     double? confidence,
     int? recordCount,
@@ -103,9 +161,11 @@ class NutritionProfile {
       saturatedFats: saturatedFats ?? this.saturatedFats,
       fiber: fiber ?? this.fiber,
       salt: salt ?? this.salt,
+      alcohol: alcohol ?? this.alcohol,
       waterContent: identical(waterContent, _sentinel)
           ? this.waterContent
           : waterContent as double?,
+      micronutrients: micronutrients ?? this.micronutrients,
       ingredientStateId: ingredientStateId ?? this.ingredientStateId,
       confidence: confidence ?? this.confidence,
       recordCount: recordCount ?? this.recordCount,
@@ -124,7 +184,9 @@ class NutritionProfile {
         other.saturatedFats == saturatedFats &&
         other.fiber == fiber &&
         other.salt == salt &&
+        other.alcohol == alcohol &&
         other.waterContent == waterContent &&
+        _mapEq(other.micronutrients, micronutrients) &&
         other.ingredientStateId == ingredientStateId &&
         other.confidence == confidence &&
         other.recordCount == recordCount;
@@ -140,7 +202,11 @@ class NutritionProfile {
     saturatedFats,
     fiber,
     salt,
+    alcohol,
     waterContent,
+    Object.hashAllUnordered(
+      micronutrients.values.map((m) => Object.hash(m.tag, m.value, m.unit)),
+    ),
     ingredientStateId,
     confidence,
     recordCount,
@@ -149,7 +215,16 @@ class NutritionProfile {
   @override
   String toString() =>
       'NutritionProfile(state=$ingredientStateId, energy=$energyKcal kcal, '
-      'P=$proteins, G=$carbs, L=$fats, fib=$fiber, sel=$salt, n=$recordCount)';
+      'P=$proteins, G=$carbs, L=$fats, fib=$fiber, sel=$salt, '
+      'micro=${micronutrients.length}, n=$recordCount)';
+}
+
+bool _mapEq(Map<String, Micronutrient> a, Map<String, Micronutrient> b) {
+  if (a.length != b.length) return false;
+  for (final e in a.entries) {
+    if (b[e.key] != e.value) return false;
+  }
+  return true;
 }
 
 const Object _sentinel = Object();
