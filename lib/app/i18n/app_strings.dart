@@ -90,6 +90,24 @@ class AppStrings {
   String get importMetierRunning => 'Import en cours…';
   String get importMetierSnackbar =>
       'Import des 4 bases métier déclenché. Voir le dossier Test-Dev/ pour le détail.';
+
+  // Phase 09 Lot F — UX pilotée par les BDD métier.
+  String get pickIngredientTitle => 'Choisir un ingrédient';
+  String get pickIngredientSearchHint => 'Rechercher (tomate, basilic…)';
+  String get pickIngredientNoResult => 'Aucun ingrédient ne correspond.';
+  String get pickIngredientCategoryAll => 'Toutes';
+  String get pickIngredientTooltip => 'Choisir depuis le référentiel Phase 1';
+  String get pickIngredientFallbackTitle => 'Saisir un ingrédient';
+  String get pickIngredientFallbackLabel => "Nom de l'ingrédient";
+  String get pickIngredientFallbackHint => 'Tomate, Basilic, …';
+  String get pickIngredientFallbackOk => 'OK';
+  String get ingredientPhase1Helper => 'Phase 1';
+  String get ingredientDetailAlcoholBadge => 'Alcoolisé';
+  String get ingredientDetailFermentedBadge => 'Fermenté';
+  String get ingredientDetailAllergensTitle => 'Allergènes';
+  String get ingredientDetailNoAllergens => 'Aucun allergène déclaré';
+  String get ingredientDetailNutritionTitle => 'Nutrition · pour 100 g';
+  String get ingredientDetailNutritionUnavailable => 'Nutrition non disponible';
 }
 
 const appStrings = AppStrings();
