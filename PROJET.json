@@ -2,26 +2,35 @@
   "schema_version": "1.0.0",
   "document_id": "projet-maestropesto",
   "projet": "MaestroPesto",
-  "phase_courante": "P0 - bootstrap methodologique (validation en attente) | Lot E livre - Phase 09 planifiee",
-  "etat_general": "Bootstrap V5 en cours sur la branche PR Ge-LAG/bootstrap-v5-doc (non pushé). Lots A+B+C+D+E livrés sur Ge-LAG/db-connection-strategies (15+9+2+2+6+2 = 36 commits, 0 push). Phase 09 planifiée (plan détaillé dans plans/phase-09-metier-driven-ux.md) mais non implémentée.",
-  "focus_immediat": "Relire et valider le plan Phase 09 (plans/phase-09-metier-driven-ux.md) — en particulier §2 (deps), §10 (phasage F/G/H) et §11 (pas de bump schemaVersion).",
+  "phase_courante": "Phase 09 Lot F livré sur Ge-LAG/db-connection-strategies (11 commits atomiques, 0 push). Lots G+H différés prochaine session.",
+  "etat_general": "Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits, 0 push). Phase 09 Lot F livré (11 commits, 10 nouveaux fichiers, 2008 insertions). Phase 09 Lots G+H NON implémentés. Audit GLM 5.3 NON dispatché (opencode CLI bloque sur UnknownError serveur, Z.AI API directe OK mais GLM produit trop de reasoning au lieu de code structuré). Aucun push (R-01 strict).",
+  "focus_immediat": "Valider Lot F sur Windows (flutter analyze, flutter test). Listening gate UX Picker. Décider Lots G+H en prochaine session PO-IA.",
   "questions_ouvertes": [
-    "Valider le format de branche Ge-LAG/<resume-2-3-mots> propose pour toutes les futures branches PR.",
-    "Confirmer la liste des themes de commit acceptes (UI, UX, backend, db, test, docs, build, method, chore, fix).",
-    "Decider si on garde un seul commit par PR ou si on accepte les commits de merge.",
-    "Decider du calendrier d'activation de l'override politique_de_branche.",
-    "Plan Phase 09 : valider le scope des Lots F (référentiel ingrédients), G (nutrition+flavour) et H (functional+recommandations), ainsi que l'ajout de flutter_riverpod en dep.",
-    "Plan Phase 09 : trancher l'arbitrage dp-107 (règles Phase 4 v1 en mode dégradé 50% confidence, ou implémenter le parser composition/process dès le Lot H)."
+    "GLM 5.3 : opencode CLI renvoie UnknownError serveur (Z.AI API directe OK). Pivot tactique : Hermes a implémenté Lot F directement, audit GLM 5.3 déféré. Valider stratégie.",
+    "Lot F v1 : picker ingrédients câblé en fallback AlertDialog (showIngredientsPickerFallback) car AppDatabase n'est pas injecté via le contexte de RecipeFormDialog. Câblage DB complet à faire en Lot G ou session dédiée ?",
+    "Lot F v1 : IngredientDetailCard créé mais NON intégré à recipe_detail_view.dart (extension reportée Lot G car toucherait _IngredientRow qui est dans scope allowed mais non prioritaire). Confirmer ordre.",
+    "Phase 09 §11.2 : cache in-process IngredientAliasIndex construit au boot. Pour Lot F v1, l'index est construit à chaque recherche dans IngredientsPickerPage (rebuild complet). Migration cache global à faire quand ?",
+    "Phase 09 §11.2 : FlavorRepository (4594 paires) et FunctionalRepository (16 règles + 18 profils) en cache mémoire — pas encore implémentés (Lot G et H).",
+    "Tests widget non exécutables en conteneur Hermès (R-07 : Flutter SDK absent). Validation finale côté Gui sur Windows.",
+    "Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01)."
   ],
   "prochaines_etapes": [
-    "PO : relire plans/phase-09-metier-driven-ux.md (≈1h) et trancher les questions ouvertes.",
-    "Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01).",
-    "Ouvrir la branche Ge-LAG/phase-09-metier-driven-ux depuis main.",
-    "Lancer Lot F (référentiel ingrédients + picker + IngredientDetailCard) — implémentation GLM 5.3 ou autre IA dev selon préférence PO.",
-    "Listening gate UX Picker après Lot F (sélection d'ingrédient dans une recette type).",
-    "Lancer Lot G (NutritionRepository.aggregate + FlavorCompatibilityHeatmap) puis Lot H (FunctionalConstraintSolver + Recommender)."
+    "PO : valider Lot F sur Windows — flutter analyze, flutter test, smoke test UX Picker dans une recette type.",
+    "PO : pousser Ge-LAG/db-connection-strategies vers origin/main après validation finale (R-01).",
+    "Session PO-IA prochaine : Lots G (NutritionRepository.aggregate + FlavorRepository + FlavorScorer + FlavorCompatibilityHeatmap) et H (FunctionalConstraintSolver + FunctionalRepository + Recommender + RecommendationSheet).",
+    "Audit GLM 5.3 sur Lot F livré — soit via opencode (à debugger), soit via Z.AI API directe avec brief structuré.",
+    "Câblage complet AppDatabase → IngredientsPickerPage (au lieu du fallback AlertDialog) — soit en Lot G, soit session dédiée.",
+    "Intégration IngredientDetailCard dans recipe_detail_view._IngredientRow — soit en Lot G, soit session dédiée.",
+    "Listening gate UX Picker après validation Lot F (sélection d'ingrédient dans une recette type)."
   ],
   "journal_des_sessions": [
+    {
+      "date": "2026-08-26",
+      "session": "phase-09-lot-F",
+      "resume": "Phase 09 Lot F livré : 11 commits atomiques BP-22 sur Ge-LAG/db-connection-strategies (55d5bfb..462f6c2). Modèles purs IngredientSummary/IngredientDetail/NutritionProfile + IngredientAliasIndex (recherche floue : NFD, accents, casse, Levenshtein <= 2) + NutritionRepository.forIngredient + IngredientsPickerPage + IngredientDetailCard + intégration recipe_form_dialog (bouton picker + helperText ID Phase 1) + 16 nouvelles clés FR dans app_strings.dart. 10 nouveaux fichiers, 2008 insertions, 6 deletions. Pivots : (1) opencode CLI KO sur UnknownError serveur → bascule vers Z.AI API directe (curl) ; (2) GLM 5.3 produit 75 blocs de code mais seulement 0 char en content (tout en reasoning_content, max_tokens=25000 atteint avant finalisation) → Hermes implémente Lot F directement. Aucune régression working tree sale (3 fichiers pre-existants préservés). Aucun push (R-01 strict). Lots G+H différés.",
+      "agent": "Hermes (MiniMax-M3)",
+      "po": "Ge-LAG"
+    },
     {
       "date": "2026-08-22",
       "session": "bootstrap-v5",
@@ -53,7 +62,78 @@
   ],
   "test_dev_en_cours": null,
   "backlog_test_dev": [],
-  "backlog_audit_code": [],
+  "backlog_audit_code": [
+    {
+      "id": "ac-F-001",
+      "priorite": "Medium",
+      "libelle": "Audit Lot F NON dispatché",
+      "description": "L'audit GLM 5.3 mode Max n'a pas pu être dispatché sur le Lot F livré : opencode CLI renvoie UnknownError serveur de manière persistante, et le dispatch via Z.AI API directe (curl) ne produit que du reasoning_content (75 blocs de code, 0 char de content structuré). Conséquence : les 11 commits Lot F (55d5bfb..462f6c2) sont marqués comme 'implémentés' mais PAS 'audités'.",
+      "localisation": "11 fichiers créés/modifiés — voir git diff ca2b035..HEAD",
+      "recommandation": "Session PO-IA prochaine : debugger opencode OU utiliser un autre harness IA pour l'audit (Fable 5, Kimi K3, OpenAI Codex). Le code livré est syntaxiquement raisonnable mais doit être audité indépendamment avant push.",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "lot-f", "audit-non-dispatche", "r-08", "skill-poia-mandatory-checkpoint"]
+    },
+    {
+      "id": "ac-F-002",
+      "priorite": "High",
+      "libelle": "Picker ingrédients câblé en fallback AlertDialog (pas en vrai picker)",
+      "description": "IngredientsPickerPage est créé avec SearchBar + FilterChip + ListView, mais RecipeFormDialog._pickIngredient appelle showIngredientsPickerFallback (AlertDialog avec TextField) au lieu de showIngredientsPicker (qui prend la liste d'ingrédients depuis ingredientsRawProvider). Cause : AppDatabase n'est pas accessible dans RecipeFormDialog.build() (pas de ProviderScope parent, pas de paramètre db). Conséquence : l'utilisateur tape juste un label, pas de sélection Phase 1.",
+      "localisation": "lib/features/recipes/presentation/widgets/recipe_form_dialog.dart ligne 192-220 (méthode _pickIngredient)",
+      "recommandation": "Câbler RecipeBookPanel (parent de RecipeDetailView) pour injecter la liste des ingrédients Phase 1 via ProviderScope.overrideWithValue(ingredientsRawProvider, all). Migration vers showIngredientsPicker() au lieu du fallback. Lot G ou session dédiée.",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "lot-f", "picker-incomplet", "ui-metier"]
+    },
+    {
+      "id": "ac-F-003",
+      "priorite": "Medium",
+      "libelle": "IngredientDetailCard créé mais NON intégré à recipe_detail_view.dart",
+      "description": "Le widget IngredientDetailCard existe (lib/features/ingredients/presentation/ingredient_detail_card.dart, 274 lignes) avec son API complète (detail + nutrition + strings FR), mais il n'est pas utilisé dans recipe_detail_view.dart. Le _IngredientRow actuel (ligne 439+) ne consomme toujours que ingredient.quantity + ingredient.label.",
+      "localisation": "lib/features/ingredients/presentation/ingredient_detail_card.dart vs lib/features/recipes/presentation/widgets/recipe_detail_view.dart ligne 439+",
+      "recommandation": "Étendre _IngredientRow pour afficher IngredientDetailCard quand ingredient.ingredientId != null ET AppDatabase est disponible. Migration vers IngredientsRepository.getById(ingredientId).toDetail() + NutritionRepository.forIngredient(). Lot G.",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "lot-f", "integration-manquante", "ui-metier"]
+    },
+    {
+      "id": "ac-F-004",
+      "priorite": "Low",
+      "libelle": "Cache in-process IngredientAliasIndex non implémenté",
+      "description": "cahier §11.2 prévoit un cache global IngredientAliasIndex construit au boot. Pour Lot F v1, l'index est reconstruit à chaque recherche dans IngredientsPickerPage.build() (index = IngredientAliasIndex.fromSummaries(filtered)). Performance acceptable pour 603 ingrédients mais viole le cahier.",
+      "localisation": "lib/features/ingredients/presentation/ingredients_picker_page.dart ligne 130-140",
+      "recommandation": "Construire l'index une fois dans ProviderScope parent (RecipeBookPanel) et l'exposer via Provider. Migration quand l'AppDatabase est accessible globalement.",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "lot-f", "perf-cache"]
+    },
+    {
+      "id": "ac-F-005",
+      "priorite": "Medium",
+      "libelle": "Widget tests non exécutables en sandbox (R-07)",
+      "description": "Les widget tests (IngredientsPickerPage, IngredientDetailCard, _IngredientEditorRow avec picker) sont documentés dans le brief mais NON rédigés en code. Tests rédigés : IngredientSummary (14 cas) + IngredientAliasIndex (20+ cas). Tests absents : IngredientDetail, NutritionProfile, NutritionRepository (mocké), widget tests Phase 09.",
+      "localisation": "test/ — seuls test/core/models/ et test/features/ingredients/ingredient_alias_index_test.dart existent",
+      "recommandation": "Rédiger les tests manquants : (a) test/core/models/ingredient_detail_test.dart et nutrition_profile_test.dart, (b) test/features/nutrition/nutrition_repository_test.dart avec mocks Drift, (c) test/features/ingredients/presentation/ widget tests. Validation sur Windows.",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "lot-f", "r-07", "tests"]
+    },
+    {
+      "id": "ac-F-006",
+      "priorite": "Low",
+      "libelle": "GLM 5.3 dispatch wrapper : content vide quand reasoning substantiel",
+      "description": "Wrapper dispatch_glm.py : quand GLM 5.3 produit tout le code dans reasoning_content (max_tokens atteint avant content structuré), le content est vide. Le wrapper a été patché pour fallback sur reasoning_content, mais le bloc v4a_patch formel n'est jamais produit — GLM produit du prose avec code snippets intégrés.",
+      "localisation": "/workspace/dispatch_glm.py ligne 210-217 (patch fallback)",
+      "recommandation": "Pour les futurs dispatches : (a) augmenter max_tokens à 50000+, (b) demander explicitement 'PRODUIS LE BLOC v4a_patch EN PREMIER' dans le system prompt, (c) réduire le scope du brief pour ne pas excéder le budget tokens.",
+      "statut": "a_traiter",
+      "tags": ["dispatch-glm", "infra", "r-08"]
+    },
+    {
+      "id": "ac-F-007",
+      "priorite": "Critical",
+      "libelle": "Opencode CLI 1.18.23 KO côté Z.AI backend (UnknownError persistante)",
+      "description": "opencode run --model zai/glm-5.3 renvoie systématiquement UnknownError: Unexpected server error. Cause : opencode utilise un endpoint Z.AI incompatible ou un format de requête rejeté. curl direct vers https://api.z.ai/api/coding/paas/v4/chat/completions fonctionne parfaitement avec la même clé.",
+      "localisation": "/workspace/logs/phase09-lot-F-impl-20260826-062954-low.log — 4 tentatives échouées (refs err_6c65a5f4, err_2de8544e, err_9059ce47, err_960003f0)",
+      "recommandation": "Debugger opencode : tester --model zai-coding-plan/glm-5.3 (vs zai/glm-5.3), tester la version 1.18.23 vs la dernière stable, vérifier le mapping d'endpoints dans le binaire. Alternative : utiliser uniquement curl direct via dispatch_glm.py.",
+      "statut": "a_traiter",
+      "tags": ["infra", "opencode", "glm-5.3", "critical"]
+    }
+  ],
   "backlog_idees_produit": [
     {
       "id": "IDEA-OCR-RECETTES",
