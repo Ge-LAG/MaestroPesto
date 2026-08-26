@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
+import 'package:maestropesto/features/flavor/presentation/widgets/flavor_compatibility_heatmap.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 /// Lot D — small advisory panel that surfaces Phase 3 + Phase 4
@@ -30,53 +30,17 @@ class RecipeMetierAdvisoryPanel extends StatelessWidget {
       future: _matchingRules(),
       builder: (context, snapshot) {
         final rules = snapshot.data ?? const <InteractionRule>[];
-        if (rules.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 12),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.science_outlined, size: 18),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Notes du moteur métier',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${rules.length} règle${rules.length > 1 ? 's' : ''} '
-                  'physico-chimique${rules.length > 1 ? 's' : ''} applicable${rules.length > 1 ? 's' : ''}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 12),
-                for (final rule in rules.take(3))
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(
-                      '• ${rule.ruleId} (${rule.ruleFamily}) — '
-                      '${rule.predictedEffect} '
-                      '(${rule.effectDirection}, ${rule.effectMagnitude})',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                if (rules.length > 3)
-                  Text(
-                    '…et ${rules.length - 3} autre${rules.length - 3 > 1 ? 's' : ''}',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-              ],
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (rules.isNotEmpty) _RulesCard(rules: rules),
+            // Lot G (G5) — heatmap aromatique dès que ≥2 ingrédients
+            // sont liés (le widget se masque tout seul sinon).
+            FlavorCompatibilityHeatmap(
+              ingredients: recipe.ingredients,
+              db: db,
             ),
-          ),
+          ],
         );
       },
     );
@@ -105,5 +69,61 @@ class RecipeMetierAdvisoryPanel extends StatelessWidget {
       }
     }
     return matches;
+  }
+}
+
+/// Card « règles physico-chimiques » (comportement Lot D, inchangé).
+class _RulesCard extends StatelessWidget {
+  const _RulesCard({required this.rules});
+
+  final List<InteractionRule> rules;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.science_outlined, size: 18),
+                const SizedBox(width: 8),
+                Text(
+                  'Notes du moteur métier',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${rules.length} règle${rules.length > 1 ? 's' : ''} '
+              'physico-chimique${rules.length > 1 ? 's' : ''} applicable${rules.length > 1 ? 's' : ''}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 12),
+            for (final rule in rules.take(3))
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  '• ${rule.ruleId} (${rule.ruleFamily}) — '
+                  '${rule.predictedEffect} '
+                  '(${rule.effectDirection}, ${rule.effectMagnitude})',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            if (rules.length > 3)
+              Text(
+                '…et ${rules.length - 3} autre${rules.length - 3 > 1 ? 's' : ''}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }
