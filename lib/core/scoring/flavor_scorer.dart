@@ -58,9 +58,8 @@ abstract final class FlavorScorer {
       return v.isNaN ? null : v;
     }
 
-    final evidence = <String>{
-      for (final p in pairs) ...p.evidenceRefs,
-    }.toList();
+    final evidence = <String>{for (final p in pairs) ...p.evidenceRefs}
+        .toList();
 
     return FlavorMatch(
       ingredientAId: ingredientIds.first,

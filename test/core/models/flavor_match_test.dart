@@ -3,18 +3,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:maestropesto/core/models/flavor_match.dart';
 
 FlavorMatch match({double score = 0.9}) => FlavorMatch(
-      ingredientAId: 'ING-A',
-      ingredientBId: 'ING-B',
-      combinationSize: 2,
-      overallScore: score,
-      aromaSimilarity: 0.8,
-      tasteBalance: 0.7,
-      dominanceRisk: 0.1,
-      maskingRisk: 0.1,
-      culinarySupport: 0.9,
-      evidenceRefs: const ['REF-1', 'REF-2'],
-      explanation: 'Accord classique',
-    );
+  ingredientAId: 'ING-A',
+  ingredientBId: 'ING-B',
+  combinationSize: 2,
+  overallScore: score,
+  aromaSimilarity: 0.8,
+  tasteBalance: 0.7,
+  dominanceRisk: 0.1,
+  maskingRisk: 0.1,
+  culinarySupport: 0.9,
+  evidenceRefs: const ['REF-1', 'REF-2'],
+  explanation: 'Accord classique',
+);
 
 void main() {
   group('FlavorMatch', () {

@@ -21,8 +21,8 @@ class FunctionalRepository {
   /// Constructeur de test : injecte directement des règles (pas de Drift).
   @visibleForTesting
   FunctionalRepository.fromRules(List<InteractionRule> rules)
-      : _db = null,
-        _preloadedRules = rules;
+    : _db = null,
+      _preloadedRules = rules;
 
   final AppDatabase? _db;
   final List<InteractionRule>? _preloadedRules;
@@ -34,8 +34,7 @@ class FunctionalRepository {
     final cached = _rulesCache;
     if (cached != null) return cached;
     final preloaded = _preloadedRules;
-    final rules =
-        preloaded ?? await _db!.select(_db.interactionRules).get();
+    final rules = preloaded ?? await _db!.select(_db.interactionRules).get();
     _rulesCache = rules;
     return rules;
   }

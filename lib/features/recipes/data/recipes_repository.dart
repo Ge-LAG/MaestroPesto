@@ -12,7 +12,7 @@ class _IdGen {
 
   static String next(String prefix) {
     _seq = (_seq + 1) & 0xFFFFFF;
-    return '${prefix}-${DateTime.now().microsecondsSinceEpoch.toRadixString(36)}-${_seq.toRadixString(36)}';
+    return '$prefix-${DateTime.now().microsecondsSinceEpoch.toRadixString(36)}-${_seq.toRadixString(36)}';
   }
 }
 
@@ -58,10 +58,11 @@ class RecipesRepository {
   }
 
   Future<Recipe?> getById(String id) async {
-    final exists = await (db.select(db.recipes)
-          ..where((t) => t.id.equals(id))
-          ..limit(1))
-        .getSingleOrNull();
+    final exists =
+        await (db.select(db.recipes)
+              ..where((t) => t.id.equals(id))
+              ..limit(1))
+            .getSingleOrNull();
     if (exists == null) {
       return null;
     }
@@ -71,69 +72,80 @@ class RecipesRepository {
   // ---------- internals ----------
 
   Future<void> _upsertRecipeHeader(Recipe recipe) async {
-    await db.into(db.recipes).insertOnConflictUpdate(
-      RecipesCompanion.insert(
-        id: recipe.id,
-        title: recipe.title,
-        description: Value(recipe.description),
-        servings: Value(recipe.servings),
-        prepTimeMin: Value(recipe.prepMinutes),
-        cookTimeMin: Value(recipe.cookMinutes),
-        createdAt: '1970-01-01T00:00:00Z',
-        updatedAt: '1970-01-01T00:00:00Z',
-        deletedAt: Value(null),
-      ),
-    );
+    await db
+        .into(db.recipes)
+        .insertOnConflictUpdate(
+          RecipesCompanion.insert(
+            id: recipe.id,
+            title: recipe.title,
+            description: Value(recipe.description),
+            servings: Value(recipe.servings),
+            prepTimeMin: Value(recipe.prepMinutes),
+            cookTimeMin: Value(recipe.cookMinutes),
+            createdAt: '1970-01-01T00:00:00Z',
+            updatedAt: '1970-01-01T00:00:00Z',
+            deletedAt: Value(null),
+          ),
+        );
   }
 
   Future<void> _replaceChildren(Recipe recipe) async {
-    await (db.delete(db.recipeItems)..where((t) => t.recipeId.equals(recipe.id)))
-        .go();
-    await (db.delete(db.recipeSteps)..where((t) => t.recipeId.equals(recipe.id)))
-        .go();
-    await (db.delete(db.recipeImages)
-          ..where((t) => t.recipeId.equals(recipe.id)))
-        .go();
-    await (db.delete(db.recipeTags)..where((t) => t.recipeId.equals(recipe.id)))
-        .go();
+    await (db.delete(
+      db.recipeItems,
+    )..where((t) => t.recipeId.equals(recipe.id))).go();
+    await (db.delete(
+      db.recipeSteps,
+    )..where((t) => t.recipeId.equals(recipe.id))).go();
+    await (db.delete(
+      db.recipeImages,
+    )..where((t) => t.recipeId.equals(recipe.id))).go();
+    await (db.delete(
+      db.recipeTags,
+    )..where((t) => t.recipeId.equals(recipe.id))).go();
 
     for (var i = 0; i < recipe.steps.length; i++) {
-      await db.into(db.recipeSteps).insert(
-        RecipeStepsCompanion.insert(
-          id: _IdGen.next('step'),
-          recipeId: recipe.id,
-          position: i,
-          body: recipe.steps[i],
-        ),
-      );
+      await db
+          .into(db.recipeSteps)
+          .insert(
+            RecipeStepsCompanion.insert(
+              id: _IdGen.next('step'),
+              recipeId: recipe.id,
+              position: i,
+              body: recipe.steps[i],
+            ),
+          );
     }
 
     for (var i = 0; i < recipe.ingredients.length; i++) {
       final ing = recipe.ingredients[i];
-      await db.into(db.recipeItems).insert(
-        RecipeItemsCompanion.insert(
-          id: _IdGen.next('ri'),
-          recipeId: recipe.id,
-          position: i,
-          kind: ing.source.name,
-          label: ing.label,
-          quantityG: 0.0,
-          ingredientId: Value(ing.ingredientId),
-        ),
-      );
+      await db
+          .into(db.recipeItems)
+          .insert(
+            RecipeItemsCompanion.insert(
+              id: _IdGen.next('ri'),
+              recipeId: recipe.id,
+              position: i,
+              kind: ing.source.name,
+              label: ing.label,
+              quantityG: 0.0,
+              ingredientId: Value(ing.ingredientId),
+            ),
+          );
     }
 
     for (var i = 0; i < recipe.images.length; i++) {
       final img = recipe.images[i];
-      await db.into(db.recipeImages).insert(
-        RecipeImagesCompanion.insert(
-          id: _IdGen.next('img'),
-          recipeId: recipe.id,
-          position: i,
-          path: img.path,
-          label: Value(img.label),
-        ),
-      );
+      await db
+          .into(db.recipeImages)
+          .insert(
+            RecipeImagesCompanion.insert(
+              id: _IdGen.next('img'),
+              recipeId: recipe.id,
+              position: i,
+              path: img.path,
+              label: Value(img.label),
+            ),
+          );
     }
 
     // Tags: the join row references `tags.id`, so we upsert each tag
@@ -141,44 +153,48 @@ class RecipesRepository {
     // If the label already exists in `tags`, we look up its id; otherwise
     // we insert a new tag row.
     for (final label in recipe.tags) {
-      final existing = await (db.select(db.tags)
-            ..where((t) => t.label.equals(label))
-            ..limit(1))
-          .getSingleOrNull();
+      final existing =
+          await (db.select(db.tags)
+                ..where((t) => t.label.equals(label))
+                ..limit(1))
+              .getSingleOrNull();
       final tagId = existing?.id ?? _IdGen.next('tag');
       if (existing == null) {
-        await db.into(db.tags).insert(
-          TagsCompanion.insert(id: tagId, label: label),
-        );
+        await db
+            .into(db.tags)
+            .insert(TagsCompanion.insert(id: tagId, label: label));
       }
-      await db.into(db.recipeTags).insertOnConflictUpdate(
-        RecipeTagsCompanion.insert(recipeId: recipe.id, tagId: tagId),
-      );
+      await db
+          .into(db.recipeTags)
+          .insertOnConflictUpdate(
+            RecipeTagsCompanion.insert(recipeId: recipe.id, tagId: tagId),
+          );
     }
   }
 
   Future<Recipe> _hydrate(String recipeId) async {
-    final header = await (db.select(db.recipes)
-          ..where((t) => t.id.equals(recipeId)))
-        .getSingle();
+    final header = await (db.select(
+      db.recipes,
+    )..where((t) => t.id.equals(recipeId))).getSingle();
 
-    final stepsRows = await (db.select(db.recipeSteps)
-          ..where((t) => t.recipeId.equals(recipeId))
-          ..orderBy([(t) => OrderingTerm.asc(t.position)]))
-        .get();
-    final itemsRows = await (db.select(db.recipeItems)
-          ..where((t) => t.recipeId.equals(recipeId))
-          ..orderBy([(t) => OrderingTerm.asc(t.position)]))
-        .get();
-    final imagesRows = await (db.select(db.recipeImages)
-          ..where((t) => t.recipeId.equals(recipeId))
-          ..orderBy([(t) => OrderingTerm.asc(t.position)]))
-        .get();
+    final stepsRows =
+        await (db.select(db.recipeSteps)
+              ..where((t) => t.recipeId.equals(recipeId))
+              ..orderBy([(t) => OrderingTerm.asc(t.position)]))
+            .get();
+    final itemsRows =
+        await (db.select(db.recipeItems)
+              ..where((t) => t.recipeId.equals(recipeId))
+              ..orderBy([(t) => OrderingTerm.asc(t.position)]))
+            .get();
+    final imagesRows =
+        await (db.select(db.recipeImages)
+              ..where((t) => t.recipeId.equals(recipeId))
+              ..orderBy([(t) => OrderingTerm.asc(t.position)]))
+            .get();
     final tagRows = await (db.select(db.recipeTags).join([
-          innerJoin(db.tags, db.tags.id.equalsExp(db.recipeTags.tagId)),
-        ])
-          ..where(db.recipeTags.recipeId.equals(recipeId)))
-        .get();
+      innerJoin(db.tags, db.tags.id.equalsExp(db.recipeTags.tagId)),
+    ])..where(db.recipeTags.recipeId.equals(recipeId))).get();
 
     final ingredients = itemsRows
         .map(
@@ -191,9 +207,7 @@ class RecipesRepository {
         )
         .toList();
     final images = imagesRows
-        .map(
-          (row) => RecipeImage(path: row.path, label: row.label ?? ''),
-        )
+        .map((row) => RecipeImage(path: row.path, label: row.label ?? ''))
         .toList();
     final steps = stepsRows.map((row) => row.body).toList();
     final tags = tagRows.map((row) => row.readTable(db.tags).label).toList();

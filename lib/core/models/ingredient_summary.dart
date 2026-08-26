@@ -123,17 +123,17 @@ class IngredientSummary {
 
   @override
   int get hashCode => Object.hash(
-        ingredientId,
-        canonicalNameFr,
-        canonicalNameEn,
-        categoryLevel1,
-        categoryLevel2,
-        categoryLevel3,
-        Object.hashAll(allergenTags),
-        isAlcoholic,
-        isFermented,
-        confidence,
-      );
+    ingredientId,
+    canonicalNameFr,
+    canonicalNameEn,
+    categoryLevel1,
+    categoryLevel2,
+    categoryLevel3,
+    Object.hashAll(allergenTags),
+    isAlcoholic,
+    isFermented,
+    confidence,
+  );
 
   @override
   String toString() =>

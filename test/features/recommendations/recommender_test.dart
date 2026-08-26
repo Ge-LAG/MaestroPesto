@@ -22,12 +22,12 @@ class FakeIngredients implements IngredientCandidatesSource {
   Future<List<IngredientSummary>> candidatesForCategory(
     String categoryLevel1, {
     double minConfidence = 0.7,
-  }) async =>
-      byId.values
-          .where((s) =>
-              s.categoryLevel1 == categoryLevel1 &&
-              s.confidence >= minConfidence)
-          .toList();
+  }) async => byId.values
+      .where(
+        (s) =>
+            s.categoryLevel1 == categoryLevel1 && s.confidence >= minConfidence,
+      )
+      .toList();
 }
 
 IngredientSummary ing(
@@ -35,20 +35,19 @@ IngredientSummary ing(
   String name, {
   String category = 'animal',
   double confidence = 0.95,
-}) =>
-    IngredientSummary(
-      ingredientId: id,
-      canonicalNameFr: name,
-      categoryLevel1: category,
-      confidence: confidence,
-    );
+}) => IngredientSummary(
+  ingredientId: id,
+  canonicalNameFr: name,
+  categoryLevel1: category,
+  confidence: confidence,
+);
 
 FlavorMatch pair(String a, String b, double score) => FlavorMatch(
-      ingredientAId: a,
-      ingredientBId: b,
-      combinationSize: 2,
-      overallScore: score,
-    );
+  ingredientAId: a,
+  ingredientBId: b,
+  combinationSize: 2,
+  overallScore: score,
+);
 
 /// Fixtures de l'annexe §20 du plan : Bœuf + Fromage bleu + Thym.
 const boeuf = 'ING-ANIMAL-BOEUF-000001';
@@ -62,12 +61,11 @@ Recommender buildRecommender({
   Map<String, IngredientSummary>? ingredients,
   List<FlavorMatch> matches = const [],
   List<InteractionRule> rules = const [],
-}) =>
-    Recommender(
-      ingredients: FakeIngredients(ingredients ?? {}),
-      flavor: FlavorRepository.fromMatches(matches),
-      functional: FunctionalRepository.fromRules(rules),
-    );
+}) => Recommender(
+  ingredients: FakeIngredients(ingredients ?? {}),
+  flavor: FlavorRepository.fromMatches(matches),
+  functional: FunctionalRepository.fromRules(rules),
+);
 
 void main() {
   group('Recommender — scénarios §12.1', () {
@@ -82,10 +80,7 @@ void main() {
 
     test('recette équilibrée : pas de bonus, raison affinité', () async {
       final r = buildRecommender(
-        ingredients: {
-          boeuf: ing(boeuf, 'Bœuf'),
-          agneau: ing(agneau, 'Agneau'),
-        },
+        ingredients: {boeuf: ing(boeuf, 'Bœuf'), agneau: ing(agneau, 'Agneau')},
         matches: [pair(boeuf, thym, 0.85), pair(agneau, thym, 0.80)],
       );
       final result = await r.suggestSubstitutes(
@@ -99,13 +94,9 @@ void main() {
       expect(result.single.scoringSource, ScoringSource.flavor);
     });
 
-    test('recette problématique : bonus +0.15 et raison résolution',
-        () async {
+    test('recette problématique : bonus +0.15 et raison résolution', () async {
       final r = buildRecommender(
-        ingredients: {
-          boeuf: ing(boeuf, 'Bœuf'),
-          agneau: ing(agneau, 'Agneau'),
-        },
+        ingredients: {boeuf: ing(boeuf, 'Bœuf'), agneau: ing(agneau, 'Agneau')},
         matches: [pair(boeuf, bleu, 0.32), pair(agneau, bleu, 0.62)],
       );
       final result = await r.suggestSubstitutes(
@@ -116,20 +107,22 @@ void main() {
       expect(result.single.reason, 'Résout une incompatibilité existante');
     });
 
-    test('recette mono-ingrédient : score neutre 0.5 sans paire connue',
-        () async {
-      final r = buildRecommender(
-        ingredients: {
-          boeuf: ing(boeuf, 'Bœuf'),
-          agneau: ing(agneau, 'Agneau'),
-        },
-      );
-      final result = await r.suggestSubstitutes(
-        targetIngredientId: boeuf,
-        currentIngredientIds: const [boeuf],
-      );
-      expect(result.single.score, 0.5);
-    });
+    test(
+      'recette mono-ingrédient : score neutre 0.5 sans paire connue',
+      () async {
+        final r = buildRecommender(
+          ingredients: {
+            boeuf: ing(boeuf, 'Bœuf'),
+            agneau: ing(agneau, 'Agneau'),
+          },
+        );
+        final result = await r.suggestSubstitutes(
+          targetIngredientId: boeuf,
+          currentIngredientIds: const [boeuf],
+        );
+        expect(result.single.score, 0.5);
+      },
+    );
 
     test('recette sans candidat : liste vide', () async {
       final r = buildRecommender(
@@ -168,55 +161,61 @@ void main() {
         currentIngredientIds: const [boeuf, thym],
       );
       expect(result, hasLength(5));
-      expect(result.first.suggestedIngredient.ingredientId,
-          'ING-ANIMAL-CAND-000007');
+      expect(
+        result.first.suggestedIngredient.ingredientId,
+        'ING-ANIMAL-CAND-000007',
+      );
       for (var i = 1; i < result.length; i++) {
         expect(result[i - 1].score >= result[i].score, isTrue);
       }
     });
 
-    test('candidat introduisant une nouvelle incompatibilité → écarté',
-        () async {
-      final r = buildRecommender(
-        ingredients: {
-          boeuf: ing(boeuf, 'Bœuf'),
-          agneau: ing(agneau, 'Agneau'),
-        },
-        matches: [pair(agneau, bleu, 0.20)],
-      );
-      final result = await r.suggestSubstitutes(
-        targetIngredientId: boeuf,
-        currentIngredientIds: const [boeuf, bleu],
-      );
-      expect(result, isEmpty);
-    });
+    test(
+      'candidat introduisant une nouvelle incompatibilité → écarté',
+      () async {
+        final r = buildRecommender(
+          ingredients: {
+            boeuf: ing(boeuf, 'Bœuf'),
+            agneau: ing(agneau, 'Agneau'),
+          },
+          matches: [pair(agneau, bleu, 0.20)],
+        );
+        final result = await r.suggestSubstitutes(
+          targetIngredientId: boeuf,
+          currentIngredientIds: const [boeuf, bleu],
+        );
+        expect(result, isEmpty);
+      },
+    );
 
-    test('candidat déclenchant une nouvelle alerte fonctionnelle → malus',
-        () async {
-      const rule = InteractionRule(
-        ruleId: 'RULE-GEL-GELATINE',
-        ruleFamily: 'gelling',
-        reactantOrComponentIds: agneau,
-        predictedEffect: 'gel',
-        effectDirection: 'increase',
-        confidence: 0.9,
-      );
-      final r = buildRecommender(
-        ingredients: {
-          boeuf: ing(boeuf, 'Bœuf'),
-          agneau: ing(agneau, 'Agneau'),
-        },
-        matches: [pair(agneau, thym, 0.80)],
-        rules: const [rule],
-      );
-      final result = await r.suggestSubstitutes(
-        targetIngredientId: boeuf,
-        currentIngredientIds: const [boeuf, thym],
-      );
-      // 0.80 base − 0.20 malus = 0.60, scoringSource = all.
-      expect(result.single.score, closeTo(0.60, 1e-9));
-      expect(result.single.scoringSource, ScoringSource.all);
-    });
+    test(
+      'candidat déclenchant une nouvelle alerte fonctionnelle → malus',
+      () async {
+        const rule = InteractionRule(
+          ruleId: 'RULE-GEL-GELATINE',
+          ruleFamily: 'gelling',
+          reactantOrComponentIds: agneau,
+          predictedEffect: 'gel',
+          effectDirection: 'increase',
+          confidence: 0.9,
+        );
+        final r = buildRecommender(
+          ingredients: {
+            boeuf: ing(boeuf, 'Bœuf'),
+            agneau: ing(agneau, 'Agneau'),
+          },
+          matches: [pair(agneau, thym, 0.80)],
+          rules: const [rule],
+        );
+        final result = await r.suggestSubstitutes(
+          targetIngredientId: boeuf,
+          currentIngredientIds: const [boeuf, thym],
+        );
+        // 0.80 base − 0.20 malus = 0.60, scoringSource = all.
+        expect(result.single.score, closeTo(0.60, 1e-9));
+        expect(result.single.scoringSource, ScoringSource.all);
+      },
+    );
 
     test('candidats déjà dans la recette exclus', () async {
       final r = buildRecommender(
@@ -264,18 +263,16 @@ void main() {
         targetIngredientId: boeuf,
         currentIngredientIds: const [boeuf, bleu, thym],
       );
-      expect(
-        result.map((r) => r.suggestedIngredient.ingredientId).toList(),
-        [poulet, agneau, porc],
-      );
+      expect(result.map((r) => r.suggestedIngredient.ingredientId).toList(), [
+        poulet,
+        agneau,
+        porc,
+      ]);
       // Formule v1 : moyenne des paires avec {bleu, thym} + bonus 0.15.
       expect(result[0].score, closeTo(0.92, 1e-9)); // (0.74+0.80)/2 + 0.15
       expect(result[1].score, closeTo(0.835, 1e-9)); // (0.62+0.75)/2 + 0.15
       expect(result[2].score, closeTo(0.75, 1e-9)); // (0.55+0.65)/2 + 0.15
-      expect(
-        result.every((r) => r.originalIngredientId == boeuf),
-        isTrue,
-      );
+      expect(result.every((r) => r.originalIngredientId == boeuf), isTrue);
     });
   });
 }

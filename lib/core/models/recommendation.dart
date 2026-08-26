@@ -69,12 +69,12 @@ class Recommendation {
 
   @override
   int get hashCode => Object.hash(
-        originalIngredientId,
-        suggestedIngredient,
-        reason,
-        score,
-        scoringSource,
-      );
+    originalIngredientId,
+    suggestedIngredient,
+    reason,
+    score,
+    scoringSource,
+  );
 
   @override
   String toString() =>

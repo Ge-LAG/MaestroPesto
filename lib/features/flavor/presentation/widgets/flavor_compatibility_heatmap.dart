@@ -117,9 +117,8 @@ class _HeatmapCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     context.strings.flavorHeatmapTitle,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w800),
                   ),
                 ),
               ],
@@ -305,9 +304,8 @@ class _HeatmapCell extends StatelessWidget {
             children: [
               Text(
                 '${a.label} × ${b.label}',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w900,
-                    ),
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 8),
               Row(

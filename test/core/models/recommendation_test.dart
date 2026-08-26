@@ -14,14 +14,13 @@ Recommendation recommendation({
   String original = 'ING-ANIMAL-BOEUF-000001',
   double score = 0.81,
   ScoringSource source = ScoringSource.flavor,
-}) =>
-    Recommendation(
-      originalIngredientId: original,
-      suggestedIngredient: suggested,
-      reason: 'Meilleure affinité aromatique',
-      score: score,
-      scoringSource: source,
-    );
+}) => Recommendation(
+  originalIngredientId: original,
+  suggestedIngredient: suggested,
+  reason: 'Meilleure affinité aromatique',
+  score: score,
+  scoringSource: source,
+);
 
 void main() {
   group('Recommendation', () {

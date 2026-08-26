@@ -76,8 +76,7 @@ class FunctionalAlertCard extends StatelessWidget {
     final ids = linkedIngredientIds(ingredients);
     if (ids.isEmpty) return const SizedBox.shrink();
 
-    final repo =
-        repository ?? (db != null ? FunctionalRepository(db!) : null);
+    final repo = repository ?? (db != null ? FunctionalRepository(db!) : null);
     if (repo == null) return const SizedBox.shrink();
 
     return FutureBuilder<List<FunctionalAlert>>(
@@ -112,9 +111,8 @@ class _AlertsCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     context.strings.functionalAlertsTitle,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w800),
                   ),
                 ),
               ],
@@ -152,9 +150,8 @@ class _AlertTile extends StatelessWidget {
             leading: Icon(functionalSeverityIcon(alert.severity), color: color),
             title: Text(
               alert.title,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
             subtitle: Text(
               '${alert.alertId} — ${strings.functionalConfidence(alert.confidence)}',

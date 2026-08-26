@@ -75,7 +75,10 @@ class IngredientMapping {
   /// Split pipe-separated. Tolère null, vide, espaces.
   static List<String> _split(String? raw) {
     if (raw == null || raw.trim().isEmpty) return const <String>[];
-    final parts = raw.split('|').map((s) => s.trim()).where((s) => s.isNotEmpty);
+    final parts = raw
+        .split('|')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty);
     return parts.toList(growable: false);
   }
 }

@@ -138,18 +138,18 @@ class FlavorMatch {
 
   @override
   int get hashCode => Object.hash(
-        ingredientAId,
-        ingredientBId,
-        combinationSize,
-        overallScore,
-        aromaSimilarity,
-        tasteBalance,
-        dominanceRisk,
-        maskingRisk,
-        culinarySupport,
-        Object.hashAll(evidenceRefs),
-        explanation,
-      );
+    ingredientAId,
+    ingredientBId,
+    combinationSize,
+    overallScore,
+    aromaSimilarity,
+    tasteBalance,
+    dominanceRisk,
+    maskingRisk,
+    culinarySupport,
+    Object.hashAll(evidenceRefs),
+    explanation,
+  );
 
   @override
   String toString() =>

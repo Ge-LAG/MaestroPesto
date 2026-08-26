@@ -83,14 +83,14 @@ class FunctionalAlert {
 
   @override
   int get hashCode => Object.hash(
-        alertId,
-        severity,
-        title,
-        Object.hashAll(conditions),
-        predictedEffect,
-        confidence,
-        evidenceType,
-      );
+    alertId,
+    severity,
+    title,
+    Object.hashAll(conditions),
+    predictedEffect,
+    confidence,
+    evidenceType,
+  );
 
   @override
   String toString() =>

@@ -16,7 +16,9 @@ class RecipeTagLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final background = selected ? colorScheme.primary : _tagColor(label);
-    final foreground = selected ? colorScheme.onPrimary : const Color(0xFF2E332D);
+    final foreground = selected
+        ? colorScheme.onPrimary
+        : const Color(0xFF2E332D);
 
     final tag = DecoratedBox(
       decoration: BoxDecoration(
@@ -32,10 +34,8 @@ class RecipeTagLabel extends StatelessWidget {
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: foreground,
-                fontWeight: FontWeight.w800,
-              ),
+          style: Theme.of(context).textTheme.labelMedium
+              ?.copyWith(color: foreground, fontWeight: FontWeight.w800),
         ),
       ),
     );

@@ -55,7 +55,8 @@ class RecommendationAnalysis {
   final List<FunctionalAlert> dangerAlerts;
   final List<RecommendationProblem> problems;
 
-  bool get hasProblem => incompatiblePairs.isNotEmpty || dangerAlerts.isNotEmpty;
+  bool get hasProblem =>
+      incompatiblePairs.isNotEmpty || dangerAlerts.isNotEmpty;
 }
 
 /// Calcule l'analyse de la recette (déclencheur du sheet, §9.2) :
@@ -114,10 +115,9 @@ Future<void> showRecommendationSheet(
   FunctionalRepository? functionalRepository,
   IngredientCandidatesSource? ingredientsSource,
 }) {
-  final flavor =
-      flavorRepository ?? (db != null ? FlavorRepository(db) : null);
-  final functional = functionalRepository ??
-      (db != null ? FunctionalRepository(db) : null);
+  final flavor = flavorRepository ?? (db != null ? FlavorRepository(db) : null);
+  final functional =
+      functionalRepository ?? (db != null ? FunctionalRepository(db) : null);
   final source =
       ingredientsSource ?? (db != null ? IngredientsRepository(db) : null);
   if (flavor == null || functional == null || source == null) {
@@ -195,10 +195,8 @@ class _RecommendationSheetState extends State<RecommendationSheet> {
                   Expanded(
                     child: Text(
                       strings.recommendationSheetTitle,
-                      style:
-                          Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w900,
-                              ),
+                      style: Theme.of(context).textTheme.titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
                   ),
                 ],
@@ -218,8 +216,7 @@ class _RecommendationSheetState extends State<RecommendationSheet> {
                 for (final problem in analysis.problems)
                   _ProblemTile(
                     problem: problem,
-                    selected:
-                        _selectedIngredientId == problem.ingredientId,
+                    selected: _selectedIngredientId == problem.ingredientId,
                     onTap: () => setState(
                       () => _selectedIngredientId = problem.ingredientId,
                     ),
@@ -347,9 +344,8 @@ class _SubstitutesSection extends StatelessWidget {
             const Divider(height: 24),
             Text(
               strings.recommendationSubstitutesFor(targetIngredientId),
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
+              style: Theme.of(context).textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 8),
             if (recommendations == null)
@@ -390,9 +386,8 @@ class _SubstituteTile extends StatelessWidget {
               children: [
                 Text(
                   suggested.canonicalNameFr,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 Text(
                   recommendation.reason,
@@ -403,9 +398,8 @@ class _SubstituteTile extends StatelessWidget {
           ),
           Text(
             recommendation.score.toStringAsFixed(2),
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(fontWeight: FontWeight.w900),
           ),
         ],
       ),

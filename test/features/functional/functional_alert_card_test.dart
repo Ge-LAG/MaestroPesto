@@ -7,11 +7,11 @@ import 'package:maestropesto/features/functional/presentation/widgets/functional
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 RecipeIngredient ing(String id) => RecipeIngredient(
-      label: id,
-      quantity: '100 g',
-      source: IngredientSource.ciqual,
-      ingredientId: id,
-    );
+  label: id,
+  quantity: '100 g',
+  source: IngredientSource.ciqual,
+  ingredientId: id,
+);
 
 const rule = InteractionRule(
   ruleId: 'RULE-GEL-GELATINE',
@@ -25,46 +25,52 @@ const rule = InteractionRule(
 );
 
 Widget wrap(Widget child) => MaterialApp(
-      home: Scaffold(body: SingleChildScrollView(child: child)),
-    );
+  home: Scaffold(body: SingleChildScrollView(child: child)),
+);
 
 void main() {
   group('FunctionalAlertCard', () {
     testWidgets('renders nothing without linked ingredients', (tester) async {
-      await tester.pumpWidget(wrap(
-        FunctionalAlertCard(
-          ingredients: const [
-            RecipeIngredient(
-              label: 'Truc libre',
-              quantity: '1',
-              source: IngredientSource.free,
-            ),
-          ],
-          repository: FunctionalRepository.fromRules(const [rule]),
+      await tester.pumpWidget(
+        wrap(
+          FunctionalAlertCard(
+            ingredients: const [
+              RecipeIngredient(
+                label: 'Truc libre',
+                quantity: '1',
+                source: IngredientSource.free,
+              ),
+            ],
+            repository: FunctionalRepository.fromRules(const [rule]),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       expect(find.byType(Card), findsNothing);
     });
 
     testWidgets('renders nothing when no rule matches', (tester) async {
-      await tester.pumpWidget(wrap(
-        FunctionalAlertCard(
-          ingredients: [ing('ING-UNKNOWN')],
-          repository: FunctionalRepository.fromRules(const [rule]),
+      await tester.pumpWidget(
+        wrap(
+          FunctionalAlertCard(
+            ingredients: [ing('ING-UNKNOWN')],
+            repository: FunctionalRepository.fromRules(const [rule]),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       expect(find.byType(Card), findsNothing);
     });
 
     testWidgets('renders alert and expands on tap', (tester) async {
-      await tester.pumpWidget(wrap(
-        FunctionalAlertCard(
-          ingredients: [ing('PROT_GEL')],
-          repository: FunctionalRepository.fromRules(const [rule]),
+      await tester.pumpWidget(
+        wrap(
+          FunctionalAlertCard(
+            ingredients: [ing('PROT_GEL')],
+            repository: FunctionalRepository.fromRules(const [rule]),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('Alertes physico-chimiques'), findsOneWidget);

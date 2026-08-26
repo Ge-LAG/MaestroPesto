@@ -55,16 +55,14 @@ abstract interface class IngredientCandidatesSource {
 /// Orchestrateur de recommandations de substituts (plan §9.1).
 class Recommender {
   Recommender({
-    required IngredientCandidatesSource ingredients,
-    required FlavorRepository flavor,
-    required FunctionalRepository functional,
-  })  : _ingredients = ingredients,
-        _flavor = flavor,
-        _functional = functional;
+    required this.ingredients,
+    required this.flavor,
+    required this.functional,
+  });
 
-  final IngredientCandidatesSource _ingredients;
-  final FlavorRepository _flavor;
-  final FunctionalRepository _functional;
+  final IngredientCandidatesSource ingredients;
+  final FlavorRepository flavor;
+  final FunctionalRepository functional;
 
   /// Propose jusqu'à [maxResults] substituts pour [targetIngredientId]
   /// dans la recette [currentIngredientIds], triés par score
@@ -76,7 +74,7 @@ class Recommender {
     int maxResults = 5,
   }) async {
     // Étape 1 : catégorie de la cible.
-    final target = await _ingredients.summaryFor(targetIngredientId);
+    final target = await ingredients.summaryFor(targetIngredientId);
     if (target == null) return const <Recommendation>[];
 
     final remaining = [
@@ -90,14 +88,14 @@ class Recommender {
       targetIngredientId,
       remaining,
     );
-    final alertIdsBefore = (await _functional.alertsFor(remaining))
+    final alertIdsBefore = (await functional.alertsFor(remaining))
         .map((a) => a.alertId)
         .toSet();
 
     // Étape 3 : candidats (même catégorie, confiance ≥ 0.7, pas déjà
     // dans la recette).
     final inRecipe = currentIngredientIds.toSet();
-    final candidates = await _ingredients.candidatesForCategory(
+    final candidates = await ingredients.candidatesForCategory(
       target.categoryLevel1,
       minConfidence: 0.7,
     );
@@ -110,7 +108,10 @@ class Recommender {
       final pairScores = <double>[];
       var introducesIncompatibility = false;
       for (final other in remaining) {
-        final match = await _flavor.bestMatchFor([candidate.ingredientId, other]);
+        final match = await flavor.bestMatchFor([
+          candidate.ingredientId,
+          other,
+        ]);
         if (match == null) continue;
         if (match.overallScore < kIncompatibilityThreshold) {
           introducesIncompatibility = true;
@@ -126,12 +127,15 @@ class Recommender {
 
       final bonus = targetConflicts ? kResolveBonus : 0.0;
 
-      final alertsAfter = await _functional.alertsFor(
-        [...remaining, candidate.ingredientId],
+      final alertsAfter = await functional.alertsFor([
+        ...remaining,
+        candidate.ingredientId,
+      ]);
+      final hasNewAlert = alertsAfter.any(
+        (a) =>
+            a.severity != FunctionalSeverity.outOfDomain &&
+            !alertIdsBefore.contains(a.alertId),
       );
-      final hasNewAlert = alertsAfter.any((a) =>
-          a.severity != FunctionalSeverity.outOfDomain &&
-          !alertIdsBefore.contains(a.alertId));
       final malus = hasNewAlert ? kNewAlertMalus : 0.0;
 
       final score = (base + bonus - malus).clamp(0.0, 1.0);
@@ -155,20 +159,18 @@ class Recommender {
       final byScore = b.score.compareTo(a.score);
       return byScore != 0
           ? byScore
-          : a.suggestedIngredient.ingredientId
-              .compareTo(b.suggestedIngredient.ingredientId);
+          : a.suggestedIngredient.ingredientId.compareTo(
+              b.suggestedIngredient.ingredientId,
+            );
     });
     return recommendations.take(maxResults).toList();
   }
 
   /// Vrai si [targetId] a au moins une paire incompatible
   /// (< [kIncompatibilityThreshold]) avec [others].
-  Future<bool> _hasIncompatibility(
-    String targetId,
-    List<String> others,
-  ) async {
+  Future<bool> _hasIncompatibility(String targetId, List<String> others) async {
     for (final other in others) {
-      final match = await _flavor.bestMatchFor([targetId, other]);
+      final match = await flavor.bestMatchFor([targetId, other]);
       if (match != null && match.overallScore < kIncompatibilityThreshold) {
         return true;
       }

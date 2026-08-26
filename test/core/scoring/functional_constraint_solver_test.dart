@@ -10,149 +10,149 @@ import 'package:maestropesto/core/scoring/functional_constraint_solver.dart';
 
 /// Les 16 règles réelles du CSV Phase 4 (colonnes utiles à la v1).
 List<InteractionRule> realRules() => const [
-      InteractionRule(
-        ruleId: 'RULE-PEC-HM-001',
-        ruleFamily: 'gelling',
-        reactantOrComponentIds: 'POLY_PEC_HM|SM_SUCROSE',
-        ingredientConstraints: 'pectine_HM_presence',
-        compositionConstraints: 'sugar_60-65pct_required',
-        processConstraints: 'T_below_boiling',
-        phMin: 2.5,
-        phMax: 4.0,
-        temperatureMin: 60,
-        temperatureMax: 105,
-        predictedEffect: 'gel_formation',
-        effectDirection: 'increase_gel_strength',
-        evidenceType: 'expert_rule_with_literature',
-        confidence: 0.92,
-        notes: 'Pectine HM gélifie uniquement si sucre > 60% ET pH < 4.0.',
-      ),
-      InteractionRule(
-        ruleId: 'RULE-PEC-LM-001',
-        ruleFamily: 'gelling',
-        reactantOrComponentIds: 'POLY_PEC_LM|SM_CA',
-        predictedEffect: 'gel_formation',
-        effectDirection: 'increase',
-        confidence: 0.88,
-        notes: 'Pectine LM gélifie au calcium (egg-box model).',
-      ),
-      InteractionRule(
-        ruleId: 'RULE-GEL-GELATINE',
-        ruleFamily: 'gelling',
-        reactantOrComponentIds: 'PROT_GEL',
-        predictedEffect: 'thermoreversible_gel',
-        effectDirection: 'increase',
-        confidence: 0.95,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-AGAR-GEL',
-        ruleFamily: 'gelling',
-        reactantOrComponentIds: 'POLY_AGAR',
-        predictedEffect: 'thermo_irreversible_gel',
-        effectDirection: 'increase',
-        confidence: 0.95,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-MAYO-001',
-        ruleFamily: 'emulsion',
-        reactantOrComponentIds: 'LIP_TRIGLY|PROT_OVALB',
-        predictedEffect: 'o/w_emulsion_stable',
-        effectDirection: 'increase_stability',
-        confidence: 0.90,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-HL-EMULSION',
-        ruleFamily: 'emulsion',
-        reactantOrComponentIds: 'LIP_PHOSPH',
-        predictedEffect: 'emulsification',
-        effectDirection: 'increase',
-        confidence: 0.90,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-MAILLARD',
-        ruleFamily: 'browning',
-        reactantOrComponentIds: 'SM_GLU_MONO|PROT_CASEINE|PROT_WHEY',
-        predictedEffect: 'Maillard_browning_aroma',
-        effectDirection: 'increase_color_aroma',
-        confidence: 0.95,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-CARAMEL',
-        ruleFamily: 'browning',
-        reactantOrComponentIds: 'SM_SUCROSE',
-        predictedEffect: 'caramelization_color_aroma',
-        effectDirection: 'increase',
-        confidence: 0.95,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-STARCH-GEL',
-        ruleFamily: 'starch',
-        reactantOrComponentIds: 'POLY_AMIDON',
-        predictedEffect: 'gelatinization_viscosity_increase',
-        effectDirection: 'increase_viscosity',
-        confidence: 0.95,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-STARCH-RETROGRAD',
-        ruleFamily: 'starch',
-        reactantOrComponentIds: 'POLY_AMYLOSE',
-        predictedEffect: 'retrogradation_syneresis',
-        effectDirection: 'increase_firmness_release_water',
-        confidence: 0.85,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-GLUTEN-DEVEL',
-        ruleFamily: 'protein',
-        reactantOrComponentIds: 'PROT_GLU',
-        predictedEffect: 'gluten_network_formation',
-        effectDirection: 'increase_viscosity_elasticity',
-        confidence: 0.92,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-SALT-CASEIN',
-        ruleFamily: 'taste',
-        reactantOrComponentIds: 'SM_SALT|PROT_CASEINE',
-        predictedEffect: 'flavor_enhancement',
-        effectDirection: 'increase_umami_perception',
-        confidence: 0.75,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-EGG-COAG',
-        ruleFamily: 'protein',
-        reactantOrComponentIds: 'PROT_OVALB',
-        predictedEffect: 'protein_coagulation',
-        effectDirection: 'solidify',
-        confidence: 0.95,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-AW-MICRO',
-        ruleFamily: 'safety',
-        reactantOrComponentIds: '',
-        predictedEffect: 'microbiological_stability',
-        effectDirection: 'control_micro_growth',
-        confidence: 0.95,
-        notes: 'Indicateur de sécurité — non prédictif suffisant.',
-      ),
-      InteractionRule(
-        ruleId: 'RULE-PH-COAG-CASEIN',
-        ruleFamily: 'protein',
-        reactantOrComponentIds: 'PROT_CASEINE',
-        predictedEffect: 'isoelectric_coagulation',
-        effectDirection: 'solidify',
-        confidence: 0.95,
-      ),
-      InteractionRule(
-        ruleId: 'RULE-GELATIN-ACID',
-        ruleFamily: 'gelling',
-        reactantOrComponentIds: 'PROT_GEL',
-        phMin: 3.0,
-        phMax: 4.5,
-        predictedEffect: 'fragile_gel_syneresis',
-        effectDirection: 'decrease_gel_strength',
-        confidence: 0.85,
-        notes: 'Gélatine ne gélifie pas bien sous pH 3.5.',
-      ),
-    ];
+  InteractionRule(
+    ruleId: 'RULE-PEC-HM-001',
+    ruleFamily: 'gelling',
+    reactantOrComponentIds: 'POLY_PEC_HM|SM_SUCROSE',
+    ingredientConstraints: 'pectine_HM_presence',
+    compositionConstraints: 'sugar_60-65pct_required',
+    processConstraints: 'T_below_boiling',
+    phMin: 2.5,
+    phMax: 4.0,
+    temperatureMin: 60,
+    temperatureMax: 105,
+    predictedEffect: 'gel_formation',
+    effectDirection: 'increase_gel_strength',
+    evidenceType: 'expert_rule_with_literature',
+    confidence: 0.92,
+    notes: 'Pectine HM gélifie uniquement si sucre > 60% ET pH < 4.0.',
+  ),
+  InteractionRule(
+    ruleId: 'RULE-PEC-LM-001',
+    ruleFamily: 'gelling',
+    reactantOrComponentIds: 'POLY_PEC_LM|SM_CA',
+    predictedEffect: 'gel_formation',
+    effectDirection: 'increase',
+    confidence: 0.88,
+    notes: 'Pectine LM gélifie au calcium (egg-box model).',
+  ),
+  InteractionRule(
+    ruleId: 'RULE-GEL-GELATINE',
+    ruleFamily: 'gelling',
+    reactantOrComponentIds: 'PROT_GEL',
+    predictedEffect: 'thermoreversible_gel',
+    effectDirection: 'increase',
+    confidence: 0.95,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-AGAR-GEL',
+    ruleFamily: 'gelling',
+    reactantOrComponentIds: 'POLY_AGAR',
+    predictedEffect: 'thermo_irreversible_gel',
+    effectDirection: 'increase',
+    confidence: 0.95,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-MAYO-001',
+    ruleFamily: 'emulsion',
+    reactantOrComponentIds: 'LIP_TRIGLY|PROT_OVALB',
+    predictedEffect: 'o/w_emulsion_stable',
+    effectDirection: 'increase_stability',
+    confidence: 0.90,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-HL-EMULSION',
+    ruleFamily: 'emulsion',
+    reactantOrComponentIds: 'LIP_PHOSPH',
+    predictedEffect: 'emulsification',
+    effectDirection: 'increase',
+    confidence: 0.90,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-MAILLARD',
+    ruleFamily: 'browning',
+    reactantOrComponentIds: 'SM_GLU_MONO|PROT_CASEINE|PROT_WHEY',
+    predictedEffect: 'Maillard_browning_aroma',
+    effectDirection: 'increase_color_aroma',
+    confidence: 0.95,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-CARAMEL',
+    ruleFamily: 'browning',
+    reactantOrComponentIds: 'SM_SUCROSE',
+    predictedEffect: 'caramelization_color_aroma',
+    effectDirection: 'increase',
+    confidence: 0.95,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-STARCH-GEL',
+    ruleFamily: 'starch',
+    reactantOrComponentIds: 'POLY_AMIDON',
+    predictedEffect: 'gelatinization_viscosity_increase',
+    effectDirection: 'increase_viscosity',
+    confidence: 0.95,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-STARCH-RETROGRAD',
+    ruleFamily: 'starch',
+    reactantOrComponentIds: 'POLY_AMYLOSE',
+    predictedEffect: 'retrogradation_syneresis',
+    effectDirection: 'increase_firmness_release_water',
+    confidence: 0.85,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-GLUTEN-DEVEL',
+    ruleFamily: 'protein',
+    reactantOrComponentIds: 'PROT_GLU',
+    predictedEffect: 'gluten_network_formation',
+    effectDirection: 'increase_viscosity_elasticity',
+    confidence: 0.92,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-SALT-CASEIN',
+    ruleFamily: 'taste',
+    reactantOrComponentIds: 'SM_SALT|PROT_CASEINE',
+    predictedEffect: 'flavor_enhancement',
+    effectDirection: 'increase_umami_perception',
+    confidence: 0.75,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-EGG-COAG',
+    ruleFamily: 'protein',
+    reactantOrComponentIds: 'PROT_OVALB',
+    predictedEffect: 'protein_coagulation',
+    effectDirection: 'solidify',
+    confidence: 0.95,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-AW-MICRO',
+    ruleFamily: 'safety',
+    reactantOrComponentIds: '',
+    predictedEffect: 'microbiological_stability',
+    effectDirection: 'control_micro_growth',
+    confidence: 0.95,
+    notes: 'Indicateur de sécurité — non prédictif suffisant.',
+  ),
+  InteractionRule(
+    ruleId: 'RULE-PH-COAG-CASEIN',
+    ruleFamily: 'protein',
+    reactantOrComponentIds: 'PROT_CASEINE',
+    predictedEffect: 'isoelectric_coagulation',
+    effectDirection: 'solidify',
+    confidence: 0.95,
+  ),
+  InteractionRule(
+    ruleId: 'RULE-GELATIN-ACID',
+    ruleFamily: 'gelling',
+    reactantOrComponentIds: 'PROT_GEL',
+    phMin: 3.0,
+    phMax: 4.5,
+    predictedEffect: 'fragile_gel_syneresis',
+    effectDirection: 'decrease_gel_strength',
+    confidence: 0.85,
+    notes: 'Gélatine ne gélifie pas bien sous pH 3.5.',
+  ),
+];
 
 void main() {
   group('FunctionalConstraintSolver — vraies règles Phase 4', () {
@@ -176,16 +176,19 @@ void main() {
       expect(alerts.map((a) => a.alertId), contains('RULE-PEC-HM-001'));
     });
 
-    test('RULE-PEC-HM-001 déclenchée par SM_SUCROSE (2e réactant, pipe-separated)', () {
-      final alerts = FunctionalConstraintSolver.evaluate(
-        recipeIngredientIds: const ['SM_SUCROSE'],
-        allRules: realRules(),
-      );
-      final ids = alerts.map((a) => a.alertId);
-      expect(ids, contains('RULE-PEC-HM-001'));
-      // SM_SUCROSE déclenche aussi RULE-CARAMEL.
-      expect(ids, contains('RULE-CARAMEL'));
-    });
+    test(
+      'RULE-PEC-HM-001 déclenchée par SM_SUCROSE (2e réactant, pipe-separated)',
+      () {
+        final alerts = FunctionalConstraintSolver.evaluate(
+          recipeIngredientIds: const ['SM_SUCROSE'],
+          allRules: realRules(),
+        );
+        final ids = alerts.map((a) => a.alertId);
+        expect(ids, contains('RULE-PEC-HM-001'));
+        // SM_SUCROSE déclenche aussi RULE-CARAMEL.
+        expect(ids, contains('RULE-CARAMEL'));
+      },
+    );
 
     test('SM_SUCROSE ne déclenche pas RULE-PEC-LM-001', () {
       final alerts = FunctionalConstraintSolver.evaluate(
@@ -229,32 +232,34 @@ void main() {
       expect(ids, containsAll(['RULE-MAYO-001', 'RULE-EGG-COAG']));
     });
 
-    test('les règles sans reactant_or_component_ids ne sont jamais déclenchées', () {
-      final alerts = FunctionalConstraintSolver.evaluate(
-        recipeIngredientIds: const [
-          'POLY_PEC_HM',
-          'SM_SUCROSE',
-          'PROT_GEL',
-          'PROT_CASEINE',
-          'PROT_OVALB',
-          'POLY_AMIDON',
-          'PROT_GLU',
-          'SM_SALT',
-          'LIP_PHOSPH',
-        ],
-        allRules: realRules(),
-      );
-      // RULE-AW-MICRO a reactant_or_component_ids vide → absente.
-      expect(alerts.map((a) => a.alertId), isNot(contains('RULE-AW-MICRO')));
-    });
+    test(
+      'les règles sans reactant_or_component_ids ne sont jamais déclenchées',
+      () {
+        final alerts = FunctionalConstraintSolver.evaluate(
+          recipeIngredientIds: const [
+            'POLY_PEC_HM',
+            'SM_SUCROSE',
+            'PROT_GEL',
+            'PROT_CASEINE',
+            'PROT_OVALB',
+            'POLY_AMIDON',
+            'PROT_GLU',
+            'SM_SALT',
+            'LIP_PHOSPH',
+          ],
+          allRules: realRules(),
+        );
+        // RULE-AW-MICRO a reactant_or_component_ids vide → absente.
+        expect(alerts.map((a) => a.alertId), isNot(contains('RULE-AW-MICRO')));
+      },
+    );
 
     test('confidence dégradée × 0.5 (dp-107)', () {
       final alerts = FunctionalConstraintSolver.evaluate(
         recipeIngredientIds: const ['POLY_PEC_HM'],
         allRules: realRules(),
       );
-      final alert =
-          alerts.singleWhere((a) => a.alertId == 'RULE-PEC-HM-001');
+      final alert = alerts.singleWhere((a) => a.alertId == 'RULE-PEC-HM-001');
       expect(alert.confidence, closeTo(0.46, 1e-9)); // 0.92 × 0.5
     });
 
@@ -288,11 +293,9 @@ void main() {
         recipeIngredientIds: const ['PROT_GEL'],
         allRules: realRules(),
       );
-      final acid =
-          alerts.singleWhere((a) => a.alertId == 'RULE-GELATIN-ACID');
+      final acid = alerts.singleWhere((a) => a.alertId == 'RULE-GELATIN-ACID');
       expect(acid.severity, FunctionalSeverity.warning);
-      final gel =
-          alerts.singleWhere((a) => a.alertId == 'RULE-GEL-GELATINE');
+      final gel = alerts.singleWhere((a) => a.alertId == 'RULE-GEL-GELATINE');
       expect(gel.severity, FunctionalSeverity.info);
     });
 
@@ -320,10 +323,11 @@ void main() {
         recipeIngredientIds: const ['ING-A'],
         allRules: rules,
       );
-      expect(
-        alerts.map((a) => a.alertId).toList(),
-        ['R-DANGER', 'R-WARNING', 'R-INFO'],
-      );
+      expect(alerts.map((a) => a.alertId).toList(), [
+        'R-DANGER',
+        'R-WARNING',
+        'R-INFO',
+      ]);
     });
 
     test('titre = notes quand présentes, sinon rule_id', () {
@@ -331,8 +335,7 @@ void main() {
         recipeIngredientIds: const ['POLY_PEC_HM'],
         allRules: realRules(),
       );
-      final alert =
-          alerts.singleWhere((a) => a.alertId == 'RULE-PEC-HM-001');
+      final alert = alerts.singleWhere((a) => a.alertId == 'RULE-PEC-HM-001');
       expect(
         alert.title,
         'Pectine HM gélifie uniquement si sucre > 60% ET pH < 4.0.',
@@ -344,8 +347,7 @@ void main() {
         recipeIngredientIds: const ['POLY_PEC_HM'],
         allRules: realRules(),
       );
-      final alert =
-          alerts.singleWhere((a) => a.alertId == 'RULE-PEC-HM-001');
+      final alert = alerts.singleWhere((a) => a.alertId == 'RULE-PEC-HM-001');
       expect(alert.conditions, contains('pectine_HM_presence'));
       expect(alert.conditions, contains('sugar_60-65pct_required'));
       expect(alert.conditions, contains('pH 2.5–4'));

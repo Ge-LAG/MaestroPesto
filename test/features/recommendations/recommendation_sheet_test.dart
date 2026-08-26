@@ -21,20 +21,20 @@ class FakeIngredients implements IngredientCandidatesSource {
   Future<List<IngredientSummary>> candidatesForCategory(
     String categoryLevel1, {
     double minConfidence = 0.7,
-  }) async =>
-      byId.values
-          .where((s) =>
-              s.categoryLevel1 == categoryLevel1 &&
-              s.confidence >= minConfidence)
-          .toList();
+  }) async => byId.values
+      .where(
+        (s) =>
+            s.categoryLevel1 == categoryLevel1 && s.confidence >= minConfidence,
+      )
+      .toList();
 }
 
 RecipeIngredient ing(String id, String label) => RecipeIngredient(
-      label: label,
-      quantity: '100 g',
-      source: IngredientSource.ciqual,
-      ingredientId: id,
-    );
+  label: label,
+  quantity: '100 g',
+  source: IngredientSource.ciqual,
+  ingredientId: id,
+);
 
 void main() {
   group('RecommendationSheet', () {
@@ -74,9 +74,11 @@ void main() {
         }),
       );
 
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(body: SingleChildScrollView(child: sheet)),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: SingleChildScrollView(child: sheet)),
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('Mauvaise combinaison détectée'), findsOneWidget);
@@ -93,19 +95,21 @@ void main() {
 
     testWidgets('bouton Ignorer déclenche le callback', (tester) async {
       var ignored = false;
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: SingleChildScrollView(
-            child: RecommendationSheet(
-              ingredients: [ing('ING-BOEUF', 'Bœuf')],
-              flavor: FlavorRepository.fromMatches(const []),
-              functional: FunctionalRepository.fromRules(const []),
-              ingredientsSource: FakeIngredients(const {}),
-              onIgnore: () => ignored = true,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: RecommendationSheet(
+                ingredients: [ing('ING-BOEUF', 'Bœuf')],
+                flavor: FlavorRepository.fromMatches(const []),
+                functional: FunctionalRepository.fromRules(const []),
+                ingredientsSource: FakeIngredients(const {}),
+                onIgnore: () => ignored = true,
+              ),
             ),
           ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text('Ignorer'));
       await tester.pumpAndSettle();

@@ -28,7 +28,9 @@ import '../../features/recipes/domain/recipe.dart';
 
 /// Lookup synchrone d'un profil nutritionnel par `ingredientId`
 /// (résolution faite en amont par le repository, cf. dp-105).
-typedef NutritionProfileLookup = NutritionProfile? Function(String ingredientId);
+typedef NutritionProfileLookup = NutritionProfile? Function(
+  String ingredientId,
+);
 
 /// Résultat de l'agrégation : profil **par portion** + métadonnées
 /// d'explicabilité (affichées par `RecipeNutritionPanel`, G2).

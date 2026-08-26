@@ -132,19 +132,19 @@ class NutritionProfile {
 
   @override
   int get hashCode => Object.hash(
-        energyKcal,
-        proteins,
-        carbs,
-        sugars,
-        fats,
-        saturatedFats,
-        fiber,
-        salt,
-        waterContent,
-        ingredientStateId,
-        confidence,
-        recordCount,
-      );
+    energyKcal,
+    proteins,
+    carbs,
+    sugars,
+    fats,
+    saturatedFats,
+    fiber,
+    salt,
+    waterContent,
+    ingredientStateId,
+    confidence,
+    recordCount,
+  );
 
   @override
   String toString() =>

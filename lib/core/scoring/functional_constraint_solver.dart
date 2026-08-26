@@ -65,7 +65,8 @@ abstract final class FunctionalConstraintSolver {
       title: _titleFor(rule),
       conditions: _conditionsFor(rule),
       predictedEffect: rule.predictedEffect ?? '',
-      confidence: (rule.confidence ?? 1.0) * kFunctionalDegradedConfidenceFactor,
+      confidence:
+          (rule.confidence ?? 1.0) * kFunctionalDegradedConfidenceFactor,
       evidenceType: rule.evidenceType ?? 'expert_rule_with_literature',
     );
   }
@@ -103,21 +104,24 @@ abstract final class FunctionalConstraintSolver {
       conditions.add('pH ${_range(rule.phMin, rule.phMax)}');
     }
     if (rule.temperatureMin != null || rule.temperatureMax != null) {
-      conditions.add('T ${_range(rule.temperatureMin, rule.temperatureMax)} °C');
+      conditions.add(
+        'T ${_range(rule.temperatureMin, rule.temperatureMax)} °C',
+      );
     }
     if (rule.timeMin != null || rule.timeMax != null) {
       conditions.add('durée ${_range(rule.timeMin, rule.timeMax)} min');
     }
     if (rule.waterActivityMin != null || rule.waterActivityMax != null) {
-      conditions.add('aw ${_range(rule.waterActivityMin, rule.waterActivityMax)}');
+      conditions.add(
+        'aw ${_range(rule.waterActivityMin, rule.waterActivityMax)}',
+      );
     }
     return conditions;
   }
 
   static String _range(double? min, double? max) {
-    String fmt(double v) => v == v.roundToDouble()
-        ? v.toStringAsFixed(0)
-        : v.toString();
+    String fmt(double v) =>
+        v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toString();
     if (min != null && max != null) return '${fmt(min)}–${fmt(max)}';
     if (min != null) return '≥ ${fmt(min)}';
     return '≤ ${fmt(max!)}';

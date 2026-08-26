@@ -16,28 +16,27 @@ NutritionProfile profile({
   double? waterContent = 80,
   double confidence = 0.9,
   int recordCount = 4,
-}) =>
-    NutritionProfile(
-      energyKcal: energyKcal,
-      proteins: proteins,
-      carbs: carbs,
-      sugars: sugars,
-      fats: fats,
-      saturatedFats: saturatedFats,
-      fiber: fiber,
-      salt: salt,
-      waterContent: waterContent,
-      ingredientStateId: 'raw',
-      confidence: confidence,
-      recordCount: recordCount,
-    );
+}) => NutritionProfile(
+  energyKcal: energyKcal,
+  proteins: proteins,
+  carbs: carbs,
+  sugars: sugars,
+  fats: fats,
+  saturatedFats: saturatedFats,
+  fiber: fiber,
+  salt: salt,
+  waterContent: waterContent,
+  ingredientStateId: 'raw',
+  confidence: confidence,
+  recordCount: recordCount,
+);
 
 RecipeIngredient linked(String id, String quantity) => RecipeIngredient(
-      label: id,
-      quantity: quantity,
-      source: IngredientSource.ciqual,
-      ingredientId: id,
-    );
+  label: id,
+  quantity: quantity,
+  source: IngredientSource.ciqual,
+  ingredientId: id,
+);
 
 void main() {
   group('NutritionAggregator.aggregate', () {

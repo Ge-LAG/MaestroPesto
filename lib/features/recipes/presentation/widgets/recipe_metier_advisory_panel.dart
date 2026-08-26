@@ -44,10 +44,7 @@ class RecipeMetierAdvisoryPanel extends StatelessWidget {
             _RecommendationBanner(recipe: recipe, db: db),
             // Lot G (G5) — heatmap aromatique dès que ≥2 ingrédients
             // sont liés (le widget se masque tout seul sinon).
-            FlavorCompatibilityHeatmap(
-              ingredients: recipe.ingredients,
-              db: db,
-            ),
+            FlavorCompatibilityHeatmap(ingredients: recipe.ingredients, db: db),
           ],
         );
       },
@@ -129,16 +126,18 @@ class _RecommendationBannerState extends State<_RecommendationBanner> {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                Icon(Icons.warning_amber_outlined,
-                    color: colorScheme.onErrorContainer),
+                Icon(
+                  Icons.warning_amber_outlined,
+                  color: colorScheme.onErrorContainer,
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     strings.recommendationSheetTitle,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: colorScheme.onErrorContainer,
-                        ),
+                      fontWeight: FontWeight.w800,
+                      color: colorScheme.onErrorContainer,
+                    ),
                   ),
                 ),
                 TextButton(
@@ -186,9 +185,8 @@ class _RulesCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   'Notes du moteur métier',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
                 ),
               ],
             ),

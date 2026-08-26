@@ -6,16 +6,15 @@ FunctionalAlert alert({
   String alertId = 'RULE-PEC-HM-001',
   FunctionalSeverity severity = FunctionalSeverity.warning,
   double confidence = 0.46,
-}) =>
-    FunctionalAlert(
-      alertId: alertId,
-      severity: severity,
-      title: 'Pectine HM gélifie uniquement si sucre > 60 % ET pH < 4.0.',
-      conditions: const ['pH 2.5–4.0', 'sucre > 60 %'],
-      predictedEffect: 'gel_formation',
-      confidence: confidence,
-      evidenceType: 'expert_rule_with_literature',
-    );
+}) => FunctionalAlert(
+  alertId: alertId,
+  severity: severity,
+  title: 'Pectine HM gélifie uniquement si sucre > 60 % ET pH < 4.0.',
+  conditions: const ['pH 2.5–4.0', 'sucre > 60 %'],
+  predictedEffect: 'gel_formation',
+  confidence: confidence,
+  evidenceType: 'expert_rule_with_literature',
+);
 
 void main() {
   group('FunctionalAlert', () {

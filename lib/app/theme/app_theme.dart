@@ -43,21 +43,9 @@ ThemeData buildAppTheme() {
         height: 1.25,
         fontWeight: FontWeight.w700,
       ),
-      bodyLarge: TextStyle(
-        color: text,
-        fontSize: 16,
-        height: 1.55,
-      ),
-      bodyMedium: TextStyle(
-        color: text,
-        fontSize: 14,
-        height: 1.5,
-      ),
-      bodySmall: TextStyle(
-        color: muted,
-        fontSize: 13,
-        height: 1.35,
-      ),
+      bodyLarge: TextStyle(color: text, fontSize: 16, height: 1.55),
+      bodyMedium: TextStyle(color: text, fontSize: 14, height: 1.5),
+      bodySmall: TextStyle(color: muted, fontSize: 13, height: 1.35),
       labelMedium: TextStyle(
         color: muted,
         fontSize: 12,
