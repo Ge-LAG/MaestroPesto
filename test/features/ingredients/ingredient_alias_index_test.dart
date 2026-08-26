@@ -1,6 +1,6 @@
 // Phase 09 Lot F — tests pour IngredientAliasIndex.
 
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:maestropesto/core/models/ingredient_summary.dart';
 import 'package:maestropesto/features/ingredients/data/ingredient_alias_index.dart';
 
@@ -126,11 +126,16 @@ void main() {
       expect(r.first.ingredientId, 'ING-ANIMAL-BOEUF-000001');
     });
 
-    test('search() fuzzy "bofe" (faute 2 chars) trouve Bœuf', () {
+    test('search() fuzzy "bofe" (distance 3) ne trouve pas Bœuf', () {
       final idx = makeIndex();
       final r = idx.search('bofe');
-      expect(r.isNotEmpty, isTrue);
-      expect(r.first.ingredientId, 'ING-ANIMAL-BOEUF-000001');
+      // « bofe » vs la clé normalisée « boeuf » : distance 3
+      // (b-o pareil, puis « euf » vs « fe »), au-delà du seuil ≤ 2
+      // du cahier §6.1 → pas de match fuzzy.
+      expect(
+        r.where((s) => s.ingredientId == 'ING-ANIMAL-BOEUF-000001'),
+        isEmpty,
+      );
     });
 
     test('search() fuzzy "bovin" (trop loin) ne trouve pas Bœuf', () {
@@ -138,8 +143,10 @@ void main() {
       final r = idx.search('bovin');
       // 3 chars de distance (b→v, oe→i, uf→n) — au-delà de Levenshtein 2.
       // On s'attend à un fallback ou un résultat vide.
-      expect(r.where((s) => s.ingredientId == 'ING-ANIMAL-BOEUF-000001'),
-          isEmpty);
+      expect(
+        r.where((s) => s.ingredientId == 'ING-ANIMAL-BOEUF-000001'),
+        isEmpty,
+      );
     });
 
     test('search() multi-token "ail basilic" trouve les deux', () {
@@ -156,14 +163,17 @@ void main() {
       expect(r.length, lessThanOrEqualTo(2));
     });
 
-    test('search() token trop court pour fuzzy : pas de fuzzy sur tokens <= 4', () {
-      final idx = makeIndex();
-      // "ail" a 3 chars, ne déclenche pas le fuzzy Levenshtein
-      // mais matche en prefix/exact
-      final r = idx.search('ail');
-      expect(r.isNotEmpty, isTrue);
-      expect(r.first.ingredientId, 'ING-PLANT-AIL-000001');
-    });
+    test(
+      'search() token trop court pour fuzzy : pas de fuzzy sur tokens <= 4',
+      () {
+        final idx = makeIndex();
+        // "ail" a 3 chars, ne déclenche pas le fuzzy Levenshtein
+        // mais matche en prefix/exact
+        final r = idx.search('ail');
+        expect(r.isNotEmpty, isTrue);
+        expect(r.first.ingredientId, 'ING-PLANT-AIL-000001');
+      },
+    );
 
     test('search() token avec pluriel approximatif : "tomates"', () {
       final idx = makeIndex();
@@ -183,13 +193,17 @@ void main() {
     test('levenshtein() symétrique', () {
       expect(levenshtein('tomate', 'tomate', maxDistance: 2), 0);
       expect(levenshtein('tomate', 'tomae', maxDistance: 2), 1);
-      expect(levenshtein('tomate', 'tom', maxDistance: 5), 2);
+      // 'tomate' → 'tom' : 3 délétions ('a', 't', 'e').
+      expect(levenshtein('tomate', 'tom', maxDistance: 5), 3);
       expect(levenshtein('abc', 'xyz', maxDistance: 2), 3);
     });
 
     test('levenshtein() élague au-delà de maxDistance', () {
       // "tomate" → "bovin" : distance 5, élague
-      expect(levenshtein('tomate', 'bovin', maxDistance: 2), 3); // maxDistance+1
+      expect(
+        levenshtein('tomate', 'bovin', maxDistance: 2),
+        3,
+      ); // maxDistance+1
     });
 
     test('search() token "Mozza" trouve Mozzarella (prefix)', () {
@@ -207,10 +221,14 @@ void main() {
     test('search() résultats stables : ordre canonique à score égal', () {
       final idx = makeIndex();
       final r = idx.search('');
-      expect(
-        r.map((s) => s.canonicalNameFr).toList(),
-        ['Ail', 'Basilic', 'Bœuf', 'Mozzarella', 'Tomate', 'Tomate cerise'],
-      );
+      expect(r.map((s) => s.canonicalNameFr).toList(), [
+        'Ail',
+        'Basilic',
+        'Bœuf',
+        'Mozzarella',
+        'Tomate',
+        'Tomate cerise',
+      ]);
     });
   });
 }

@@ -38,13 +38,7 @@ class IndexEntry {
 
 /// Index de recherche floue construit une fois pour toute la session.
 class IngredientAliasIndex {
-  IngredientAliasIndex._({
-    required Map<String, List<String>> exact,
-    required Map<String, List<String>> tokens,
-    required Map<String, IngredientSummary> byId,
-  })  : _exact = exact,
-        _tokens = tokens,
-        _byId = byId;
+  IngredientAliasIndex._(this._exact, this._tokens, this._byId);
 
   /// Map normalized_query → liste d'ids (ranked).
   final Map<String, List<String>> _exact;
@@ -87,11 +81,7 @@ class IngredientAliasIndex {
       }
     }
 
-    return IngredientAliasIndex._(
-      exact: exact,
-      tokens: tokens,
-      byId: summariesById,
-    );
+    return IngredientAliasIndex._(exact, tokens, summariesById);
   }
 
   /// Variante simplifiée : construction directe depuis summaries.
@@ -133,7 +123,13 @@ class IngredientAliasIndex {
     }
 
     final normalized = normalize(q);
-    if (normalized.isEmpty) {
+    final tokens = normalized
+        .split(_separatorPattern)
+        .where((t) => t.isNotEmpty)
+        .toList(growable: false);
+    // Requête vide ou ne contenant que des séparateurs (« --- », « / ») :
+    // même fallback que la requête vide.
+    if (normalized.isEmpty || tokens.isEmpty) {
       return _byId.values
           .sorted((a, b) => a.canonicalNameFr.compareTo(b.canonicalNameFr))
           .take(limit)
@@ -154,10 +150,6 @@ class IngredientAliasIndex {
     }
 
     // 2. Match token exact — score 80
-    final tokens = normalized
-        .split(_separatorPattern)
-        .where((t) => t.isNotEmpty)
-        .toList(growable: false);
     for (final token in tokens) {
       final tokenHits = _tokens[token];
       if (tokenHits != null) {
@@ -193,10 +185,13 @@ class IngredientAliasIndex {
       }
     }
 
-    // 4. Fuzzy Levenshtein ≤ 2 sur tokens > 4 chars — score 40-30-20
+    // 4. Fuzzy Levenshtein ≤ 2 — le cahier §6.1 limite le fuzzy aux
+    // tokens de l'index > 4 chars (évite le bruit sur les mots courts
+    // du référentiel) ; la requête peut être plus courte (ex. « boef »
+    // vs la clé « boeuf », distance 1).
     for (final token in tokens) {
-      if (token.length <= 4) continue;
       for (final entry in _tokens.entries) {
+        if (entry.key.length <= 4) continue;
         if (entry.key == token) continue;
         if ((entry.key.length - token.length).abs() > 2) continue;
         final distance = _levenshtein(entry.key, token, maxDistance: 2);
@@ -245,11 +240,85 @@ String normalize(String input) {
   return decomposed.replaceAll(_whitespacePattern, ' ').trim();
 }
 
-/// Retire les marques diacritiques (U+0300..U+036F Combining Diacritical Marks).
+/// Table de décomposition des diacritiques latins courants (fold
+/// d'accents). Dart n'expose pas de NFD natif : on décompose les
+/// caractères précomposés vers leur base, puis les marques combinantes
+/// résiduelles (U+0300..U+036F) sont filtrées par [_decompose].
+const Map<int, String> _latinDecomposition = <int, String>{
+  0x00C0: 'A',
+  0x00C1: 'A',
+  0x00C2: 'A',
+  0x00C3: 'A',
+  0x00C4: 'A',
+  0x00C5: 'A',
+  0x00C6: 'AE',
+  0x00C7: 'C',
+  0x00C8: 'E',
+  0x00C9: 'E',
+  0x00CA: 'E',
+  0x00CB: 'E',
+  0x00CC: 'I',
+  0x00CD: 'I',
+  0x00CE: 'I',
+  0x00CF: 'I',
+  0x00D0: 'D',
+  0x00D1: 'N',
+  0x00D2: 'O',
+  0x00D3: 'O',
+  0x00D4: 'O',
+  0x00D5: 'O',
+  0x00D6: 'O',
+  0x00D8: 'O',
+  0x00D9: 'U',
+  0x00DA: 'U',
+  0x00DB: 'U',
+  0x00DC: 'U',
+  0x00DD: 'Y',
+  0x00DF: 'ss',
+  0x00E0: 'a',
+  0x00E1: 'a',
+  0x00E2: 'a',
+  0x00E3: 'a',
+  0x00E4: 'a',
+  0x00E5: 'a',
+  0x00E6: 'ae',
+  0x00E7: 'c',
+  0x00E8: 'e',
+  0x00E9: 'e',
+  0x00EA: 'e',
+  0x00EB: 'e',
+  0x00EC: 'i',
+  0x00ED: 'i',
+  0x00EE: 'i',
+  0x00EF: 'i',
+  0x00F0: 'd',
+  0x00F1: 'n',
+  0x00F2: 'o',
+  0x00F3: 'o',
+  0x00F4: 'o',
+  0x00F5: 'o',
+  0x00F6: 'o',
+  0x00F8: 'o',
+  0x00F9: 'u',
+  0x00FA: 'u',
+  0x00FB: 'u',
+  0x00FC: 'u',
+  0x00FD: 'y',
+  0x00FF: 'y',
+  0x0152: 'OE',
+  0x0153: 'oe',
+  0x0178: 'Y',
+};
+
+/// Décomposition des caractères précomposés vers leur base + retrait
+/// des marques diacritiques combinantes (U+0300..U+036F).
 String _decompose(String input) {
   final buffer = StringBuffer();
   for (final rune in input.runes) {
-    if (rune < 0x0300 || rune > 0x036F) {
+    final folded = _latinDecomposition[rune];
+    if (folded != null) {
+      buffer.write(folded);
+    } else if (rune < 0x0300 || rune > 0x036F) {
       buffer.writeCharCode(rune);
     }
   }
