@@ -800,6 +800,34 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   écart documenté, zéro changement visuel. Le warning live H4 est
   actif dès que `db` est fourni, et se recalcule aussi à la
   suppression d'un slot ingrédient.
+- **dp-117** (Retour PO n°2, 2026-08-26) : **enrichissement
+  nutritionnel Ciqual complémentaire et sourcé**. Constat : la Phase 2
+  réelle ne couvre que 62/603 ingrédients ; le PO demande de
+  compléter en citant les sources in-app. Décisions :
+  (a) les `ciqual_ids` du référentiel Phase 1 pointent vers une
+  ANCIENNE numérotation Ciqual (la table 2025-11-03 a été renumérotée,
+  ex. le code « banane » désigne l'abricot) → le générateur
+  `tool/generate_ciqual_enrichment.dart` résout par **code si cohérent
+  avec le nom, sinon par matching de nom** (mot-tête obligatoire pour
+  un match partiel, préférence « cru », dédoublonnage anti-collision) ;
+  (b) chaque valeur transporte sa **citation exacte** (`sources.xml`
+  Ciqual, ex. analyses USDA, rapports de labo) et son code de
+  confiance ; (c) règle « complément, pas doublon » : seuls les
+  ingrédients SANS record Phase 2 sont enrichis ; (d) `database-metier/`
+  et `ciqual/` restent intacts — CSV dérivé versionné dans
+  `assets/database-enrichment/` (386 Ko, 1 668 records, 153 ingrédients,
+  10 constituants dont énergie 327/328 UE et sel 10004) ; (e) le panneau
+  nutrition affiche les sources (libellé + citation en tooltip).
+- **dp-118** (Retour PO n°2, 2026-08-26) : le champ quantité du
+  formulaire devient « nombre + sélecteur d'unité (g/ml) » ; les
+  textes libres existants (« 2 branches ») restent supportés ; le ml
+  est converti en grammes avec densité 1 (approximation v1, ac-101).
+- **dp-119** (Retour PO n°2, 2026-08-26) : les messages
+  d'incompatibilité aromatique **nomment les ingrédients concernés et
+  le score** — warning live du formulaire (dès l'ouverture d'une
+  recette déjà en conflit), sous-titre de la bannière de
+  recommandation (reprend les paires du sheet) ; les alertes Phase 4
+  citent leurs `source_refs` dans la card dépliée.
 
 ## 15. Dette et risques connus
 
@@ -850,6 +878,23 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
 - **ac-113** (Low, Audit) : `confidence` des `NutritionProfile`
   agrégés est hardcodée à 0.8 (Lot F v1) — à remplacer par la
   moyenne réelle des records au lot qualité.
+- **ac-114** (High, Retour PO n°2) : les `ciqual_ids` du référentiel
+  Phase 1 (`ingredient_registry_v1.csv`) sont incohérents avec
+  l'édition Ciqual 2025-11-03 (numérotation renumérotée) — contourné
+  par la résolution par nom (dp-117), mais le fichier source reste à
+  corriger un jour (hors `database-metier/` intouchable → décision PO).
+- **ac-115** (High, Retour PO n°2) : la couverture flavour réelle est
+  de **97/603 ingrédients** (4 557 paires < 0.40 existantes mais sur
+  un sous-ensemble) — « documenter TOUTES les interactions » exigerait
+  un chantier données dédié (sources type FlavourDB / littérature
+  food-pairing), non fabricable à partir de rien. Les paires non
+  couvertes affichent « Pas de donnée ».
+- **ac-116** (Low, Retour PO n°2) : la résolution par nom Ciqual
+  produit parfois une approximation (Banane → « Banane plantain,
+  crue » car la banane dessert n'existe pas dans cette édition ;
+  Tomate fraîche → « Tomate verte, crue » car pas de tomate générique
+  crue). L'aliment retenu est TOUJOURS visible in-app
+  (`source_food_name`) ; perfectible via une table d'alias manuelle.
 
 ### 15.2 Risques
 - **r-101** (Medium) : **temps de chargement au boot**. Si la DB

@@ -7,31 +7,36 @@
 | Champ | Valeur |
 |-------|--------|
 | **Projet** | MaestroPesto |
-| **Phase courante** | Phase 09 Lots F+G+H livrés ET AUDITÉS sur Ge-LAG/db-connection-strategies (28 commits Kimi/Hermes + session audit-correctifs GLM 5.3/Zcode : 219/219 tests verts, analyze 0 issue, build Windows OK). Lot I (optionnel) non implémenté. |
-| **Etat general** | Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 Lot F (Hermes) + Lots G+H (Kimi) livrés puis AUDITÉS et CORRIGÉS le 2026-08-26 (GLM 5.3 via Zcode, machine PO, SDK Flutter 3.47.1) : 3 erreurs compilation lib, 7 fichiers de tests réparés, bugs métier corrigés (mapping Ciqual dp-111 — nutriments à 0 sinon, déterminisme flavor dp-112, fold accents dp-114), intégrations vision câblées (picker DB, IngredientDetailCard, warning live H4 actif — dp-116), +30 tests dont smoke tests DoD sur données réelles. flutter test 219/219, analyze 0 issue, format exit 0, flutter build windows OK. Aucun push (R-01 strict). |
+| **Phase courante** | Phase 09 : Lots F+G+H livrés, audités, validés Windows + RETOUR PO n°2 traité (enrichissement Ciqual sourcé, sources in-app, incompatibilités nommées, quantités g/ml). |
+| **Etat general** | Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 complète puis retour PO n°2 (GLM 5.3/Zcode, 2026-08-26) : diagnostic (nutrition 62/603, flavour 97/603 → « ça ne produit rien » expliqué), enrichissement Ciqual complémentaire et sourcé (générateur tool/ + CSV 1 668 records/153 ingrédients avec citations sources.xml, résolution par nom car les ciqual_ids du référentiel sont d'une ancienne numérotation, loader intégré au bouton import), panneau nutrition cite les sources (tooltip citation), warning live + bannière nomment les paires incompatibles avec score, alertes Phase 4 citent leurs références, champ quantité nombre + unité g/ml. flutter test 227/227, analyze 0, format 0, build windows OK. Aucun push (R-01). |
 
 ## Focus immediat
 
-Smoke test MANUEL du PO sur Windows : lancer `maestropesto.exe`, importer la BDD métier (bouton AppBar), composer une recette via le picker (recherche « tom » → Tomate), vérifier badge nutrition calculée + heatmap + bannière recommandation. Puis décision push (R-01).
+Smoke test MANUEL du PO : relancer l'import BDD métier (le bouton importe maintenant AUSSI l'enrichissement Ciqual — 5e phase), éditer une recette avec girolle (nutrition apparaît + source « ANSES Ciqual 2025-11-03 » citée), saisir une quantité en ml, provoquer une incompatibilité (Abricot+Aneth) pour lire les noms dans le warning. Puis décision push (R-01).
 
 ## Prochaines etapes
 
-- PO : smoke test manuel — lancer build/windows/x64/runner/Release/maestropesto.exe, importer la BDD métier, composer une recette avec le picker, vérifier nutrition calculée + heatmap + recommandation.
-- PO : relire le rapport d'audit (journal session 2026-08-26 + dp-111 à dp-116 du cahier) et valider les arbitrages.
+- PO : smoke test manuel du retour n°2 — relancer l'import (5 phases), éditer une recette avec un ingrédient enrichi (girolle : 24,7 kcal/100 g, source citée), tester ml et le warning nommé.
+- PO : décider du chantier données flavour (ac-115, couverture 97/603) et du traitement des ciqual_ids sources (ac-114).
 - PO : pousser Ge-LAG/db-connection-strategies vers origin après validation finale (R-01), ouvrir la PR vers main.
-- Décider Lot I (mode batch, §10.4) et le lot UI traduction catégories (r-103/ac-111).
-- Listening gate UX Picker : à faire pendant le smoke test manuel.
-- Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss (ac-H-004), qualité (ac-107/113).
+- Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss (ac-H-004), qualité (ac-107/113), traduction catégories (ac-111).
 
 ## Questions ouvertes
 
-- Smoke test manuel PO (rendu visuel non automatisable) : valider l'UX picker/nutrition/heatmap/recommandation en conditions réelles — la logique est couverte par `metier_smoke_test.dart`, pas le rendu.
-- Lot I (mode batch CSV de recettes externes, §10.4) : à planifier ou abandonner ?
-- Traduction culinaire des catégories accentuées (r-103, ac-111) : « végétal » → « Légumes & fruits », etc. — lot UI dédié ?
-- Sévérité Phase 4 heuristique (dp-110/ac-H-001) : validation métier par Gui sur les 16 règles réelles.
-- Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01).
+- Smoke test manuel PO : valider enrichissement + sources citées + warning nommé + quantités ml en conditions réelles.
+- Couverture flavour 97/603 (ac-115) : chantier données dédié sourcé (FlavourDB, littérature food-pairing) pour « documenter toutes les interactions » ? Décision PO.
+- ciqual_ids du référentiel Phase 1 incohérents avec l'édition Ciqual 2025 (ac-114) : corriger la source un jour ou maintenir la résolution par nom ?
+- Approximations de résolution Ciqual (Banane→plantain, Tomate→verte, ac-116) : acceptable ou table d'alias ?
+- Lot I (mode batch, §10.4) : à planifier ou abandonner ?
+- Sévérité Phase 4 heuristique (dp-110/ac-H-001) : validation métier Gui.
+- Pousser la branche vers origin/main après validation PO finale (R-01).
 
 ## Journal des sessions
+
+#### 2026-08-26 - retour-po-2-metier
+*Traitement du retour PO n°2 : diagnostic couverture (nutrition 62/603, flavour 97/603) ; enrichissement Ciqual sourcé (découverte : ciqual_ids du référentiel d'une ancienne numérotation → résolution par nom avec garde-fous ; générateur tool/ + CSV 1 668 records/153 ingrédients avec citations exactes ; loader en 5e phase du bouton import, complément seulement si non couvert) ; sources citées in-app (panel nutrition + tooltip citation, alertes Phase 4 avec source_refs) ; incompatibilités nommées (« Abricot × Aneth (0.03) » dans le warning live dès l'ouverture + sous-titre de la bannière) ; quantités nombre + unité g/ml. 227/227 tests verts (+8), analyze 0, format 0, build windows OK. Cahier : dp-117/118/119, dette ac-114/115/116. Commits BP-22. Aucun push (R-01).*
+- PO : Ge-LAG
+- Agent : GLM 5.3 (Zcode)
 
 #### 2026-08-26 - phase-09-audit-correctifs
 *Audit du travail Kimi (Lots F+G+H) + correctifs sur machine Windows PO (SDK Flutter 3.47.1). Compilation : 3 erreurs lib corrigées (_listEq manquant, _preloaded non initialisé, constructeur _IngredientDetailStrings.fr() invalide). Tests : 7 fichiers réparés (imports package:test→flutter_test, lot_d_schema_test→package maestropesto, widget_test paramètre services via AppServices.forTesting). Métier : mapping component_id Ciqual réel (dp-111 — tous nutriments à 0 sinon), meilleur score par clé flavor (dp-112), fold d'accents NFD + fuzzy sur tokens d'index (dp-114). Vision : picker DB câblé (ac-F-002), IngredientDetailCard intégré (ac-F-003), warning live H4 actif (dp-116), widgets migrés vers context.strings. +30 tests dont smoke tests DoD sur données réelles (§19 n-aire 0.90 vérifié ; §20 illustratif, dp-113). Résultats : flutter test 219/219, analyze 0 issue, format exit 0, build windows OK. Commits atomiques BP-22. Aucun push (R-01).*

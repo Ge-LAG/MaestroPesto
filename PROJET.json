@@ -2,25 +2,32 @@
   "schema_version": "1.0.0",
   "document_id": "projet-maestropesto",
   "projet": "MaestroPesto",
-  "phase_courante": "Phase 09 Lots F+G+H livrés ET AUDITÉS sur Ge-LAG/db-connection-strategies (28 commits Kimi + session audit-correctifs GLM 5.3/Zcode 2026-08-26 : suite 219/219 verte, analyze 0 issue, build Windows OK). Lot I (optionnel) non implémenté.",
-  "etat_general": "Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 Lots F (Hermes) + G+H (Kimi) livrés puis AUDITÉS et CORRIGÉS le 2026-08-26 par GLM 5.3 (ZCode, machine Windows PO, SDK Flutter 3.47.1) : 3 erreurs compilation lib corrigées (_listEq, _preloaded, _IngredientDetailStrings), 7 fichiers de tests réparés (imports package:test, sandbox lot_d, widget_test services), bugs métier corrigés (mapping component_id Ciqual réel dp-111 — tous nutriments à 0 sinon ; déterminisme best-match flavor dp-112 ; fold accents NFD dp-114), intégrations vision câblées (picker DB ac-F-002, IngredientDetailCard ac-F-003, warning live H4 actif ac-H-002/dp-116), 30 nouveaux tests dont smoke tests DoD sur données réelles (§13.3 nutrition+heatmap, §13.4 incompatibilité+substituts). flutter test 219/219 verts, flutter analyze 0 issue, dart format exit 0, flutter build windows OK (maestropesto.exe). Aucun push (R-01 strict).",
-  "focus_immediat": "Smoke test MANUEL du PO sur Windows : lancer maestropesto.exe, importer la BDD métier (bouton AppBar), composer une recette via le picker (recherche 'tom' → Tomate), vérifier badge nutrition calculée + heatmap + bannière recommandation sur paire incompatible. Puis décision push (R-01).",
+  "phase_courante": "Phase 09 : Lots F+G+H livrés, audités, validés Windows (227/227 tests, build OK) + RETOUR PO n°2 traité le 2026-08-26 (enrichissement nutritionnel Ciqual sourcé, sources in-app, incompatibilités nommées, quantités g/ml).",
+  "etat_general": "Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 Lots F+G+H livrés, audités (219/219) puis enrichis du retour PO n°2 (GLM 5.3/Zcode, 2026-08-26) : (1) diagnostic — nutrition Phase 2 ne couvre que 62/603 ingrédients, flavour 97/603 ; (2) enrichissement Ciqual complémentaire : générateur tool/generate_ciqual_enrichment.dart (résolution par NOM car les ciqual_ids du référentiel pointent vers une ancienne numérotation Ciqual, garde-fou mot-tête + dédoublonnage) → assets/database-enrichment/ciqual_nutrition.csv (1 668 records, 153 ingrédients, citations sources.xml par valeur) → CiqualEnrichmentLoader intégré au bouton import (phase 'enrichment' optionnelle, complément seulement si non couvert Phase 2, idempotent par hash) ; (3) panneau nutrition affiche les sources avec citation en tooltip ; (4) warning live + bannière recommandation nomment les paires ('Abricot × Aneth (0.03)'), calcul aussi à l'ouverture ; (5) alertes Phase 4 citent leurs source_refs ; (6) champ quantité 'nombre + unité g/ml'. flutter test 227/227 verts, analyze 0 issue, format exit 0, build windows OK. Aucun push (R-01 strict).",
+  "focus_immediat": "Smoke test MANUEL du PO : relancer l'import BDD métier (le bouton importe maintenant AUSSI l'enrichissement Ciqual — 5e phase), éditer une recette avec girolle/banane (nutrition apparaît + source 'ANSES Ciqual 2025-11-03' citée), saisir une quantité en ml, provoquer une incompatibilité (Abricot+Aneth) pour lire les noms dans le warning. Puis décision push (R-01).",
   "questions_ouvertes": [
-    "Smoke test manuel PO (rendu visuel non automatisable) : valider l'UX picker/nutrition/heatmap/recommandation en conditions réelles — la logique est couverte par metier_smoke_test.dart, pas le rendu.",
-    "Lot I (mode batch CSV de recettes externes, §10.4) : à planifier ou abandonner ?",
-    "Traduction culinaire des catégories accentuées (r-103, ac-111) : « végétal » → « Légumes & fruits », etc. — lot UI dédié ?",
+    "Smoke test manuel PO : valider enrichissement + sources citées + warning nommé + quantités ml en conditions réelles.",
+    "Couverture flavour 97/603 (ac-115) : lancer un chantier données dédié sourcé (FlavourDB, littérature food-pairing) pour 'documenter toutes les interactions' ? Décision PO requise.",
+    "ciqual_ids du référentiel Phase 1 incohérents avec l'édition 2025 (ac-114) : corriger le fichier source un jour (database-metier/ intouchable par défaut) ou maintenir la résolution par nom ?",
+    "Approximations de résolution Ciqual (Banane→plantain, Tomate→verte, ac-116) : acceptable ou table d'alias manuelle ?",
+    "Lot I (mode batch, §10.4) : à planifier ou abandonner ?",
     "Sévérité Phase 4 heuristique (dp-110/ac-H-001) : validation métier par Gui sur les 16 règles réelles.",
     "Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01)."
   ],
   "prochaines_etapes": [
-    "PO : smoke test manuel — lancer build/windows/x64/runner/Release/maestropesto.exe, importer la BDD métier, composer une recette avec le picker, vérifier nutrition calculée + heatmap + recommandation.",
-    "PO : relire le rapport d'audit (journal session 2026-08-26 audit + dp-111 à dp-116 du cahier) et valider les arbitrages.",
+    "PO : smoke test manuel du retour n°2 — relancer l'import (5 phases), éditer une recette avec un ingrédient enrichi (girolle : 24,7 kcal/100 g, source citée), tester ml et le warning nommé.",
+    "PO : décider du chantier données flavour (ac-115) et du traitement des ciqual_ids sources (ac-114).",
     "PO : pousser Ge-LAG/db-connection-strategies vers origin après validation finale (R-01), ouvrir la PR vers main.",
-    "Décider Lot I (mode batch, §10.4) et le lot UI traduction catégories (r-103/ac-111).",
-    "Listening gate UX Picker (validation Lot F) : à faire pendant le smoke test manuel.",
-    "Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss recommandation (ac-H-004), qualité (ac-107/113)."
+    "Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss (ac-H-004), qualité (ac-107/113), traduction catégories (ac-111)."
   ],
   "journal_des_sessions": [
+    {
+      "date": "2026-08-26",
+      "session": "retour-po-2-metier",
+      "resume": "Traitement du retour PO n°2 (4 points) : (1) DIAGNOSTIC — la Phase 2 nutrition réelle ne couvre que 62/603 ingrédients et la base flavour 97/603, ce qui explique que 'l'ajout d'ingrédients ne produit rien' la plupart du temps ; (2) ENRICHISSEMENT CIQUAL SOURCÉ — découverte majeure : les ciqual_ids du référentiel Phase 1 pointent vers une ANCIENNE numérotation Ciqual (la table 2025-11-03 a été renumérotée : le code banane désigne l'abricot) → générateur tool/generate_ciqual_enrichment.dart qui résout par code si cohérent SINON par matching de nom (mot-tête obligatoire en match partiel, préférence cru/plus court, dédoublonnage anti-collision, protéines N×6.25 uniquement) → assets/database-enrichment/ciqual_nutrition.csv : 1 668 records / 153 ingrédients / 10 constituants, chaque valeur avec sa citation exacte sources.xml (USDA, rapports de labo ANSES) et son code de confiance → CiqualEnrichmentLoader intégré comme 5e phase optionnelle du bouton import (complément seulement si non couvert Phase 2, idempotent hash+recordId, absence de fichier = skip silencieux) ; couverture nutrition effective ~215/603 ; (3) SOURCES IN-APP — NutritionSource dans l'agrégation, panneau nutrition affiche les libellés (ex. 'ANSES Ciqual 2025-11-03') avec citation complète en tooltip ; alertes Phase 4 citent leurs source_refs dans la card ; (4) INCOMPATIBILITÉS NOMMÉES — warning live du formulaire liste les paires ('Incompatibilités aromatiques : Abricot × Aneth (0.03)'), calculé aussi à l'ouverture d'une recette déjà en conflit ; bannière de recommandation affiche les paires en sous-titre ; (5) QUANTITÉS g/ml — champ nombre + sélecteur d'unité (compat texte libre, ml converti densité 1). Debug notable : le banner du warning vit dans le cacheExtent du ListView → finders avec skipOffstage:false dans les tests. 227/227 tests verts (+8 nouveaux : loader 3, sources 2, warning 2, import service ajusté), analyze 0, format 0, build windows OK.Décisions cahier dp-117/118/119, dette ac-114/115/116. Commits BP-22. Aucun push (R-01).",
+      "agent": "GLM 5.3 (Zcode)",
+      "po": "Ge-LAG"
+    },
     {
       "date": "2026-08-26",
       "session": "phase-09-audit-correctifs",
