@@ -2,29 +2,32 @@
   "schema_version": "1.0.0",
   "document_id": "projet-maestropesto",
   "projet": "MaestroPesto",
-  "phase_courante": "Phase 09 Lots F+G+H livrés sur Ge-LAG/db-connection-strategies (11+8+9 = 28 commits atomiques, 0 push). Lot I (optionnel, mode batch) non implémenté.",
-  "etat_general": "Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits, 0 push). Phase 09 Lot F livré (11 commits, 10 nouveaux fichiers, 2008 insertions). Phase 09 Lots G+H livrés le 2026-08-26 par Kimi Code CLI (17 commits : 8 Lot G + 9 Lot H) : nutrition agrégée par portion (dp-105 synchrone), FlavorRepository/FlavorScorer + heatmap aromatique, FunctionalConstraintSolver/FunctionalRepository + alertes physico-chimiques (dp-107 dégradé), Recommender + RecommendationSheet, warning live formulaire. ~90 cas de tests écrits mais NON exécutés (aucun SDK Flutter/Dart détecté sur la machine de session, R-07). Audit GLM 5.3 NON dispatché (opencode CLI bloque sur UnknownError serveur). Aucun push (R-01 strict).",
-  "focus_immediat": "Valider Lots F+G+H sur Windows avec SDK Flutter : dart analyze, dart/flutter test, dart format. Smoke tests DoD §13.3 (nutrition calculée + heatmap) et §13.4 (recommandation Bœuf+Bleu+Thym). Push après validation PO (R-01).",
+  "phase_courante": "Phase 09 Lots F+G+H livrés ET AUDITÉS sur Ge-LAG/db-connection-strategies (28 commits Kimi + session audit-correctifs GLM 5.3/Zcode 2026-08-26 : suite 219/219 verte, analyze 0 issue, build Windows OK). Lot I (optionnel) non implémenté.",
+  "etat_general": "Bootstrap V5 en cours. Lots A+B+C+D+E livrés (36 commits). Phase 09 Lots F (Hermes) + G+H (Kimi) livrés puis AUDITÉS et CORRIGÉS le 2026-08-26 par GLM 5.3 (ZCode, machine Windows PO, SDK Flutter 3.47.1) : 3 erreurs compilation lib corrigées (_listEq, _preloaded, _IngredientDetailStrings), 7 fichiers de tests réparés (imports package:test, sandbox lot_d, widget_test services), bugs métier corrigés (mapping component_id Ciqual réel dp-111 — tous nutriments à 0 sinon ; déterminisme best-match flavor dp-112 ; fold accents NFD dp-114), intégrations vision câblées (picker DB ac-F-002, IngredientDetailCard ac-F-003, warning live H4 actif ac-H-002/dp-116), 30 nouveaux tests dont smoke tests DoD sur données réelles (§13.3 nutrition+heatmap, §13.4 incompatibilité+substituts). flutter test 219/219 verts, flutter analyze 0 issue, dart format exit 0, flutter build windows OK (maestropesto.exe). Aucun push (R-01 strict).",
+  "focus_immediat": "Smoke test MANUEL du PO sur Windows : lancer maestropesto.exe, importer la BDD métier (bouton AppBar), composer une recette via le picker (recherche 'tom' → Tomate), vérifier badge nutrition calculée + heatmap + bannière recommandation sur paire incompatible. Puis décision push (R-01).",
   "questions_ouvertes": [
-    "Validation Windows : flutter analyze / flutter test / dart format non exécutables dans la session Kimi (aucun SDK détecté sur la machine). Tous les tests Lots F+G+H sont écrits mais jamais exécutés.",
-    "Lot F v1 : picker ingrédients toujours en fallback AlertDialog (ac-F-002) — câblage DB complet non traité en Lots G/H, session dédiée ?",
-    "IngredientDetailCard toujours NON intégré à recipe_detail_view._IngredientRow (ac-F-003) — non traité en Lots G/H, session dédiée ?",
-    "H4 : warning live formulaire implémenté mais inactif tant que les repositories ne sont pas injectés par l'appelant de showRecipeFormDialog (ac-H-002).",
-    "Recommender : IngredientsRepository.candidatesForCategory exclut les lignes Phase 1 sans confidence — vérifier le comportement sur données réelles importées.",
+    "Smoke test manuel PO (rendu visuel non automatisable) : valider l'UX picker/nutrition/heatmap/recommandation en conditions réelles — la logique est couverte par metier_smoke_test.dart, pas le rendu.",
     "Lot I (mode batch CSV de recettes externes, §10.4) : à planifier ou abandonner ?",
-    "Audit du code Lots G+H (comme ac-F-001 pour le Lot F) : par quel harness IA ?",
+    "Traduction culinaire des catégories accentuées (r-103, ac-111) : « végétal » → « Légumes & fruits », etc. — lot UI dédié ?",
+    "Sévérité Phase 4 heuristique (dp-110/ac-H-001) : validation métier par Gui sur les 16 règles réelles.",
     "Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01)."
   ],
   "prochaines_etapes": [
-    "PO : valider Lots F+G+H sur Windows — flutter analyze, flutter test, dart format --set-exit-if-changed (0 issue attendu, §12.4).",
-    "PO : smoke test DoD §13.3 — recette ≥2 ingrédients liés : nutrition calculée (badge « Calculé depuis N ingrédients sur M ») + heatmap aromatique visible.",
-    "PO : smoke test DoD §13.4 — recette Bœuf+Bleu+Thym avec DB importée : bannière recommandation + sheet + substituts (Agneau/Poulet/Porc).",
+    "PO : smoke test manuel — lancer build/windows/x64/runner/Release/maestropesto.exe, importer la BDD métier, composer une recette avec le picker, vérifier nutrition calculée + heatmap + recommandation.",
+    "PO : relire le rapport d'audit (journal session 2026-08-26 audit + dp-111 à dp-116 du cahier) et valider les arbitrages.",
     "PO : pousser Ge-LAG/db-connection-strategies vers origin après validation finale (R-01), ouvrir la PR vers main.",
-    "Session dédiée : câblage DB du picker (ac-F-002), intégration IngredientDetailCard (ac-F-003), injection des repositories pour activer le warning H4 (ac-H-002).",
-    "Décider Lot I (mode batch, §10.4) et l'audit indépendant des Lots G+H.",
-    "Listening gate UX Picker toujours en attente (validation Lot F)."
+    "Décider Lot I (mode batch, §10.4) et le lot UI traduction catégories (r-103/ac-111).",
+    "Listening gate UX Picker (validation Lot F) : à faire pendant le smoke test manuel.",
+    "Session dédiée possible : cache global IngredientAliasIndex (ac-F-004), persistance dismiss recommandation (ac-H-004), qualité (ac-107/113)."
   ],
   "journal_des_sessions": [
+    {
+      "date": "2026-08-26",
+      "session": "phase-09-audit-correctifs",
+      "resume": "Audit du travail Kimi (Lots F+G+H) + correctifs sur machine Windows PO (SDK Flutter 3.47.1) : (1) 3 erreurs compilation lib corrigées — _listEq manquant dans IngredientDetail (privé inter-fichiers), _preloaded non initialisé dans FlavorRepository, constructeur _IngredientDetailStrings.fr() invalide ; (2) 7 fichiers de tests réparés — imports package:test→flutter_test (6), lot_d_schema_test pointait un package sandbox disparu, widget_test n'avait pas le paramètre services requis depuis le Lot E (ajout AppServices.forTesting @visibleForTesting avec NativeDatabase.memory) ; (3) bugs métier — mapping component_id du NutritionRepository utilisait des clés génériques absentes du dictionnaire réel → tags Ciqual (ENERCKCAL/ENERC/PROTEIN/FAT/CARB/SUGAR/FIBER/NA/WATER) + conversion sel = NA mg × 2.5/1000 (dp-111, tous nutriments à 0 sinon sur données réelles) ; FlavorRepository garde le MEILLEUR score par clé (26 clés dupliquées réelles, dp-112) ; fold d'accents réel dans IngredientAliasIndex (table décomposition latine, dp-114) + fuzzy sur tokens d'index > 4 chars ; (4) intégrations vision câblées — IngredientsRepository.allSummaries, showIngredientsPicker renvoie IngredientSummary, showRecipeFormDialog prend db optionnel (picker réel si référentiel importé, sinon fallback), db injecté par recipes_home_page (2 call sides, dp-116), IngredientDetailCard intégré à recipe_detail_view sous les rows liés (ac-F-003), warning live H4 actif + recalcul à la suppression ; (5) widgets migrés vers context.strings (clés i18n métier existaient mais n'étaient pas consommées) ; (6) +30 tests : models F, picker page, detail card, mapping nutrition Ciqual, déterminisme flavor, smoke tests DoD sur données RÉELLES (import 4 phases → §13.3 nutrition calculée + trio Tomate/Basilic/Mozzarella n-aire 0.90 ; §13.4 paires < 0.40 réelles + substituts vérifiés §9.1 — §20 Bœuf/Bleu illustratif, absent du référentiel réel, dp-113). Corrections de tests erronés documentées : clés lookup non triées (flavor_scorer_test), distance 'tomate'→'tom' = 3 (pas 2), 'bofe' distance 3 > seuil 2, FK functional_ingredients/nutrition_records (parents ingredients insérés). Résultats : flutter test 219/219 verts, flutter analyze 0 issue, dart format --set-exit-if-changed exit 0, flutter build windows OK (maestropesto.exe). pubspec.lock résolu (le commit Lot F 'chore: pubspec metier deps' n'avait pas locké) + generated_plugins Windows/Linux/macOS auto-générés (jni FFI, transitif cached_network_image). Commits atomiques BP-22. Aucun push (R-01).",
+      "agent": "GLM 5.3 (ZCode)",
+      "po": "Ge-LAG"
+    },
     {
       "date": "2026-08-26",
       "session": "phase-09-lots-G-H",
@@ -75,31 +78,31 @@
       "id": "ac-F-001",
       "priorite": "Medium",
       "libelle": "Audit Lot F NON dispatché",
-      "description": "L'audit GLM 5.3 mode Max n'a pas pu être dispatché sur le Lot F livré : opencode CLI renvoie UnknownError serveur de manière persistante, et le dispatch via Z.AI API directe (curl) ne produit que du reasoning_content (75 blocs de code, 0 char de content structuré). Conséquence : les 11 commits Lot F (55d5bfb..462f6c2) sont marqués comme 'implémentés' mais PAS 'audités'.",
-      "localisation": "11 fichiers créés/modifiés — voir git diff ca2b035..HEAD",
-      "recommandation": "Session PO-IA prochaine : debugger opencode OU utiliser un autre harness IA pour l'audit (Fable 5, Kimi K3, OpenAI Codex). Le code livré est syntaxiquement raisonnable mais doit être audité indépendamment avant push.",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-f", "audit-non-dispatche", "r-08", "skill-poia-mandatory-checkpoint"]
+      "description": "L'audit GLM 5.3 mode Max n'a pas pu être dispatché sur le Lot F livré : opencode CLI renvoie UnknownError serveur de manière persistante, et le dispatch via Z.AI API directe (curl) ne produit que du reasoning_content. Résolu le 2026-08-26 : audit réalisé par GLM 5.3 via ZCode directement sur la machine PO (session phase-09-audit-correctifs) — Lots F+G+H audités et corrigés.",
+      "localisation": "git diff ca2b035..HEAD ( Lots F+G+H) + correctifs audit 2026-08-26",
+      "recommandation": "N/A — résolu. Pour les futurs audits : ZCode sur machine PO (SDK dispo) plutôt qu'opencode.",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-f", "audit", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-F-002",
       "priorite": "High",
       "libelle": "Picker ingrédients câblé en fallback AlertDialog (pas en vrai picker)",
-      "description": "IngredientsPickerPage est créé avec SearchBar + FilterChip + ListView, mais RecipeFormDialog._pickIngredient appelle showIngredientsPickerFallback (AlertDialog avec TextField) au lieu de showIngredientsPicker (qui prend la liste d'ingrédients depuis ingredientsRawProvider). Cause : AppDatabase n'est pas accessible dans RecipeFormDialog.build() (pas de ProviderScope parent, pas de paramètre db). Conséquence : l'utilisateur tape juste un label, pas de sélection Phase 1. TOUJOURS OUVERT après Lots G+H.",
-      "localisation": "lib/features/recipes/presentation/widgets/recipe_form_dialog.dart ligne 192-220 (méthode _pickIngredient)",
-      "recommandation": "Câbler RecipeBookPanel (parent de RecipeDetailView) pour injecter la liste des ingrédients Phase 1 via ProviderScope.overrideWithValue(ingredientsRawProvider, all). Migration vers showIngredientsPicker() au lieu du fallback. Session dédiée.",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-f", "picker-incomplet", "ui-metier"]
+      "description": "IngredientsPickerPage existait mais RecipeFormDialog._pickIngredient appelait le fallback texte au lieu du vrai picker, faute d'accès à la DB. RÉSOLU (audit 2026-08-26, dp-116) : showRecipeFormDialog prend un db optionnel, IngredientsRepository.allSummaries() alimente le picker (cache par dialogue), showIngredientsPicker renvoie l'IngredientSummary complet (label + id), recipes_home_page injecte widget.services.db aux 2 call sites. Fallback conservé si le référentiel n'est pas importé.",
+      "localisation": "lib/features/recipes/presentation/widgets/recipe_form_dialog.dart, lib/features/ingredients/presentation/ingredients_picker_page.dart",
+      "recommandation": "N/A — résolu. Tests : ingredients_picker_page_test.dart (5 cas).",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-f", "picker-incomplet", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-F-003",
       "priorite": "Medium",
       "libelle": "IngredientDetailCard créé mais NON intégré à recipe_detail_view.dart",
-      "description": "Le widget IngredientDetailCard existe (lib/features/ingredients/presentation/ingredient_detail_card.dart, 274 lignes) avec son API complète (detail + nutrition + strings FR), mais il n'est pas utilisé dans recipe_detail_view.dart. Le _IngredientRow actuel (ligne 439+) ne consomme toujours que ingredient.quantity + ingredient.label. TOUJOURS OUVERT après Lots G+H.",
-      "localisation": "lib/features/ingredients/presentation/ingredient_detail_card.dart vs lib/features/recipes/presentation/widgets/recipe_detail_view.dart ligne 439+",
-      "recommandation": "Étendre _IngredientRow pour afficher IngredientDetailCard quand ingredient.ingredientId != null ET AppDatabase est disponible. Migration vers IngredientsRepository.getById(ingredientId).toDetail() + NutritionRepository.forIngredient(). Session dédiée.",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-f", "integration-manquante", "ui-metier"]
+      "description": "Le widget existait mais n'était pas consommé. RÉSOLU (audit 2026-08-26) : _IngredientRow affiche une _IngredientMetierDetail (FutureBuilder IngredientsRepository.getById → IngredientMapping.toDetail + NutritionRepository.forIngredient) sous chaque row liée quand db est fournie. Card migrée vers context.strings (suppression _IngredientDetailStrings dupliquée + constructeur .fr() invalide).",
+      "localisation": "lib/features/recipes/presentation/widgets/recipe_detail_view.dart, lib/features/ingredients/presentation/ingredient_detail_card.dart",
+      "recommandation": "N/A — résolu. Tests : ingredient_detail_card_test.dart (4 cas).",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-f", "integration-manquante", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-F-004",
@@ -115,11 +118,11 @@
       "id": "ac-F-005",
       "priorite": "Medium",
       "libelle": "Widget tests non exécutables en sandbox (R-07)",
-      "description": "PARTIELLEMENT RÉSOLU : Lots G+H ont ajouté des widget tests (FlavorCompatibilityHeatmap, FunctionalAlertCard, RecommendationSheet) et des tests Drift in-memory (FlavorRepository, FunctionalRepository). Restent absents : widget tests IngredientsPickerPage/IngredientDetailCard, tests IngredientDetail/NutritionProfile models, NutritionRepository mocké. Et AUCUN test n'a été exécuté (R-07, cf. ac-G-001).",
+      "description": "RÉSOLU (audit 2026-08-26) : widget tests IngredientsPickerPage (5 cas) et IngredientDetailCard (4 cas) rédigés, tests models F IngredientDetail (6) + NutritionProfile (3) rédigés, mapping NutritionRepository (7 cas) rédigé, suite complète exécutée : 219/219 verts.",
       "localisation": "test/",
-      "recommandation": "Rédiger les tests manquants (picker, detail card, models F) puis exécuter la suite complète sur Windows.",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-f", "r-07", "tests"]
+      "recommandation": "N/A — résolu.",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-f", "r-07", "tests", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-F-006",
@@ -145,21 +148,21 @@
       "id": "ac-G-001",
       "priorite": "High",
       "libelle": "Tests Lots G+H écrits mais JAMAIS exécutés (R-07)",
-      "description": "~90 cas de tests écrits pour les Lots G+H (unitaires purs, Drift NativeDatabase.memory, widget tests heatmap/alertcard/recommendation sheet) mais aucun SDK Flutter/Dart détecté sur la machine de session Kimi : flutter test, dart analyze et dart format n'ont pas pu être exécutés. Le code est relu mentalement (imports, types Drift confirmés dans app_database.g.dart) mais non vérifié par le compilateur.",
-      "localisation": "test/core/scoring/, test/core/models/flavor_match_test.dart, test/features/flavor/, test/features/functional/, test/features/recommendations/",
-      "recommandation": "Sur Windows avec SDK Flutter : dart analyze lib/ test/ (0 issue, §12.4), flutter test (100% verts), dart format --set-exit-if-changed. Corriger avant tout push (R-04/BP-14).",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-g", "lot-h", "r-07", "tests"]
+      "description": "RÉSOLU (audit 2026-08-26) : suite exécutée sur machine PO (SDK Flutter 3.47.1). 7 échecs initiaux corrigés : 2 clés lookup non triées (flavor_scorer_test — contrat du repository), attente levenshtein('tomate','tom')=2 corrigée en 3 (distance réelle), 'bofe' distance 3 > seuil 2 (test reformulé en non-trouvé), FK functional_ingredients (parent ingredients inséré), imports package:test→flutter_test. Résultat final : 219/219 verts + analyze 0 issue + format exit 0 + build windows OK.",
+      "localisation": "test/",
+      "recommandation": "N/A — résolu.",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-g", "lot-h", "r-07", "tests", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-G-002",
       "priorite": "Low",
       "libelle": "Fallback FlavorScorer en moyenne simple (écart dp-106-bis)",
-      "description": "Le plan §7.1 mentionne une 'moyenne pondérée' des paires en fallback ; l'implémentation utilise une moyenne arithmétique simple car aucun poids n'existe dans le modèle FlavorMatch §5.4. L'annexe §19 (Tomate+Basilic+Mozzarella ≈ 0.84) est validée par moyenne simple.",
+      "description": "RÉSOLU (acté) : décision dp-108 consignée dans le cahier §14 — moyenne arithmétique simple assumée (aucun poids dans le modèle FlavorMatch §5.4, annexe §19 validée).",
       "localisation": "lib/core/scoring/flavor_scorer.dart",
-      "recommandation": "Acter la décision (dp-108 dans le cahier) ou définir des poids métier si Gui veut une vraie pondération.",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-g", "decision"]
+      "recommandation": "N/A — acté (dp-108). Définir des poids métier uniquement si Gui le demande explicitement.",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-g", "decision", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-G-003",
@@ -185,21 +188,21 @@
       "id": "ac-H-002",
       "priorite": "Medium",
       "libelle": "Warning live H4 inactif en production (repositories non injectés)",
-      "description": "Le warning live de mauvaise combinaison dans RecipeFormDialog est implémenté (flavorRepository/functionalRepository optionnels) mais aucun appelant existant de showRecipeFormDialog n'injecte les repositories — le warning est donc un no-op en production. Lié à ac-F-002 (pas de DB dans le contexte du formulaire).",
+      "description": "RÉSOLU (audit 2026-08-26, dp-116) : showRecipeFormDialog prend un db optionnel et dérive Flavor/Functional repositories quand il est fourni ; recipes_home_page injecte widget.services.db aux 2 call sites. Le warning est actif dès que la DB est là, et se recalcule aussi à la suppression d'un slot ingrédient (_onIngredientsChanged).",
       "localisation": "lib/features/recipes/presentation/widgets/recipe_form_dialog.dart",
-      "recommandation": "Injecter les repositories depuis l'appelant (recipes_home_page / RecipeBookPanel) lors du câblage DB du picker (ac-F-002), même session dédiée.",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-h", "integration-manquante"]
+      "recommandation": "N/A — résolu.",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-h", "integration-manquante", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-H-003",
       "priorite": "Medium",
       "libelle": "Formule de score Recommender v1 ≠ chiffres illustratifs §20",
-      "description": "Les bonus de l'annexe §20 sont incohérents entre eux (+0.16/+0.07/+0.16). Formule v1 déterministe implémentée et documentée : score = clamp(moyenne(paires candidat↔restants) + 0.15 si résout un conflit − 0.20 si nouvelle alerte, 0, 1), candidat avec paire <0.40 écarté. L'ordre §20 (Poulet > Agneau > Porc) est reproduit par les tests.",
+      "description": "RÉSOLU (acté + précisé) : décision dp-109 consignée ; en outre l'audit a montré que l'annexe §20 (Bœuf/Bleu/Agneau/Poulet/Porc) est illustrative — ces ingrédients n'existent pas dans le référentiel réel (dp-113). Le smoke test §13.4 vérifie les invariants §9.1 sur des paires réelles (ABRICOT×ANETH = 0.03, substituts végétaux vérifiés).",
       "localisation": "lib/features/recommendations/data/recommender.dart",
-      "recommandation": "Acter la formule v1 (dp-109 dans le cahier) ou faire calibrer les coefficients par Gui sur des recettes réelles.",
-      "statut": "a_traiter",
-      "tags": ["phase-09", "lot-h", "decision"]
+      "recommandation": "N/A — acté (dp-109, dp-113).",
+      "statut": "resolu",
+      "tags": ["phase-09", "lot-h", "decision", "resolu-audit-2026-08-26"]
     },
     {
       "id": "ac-H-004",
@@ -210,6 +213,36 @@
       "recommandation": "Acceptable en v1 ; si Gui veut une persistance, stocker dans une table Drift dédiée (bump schema → lot séparé).",
       "statut": "a_traiter",
       "tags": ["phase-09", "lot-h", "ux"]
+    },
+    {
+      "id": "ac-111",
+      "priorite": "Low",
+      "libelle": "Catégories accentuées affichées brutes dans le picker (r-103)",
+      "description": "Les category_level_1 réels sont accentués (« végétal », « ingrédient technique », « sous-produit culinaire »…) — le picker et les chips affichent les valeurs brutes. La table de traduction culinaire prévue par r-103 (« végétal » → « Légumes & fruits »…) reste à faire.",
+      "localisation": "lib/features/ingredients/presentation/ingredients_picker_page.dart",
+      "recommandation": "Lot UI dédié : table de mapping catégorie → libellé culinaire, à valider par Gui (nomenclature métier).",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "audit", "ui", "i18n"]
+    },
+    {
+      "id": "ac-112",
+      "priorite": "Low",
+      "libelle": "copyWith des modèles ingrédient ne supporte pas la remise à null",
+      "description": "IngredientSummary.copyWith / IngredientDetail.copyWith suivent le pattern `?? this.x` : impossible de remettre un champ nullable à null via copyWith. Aucun usage courant n'en a besoin (la reconstruction passe par le mapping Drift) — documenté dans les tests.",
+      "localisation": "lib/core/models/ingredient_summary.dart, lib/core/models/ingredient_detail.dart",
+      "recommandation": "Si un usage émerge, migrer vers le pattern sentinel (comme NutritionProfile.waterContent).",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "audit", "models"]
+    },
+    {
+      "id": "ac-113",
+      "priorite": "Low",
+      "libelle": "Confiance nutrition agrégée hardcodée à 0.8",
+      "description": "NutritionRepository._aggregate fixe confidence = 0.8 en dur (Lot F v1) au lieu de moyenner les confiances réelles des records agrégés.",
+      "localisation": "lib/features/nutrition/data/nutrition_repository.dart",
+      "recommandation": "Au lot qualité : moyenner r.confidence des records utilisés (colonne confidence de nutrition_records).",
+      "statut": "a_traiter",
+      "tags": ["phase-09", "audit", "nutrition"]
     }
   ],
   "backlog_idees_produit": [

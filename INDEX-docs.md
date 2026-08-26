@@ -27,7 +27,7 @@
 
 | Path | Rôle | Statut | Résumé |
 |------|------|--------|--------|
-| `plans/phase-09-metier-driven-ux.md` | Plan produit Phase 09 — UX pilotée par les BDD métier | Lots F+G/H implémentés (2026-08-26), Lot I optionnel non fait | Plan détaillé en 20 sections pour transformer MaestroPesto en atelier de formulation culinaire : référentiel ingrédients (Phase 1), nutrition (Phase 2), flavour (Phase 3), functional (Phase 4) + module de recommandation. Amendé dp-108/109/110 + ac-107 à ac-110. |
+| `plans/phase-09-metier-driven-ux.md` | Plan produit Phase 09 — UX pilotée par les BDD métier | Lots F+G/H implémentés, audités et validés Windows (219/219 tests, build OK, 2026-08-26) ; Lot I optionnel non fait | Plan détaillé en 20 sections pour transformer MaestroPesto en atelier de formulation culinaire : référentiel ingrédients (Phase 1), nutrition (Phase 2), flavour (Phase 3), functional (Phase 4) + module de recommandation. Amendé dp-108 à dp-116 + ac-107 à ac-113. |
 | `plans/` (à venir) | Plans futurs | À créer | Chaque phase planifiée y créera un fichier `phase-NN-...md`. |
 
 ## Test-Dev — `Test-Dev/`

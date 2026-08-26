@@ -9,12 +9,13 @@
 > plan de produit (et non un cahier de phase technique). Implémentation
 > prévue : **multi-lots** sur la branche `Ge-LAG/phase-09-metier-ux`
 > (à créer après push de la branche actuelle par Gui).
-> Date : 2026-08-25. Statut : **Lots F+G+H implémentés** (2026-08-26,
-> 28 commits atomiques sur `Ge-LAG/db-connection-strategies`, 0 push).
-> Lot I (optionnel) non implémenté. Validation `flutter test/analyze`
-> déferrée au PO sur Windows (R-07 : aucun SDK dans les sessions agents).
+> Date : 2026-08-25. Statut : **Lots F+G+H implémentés + AUDITÉS**
+> (2026-08-26, 28 commits Kimi + session audit GLM 5.3 / ZCode :
+> corrections compilation/métier, câblage picker + detail card +
+> warning live, suite 219/219 verte, analyze 0 issue, build Windows OK).
+> Lot I (optionnel) non implémenté.
 > Note de traçabilité (R-08) : les amendements de lots sont consignés
-> en §14 (dp-108 à dp-110) et §15 (ac-107 à ac-110) — voir aussi
+> en §14 (dp-108 à dp-116) et §15 (ac-107 à ac-113) — voir aussi
 > `PROJET.json` (backlog_audit_code ac-G-*/ac-H-*).
 
 ## 1. Résumé exécutif
@@ -668,11 +669,16 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   incompatibles, reçoit une recommendation" (Lot H).
 
 ### 12.4 Vérification sandbox
-- `dart analyze lib/ test/` : 0 issue (les exceptions préexistantes
-  signalées au Lot E dans `app_theme.dart` et `recipe_form_dialog.dart`
-  doivent être corrigées dans un lot technique séparé, pas ce plan).
-- `dart test test/` : 100% verts (≥ 50 tests cumulés).
-- `dart format --set-exit-if-changed lib/ test/` : exit 0.
+- `dart analyze lib/ test/` : 0 issue — **VÉRIFIÉ le 2026-08-26**
+  (session audit : `flutter analyze` 0 issue, warnings préexistants
+  `app_theme.dart`/`recipe_form_dialog.dart` du Lot E corrigés au
+  passage).
+- `dart test test/` : 100% verts — **VÉRIFIÉ : 219/219** (audit
+  2026-08-26 sur SDK Windows Flutter 3.47.1 / Dart 3.13.1), dont
+  smoke tests DoD sur données réelles (`metier_smoke_test.dart`).
+- `dart format --set-exit-if-changed lib/ test/` : exit 0 — **VÉRIFIÉ**.
+- `flutter build windows` : **OK** (maestropesto.exe généré, audit
+  2026-08-26).
 
 ## 13. Definition of Done (par lot)
 
@@ -758,6 +764,42 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   est déduite par heuristique (famille `safety` → danger,
   `effect_direction` `decrease*` → warning, sinon info) faute de
   colonne dédiée dans `interaction_rules.csv`. À valider métier par le PO.
+- **dp-111** (Audit, GLM 5.3 / ZCode, 2026-08-26) : le mapping
+  `component_id` du `NutritionRepository` utilisait des clés génériques
+  (`energy_kcal`, `proteins`…) **absentes du dictionnaire Phase 2
+  réel**, qui utilise des tags Ciqual (`ENERCKCAL`, `ENERC`, `PROTEIN`,
+  `FAT`, `FAT_SAT`, `CARB`, `SUGAR`, `FIBER`, `NA`, `WATER`). Sans ce
+  correctif, **tous les nutriments sortaient à 0** sur données réelles
+  (vérifié par smoke test). Ajout de la conversion sel = NA (mg) × 2.5
+  / 1000 (§5.3) et ENERC kJ → kcal.
+- **dp-112** (Audit, 2026-08-26) : `FlavorRepository` garde désormais
+  le **meilleur** score par clé (les données réelles contiennent
+  26 clés dupliquées — contextes prédits/observés) ; l'écrasement
+  « dernier lu » d'origine était non déterministe et contredisait le
+  §7.2 (« le meilleur FlavorMatch »).
+- **dp-113** (Audit, 2026-08-26) : l'annexe §20 (Bœuf + Fromage bleu +
+  Thym) est **illustrative** — ces ingrédients n'existent pas dans le
+  référentiel réel (`AGNEAUVIANDE`, `POULETVIANDE`, `PORCVIANDE`…).
+  Le smoke test DoD §13.4 vérifie les invariants §9.1 sur des paires
+  réelles (ex. ABRICOT × ANETH = 0.03) au lieu de l'ordre
+  Poulet > Agneau > Porc.
+- **dp-114** (Audit, 2026-08-26) : le fuzzy Levenshtein s'applique aux
+  **tokens de l'index** > 4 chars (la requête peut être plus courte :
+  « boef » → « boeuf », distance 1) — lecture du §6.1 validée par les
+  tests. Le `IngredientAliasIndex` gagne aussi un vrai fold d'accents
+  (table de décomposition latine : é→e, œ→oe…) et un fallback
+  « requête séparateurs seulement » (« --- » ≈ vide).
+- **dp-115** (Audit, 2026-08-26) : les catégories réelles Phase 1 sont
+  **accentuées** (« végétal », r-103 confirmé) — le picker affiche les
+  valeurs brutes ; la table de traduction culinaire reste à faire
+  (ac-111).
+- **dp-116** (Audit, 2026-08-26) : `showRecipeFormDialog` prend un
+  `db` optionnel (dérive Flavor/Functional repositories + charge les
+  summaries du picker). `recipes_home_page.dart` (Forbidden « UI Alex
+  intacte ») n'a reçu que le passage de paramètre aux 2 call sites —
+  écart documenté, zéro changement visuel. Le warning live H4 est
+  actif dès que `db` est fourni, et se recalcule aussi à la
+  suppression d'un slot ingrédient.
 
 ## 15. Dette et risques connus
 
@@ -780,22 +822,34 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
   que "tomate" trouve "tomates cerises" même avec faute, ajouter
   l'algo.
 - **ac-106** (High) : le projet n'a **aucun test d'intégration**
-  (`integration_test/`) aujourd'hui. Lot H introduit les premiers
-  → dette à résorber dans un lot "qualité" dédié.
+  (`integration_test/`) aujourd'hui. Le smoke test données réelles
+  (`test/core/database/metier_smoke_test.dart`, audit 2026-08-26)
+  couvre l'import + les parcours métier en `flutter test`, mais les
+  scénarios UI end-to-end (`integration_test/`) restent à créer.
 - **ac-107** (Low, Lot G) : `waterContent` est agrégé en **somme**
   comme les autres nutriments dans `NutritionAggregator` — sémantique
   à revoir au lot qualité (moyenne pondérée par la masse ?).
-- **ac-108** (Medium, Lot H) : le warning live H4 du formulaire est
-  implémenté mais **inactif en production** tant que les repositories
-  ne sont pas injectés par l'appelant de `showRecipeFormDialog`
-  (lié au câblage DB du picker, ac-F-002 dans `PROJET.json`).
+- **ac-108** (Medium, Lot H) : ~~le warning live H4 est implémenté
+  mais inactif~~ **RÉSOLU (audit 2026-08-26)** : `showRecipeFormDialog`
+  prend `db`, les appelants l'injectent, le warning est actif.
 - **ac-109** (Low, Lot H) : le dismiss du `RecommendationSheet` est en
   mémoire de session seulement (Set statique) — pas de sessionStorage
   en Flutter desktop ; persistance Drift éventuelle = lot séparé (bump
   schema).
-- **ac-110** (High, Lots G+H) : ~90 cas de tests écrits mais **jamais
-  exécutés** (R-07 : aucun SDK Flutter/Dart dans la session agent).
-  Validation Windows obligatoire avant push (R-04/BP-14).
+- **ac-110** (High, Lots G+H) : ~~90 cas de tests écrits mais jamais
+  exécutés~~ **RÉSOLU (audit 2026-08-26)** : suite **219/219 verte**,
+  analyze 0 issue, format exit 0, build Windows OK.
+- **ac-111** (Low, Audit) : les chips de catégories du picker
+  affichent les valeurs brutes accentuées du référentiel (« végétal »,
+  « ingrédient technique »…) — la table de traduction culinaire
+  (r-103) reste à faire (lot UI dédié).
+- **ac-112** (Low, Audit) : `IngredientSummary.copyWith` /
+  `IngredientDetail.copyWith` suivent le pattern `?? this.x` —
+  impossible de remettre un champ nullable à null (aucun usage
+  courant ; reconstruction par le mapping Drift).
+- **ac-113** (Low, Audit) : `confidence` des `NutritionProfile`
+  agrégés est hardcodée à 0.8 (Lot F v1) — à remplacer par la
+  moyenne réelle des records au lot qualité.
 
 ### 15.2 Risques
 - **r-101** (Medium) : **temps de chargement au boot**. Si la DB
@@ -819,14 +873,20 @@ migration pour ne pas toucher à `app_database.dart` (Lot A+D).
 ## 16. Impossibilités documentées (R-07)
 
 - **flutter test / flutter run / flutter analyze** : non
-  exécutables dans le conteneur Hermès (Flutter SDK absent).
-  Validation finale côté Gui sur Windows.
+  exécutables dans les conteneurs agents Kimi/Hermes (Flutter SDK
+  absent). **LEVÉ le 2026-08-26** : la session audit (GLM 5.3 via
+  ZCode, machine Windows du PO, SDK Flutter 3.47.1 / Dart 3.13.1) a
+  exécuté `flutter analyze` (0 issue), `flutter test` (219/219),
+  `dart format --set-exit-if-changed` (exit 0) et `flutter build
+  windows` (OK).
 - **dart test** : OK en sandbox, 18/18 verts au moment de la
   rédaction du plan.
 - **build_runner** : OK en sandbox, 74 outputs générés en 37 s.
 - **Validation du design par tests visuels** : non automatisable.
-  Lot F inclut une phase "smoke test manuel" (Gui ouvre l'app,
-  compose 3 recettes types, valide l'UX).
+  Le smoke test manuel PO (ouvrir l'app, importer la BDD métier,
+  composer 3 recettes types, valider l'UX picker/nutrition/heatmap/
+  recommandation) reste à faire — logique couverte par
+  `metier_smoke_test.dart`, pas le rendu.
 
 ## 17. À faire par Gui (post-plan)
 
