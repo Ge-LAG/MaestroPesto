@@ -6,18 +6,22 @@
 //   via NutritionAggregator (Lot G, dp-105)
 //
 // Source de vérité : table `nutrition_records` (Lot A schéma Drift).
-// Mapping component_id → champ NutritionProfile :
-//   - 'energy_kcal' (ou ENERGY_KCAL) → energyKcal
-//   - 'proteins' (ou PROTEINS)       → proteins
-//   - 'carbs' / 'sugars'             → carbs / sugars
-//   - 'fat' / 'saturated_fat'        → fats / saturatedFats
-//   - 'fiber'                        → fiber
-//   - 'salt' / 'sodium'              → salt (× 2.5 si Na pur)
-//   - 'water'                        → waterContent
+// Mapping component_id → champ NutritionProfile — les tags réels du
+// dictionnaire Phase 2 (`component_dictionary.csv`, style Ciqual) sont
+// en premier, les alias génériques en secours :
+//   - ENERCKCAL / energy_kcal / energy → energyKcal (kcal)
+//   - ENERC / energy_kj / kj           → energyKcal (÷ 4.184)
+//   - PROTEIN / protein                → proteins
+//   - CARB / carbohydrate / carbs      → carbs
+//   - SUGAR / sugar                    → sugars
+//   - FAT / fat / lipid                → fats
+//   - FAT_SAT / saturated_fat          → saturatedFats
+//   - FIBER / fiber / fibres           → fiber
+//   - NA / sodium (mg) ou salt (g)     → salt (sel = Na × 2.5, §5.3)
+//   - WATER / water                    → waterContent
 //
 // Si plusieurs records par composant, on moyenne `normalized_value`.
 
-import 'package:drift/drift.dart';
 import 'package:meta/meta.dart';
 
 import '../../../core/database/app_database.dart';
@@ -109,8 +113,7 @@ class NutritionRepository {
   static NutritionProfile aggregateRecords(
     List<NutritionRecord> records, {
     String stateId = 'raw',
-  }) =>
-      _aggregate(records, stateId: stateId);
+  }) => _aggregate(records, stateId: stateId);
 
   static NutritionProfile _aggregate(
     List<NutritionRecord> records, {
@@ -136,18 +139,35 @@ class NutritionRepository {
       return list.reduce((a, b) => a + b) / list.length;
     }
 
+    // Moyenne de la première clé présente (les alias sont des
+    // alternatives, jamais cumulées : un dataset n'utilise qu'un tag
+    // par composant).
+    double meanOf(List<String> aliases) {
+      for (final cid in aliases) {
+        final list = byComponent[cid];
+        if (list != null && list.isNotEmpty) {
+          return list.reduce((a, b) => a + b) / list.length;
+        }
+      }
+      return 0;
+    }
+
+    final water = mean('water');
+
     return NutritionProfile(
       energyKcal: _readEnergy(byComponent),
-      proteins: mean('protein') + mean('proteins'),
-      carbs: mean('carbohydrate') + mean('carbs') + mean('carbohydrates'),
-      sugars: mean('sugars') + mean('sugar'),
-      fats: mean('fat') + mean('fats') + mean('lipid') + mean('lipids'),
-      saturatedFats: mean('saturated_fat') + mean('saturated_fats'),
-      fiber: mean('fiber') + mean('fibres') + mean('dietary_fiber'),
-      salt: mean('salt'),
-      waterContent: byComponent.containsKey('water')
-          ? mean('water')
-          : null,
+      proteins: meanOf(const ['protein', 'proteins']),
+      carbs: meanOf(const ['carb', 'carbohydrate', 'carbs', 'carbohydrates']),
+      sugars: meanOf(const ['sugar', 'sugars']),
+      fats: meanOf(const ['fat', 'fats', 'lipid', 'lipids']),
+      saturatedFats: meanOf(const [
+        'fat_sat',
+        'saturated_fat',
+        'saturated_fats',
+      ]),
+      fiber: meanOf(const ['fiber', 'fibre', 'fibres', 'dietary_fiber']),
+      salt: _readSalt(byComponent, meanOf),
+      waterContent: water > 0 ? water : null,
       ingredientStateId: stateId,
       confidence: 0.8, // Lot F v1 simplifiée
       recordCount: sampleCount,
@@ -156,16 +176,32 @@ class NutritionRepository {
 
   /// L'énergie peut être stockée en kJ ou kcal — on normalise.
   static double _readEnergy(Map<String, List<double>> byComponent) {
-    final kcalList = byComponent['energy_kcal'] ?? byComponent['energy'];
-    if (kcalList != null && kcalList.isNotEmpty) {
-      return kcalList.reduce((a, b) => a + b) / kcalList.length;
+    for (final cid in const ['enerckcal', 'energy_kcal', 'energy']) {
+      final list = byComponent[cid];
+      if (list != null && list.isNotEmpty) {
+        return list.reduce((a, b) => a + b) / list.length;
+      }
     }
-    final kjList = byComponent['energy_kj'] ?? byComponent['kj'];
-    if (kjList != null && kjList.isNotEmpty) {
-      final kjMean = kjList.reduce((a, b) => a + b) / kjList.length;
-      return kjMean / 4.184; // kJ → kcal
+    for (final cid in const ['enerc', 'energy_kj', 'kj']) {
+      final list = byComponent[cid];
+      if (list != null && list.isNotEmpty) {
+        final kjMean = list.reduce((a, b) => a + b) / list.length;
+        return kjMean / 4.184; // kJ → kcal
+      }
     }
     return 0;
+  }
+
+  /// Sel : soit un record `salt` direct (g), soit le sodium NA (mg)
+  /// converti — sel (g) = Na (mg) × 2.5 / 1000 (§5.3 : sel = Na × 2.5).
+  static double _readSalt(
+    Map<String, List<double>> byComponent,
+    double Function(List<String>) meanOf,
+  ) {
+    final direct = meanOf(const ['salt']);
+    if (direct > 0) return direct;
+    final naMg = meanOf(const ['na', 'sodium']);
+    return naMg * 2.5 / 1000;
   }
 }
 
