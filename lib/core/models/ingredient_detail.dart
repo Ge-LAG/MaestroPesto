@@ -100,17 +100,17 @@ class IngredientDetail extends IngredientSummary {
 
   /// Construit un IngredientSummary à partir de ce détail (pour le picker).
   IngredientSummary toSummary() => IngredientSummary(
-        ingredientId: ingredientId,
-        canonicalNameFr: canonicalNameFr,
-        canonicalNameEn: canonicalNameEn,
-        categoryLevel1: categoryLevel1,
-        categoryLevel2: categoryLevel2,
-        categoryLevel3: categoryLevel3,
-        allergenTags: allergenTags,
-        isAlcoholic: isAlcoholic,
-        isFermented: isFermented,
-        confidence: confidence,
-      );
+    ingredientId: ingredientId,
+    canonicalNameFr: canonicalNameFr,
+    canonicalNameEn: canonicalNameEn,
+    categoryLevel1: categoryLevel1,
+    categoryLevel2: categoryLevel2,
+    categoryLevel3: categoryLevel3,
+    allergenTags: allergenTags,
+    isAlcoholic: isAlcoholic,
+    isFermented: isFermented,
+    confidence: confidence,
+  );
 
   @override
   bool operator ==(Object other) {
@@ -131,20 +131,31 @@ class IngredientDetail extends IngredientSummary {
 
   @override
   int get hashCode => Object.hash(
-        super.hashCode,
-        Object.hashAll(aliasesFr),
-        Object.hashAll(aliasesEn),
-        scientificName,
-        physicalForm,
-        processingState,
-        ingredientClass,
-        foodonId,
-        Object.hashAll(langualIds),
-        Object.hashAll(ciqualIds),
-        Object.hashAll(sourceRefs),
-      );
+    super.hashCode,
+    Object.hashAll(aliasesFr),
+    Object.hashAll(aliasesEn),
+    scientificName,
+    physicalForm,
+    processingState,
+    ingredientClass,
+    foodonId,
+    Object.hashAll(langualIds),
+    Object.hashAll(ciqualIds),
+    Object.hashAll(sourceRefs),
+  );
 
   @override
   String toString() =>
       'IngredientDetail($ingredientId, "$canonicalNameFr", sci=$scientificName)';
+}
+
+/// Copie locale du helper de [IngredientSummary] : un symbole top-level
+/// privé n'est pas visible depuis une autre bibliothèque.
+bool _listEq<T>(List<T> a, List<T> b) {
+  if (identical(a, b)) return true;
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
 }
