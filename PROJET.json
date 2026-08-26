@@ -2,20 +2,24 @@
   "schema_version": "1.0.0",
   "document_id": "projet-maestropesto",
   "projet": "MaestroPesto",
-  "phase_courante": "P0 - bootstrap methodologique",
-  "etat_general": "Bootstrap V5 en cours sur la branche PR Ge-LAG/bootstrap-v5-doc. Aucune feature de code n'est developpee tant que la methode n'est pas validee par le PO.",
-  "focus_immediat": "Valider avec Gui la branche PR (Ge-LAG/bootstrap-v5-doc) et l'integration des regles PR/commit dans METHOD.md.",
+  "phase_courante": "P0 - bootstrap methodologique (validation en attente) | Lot E livre - Phase 09 planifiee",
+  "etat_general": "Bootstrap V5 en cours sur la branche PR Ge-LAG/bootstrap-v5-doc (non pushé). Lots A+B+C+D+E livrés sur Ge-LAG/db-connection-strategies (15+9+2+2+6+2 = 36 commits, 0 push). Phase 09 planifiée (plan détaillé dans plans/phase-09-metier-driven-ux.md) mais non implémentée.",
+  "focus_immediat": "Relire et valider le plan Phase 09 (plans/phase-09-metier-driven-ux.md) — en particulier §2 (deps), §10 (phasage F/G/H) et §11 (pas de bump schemaVersion).",
   "questions_ouvertes": [
     "Valider le format de branche Ge-LAG/<resume-2-3-mots> propose pour toutes les futures branches PR.",
     "Confirmer la liste des themes de commit acceptes (UI, UX, backend, db, test, docs, build, method, chore, fix).",
     "Decider si on garde un seul commit par PR ou si on accepte les commits de merge.",
-    "Decider du calendrier d'activation de l'override politique_de_branche."
+    "Decider du calendrier d'activation de l'override politique_de_branche.",
+    "Plan Phase 09 : valider le scope des Lots F (référentiel ingrédients), G (nutrition+flavour) et H (functional+recommandations), ainsi que l'ajout de flutter_riverpod en dep.",
+    "Plan Phase 09 : trancher l'arbitrage dp-107 (règles Phase 4 v1 en mode dégradé 50% confidence, ou implémenter le parser composition/process dès le Lot H)."
   ],
   "prochaines_etapes": [
-    "Attendre validation PO du bootstrap V5 (R-06 / A.8).",
-    "Ouvrir une PR GitHub depuis Ge-LAG/bootstrap-v5-doc vers main.",
-    "Indexer dans INDEX-docs.md les fichiers METHOD/PROJET crees.",
-    "Planifier la premiere feature produit sur une nouvelle branche PR dediee."
+    "PO : relire plans/phase-09-metier-driven-ux.md (≈1h) et trancher les questions ouvertes.",
+    "Pousser Ge-LAG/db-connection-strategies vers origin/main après validation PO finale (R-01).",
+    "Ouvrir la branche Ge-LAG/phase-09-metier-driven-ux depuis main.",
+    "Lancer Lot F (référentiel ingrédients + picker + IngredientDetailCard) — implémentation GLM 5.3 ou autre IA dev selon préférence PO.",
+    "Listening gate UX Picker après Lot F (sélection d'ingrédient dans une recette type).",
+    "Lancer Lot G (NutritionRepository.aggregate + FlavorCompatibilityHeatmap) puis Lot H (FunctionalConstraintSolver + Recommender)."
   ],
   "journal_des_sessions": [
     {
@@ -29,6 +33,20 @@
       "date": "2026-08-22",
       "session": "backlog-idees-ocr-recettes",
       "resume": "Ajout d'une section 'Backlog idees produit' dans PROJET.md (et miroir PROJET.json, BP-17) avec l'entree IDEA-OCR-RECETTES : integration d'un OCR local pour formaliser les recettes au format MaestroPesto. Aucun fichier source modifie, aucun commit, aucun push (le repo est en bootstrap V5, en attente de validation PO).",
+      "agent": "Hermes (MiniMax-M3)",
+      "po": "Ge-LAG"
+    },
+    {
+      "date": "2026-08-25",
+      "session": "phase-09-plan",
+      "resume": "Redaction du plan d implementation Phase 09 (plans/phase-09-metier-driven-ux.md, 20 sections, 39 ko) couvrant l exposition des 4 BDD metier (Phase 1 referentiel, Phase 2 nutrition, Phase 3 flavour, Phase 4 functional) + module de recommandation. Phasage 3 lots F/G/H. Aucune modification de code.",
+      "agent": "Hermes (MiniMax-M3)",
+      "po": "Ge-LAG"
+    },
+    {
+      "date": "2026-08-25",
+      "session": "lot-e-cablage-live",
+      "resume": "Cablage reel du bouton Importer BDD metier : AppServices (DB + CsvImportService), main.dart async init, drift_flutter retourne QueryExecutor, _MetierStatusAction avec 3 etats (spinner/neutre/vert), db: optionnel passe au RecipeDetailView pour activer le metier advisory panel, assets/database-metier/ bundles (22 CSV, fichiers reels apres fix symlinks). 6 commits atomiques (a900bb6/6f36195/03acea3/b9feb86/072802f/7dcc2cb) + 2 fixes build (c1c7003/920928e). 18/18 tests Dart verts en sandbox.",
       "agent": "Hermes (MiniMax-M3)",
       "po": "Ge-LAG"
     }

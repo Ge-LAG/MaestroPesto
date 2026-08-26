@@ -21,11 +21,14 @@
 
 ## Plans — `plans/`
 
-> Dossier **à créer** lors du premier besoin d'un plan de session ou produit. Pas créé au bootstrap V5 pour éviter l'anti-pattern « dossiers vides inutiles ».
+> Dossier créé le 2026-08-25 lors de la rédaction du plan Phase 09.
+> Héberge les plans de session ou produit (format §71, aligné sur
+> le cahier `tasks/phase-08-db-connection-strategies.md`).
 
 | Path | Rôle | Statut | Résumé |
 |------|------|--------|--------|
-| `plans/` (à créer) | Ancrage des plans de session | À créer | Expliquera le rôle du dossier et pointera vers le plan actif. |
+| `plans/phase-09-metier-driven-ux.md` | Plan produit Phase 09 — UX pilotée par les BDD métier | Actif (en relecture PO) | Plan détaillé en 20 sections pour transformer MaestroPesto en atelier de formulation culinaire : référentiel ingrédients (Phase 1), nutrition (Phase 2), flavour (Phase 3), functional (Phase 4) + module de recommandation. 3 lots d'implémentation (F/G/H). |
+| `plans/` (à venir) | Plans futurs | À créer | Chaque phase planifiée y créera un fichier `phase-NN-...md`. |
 
 ## Test-Dev — `Test-Dev/`
 
