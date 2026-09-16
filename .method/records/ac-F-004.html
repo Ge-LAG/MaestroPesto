@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dette : cache global IngredientAliasIndex · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>finding · ac-F-004</span></header><main>
+<article data-method data-revision="1" data-owner="Robertson Andersen" id="ac-F-004" data-title="Dette : cache global IngredientAliasIndex" data-summary="L'index de recherche floue est reconstruit à chaque ouverture du picker au lieu d'un cache global construit au boot (cahier §11.2)." data-tags="ac finding dette perf cache picker ingredients phase-09" data-kind="finding" data-status="active">
+<p class="eyebrow">finding / ac-F-004</p><h1>Dette : cache global IngredientAliasIndex</h1>
+<dl><dt>Origine</dt><dd>Audit code du Lot F (GLM 5.3/ZCode, 2026-08-26) ; écart au cahier §11.2.</dd>
+<dt>Impact</dt><dd>Low — performance acceptable pour 603 ingrédients, mais l'index est reconstruit à chaque recherche dans IngredientsPickerPage.build() (IngredientAliasIndex.fromSummaries).</dd>
+<dt>Localisation</dt><dd>lib/features/ingredients/presentation/ingredients_picker_page.dart, environ lignes 130-140.</dd>
+<dt>Résultat attendu</dt><dd>Index construit une fois dans un ProviderScope parent et exposé via Provider, quand AppDatabase sera globalement accessible.</dd></dl>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>

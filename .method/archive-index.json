@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "generated": true,
+  "entries": [
+    {
+      "id": "phase08-foundations",
+      "path": "work/phase08-foundations.html",
+      "title": "Socle applicatif et import métier (Lots A-E)",
+      "summary": "Fondations livrées et subsumées : app Flutter responsive, base Drift, CRUD recettes, import CSV des 4 bases métier, panneau conseil. Historique clos.",
+      "tags": [
+        "phase-08",
+        "lots",
+        "fondations",
+        "drift",
+        "import",
+        "historique",
+        "archive"
+      ],
+      "kind": "work",
+      "status": "archived",
+      "sha256": "bf291e41232d16c9f5536b0a7ef15253de729c22b02bf3cd095f12132f064dfc",
+      "chars": 1011,
+      "size": 2067,
+      "mtime_ns": 1789570623412874000,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "c0d4bc06e1d410f49ab2d38de3d3dcf40f3250380f3dc1f2c069502d9d20478b",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "phase09-metier-ux.html#phase09-metier-ux"
+      ],
+      "anchors": [
+        "phase08-foundations"
+      ]
+    }
+  ]
+}

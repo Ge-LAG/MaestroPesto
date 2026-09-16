@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Infra : opencode CLI KO côté backend Z.AI · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>finding · ac-F-007</span></header><main>
+<article data-method data-revision="1" data-owner="Robertson Andersen" id="ac-F-007" data-title="Infra : opencode CLI KO côté backend Z.AI" data-summary="opencode run --model zai/glm-5.3 renvoie UnknownError de façon persistante ; le curl direct vers l'API Z.AI fonctionne avec la même clé." data-tags="ac finding infra opencode glm critical" data-kind="finding" data-status="active">
+<p class="eyebrow">finding / ac-F-007</p><h1>Infra : opencode CLI KO côté backend Z.AI</h1>
+<dl><dt>Origine</dt><dd>Constat d'infrastructure Lot F (2026-08-26) : opencode CLI 1.18.23, quatre tentatives échouées (refs err_6c65a5f4, err_2de85e4e, err_9059ce47, err_960003f0 dans les logs /workspace).</dd>
+<dt>Impact</dt><dd>Critical pour le dispatch externalisé — n'affecte pas le produit : l'endpoint ou le format de requête utilisé par opencode est rejeté par le backend Z.AI, alors que le curl direct fonctionne.</dd>
+<dt>Pistes</dt><dd>Tester --model zai-coding-plan/glm-5.3, comparer versions, vérifier le mapping d'endpoints du binaire. Contournement stable : curl direct via dispatch_glm.py ou agent ZCode sur machine PO (ce qui a permis l'audit du 2026-08-26).</dd></dl>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>

@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Phase 09 : validation PO et livraison · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>work · phase09-closeout</span></header><main>
+<article data-method data-revision="1" data-owner="Guillaume" id="phase09-closeout" data-title="Phase 09 : validation PO et livraison" data-summary="Focus courant : smoke test manuel du retour n°4 par le PO, puis décision et exécution du push de la branche et de la PR vers main." data-tags="phase-09 validation smoke push pr livraison focus" data-kind="work" data-status="active" data-components="delivery" data-requires="acceptance-phase09">
+<p class="eyebrow">work / phase09-closeout</p><h1>Phase 09 : validation PO et livraison</h1>
+<dl><dt>Résultat attendu</dt><dd>Le retour n°4 est validé en conditions réelles par le PO, puis la branche Ge-LAG/db-connection-strategies est poussée et la PR vers main ouverte — ou le report est explicitement consigné avec ses motifs.</dd>
+<dt>Mandat / périmètre</dt><dd>Aucune modification de code attendue. Actions autorisées : exécution du smoke test (voir <a href="../records/acceptance-phase09.html#acceptance-phase09">acceptance-phase09</a>), puis push/PR strictement encadrés par la contrainte <a href="../records/delivery-gate.html#delivery-gate">delivery-gate</a> (validation explicite du PO dans la session courante). Toute correction révélée par le smoke test rouvre du travail sur <a href="phase09-metier-ux.html#phase09-metier-ux">phase09-metier-ux</a>.</dd>
+<dt>Point de contrôle</dt><dd>Au 2026-09-16 : migration méthode V6 posée dans le working tree (dossier .method/, artefacts V5 supprimés), non commitée — à commiter (« method: migrate v6 ») après revue PO. 244/244 tests, analyze 0, format 0, build windows OK au dernier état vérifié.</dd></dl>
+<h2>Critères d'acceptation machine</h2>
+<p data-criterion="A1">Smoke test PO du retour n°4 passé et consigné dans acceptance-phase09.</p>
+<p data-criterion="A2">Push et PR exécutés selon delivery-gate, ou report explicite consigné avec motif et prochaine action.</p>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>
