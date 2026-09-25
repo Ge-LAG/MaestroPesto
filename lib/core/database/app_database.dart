@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import 'tables/ciqual_foods.dart';
 import 'tables/ciqual_nutrients.dart';
+import 'tables/enrichment_tables.dart';
 import 'tables/flavor_compatibility.dart';
 import 'tables/functional_ingredients.dart';
 import 'tables/ingredient_aroma_compounds.dart';
@@ -41,6 +42,13 @@ part 'app_database.g.dart';
     FunctionalIngredients,
     InteractionRules,
     ProcessOperations,
+    IngredientCulinary,
+    ProcessFactors,
+    IngredientFunctionalComponents,
+    FunctionalComponents,
+    ExperimentalValidationCases,
+    IngredientFlavorProfiles,
+    CulinaryPairings,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -52,8 +60,13 @@ class AppDatabase extends _$AppDatabase {
   ///   field `Recipe.images` introduced by the UI/UX pass.
   /// - v3 (2026-08-25, Lot D): adds nullable `recipe_items.ingredient_id`
   ///   FK to `ingredients` so the UI can resolve Phase 1 canonical names.
+  /// - v4 (2026-09-26, Phase 10): enrichment tables (culinary data,
+  ///   process factors, ingredient → functional components, flavour
+  ///   profiles, culinary pairings, Phase 4 orphan CSVs) and recipe
+  ///   persistence columns (nutrition + source, quantity text, cooking
+  ///   method, typed steps).
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -70,6 +83,22 @@ class AppDatabase extends _$AppDatabase {
         // when the column is nullable and the FK is enforced by the engine
         // (PRAGMA foreign_keys = ON, set in beforeOpen).
         await m.addColumn(recipeItems, recipeItems.ingredientId);
+      }
+      if (from < 4) {
+        await m.createTable(ingredientCulinary);
+        await m.createTable(processFactors);
+        await m.createTable(ingredientFunctionalComponents);
+        await m.createTable(functionalComponents);
+        await m.createTable(experimentalValidationCases);
+        await m.createTable(ingredientFlavorProfiles);
+        await m.createTable(culinaryPairings);
+        await m.addColumn(recipes, recipes.nutritionMode);
+        await m.addColumn(recipes, recipes.nutritionJson);
+        await m.addColumn(recipeItems, recipeItems.quantityText);
+        await m.addColumn(recipeItems, recipeItems.cookingMethod);
+        await m.addColumn(recipeSteps, recipeSteps.opId);
+        await m.addColumn(recipeSteps, recipeSteps.temperatureC);
+        await m.addColumn(recipeSteps, recipeSteps.durationMin);
       }
     },
     beforeOpen: (details) async {

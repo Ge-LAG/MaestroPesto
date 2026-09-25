@@ -6,6 +6,7 @@ import '../../../features/ingredients/data/ingredient_registry_loader.dart';
 import '../../../features/nutrition/data/nutrition_loader.dart';
 import '../app_database.dart';
 import 'ciqual_enrichment_loader.dart';
+import 'metier_enrichment_loader.dart';
 
 /// Orchestrates the import of the four database-metier phases, in FK order:
 /// phase 1 referentiel, phase 2 nutrition (components then records),
@@ -133,6 +134,23 @@ class CsvImportService {
         skipped['enrichment'] = true;
         onPhaseProgress?.call('enrichment', 0);
       }
+
+      // Phase 10 — enrichissement métier (profils sensoriels, accords,
+      // composants fonctionnels, données culinaires, facteurs de
+      // procédé) + CSV Phase 4 orphelins. Fichiers optionnels.
+      final metierReport = await MetierEnrichmentLoader().loadInto(
+        db,
+        enrichmentDir: p.join(
+          p.dirname(databaseMetierRoot),
+          'database-enrichment',
+        ),
+        phase4Dir: p.join(databaseMetierRoot, 'phase4-functional'),
+        onFileSkipped: (_, s) =>
+            skipped['metier'] = (skipped['metier'] ?? true) && s,
+      );
+      rowsImported['metier'] = metierReport.values.fold(0, (a, b) => a + b);
+      skipped.putIfAbsent('metier', () => true);
+      onPhaseProgress?.call('metier', rowsImported['metier']!);
     });
 
     return ImportReport(

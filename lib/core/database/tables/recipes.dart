@@ -13,6 +13,14 @@ class Recipes extends Table {
   TextColumn get updatedAt => text().named('updated_at')();
   TextColumn get deletedAt => text().named('deleted_at').nullable()();
 
+  // Phase 10 (ac-125, schéma v4) — nutrition persistée avec sa source.
+  /// `computed` (calculée depuis les ingrédients) ou `manual`.
+  TextColumn get nutritionMode => text().named('nutrition_mode').nullable()();
+
+  /// Résumé nutritionnel par portion (JSON : energyKcal, proteins,
+  /// carbs, fats, fiber, salt).
+  TextColumn get nutritionJson => text().named('nutrition_json').nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }

@@ -31,6 +31,12 @@ class RecipeItems extends Table {
       .nullable()
       .references(Ingredients, #ingredientId)();
 
+  // Phase 10 (ac-125/ac-128, schéma v4) — quantité saisie telle quelle
+  // (« 2 c. à soupe ») et mode de cuisson de la ligne ; `quantity_g`
+  // porte la conversion en grammes au moment de l'enregistrement.
+  TextColumn get quantityText => text().named('quantity_text').nullable()();
+  TextColumn get cookingMethod => text().named('cooking_method').nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }

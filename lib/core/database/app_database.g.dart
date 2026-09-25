@@ -107,6 +107,28 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _nutritionModeMeta = const VerificationMeta(
+    'nutritionMode',
+  );
+  @override
+  late final GeneratedColumn<String> nutritionMode = GeneratedColumn<String>(
+    'nutrition_mode',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _nutritionJsonMeta = const VerificationMeta(
+    'nutritionJson',
+  );
+  @override
+  late final GeneratedColumn<String> nutritionJson = GeneratedColumn<String>(
+    'nutrition_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -118,6 +140,8 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
     createdAt,
     updatedAt,
     deletedAt,
+    nutritionMode,
+    nutritionJson,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -199,6 +223,24 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
         deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
       );
     }
+    if (data.containsKey('nutrition_mode')) {
+      context.handle(
+        _nutritionModeMeta,
+        nutritionMode.isAcceptableOrUnknown(
+          data['nutrition_mode']!,
+          _nutritionModeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('nutrition_json')) {
+      context.handle(
+        _nutritionJsonMeta,
+        nutritionJson.isAcceptableOrUnknown(
+          data['nutrition_json']!,
+          _nutritionJsonMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -244,6 +286,14 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
         DriftSqlType.string,
         data['${effectivePrefix}deleted_at'],
       ),
+      nutritionMode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nutrition_mode'],
+      ),
+      nutritionJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nutrition_json'],
+      ),
     );
   }
 
@@ -263,6 +313,13 @@ class Recipe extends DataClass implements Insertable<Recipe> {
   final String createdAt;
   final String updatedAt;
   final String? deletedAt;
+
+  /// `computed` (calculée depuis les ingrédients) ou `manual`.
+  final String? nutritionMode;
+
+  /// Résumé nutritionnel par portion (JSON : energyKcal, proteins,
+  /// carbs, fats, fiber, salt).
+  final String? nutritionJson;
   const Recipe({
     required this.id,
     required this.title,
@@ -273,6 +330,8 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
+    this.nutritionMode,
+    this.nutritionJson,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -287,6 +346,12 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     map['updated_at'] = Variable<String>(updatedAt);
     if (!nullToAbsent || deletedAt != null) {
       map['deleted_at'] = Variable<String>(deletedAt);
+    }
+    if (!nullToAbsent || nutritionMode != null) {
+      map['nutrition_mode'] = Variable<String>(nutritionMode);
+    }
+    if (!nullToAbsent || nutritionJson != null) {
+      map['nutrition_json'] = Variable<String>(nutritionJson);
     }
     return map;
   }
@@ -304,6 +369,12 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       deletedAt: deletedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(deletedAt),
+      nutritionMode: nutritionMode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nutritionMode),
+      nutritionJson: nutritionJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nutritionJson),
     );
   }
 
@@ -322,6 +393,8 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       createdAt: serializer.fromJson<String>(json['createdAt']),
       updatedAt: serializer.fromJson<String>(json['updatedAt']),
       deletedAt: serializer.fromJson<String?>(json['deletedAt']),
+      nutritionMode: serializer.fromJson<String?>(json['nutritionMode']),
+      nutritionJson: serializer.fromJson<String?>(json['nutritionJson']),
     );
   }
   @override
@@ -337,6 +410,8 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       'createdAt': serializer.toJson<String>(createdAt),
       'updatedAt': serializer.toJson<String>(updatedAt),
       'deletedAt': serializer.toJson<String?>(deletedAt),
+      'nutritionMode': serializer.toJson<String?>(nutritionMode),
+      'nutritionJson': serializer.toJson<String?>(nutritionJson),
     };
   }
 
@@ -350,6 +425,8 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     String? createdAt,
     String? updatedAt,
     Value<String?> deletedAt = const Value.absent(),
+    Value<String?> nutritionMode = const Value.absent(),
+    Value<String?> nutritionJson = const Value.absent(),
   }) => Recipe(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -360,6 +437,12 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    nutritionMode: nutritionMode.present
+        ? nutritionMode.value
+        : this.nutritionMode,
+    nutritionJson: nutritionJson.present
+        ? nutritionJson.value
+        : this.nutritionJson,
   );
   Recipe copyWithCompanion(RecipesCompanion data) {
     return Recipe(
@@ -378,6 +461,12 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      nutritionMode: data.nutritionMode.present
+          ? data.nutritionMode.value
+          : this.nutritionMode,
+      nutritionJson: data.nutritionJson.present
+          ? data.nutritionJson.value
+          : this.nutritionJson,
     );
   }
 
@@ -392,7 +481,9 @@ class Recipe extends DataClass implements Insertable<Recipe> {
           ..write('cookTimeMin: $cookTimeMin, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
-          ..write('deletedAt: $deletedAt')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('nutritionMode: $nutritionMode, ')
+          ..write('nutritionJson: $nutritionJson')
           ..write(')'))
         .toString();
   }
@@ -408,6 +499,8 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     createdAt,
     updatedAt,
     deletedAt,
+    nutritionMode,
+    nutritionJson,
   );
   @override
   bool operator ==(Object other) =>
@@ -421,7 +514,9 @@ class Recipe extends DataClass implements Insertable<Recipe> {
           other.cookTimeMin == this.cookTimeMin &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
-          other.deletedAt == this.deletedAt);
+          other.deletedAt == this.deletedAt &&
+          other.nutritionMode == this.nutritionMode &&
+          other.nutritionJson == this.nutritionJson);
 }
 
 class RecipesCompanion extends UpdateCompanion<Recipe> {
@@ -434,6 +529,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
   final Value<String> createdAt;
   final Value<String> updatedAt;
   final Value<String?> deletedAt;
+  final Value<String?> nutritionMode;
+  final Value<String?> nutritionJson;
   final Value<int> rowid;
   const RecipesCompanion({
     this.id = const Value.absent(),
@@ -445,6 +542,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
+    this.nutritionMode = const Value.absent(),
+    this.nutritionJson = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RecipesCompanion.insert({
@@ -457,6 +556,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     required String createdAt,
     required String updatedAt,
     this.deletedAt = const Value.absent(),
+    this.nutritionMode = const Value.absent(),
+    this.nutritionJson = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        title = Value(title),
@@ -472,6 +573,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     Expression<String>? createdAt,
     Expression<String>? updatedAt,
     Expression<String>? deletedAt,
+    Expression<String>? nutritionMode,
+    Expression<String>? nutritionJson,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -484,6 +587,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
+      if (nutritionMode != null) 'nutrition_mode': nutritionMode,
+      if (nutritionJson != null) 'nutrition_json': nutritionJson,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -498,6 +603,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     Value<String>? createdAt,
     Value<String>? updatedAt,
     Value<String?>? deletedAt,
+    Value<String?>? nutritionMode,
+    Value<String?>? nutritionJson,
     Value<int>? rowid,
   }) {
     return RecipesCompanion(
@@ -510,6 +617,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
+      nutritionMode: nutritionMode ?? this.nutritionMode,
+      nutritionJson: nutritionJson ?? this.nutritionJson,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -544,6 +653,12 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     if (deletedAt.present) {
       map['deleted_at'] = Variable<String>(deletedAt.value);
     }
+    if (nutritionMode.present) {
+      map['nutrition_mode'] = Variable<String>(nutritionMode.value);
+    }
+    if (nutritionJson.present) {
+      map['nutrition_json'] = Variable<String>(nutritionJson.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -562,6 +677,8 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
+          ..write('nutritionMode: $nutritionMode, ')
+          ..write('nutritionJson: $nutritionJson, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -973,8 +1090,47 @@ class $RecipeStepsTable extends RecipeSteps
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _opIdMeta = const VerificationMeta('opId');
   @override
-  List<GeneratedColumn> get $columns => [id, recipeId, position, body];
+  late final GeneratedColumn<String> opId = GeneratedColumn<String>(
+    'op_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _temperatureCMeta = const VerificationMeta(
+    'temperatureC',
+  );
+  @override
+  late final GeneratedColumn<double> temperatureC = GeneratedColumn<double>(
+    'temperature_c',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationMinMeta = const VerificationMeta(
+    'durationMin',
+  );
+  @override
+  late final GeneratedColumn<double> durationMin = GeneratedColumn<double>(
+    'duration_min',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    recipeId,
+    position,
+    body,
+    opId,
+    temperatureC,
+    durationMin,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1016,6 +1172,30 @@ class $RecipeStepsTable extends RecipeSteps
     } else if (isInserting) {
       context.missing(_bodyMeta);
     }
+    if (data.containsKey('op_id')) {
+      context.handle(
+        _opIdMeta,
+        opId.isAcceptableOrUnknown(data['op_id']!, _opIdMeta),
+      );
+    }
+    if (data.containsKey('temperature_c')) {
+      context.handle(
+        _temperatureCMeta,
+        temperatureC.isAcceptableOrUnknown(
+          data['temperature_c']!,
+          _temperatureCMeta,
+        ),
+      );
+    }
+    if (data.containsKey('duration_min')) {
+      context.handle(
+        _durationMinMeta,
+        durationMin.isAcceptableOrUnknown(
+          data['duration_min']!,
+          _durationMinMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1041,6 +1221,18 @@ class $RecipeStepsTable extends RecipeSteps
         DriftSqlType.string,
         data['${effectivePrefix}body'],
       )!,
+      opId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}op_id'],
+      ),
+      temperatureC: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}temperature_c'],
+      ),
+      durationMin: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}duration_min'],
+      ),
     );
   }
 
@@ -1055,11 +1247,17 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
   final String recipeId;
   final int position;
   final String body;
+  final String? opId;
+  final double? temperatureC;
+  final double? durationMin;
   const RecipeStep({
     required this.id,
     required this.recipeId,
     required this.position,
     required this.body,
+    this.opId,
+    this.temperatureC,
+    this.durationMin,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1068,6 +1266,15 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
     map['recipe_id'] = Variable<String>(recipeId);
     map['position'] = Variable<int>(position);
     map['body'] = Variable<String>(body);
+    if (!nullToAbsent || opId != null) {
+      map['op_id'] = Variable<String>(opId);
+    }
+    if (!nullToAbsent || temperatureC != null) {
+      map['temperature_c'] = Variable<double>(temperatureC);
+    }
+    if (!nullToAbsent || durationMin != null) {
+      map['duration_min'] = Variable<double>(durationMin);
+    }
     return map;
   }
 
@@ -1077,6 +1284,13 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       recipeId: Value(recipeId),
       position: Value(position),
       body: Value(body),
+      opId: opId == null && nullToAbsent ? const Value.absent() : Value(opId),
+      temperatureC: temperatureC == null && nullToAbsent
+          ? const Value.absent()
+          : Value(temperatureC),
+      durationMin: durationMin == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationMin),
     );
   }
 
@@ -1090,6 +1304,9 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       recipeId: serializer.fromJson<String>(json['recipeId']),
       position: serializer.fromJson<int>(json['position']),
       body: serializer.fromJson<String>(json['body']),
+      opId: serializer.fromJson<String?>(json['opId']),
+      temperatureC: serializer.fromJson<double?>(json['temperatureC']),
+      durationMin: serializer.fromJson<double?>(json['durationMin']),
     );
   }
   @override
@@ -1100,6 +1317,9 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       'recipeId': serializer.toJson<String>(recipeId),
       'position': serializer.toJson<int>(position),
       'body': serializer.toJson<String>(body),
+      'opId': serializer.toJson<String?>(opId),
+      'temperatureC': serializer.toJson<double?>(temperatureC),
+      'durationMin': serializer.toJson<double?>(durationMin),
     };
   }
 
@@ -1108,11 +1328,17 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
     String? recipeId,
     int? position,
     String? body,
+    Value<String?> opId = const Value.absent(),
+    Value<double?> temperatureC = const Value.absent(),
+    Value<double?> durationMin = const Value.absent(),
   }) => RecipeStep(
     id: id ?? this.id,
     recipeId: recipeId ?? this.recipeId,
     position: position ?? this.position,
     body: body ?? this.body,
+    opId: opId.present ? opId.value : this.opId,
+    temperatureC: temperatureC.present ? temperatureC.value : this.temperatureC,
+    durationMin: durationMin.present ? durationMin.value : this.durationMin,
   );
   RecipeStep copyWithCompanion(RecipeStepsCompanion data) {
     return RecipeStep(
@@ -1120,6 +1346,13 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
       recipeId: data.recipeId.present ? data.recipeId.value : this.recipeId,
       position: data.position.present ? data.position.value : this.position,
       body: data.body.present ? data.body.value : this.body,
+      opId: data.opId.present ? data.opId.value : this.opId,
+      temperatureC: data.temperatureC.present
+          ? data.temperatureC.value
+          : this.temperatureC,
+      durationMin: data.durationMin.present
+          ? data.durationMin.value
+          : this.durationMin,
     );
   }
 
@@ -1129,13 +1362,24 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
           ..write('id: $id, ')
           ..write('recipeId: $recipeId, ')
           ..write('position: $position, ')
-          ..write('body: $body')
+          ..write('body: $body, ')
+          ..write('opId: $opId, ')
+          ..write('temperatureC: $temperatureC, ')
+          ..write('durationMin: $durationMin')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, recipeId, position, body);
+  int get hashCode => Object.hash(
+    id,
+    recipeId,
+    position,
+    body,
+    opId,
+    temperatureC,
+    durationMin,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1143,7 +1387,10 @@ class RecipeStep extends DataClass implements Insertable<RecipeStep> {
           other.id == this.id &&
           other.recipeId == this.recipeId &&
           other.position == this.position &&
-          other.body == this.body);
+          other.body == this.body &&
+          other.opId == this.opId &&
+          other.temperatureC == this.temperatureC &&
+          other.durationMin == this.durationMin);
 }
 
 class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
@@ -1151,12 +1398,18 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
   final Value<String> recipeId;
   final Value<int> position;
   final Value<String> body;
+  final Value<String?> opId;
+  final Value<double?> temperatureC;
+  final Value<double?> durationMin;
   final Value<int> rowid;
   const RecipeStepsCompanion({
     this.id = const Value.absent(),
     this.recipeId = const Value.absent(),
     this.position = const Value.absent(),
     this.body = const Value.absent(),
+    this.opId = const Value.absent(),
+    this.temperatureC = const Value.absent(),
+    this.durationMin = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RecipeStepsCompanion.insert({
@@ -1164,6 +1417,9 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     required String recipeId,
     required int position,
     required String body,
+    this.opId = const Value.absent(),
+    this.temperatureC = const Value.absent(),
+    this.durationMin = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        recipeId = Value(recipeId),
@@ -1174,6 +1430,9 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     Expression<String>? recipeId,
     Expression<int>? position,
     Expression<String>? body,
+    Expression<String>? opId,
+    Expression<double>? temperatureC,
+    Expression<double>? durationMin,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1181,6 +1440,9 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
       if (recipeId != null) 'recipe_id': recipeId,
       if (position != null) 'position': position,
       if (body != null) 'body': body,
+      if (opId != null) 'op_id': opId,
+      if (temperatureC != null) 'temperature_c': temperatureC,
+      if (durationMin != null) 'duration_min': durationMin,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1190,6 +1452,9 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     Value<String>? recipeId,
     Value<int>? position,
     Value<String>? body,
+    Value<String?>? opId,
+    Value<double?>? temperatureC,
+    Value<double?>? durationMin,
     Value<int>? rowid,
   }) {
     return RecipeStepsCompanion(
@@ -1197,6 +1462,9 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
       recipeId: recipeId ?? this.recipeId,
       position: position ?? this.position,
       body: body ?? this.body,
+      opId: opId ?? this.opId,
+      temperatureC: temperatureC ?? this.temperatureC,
+      durationMin: durationMin ?? this.durationMin,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1216,6 +1484,15 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
     if (body.present) {
       map['body'] = Variable<String>(body.value);
     }
+    if (opId.present) {
+      map['op_id'] = Variable<String>(opId.value);
+    }
+    if (temperatureC.present) {
+      map['temperature_c'] = Variable<double>(temperatureC.value);
+    }
+    if (durationMin.present) {
+      map['duration_min'] = Variable<double>(durationMin.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1229,6 +1506,9 @@ class RecipeStepsCompanion extends UpdateCompanion<RecipeStep> {
           ..write('recipeId: $recipeId, ')
           ..write('position: $position, ')
           ..write('body: $body, ')
+          ..write('opId: $opId, ')
+          ..write('temperatureC: $temperatureC, ')
+          ..write('durationMin: $durationMin, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3660,6 +3940,28 @@ class $RecipeItemsTable extends RecipeItems
       'REFERENCES ingredients (ingredient_id)',
     ),
   );
+  static const VerificationMeta _quantityTextMeta = const VerificationMeta(
+    'quantityText',
+  );
+  @override
+  late final GeneratedColumn<String> quantityText = GeneratedColumn<String>(
+    'quantity_text',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _cookingMethodMeta = const VerificationMeta(
+    'cookingMethod',
+  );
+  @override
+  late final GeneratedColumn<String> cookingMethod = GeneratedColumn<String>(
+    'cooking_method',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3671,6 +3973,8 @@ class $RecipeItemsTable extends RecipeItems
     ciqualCode,
     childRecipeId,
     ingredientId,
+    quantityText,
+    cookingMethod,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3753,6 +4057,24 @@ class $RecipeItemsTable extends RecipeItems
         ),
       );
     }
+    if (data.containsKey('quantity_text')) {
+      context.handle(
+        _quantityTextMeta,
+        quantityText.isAcceptableOrUnknown(
+          data['quantity_text']!,
+          _quantityTextMeta,
+        ),
+      );
+    }
+    if (data.containsKey('cooking_method')) {
+      context.handle(
+        _cookingMethodMeta,
+        cookingMethod.isAcceptableOrUnknown(
+          data['cooking_method']!,
+          _cookingMethodMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -3798,6 +4120,14 @@ class $RecipeItemsTable extends RecipeItems
         DriftSqlType.string,
         data['${effectivePrefix}ingredient_id'],
       ),
+      quantityText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}quantity_text'],
+      ),
+      cookingMethod: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cooking_method'],
+      ),
     );
   }
 
@@ -3822,6 +4152,8 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
   /// populated so the recipe detail can resolve the canonical name, the
   /// allergens and the nutrition profile from the 4 metier databases.
   final String? ingredientId;
+  final String? quantityText;
+  final String? cookingMethod;
   const RecipeItem({
     required this.id,
     required this.recipeId,
@@ -3832,6 +4164,8 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
     this.ciqualCode,
     this.childRecipeId,
     this.ingredientId,
+    this.quantityText,
+    this.cookingMethod,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3850,6 +4184,12 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
     }
     if (!nullToAbsent || ingredientId != null) {
       map['ingredient_id'] = Variable<String>(ingredientId);
+    }
+    if (!nullToAbsent || quantityText != null) {
+      map['quantity_text'] = Variable<String>(quantityText);
+    }
+    if (!nullToAbsent || cookingMethod != null) {
+      map['cooking_method'] = Variable<String>(cookingMethod);
     }
     return map;
   }
@@ -3871,6 +4211,12 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
       ingredientId: ingredientId == null && nullToAbsent
           ? const Value.absent()
           : Value(ingredientId),
+      quantityText: quantityText == null && nullToAbsent
+          ? const Value.absent()
+          : Value(quantityText),
+      cookingMethod: cookingMethod == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cookingMethod),
     );
   }
 
@@ -3889,6 +4235,8 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
       ciqualCode: serializer.fromJson<String?>(json['ciqualCode']),
       childRecipeId: serializer.fromJson<String?>(json['childRecipeId']),
       ingredientId: serializer.fromJson<String?>(json['ingredientId']),
+      quantityText: serializer.fromJson<String?>(json['quantityText']),
+      cookingMethod: serializer.fromJson<String?>(json['cookingMethod']),
     );
   }
   @override
@@ -3904,6 +4252,8 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
       'ciqualCode': serializer.toJson<String?>(ciqualCode),
       'childRecipeId': serializer.toJson<String?>(childRecipeId),
       'ingredientId': serializer.toJson<String?>(ingredientId),
+      'quantityText': serializer.toJson<String?>(quantityText),
+      'cookingMethod': serializer.toJson<String?>(cookingMethod),
     };
   }
 
@@ -3917,6 +4267,8 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
     Value<String?> ciqualCode = const Value.absent(),
     Value<String?> childRecipeId = const Value.absent(),
     Value<String?> ingredientId = const Value.absent(),
+    Value<String?> quantityText = const Value.absent(),
+    Value<String?> cookingMethod = const Value.absent(),
   }) => RecipeItem(
     id: id ?? this.id,
     recipeId: recipeId ?? this.recipeId,
@@ -3929,6 +4281,10 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
         ? childRecipeId.value
         : this.childRecipeId,
     ingredientId: ingredientId.present ? ingredientId.value : this.ingredientId,
+    quantityText: quantityText.present ? quantityText.value : this.quantityText,
+    cookingMethod: cookingMethod.present
+        ? cookingMethod.value
+        : this.cookingMethod,
   );
   RecipeItem copyWithCompanion(RecipeItemsCompanion data) {
     return RecipeItem(
@@ -3947,6 +4303,12 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
       ingredientId: data.ingredientId.present
           ? data.ingredientId.value
           : this.ingredientId,
+      quantityText: data.quantityText.present
+          ? data.quantityText.value
+          : this.quantityText,
+      cookingMethod: data.cookingMethod.present
+          ? data.cookingMethod.value
+          : this.cookingMethod,
     );
   }
 
@@ -3961,7 +4323,9 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
           ..write('quantityG: $quantityG, ')
           ..write('ciqualCode: $ciqualCode, ')
           ..write('childRecipeId: $childRecipeId, ')
-          ..write('ingredientId: $ingredientId')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('quantityText: $quantityText, ')
+          ..write('cookingMethod: $cookingMethod')
           ..write(')'))
         .toString();
   }
@@ -3977,6 +4341,8 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
     ciqualCode,
     childRecipeId,
     ingredientId,
+    quantityText,
+    cookingMethod,
   );
   @override
   bool operator ==(Object other) =>
@@ -3990,7 +4356,9 @@ class RecipeItem extends DataClass implements Insertable<RecipeItem> {
           other.quantityG == this.quantityG &&
           other.ciqualCode == this.ciqualCode &&
           other.childRecipeId == this.childRecipeId &&
-          other.ingredientId == this.ingredientId);
+          other.ingredientId == this.ingredientId &&
+          other.quantityText == this.quantityText &&
+          other.cookingMethod == this.cookingMethod);
 }
 
 class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
@@ -4003,6 +4371,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
   final Value<String?> ciqualCode;
   final Value<String?> childRecipeId;
   final Value<String?> ingredientId;
+  final Value<String?> quantityText;
+  final Value<String?> cookingMethod;
   final Value<int> rowid;
   const RecipeItemsCompanion({
     this.id = const Value.absent(),
@@ -4014,6 +4384,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
     this.ciqualCode = const Value.absent(),
     this.childRecipeId = const Value.absent(),
     this.ingredientId = const Value.absent(),
+    this.quantityText = const Value.absent(),
+    this.cookingMethod = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RecipeItemsCompanion.insert({
@@ -4026,6 +4398,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
     this.ciqualCode = const Value.absent(),
     this.childRecipeId = const Value.absent(),
     this.ingredientId = const Value.absent(),
+    this.quantityText = const Value.absent(),
+    this.cookingMethod = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        recipeId = Value(recipeId),
@@ -4043,6 +4417,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
     Expression<String>? ciqualCode,
     Expression<String>? childRecipeId,
     Expression<String>? ingredientId,
+    Expression<String>? quantityText,
+    Expression<String>? cookingMethod,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4055,6 +4431,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
       if (ciqualCode != null) 'ciqual_code': ciqualCode,
       if (childRecipeId != null) 'child_recipe_id': childRecipeId,
       if (ingredientId != null) 'ingredient_id': ingredientId,
+      if (quantityText != null) 'quantity_text': quantityText,
+      if (cookingMethod != null) 'cooking_method': cookingMethod,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4069,6 +4447,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
     Value<String?>? ciqualCode,
     Value<String?>? childRecipeId,
     Value<String?>? ingredientId,
+    Value<String?>? quantityText,
+    Value<String?>? cookingMethod,
     Value<int>? rowid,
   }) {
     return RecipeItemsCompanion(
@@ -4081,6 +4461,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
       ciqualCode: ciqualCode ?? this.ciqualCode,
       childRecipeId: childRecipeId ?? this.childRecipeId,
       ingredientId: ingredientId ?? this.ingredientId,
+      quantityText: quantityText ?? this.quantityText,
+      cookingMethod: cookingMethod ?? this.cookingMethod,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4115,6 +4497,12 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
     if (ingredientId.present) {
       map['ingredient_id'] = Variable<String>(ingredientId.value);
     }
+    if (quantityText.present) {
+      map['quantity_text'] = Variable<String>(quantityText.value);
+    }
+    if (cookingMethod.present) {
+      map['cooking_method'] = Variable<String>(cookingMethod.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -4133,6 +4521,8 @@ class RecipeItemsCompanion extends UpdateCompanion<RecipeItem> {
           ..write('ciqualCode: $ciqualCode, ')
           ..write('childRecipeId: $childRecipeId, ')
           ..write('ingredientId: $ingredientId, ')
+          ..write('quantityText: $quantityText, ')
+          ..write('cookingMethod: $cookingMethod, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -15144,6 +15534,4062 @@ class ProcessOperationsCompanion extends UpdateCompanion<ProcessOperation> {
   }
 }
 
+class $IngredientCulinaryTable extends IngredientCulinary
+    with TableInfo<$IngredientCulinaryTable, IngredientCulinaryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IngredientCulinaryTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _ingredientIdMeta = const VerificationMeta(
+    'ingredientId',
+  );
+  @override
+  late final GeneratedColumn<String> ingredientId = GeneratedColumn<String>(
+    'ingredient_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _densityGPerMlMeta = const VerificationMeta(
+    'densityGPerMl',
+  );
+  @override
+  late final GeneratedColumn<double> densityGPerMl = GeneratedColumn<double>(
+    'density_g_per_ml',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _densityNoteMeta = const VerificationMeta(
+    'densityNote',
+  );
+  @override
+  late final GeneratedColumn<String> densityNote = GeneratedColumn<String>(
+    'density_note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _unitMassesMeta = const VerificationMeta(
+    'unitMasses',
+  );
+  @override
+  late final GeneratedColumn<String> unitMasses = GeneratedColumn<String>(
+    'unit_masses',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _phMeta = const VerificationMeta('ph');
+  @override
+  late final GeneratedColumn<double> ph = GeneratedColumn<double>(
+    'ph',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _phConfidenceMeta = const VerificationMeta(
+    'phConfidence',
+  );
+  @override
+  late final GeneratedColumn<double> phConfidence = GeneratedColumn<double>(
+    'ph_confidence',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _phNoteMeta = const VerificationMeta('phNote');
+  @override
+  late final GeneratedColumn<String> phNote = GeneratedColumn<String>(
+    'ph_note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    ingredientId,
+    densityGPerMl,
+    densityNote,
+    unitMasses,
+    ph,
+    phConfidence,
+    phNote,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ingredient_culinary';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<IngredientCulinaryData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('ingredient_id')) {
+      context.handle(
+        _ingredientIdMeta,
+        ingredientId.isAcceptableOrUnknown(
+          data['ingredient_id']!,
+          _ingredientIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_ingredientIdMeta);
+    }
+    if (data.containsKey('density_g_per_ml')) {
+      context.handle(
+        _densityGPerMlMeta,
+        densityGPerMl.isAcceptableOrUnknown(
+          data['density_g_per_ml']!,
+          _densityGPerMlMeta,
+        ),
+      );
+    }
+    if (data.containsKey('density_note')) {
+      context.handle(
+        _densityNoteMeta,
+        densityNote.isAcceptableOrUnknown(
+          data['density_note']!,
+          _densityNoteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('unit_masses')) {
+      context.handle(
+        _unitMassesMeta,
+        unitMasses.isAcceptableOrUnknown(data['unit_masses']!, _unitMassesMeta),
+      );
+    }
+    if (data.containsKey('ph')) {
+      context.handle(_phMeta, ph.isAcceptableOrUnknown(data['ph']!, _phMeta));
+    }
+    if (data.containsKey('ph_confidence')) {
+      context.handle(
+        _phConfidenceMeta,
+        phConfidence.isAcceptableOrUnknown(
+          data['ph_confidence']!,
+          _phConfidenceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ph_note')) {
+      context.handle(
+        _phNoteMeta,
+        phNote.isAcceptableOrUnknown(data['ph_note']!, _phNoteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {ingredientId};
+  @override
+  IngredientCulinaryData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IngredientCulinaryData(
+      ingredientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ingredient_id'],
+      )!,
+      densityGPerMl: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}density_g_per_ml'],
+      ),
+      densityNote: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}density_note'],
+      ),
+      unitMasses: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}unit_masses'],
+      ),
+      ph: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}ph'],
+      ),
+      phConfidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}ph_confidence'],
+      ),
+      phNote: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ph_note'],
+      ),
+    );
+  }
+
+  @override
+  $IngredientCulinaryTable createAlias(String alias) {
+    return $IngredientCulinaryTable(attachedDatabase, alias);
+  }
+}
+
+class IngredientCulinaryData extends DataClass
+    implements Insertable<IngredientCulinaryData> {
+  final String ingredientId;
+  final double? densityGPerMl;
+  final String? densityNote;
+
+  /// Masses unitaires `unité:grammes` séparées par `|` (ex.
+  /// `piece:50|gousse:5`).
+  final String? unitMasses;
+  final double? ph;
+  final double? phConfidence;
+  final String? phNote;
+  const IngredientCulinaryData({
+    required this.ingredientId,
+    this.densityGPerMl,
+    this.densityNote,
+    this.unitMasses,
+    this.ph,
+    this.phConfidence,
+    this.phNote,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['ingredient_id'] = Variable<String>(ingredientId);
+    if (!nullToAbsent || densityGPerMl != null) {
+      map['density_g_per_ml'] = Variable<double>(densityGPerMl);
+    }
+    if (!nullToAbsent || densityNote != null) {
+      map['density_note'] = Variable<String>(densityNote);
+    }
+    if (!nullToAbsent || unitMasses != null) {
+      map['unit_masses'] = Variable<String>(unitMasses);
+    }
+    if (!nullToAbsent || ph != null) {
+      map['ph'] = Variable<double>(ph);
+    }
+    if (!nullToAbsent || phConfidence != null) {
+      map['ph_confidence'] = Variable<double>(phConfidence);
+    }
+    if (!nullToAbsent || phNote != null) {
+      map['ph_note'] = Variable<String>(phNote);
+    }
+    return map;
+  }
+
+  IngredientCulinaryCompanion toCompanion(bool nullToAbsent) {
+    return IngredientCulinaryCompanion(
+      ingredientId: Value(ingredientId),
+      densityGPerMl: densityGPerMl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(densityGPerMl),
+      densityNote: densityNote == null && nullToAbsent
+          ? const Value.absent()
+          : Value(densityNote),
+      unitMasses: unitMasses == null && nullToAbsent
+          ? const Value.absent()
+          : Value(unitMasses),
+      ph: ph == null && nullToAbsent ? const Value.absent() : Value(ph),
+      phConfidence: phConfidence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phConfidence),
+      phNote: phNote == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phNote),
+    );
+  }
+
+  factory IngredientCulinaryData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IngredientCulinaryData(
+      ingredientId: serializer.fromJson<String>(json['ingredientId']),
+      densityGPerMl: serializer.fromJson<double?>(json['densityGPerMl']),
+      densityNote: serializer.fromJson<String?>(json['densityNote']),
+      unitMasses: serializer.fromJson<String?>(json['unitMasses']),
+      ph: serializer.fromJson<double?>(json['ph']),
+      phConfidence: serializer.fromJson<double?>(json['phConfidence']),
+      phNote: serializer.fromJson<String?>(json['phNote']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'ingredientId': serializer.toJson<String>(ingredientId),
+      'densityGPerMl': serializer.toJson<double?>(densityGPerMl),
+      'densityNote': serializer.toJson<String?>(densityNote),
+      'unitMasses': serializer.toJson<String?>(unitMasses),
+      'ph': serializer.toJson<double?>(ph),
+      'phConfidence': serializer.toJson<double?>(phConfidence),
+      'phNote': serializer.toJson<String?>(phNote),
+    };
+  }
+
+  IngredientCulinaryData copyWith({
+    String? ingredientId,
+    Value<double?> densityGPerMl = const Value.absent(),
+    Value<String?> densityNote = const Value.absent(),
+    Value<String?> unitMasses = const Value.absent(),
+    Value<double?> ph = const Value.absent(),
+    Value<double?> phConfidence = const Value.absent(),
+    Value<String?> phNote = const Value.absent(),
+  }) => IngredientCulinaryData(
+    ingredientId: ingredientId ?? this.ingredientId,
+    densityGPerMl: densityGPerMl.present
+        ? densityGPerMl.value
+        : this.densityGPerMl,
+    densityNote: densityNote.present ? densityNote.value : this.densityNote,
+    unitMasses: unitMasses.present ? unitMasses.value : this.unitMasses,
+    ph: ph.present ? ph.value : this.ph,
+    phConfidence: phConfidence.present ? phConfidence.value : this.phConfidence,
+    phNote: phNote.present ? phNote.value : this.phNote,
+  );
+  IngredientCulinaryData copyWithCompanion(IngredientCulinaryCompanion data) {
+    return IngredientCulinaryData(
+      ingredientId: data.ingredientId.present
+          ? data.ingredientId.value
+          : this.ingredientId,
+      densityGPerMl: data.densityGPerMl.present
+          ? data.densityGPerMl.value
+          : this.densityGPerMl,
+      densityNote: data.densityNote.present
+          ? data.densityNote.value
+          : this.densityNote,
+      unitMasses: data.unitMasses.present
+          ? data.unitMasses.value
+          : this.unitMasses,
+      ph: data.ph.present ? data.ph.value : this.ph,
+      phConfidence: data.phConfidence.present
+          ? data.phConfidence.value
+          : this.phConfidence,
+      phNote: data.phNote.present ? data.phNote.value : this.phNote,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientCulinaryData(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('densityGPerMl: $densityGPerMl, ')
+          ..write('densityNote: $densityNote, ')
+          ..write('unitMasses: $unitMasses, ')
+          ..write('ph: $ph, ')
+          ..write('phConfidence: $phConfidence, ')
+          ..write('phNote: $phNote')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    ingredientId,
+    densityGPerMl,
+    densityNote,
+    unitMasses,
+    ph,
+    phConfidence,
+    phNote,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IngredientCulinaryData &&
+          other.ingredientId == this.ingredientId &&
+          other.densityGPerMl == this.densityGPerMl &&
+          other.densityNote == this.densityNote &&
+          other.unitMasses == this.unitMasses &&
+          other.ph == this.ph &&
+          other.phConfidence == this.phConfidence &&
+          other.phNote == this.phNote);
+}
+
+class IngredientCulinaryCompanion
+    extends UpdateCompanion<IngredientCulinaryData> {
+  final Value<String> ingredientId;
+  final Value<double?> densityGPerMl;
+  final Value<String?> densityNote;
+  final Value<String?> unitMasses;
+  final Value<double?> ph;
+  final Value<double?> phConfidence;
+  final Value<String?> phNote;
+  final Value<int> rowid;
+  const IngredientCulinaryCompanion({
+    this.ingredientId = const Value.absent(),
+    this.densityGPerMl = const Value.absent(),
+    this.densityNote = const Value.absent(),
+    this.unitMasses = const Value.absent(),
+    this.ph = const Value.absent(),
+    this.phConfidence = const Value.absent(),
+    this.phNote = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  IngredientCulinaryCompanion.insert({
+    required String ingredientId,
+    this.densityGPerMl = const Value.absent(),
+    this.densityNote = const Value.absent(),
+    this.unitMasses = const Value.absent(),
+    this.ph = const Value.absent(),
+    this.phConfidence = const Value.absent(),
+    this.phNote = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : ingredientId = Value(ingredientId);
+  static Insertable<IngredientCulinaryData> custom({
+    Expression<String>? ingredientId,
+    Expression<double>? densityGPerMl,
+    Expression<String>? densityNote,
+    Expression<String>? unitMasses,
+    Expression<double>? ph,
+    Expression<double>? phConfidence,
+    Expression<String>? phNote,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (ingredientId != null) 'ingredient_id': ingredientId,
+      if (densityGPerMl != null) 'density_g_per_ml': densityGPerMl,
+      if (densityNote != null) 'density_note': densityNote,
+      if (unitMasses != null) 'unit_masses': unitMasses,
+      if (ph != null) 'ph': ph,
+      if (phConfidence != null) 'ph_confidence': phConfidence,
+      if (phNote != null) 'ph_note': phNote,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  IngredientCulinaryCompanion copyWith({
+    Value<String>? ingredientId,
+    Value<double?>? densityGPerMl,
+    Value<String?>? densityNote,
+    Value<String?>? unitMasses,
+    Value<double?>? ph,
+    Value<double?>? phConfidence,
+    Value<String?>? phNote,
+    Value<int>? rowid,
+  }) {
+    return IngredientCulinaryCompanion(
+      ingredientId: ingredientId ?? this.ingredientId,
+      densityGPerMl: densityGPerMl ?? this.densityGPerMl,
+      densityNote: densityNote ?? this.densityNote,
+      unitMasses: unitMasses ?? this.unitMasses,
+      ph: ph ?? this.ph,
+      phConfidence: phConfidence ?? this.phConfidence,
+      phNote: phNote ?? this.phNote,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (ingredientId.present) {
+      map['ingredient_id'] = Variable<String>(ingredientId.value);
+    }
+    if (densityGPerMl.present) {
+      map['density_g_per_ml'] = Variable<double>(densityGPerMl.value);
+    }
+    if (densityNote.present) {
+      map['density_note'] = Variable<String>(densityNote.value);
+    }
+    if (unitMasses.present) {
+      map['unit_masses'] = Variable<String>(unitMasses.value);
+    }
+    if (ph.present) {
+      map['ph'] = Variable<double>(ph.value);
+    }
+    if (phConfidence.present) {
+      map['ph_confidence'] = Variable<double>(phConfidence.value);
+    }
+    if (phNote.present) {
+      map['ph_note'] = Variable<String>(phNote.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientCulinaryCompanion(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('densityGPerMl: $densityGPerMl, ')
+          ..write('densityNote: $densityNote, ')
+          ..write('unitMasses: $unitMasses, ')
+          ..write('ph: $ph, ')
+          ..write('phConfidence: $phConfidence, ')
+          ..write('phNote: $phNote, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ProcessFactorsTable extends ProcessFactors
+    with TableInfo<$ProcessFactorsTable, ProcessFactor> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProcessFactorsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _factorIdMeta = const VerificationMeta(
+    'factorId',
+  );
+  @override
+  late final GeneratedColumn<String> factorId = GeneratedColumn<String>(
+    'factor_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _foodGroupMeta = const VerificationMeta(
+    'foodGroup',
+  );
+  @override
+  late final GeneratedColumn<String> foodGroup = GeneratedColumn<String>(
+    'food_group',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _methodMeta = const VerificationMeta('method');
+  @override
+  late final GeneratedColumn<String> method = GeneratedColumn<String>(
+    'method',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _yieldFactorMeta = const VerificationMeta(
+    'yieldFactor',
+  );
+  @override
+  late final GeneratedColumn<double> yieldFactor = GeneratedColumn<double>(
+    'yield_factor',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fatUptakeGMeta = const VerificationMeta(
+    'fatUptakeG',
+  );
+  @override
+  late final GeneratedColumn<double> fatUptakeG = GeneratedColumn<double>(
+    'fat_uptake_g',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _fatRetentionMeta = const VerificationMeta(
+    'fatRetention',
+  );
+  @override
+  late final GeneratedColumn<double> fatRetention = GeneratedColumn<double>(
+    'fat_retention',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _retentionMeta = const VerificationMeta(
+    'retention',
+  );
+  @override
+  late final GeneratedColumn<String> retention = GeneratedColumn<String>(
+    'retention',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _confidenceMeta = const VerificationMeta(
+    'confidence',
+  );
+  @override
+  late final GeneratedColumn<double> confidence = GeneratedColumn<double>(
+    'confidence',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    factorId,
+    foodGroup,
+    method,
+    yieldFactor,
+    fatUptakeG,
+    fatRetention,
+    retention,
+    confidence,
+    source,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'process_factors';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ProcessFactor> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('factor_id')) {
+      context.handle(
+        _factorIdMeta,
+        factorId.isAcceptableOrUnknown(data['factor_id']!, _factorIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_factorIdMeta);
+    }
+    if (data.containsKey('food_group')) {
+      context.handle(
+        _foodGroupMeta,
+        foodGroup.isAcceptableOrUnknown(data['food_group']!, _foodGroupMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_foodGroupMeta);
+    }
+    if (data.containsKey('method')) {
+      context.handle(
+        _methodMeta,
+        method.isAcceptableOrUnknown(data['method']!, _methodMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_methodMeta);
+    }
+    if (data.containsKey('yield_factor')) {
+      context.handle(
+        _yieldFactorMeta,
+        yieldFactor.isAcceptableOrUnknown(
+          data['yield_factor']!,
+          _yieldFactorMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_yieldFactorMeta);
+    }
+    if (data.containsKey('fat_uptake_g')) {
+      context.handle(
+        _fatUptakeGMeta,
+        fatUptakeG.isAcceptableOrUnknown(
+          data['fat_uptake_g']!,
+          _fatUptakeGMeta,
+        ),
+      );
+    }
+    if (data.containsKey('fat_retention')) {
+      context.handle(
+        _fatRetentionMeta,
+        fatRetention.isAcceptableOrUnknown(
+          data['fat_retention']!,
+          _fatRetentionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('retention')) {
+      context.handle(
+        _retentionMeta,
+        retention.isAcceptableOrUnknown(data['retention']!, _retentionMeta),
+      );
+    }
+    if (data.containsKey('confidence')) {
+      context.handle(
+        _confidenceMeta,
+        confidence.isAcceptableOrUnknown(data['confidence']!, _confidenceMeta),
+      );
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {factorId};
+  @override
+  ProcessFactor map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProcessFactor(
+      factorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}factor_id'],
+      )!,
+      foodGroup: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}food_group'],
+      )!,
+      method: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}method'],
+      )!,
+      yieldFactor: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}yield_factor'],
+      )!,
+      fatUptakeG: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}fat_uptake_g'],
+      ),
+      fatRetention: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}fat_retention'],
+      ),
+      retention: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}retention'],
+      ),
+      confidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}confidence'],
+      ),
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $ProcessFactorsTable createAlias(String alias) {
+    return $ProcessFactorsTable(attachedDatabase, alias);
+  }
+}
+
+class ProcessFactor extends DataClass implements Insertable<ProcessFactor> {
+  final String factorId;
+  final String foodGroup;
+  final String method;
+  final double yieldFactor;
+  final double? fatUptakeG;
+  final double? fatRetention;
+
+  /// Rétentions `TAG:facteur` séparées par `|` (1 si absent).
+  final String? retention;
+  final double? confidence;
+  final String? source;
+  final String? note;
+  const ProcessFactor({
+    required this.factorId,
+    required this.foodGroup,
+    required this.method,
+    required this.yieldFactor,
+    this.fatUptakeG,
+    this.fatRetention,
+    this.retention,
+    this.confidence,
+    this.source,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['factor_id'] = Variable<String>(factorId);
+    map['food_group'] = Variable<String>(foodGroup);
+    map['method'] = Variable<String>(method);
+    map['yield_factor'] = Variable<double>(yieldFactor);
+    if (!nullToAbsent || fatUptakeG != null) {
+      map['fat_uptake_g'] = Variable<double>(fatUptakeG);
+    }
+    if (!nullToAbsent || fatRetention != null) {
+      map['fat_retention'] = Variable<double>(fatRetention);
+    }
+    if (!nullToAbsent || retention != null) {
+      map['retention'] = Variable<String>(retention);
+    }
+    if (!nullToAbsent || confidence != null) {
+      map['confidence'] = Variable<double>(confidence);
+    }
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  ProcessFactorsCompanion toCompanion(bool nullToAbsent) {
+    return ProcessFactorsCompanion(
+      factorId: Value(factorId),
+      foodGroup: Value(foodGroup),
+      method: Value(method),
+      yieldFactor: Value(yieldFactor),
+      fatUptakeG: fatUptakeG == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fatUptakeG),
+      fatRetention: fatRetention == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fatRetention),
+      retention: retention == null && nullToAbsent
+          ? const Value.absent()
+          : Value(retention),
+      confidence: confidence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(confidence),
+      source: source == null && nullToAbsent
+          ? const Value.absent()
+          : Value(source),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory ProcessFactor.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProcessFactor(
+      factorId: serializer.fromJson<String>(json['factorId']),
+      foodGroup: serializer.fromJson<String>(json['foodGroup']),
+      method: serializer.fromJson<String>(json['method']),
+      yieldFactor: serializer.fromJson<double>(json['yieldFactor']),
+      fatUptakeG: serializer.fromJson<double?>(json['fatUptakeG']),
+      fatRetention: serializer.fromJson<double?>(json['fatRetention']),
+      retention: serializer.fromJson<String?>(json['retention']),
+      confidence: serializer.fromJson<double?>(json['confidence']),
+      source: serializer.fromJson<String?>(json['source']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'factorId': serializer.toJson<String>(factorId),
+      'foodGroup': serializer.toJson<String>(foodGroup),
+      'method': serializer.toJson<String>(method),
+      'yieldFactor': serializer.toJson<double>(yieldFactor),
+      'fatUptakeG': serializer.toJson<double?>(fatUptakeG),
+      'fatRetention': serializer.toJson<double?>(fatRetention),
+      'retention': serializer.toJson<String?>(retention),
+      'confidence': serializer.toJson<double?>(confidence),
+      'source': serializer.toJson<String?>(source),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  ProcessFactor copyWith({
+    String? factorId,
+    String? foodGroup,
+    String? method,
+    double? yieldFactor,
+    Value<double?> fatUptakeG = const Value.absent(),
+    Value<double?> fatRetention = const Value.absent(),
+    Value<String?> retention = const Value.absent(),
+    Value<double?> confidence = const Value.absent(),
+    Value<String?> source = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+  }) => ProcessFactor(
+    factorId: factorId ?? this.factorId,
+    foodGroup: foodGroup ?? this.foodGroup,
+    method: method ?? this.method,
+    yieldFactor: yieldFactor ?? this.yieldFactor,
+    fatUptakeG: fatUptakeG.present ? fatUptakeG.value : this.fatUptakeG,
+    fatRetention: fatRetention.present ? fatRetention.value : this.fatRetention,
+    retention: retention.present ? retention.value : this.retention,
+    confidence: confidence.present ? confidence.value : this.confidence,
+    source: source.present ? source.value : this.source,
+    note: note.present ? note.value : this.note,
+  );
+  ProcessFactor copyWithCompanion(ProcessFactorsCompanion data) {
+    return ProcessFactor(
+      factorId: data.factorId.present ? data.factorId.value : this.factorId,
+      foodGroup: data.foodGroup.present ? data.foodGroup.value : this.foodGroup,
+      method: data.method.present ? data.method.value : this.method,
+      yieldFactor: data.yieldFactor.present
+          ? data.yieldFactor.value
+          : this.yieldFactor,
+      fatUptakeG: data.fatUptakeG.present
+          ? data.fatUptakeG.value
+          : this.fatUptakeG,
+      fatRetention: data.fatRetention.present
+          ? data.fatRetention.value
+          : this.fatRetention,
+      retention: data.retention.present ? data.retention.value : this.retention,
+      confidence: data.confidence.present
+          ? data.confidence.value
+          : this.confidence,
+      source: data.source.present ? data.source.value : this.source,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProcessFactor(')
+          ..write('factorId: $factorId, ')
+          ..write('foodGroup: $foodGroup, ')
+          ..write('method: $method, ')
+          ..write('yieldFactor: $yieldFactor, ')
+          ..write('fatUptakeG: $fatUptakeG, ')
+          ..write('fatRetention: $fatRetention, ')
+          ..write('retention: $retention, ')
+          ..write('confidence: $confidence, ')
+          ..write('source: $source, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    factorId,
+    foodGroup,
+    method,
+    yieldFactor,
+    fatUptakeG,
+    fatRetention,
+    retention,
+    confidence,
+    source,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProcessFactor &&
+          other.factorId == this.factorId &&
+          other.foodGroup == this.foodGroup &&
+          other.method == this.method &&
+          other.yieldFactor == this.yieldFactor &&
+          other.fatUptakeG == this.fatUptakeG &&
+          other.fatRetention == this.fatRetention &&
+          other.retention == this.retention &&
+          other.confidence == this.confidence &&
+          other.source == this.source &&
+          other.note == this.note);
+}
+
+class ProcessFactorsCompanion extends UpdateCompanion<ProcessFactor> {
+  final Value<String> factorId;
+  final Value<String> foodGroup;
+  final Value<String> method;
+  final Value<double> yieldFactor;
+  final Value<double?> fatUptakeG;
+  final Value<double?> fatRetention;
+  final Value<String?> retention;
+  final Value<double?> confidence;
+  final Value<String?> source;
+  final Value<String?> note;
+  final Value<int> rowid;
+  const ProcessFactorsCompanion({
+    this.factorId = const Value.absent(),
+    this.foodGroup = const Value.absent(),
+    this.method = const Value.absent(),
+    this.yieldFactor = const Value.absent(),
+    this.fatUptakeG = const Value.absent(),
+    this.fatRetention = const Value.absent(),
+    this.retention = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.source = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ProcessFactorsCompanion.insert({
+    required String factorId,
+    required String foodGroup,
+    required String method,
+    required double yieldFactor,
+    this.fatUptakeG = const Value.absent(),
+    this.fatRetention = const Value.absent(),
+    this.retention = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.source = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : factorId = Value(factorId),
+       foodGroup = Value(foodGroup),
+       method = Value(method),
+       yieldFactor = Value(yieldFactor);
+  static Insertable<ProcessFactor> custom({
+    Expression<String>? factorId,
+    Expression<String>? foodGroup,
+    Expression<String>? method,
+    Expression<double>? yieldFactor,
+    Expression<double>? fatUptakeG,
+    Expression<double>? fatRetention,
+    Expression<String>? retention,
+    Expression<double>? confidence,
+    Expression<String>? source,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (factorId != null) 'factor_id': factorId,
+      if (foodGroup != null) 'food_group': foodGroup,
+      if (method != null) 'method': method,
+      if (yieldFactor != null) 'yield_factor': yieldFactor,
+      if (fatUptakeG != null) 'fat_uptake_g': fatUptakeG,
+      if (fatRetention != null) 'fat_retention': fatRetention,
+      if (retention != null) 'retention': retention,
+      if (confidence != null) 'confidence': confidence,
+      if (source != null) 'source': source,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ProcessFactorsCompanion copyWith({
+    Value<String>? factorId,
+    Value<String>? foodGroup,
+    Value<String>? method,
+    Value<double>? yieldFactor,
+    Value<double?>? fatUptakeG,
+    Value<double?>? fatRetention,
+    Value<String?>? retention,
+    Value<double?>? confidence,
+    Value<String?>? source,
+    Value<String?>? note,
+    Value<int>? rowid,
+  }) {
+    return ProcessFactorsCompanion(
+      factorId: factorId ?? this.factorId,
+      foodGroup: foodGroup ?? this.foodGroup,
+      method: method ?? this.method,
+      yieldFactor: yieldFactor ?? this.yieldFactor,
+      fatUptakeG: fatUptakeG ?? this.fatUptakeG,
+      fatRetention: fatRetention ?? this.fatRetention,
+      retention: retention ?? this.retention,
+      confidence: confidence ?? this.confidence,
+      source: source ?? this.source,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (factorId.present) {
+      map['factor_id'] = Variable<String>(factorId.value);
+    }
+    if (foodGroup.present) {
+      map['food_group'] = Variable<String>(foodGroup.value);
+    }
+    if (method.present) {
+      map['method'] = Variable<String>(method.value);
+    }
+    if (yieldFactor.present) {
+      map['yield_factor'] = Variable<double>(yieldFactor.value);
+    }
+    if (fatUptakeG.present) {
+      map['fat_uptake_g'] = Variable<double>(fatUptakeG.value);
+    }
+    if (fatRetention.present) {
+      map['fat_retention'] = Variable<double>(fatRetention.value);
+    }
+    if (retention.present) {
+      map['retention'] = Variable<String>(retention.value);
+    }
+    if (confidence.present) {
+      map['confidence'] = Variable<double>(confidence.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProcessFactorsCompanion(')
+          ..write('factorId: $factorId, ')
+          ..write('foodGroup: $foodGroup, ')
+          ..write('method: $method, ')
+          ..write('yieldFactor: $yieldFactor, ')
+          ..write('fatUptakeG: $fatUptakeG, ')
+          ..write('fatRetention: $fatRetention, ')
+          ..write('retention: $retention, ')
+          ..write('confidence: $confidence, ')
+          ..write('source: $source, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IngredientFunctionalComponentsTable
+    extends IngredientFunctionalComponents
+    with
+        TableInfo<
+          $IngredientFunctionalComponentsTable,
+          IngredientFunctionalComponent
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IngredientFunctionalComponentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _ingredientIdMeta = const VerificationMeta(
+    'ingredientId',
+  );
+  @override
+  late final GeneratedColumn<String> ingredientId = GeneratedColumn<String>(
+    'ingredient_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _componentIdMeta = const VerificationMeta(
+    'componentId',
+  );
+  @override
+  late final GeneratedColumn<String> componentId = GeneratedColumn<String>(
+    'component_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fractionGPer100gMeta = const VerificationMeta(
+    'fractionGPer100g',
+  );
+  @override
+  late final GeneratedColumn<double> fractionGPer100g = GeneratedColumn<double>(
+    'fraction_g_per_100g',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _basisMeta = const VerificationMeta('basis');
+  @override
+  late final GeneratedColumn<String> basis = GeneratedColumn<String>(
+    'basis',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceRefsMeta = const VerificationMeta(
+    'sourceRefs',
+  );
+  @override
+  late final GeneratedColumn<String> sourceRefs = GeneratedColumn<String>(
+    'source_refs',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _confidenceMeta = const VerificationMeta(
+    'confidence',
+  );
+  @override
+  late final GeneratedColumn<double> confidence = GeneratedColumn<double>(
+    'confidence',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    ingredientId,
+    componentId,
+    fractionGPer100g,
+    basis,
+    sourceRefs,
+    confidence,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ingredient_functional_components';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<IngredientFunctionalComponent> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('ingredient_id')) {
+      context.handle(
+        _ingredientIdMeta,
+        ingredientId.isAcceptableOrUnknown(
+          data['ingredient_id']!,
+          _ingredientIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_ingredientIdMeta);
+    }
+    if (data.containsKey('component_id')) {
+      context.handle(
+        _componentIdMeta,
+        componentId.isAcceptableOrUnknown(
+          data['component_id']!,
+          _componentIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_componentIdMeta);
+    }
+    if (data.containsKey('fraction_g_per_100g')) {
+      context.handle(
+        _fractionGPer100gMeta,
+        fractionGPer100g.isAcceptableOrUnknown(
+          data['fraction_g_per_100g']!,
+          _fractionGPer100gMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_fractionGPer100gMeta);
+    }
+    if (data.containsKey('basis')) {
+      context.handle(
+        _basisMeta,
+        basis.isAcceptableOrUnknown(data['basis']!, _basisMeta),
+      );
+    }
+    if (data.containsKey('source_refs')) {
+      context.handle(
+        _sourceRefsMeta,
+        sourceRefs.isAcceptableOrUnknown(data['source_refs']!, _sourceRefsMeta),
+      );
+    }
+    if (data.containsKey('confidence')) {
+      context.handle(
+        _confidenceMeta,
+        confidence.isAcceptableOrUnknown(data['confidence']!, _confidenceMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {ingredientId, componentId};
+  @override
+  IngredientFunctionalComponent map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IngredientFunctionalComponent(
+      ingredientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ingredient_id'],
+      )!,
+      componentId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}component_id'],
+      )!,
+      fractionGPer100g: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}fraction_g_per_100g'],
+      )!,
+      basis: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}basis'],
+      ),
+      sourceRefs: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_refs'],
+      ),
+      confidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}confidence'],
+      ),
+    );
+  }
+
+  @override
+  $IngredientFunctionalComponentsTable createAlias(String alias) {
+    return $IngredientFunctionalComponentsTable(attachedDatabase, alias);
+  }
+}
+
+class IngredientFunctionalComponent extends DataClass
+    implements Insertable<IngredientFunctionalComponent> {
+  final String ingredientId;
+  final String componentId;
+
+  /// Teneur du composant (g pour 100 g d'ingrédient).
+  final double fractionGPer100g;
+  final String? basis;
+  final String? sourceRefs;
+  final double? confidence;
+  const IngredientFunctionalComponent({
+    required this.ingredientId,
+    required this.componentId,
+    required this.fractionGPer100g,
+    this.basis,
+    this.sourceRefs,
+    this.confidence,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['ingredient_id'] = Variable<String>(ingredientId);
+    map['component_id'] = Variable<String>(componentId);
+    map['fraction_g_per_100g'] = Variable<double>(fractionGPer100g);
+    if (!nullToAbsent || basis != null) {
+      map['basis'] = Variable<String>(basis);
+    }
+    if (!nullToAbsent || sourceRefs != null) {
+      map['source_refs'] = Variable<String>(sourceRefs);
+    }
+    if (!nullToAbsent || confidence != null) {
+      map['confidence'] = Variable<double>(confidence);
+    }
+    return map;
+  }
+
+  IngredientFunctionalComponentsCompanion toCompanion(bool nullToAbsent) {
+    return IngredientFunctionalComponentsCompanion(
+      ingredientId: Value(ingredientId),
+      componentId: Value(componentId),
+      fractionGPer100g: Value(fractionGPer100g),
+      basis: basis == null && nullToAbsent
+          ? const Value.absent()
+          : Value(basis),
+      sourceRefs: sourceRefs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceRefs),
+      confidence: confidence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(confidence),
+    );
+  }
+
+  factory IngredientFunctionalComponent.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IngredientFunctionalComponent(
+      ingredientId: serializer.fromJson<String>(json['ingredientId']),
+      componentId: serializer.fromJson<String>(json['componentId']),
+      fractionGPer100g: serializer.fromJson<double>(json['fractionGPer100g']),
+      basis: serializer.fromJson<String?>(json['basis']),
+      sourceRefs: serializer.fromJson<String?>(json['sourceRefs']),
+      confidence: serializer.fromJson<double?>(json['confidence']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'ingredientId': serializer.toJson<String>(ingredientId),
+      'componentId': serializer.toJson<String>(componentId),
+      'fractionGPer100g': serializer.toJson<double>(fractionGPer100g),
+      'basis': serializer.toJson<String?>(basis),
+      'sourceRefs': serializer.toJson<String?>(sourceRefs),
+      'confidence': serializer.toJson<double?>(confidence),
+    };
+  }
+
+  IngredientFunctionalComponent copyWith({
+    String? ingredientId,
+    String? componentId,
+    double? fractionGPer100g,
+    Value<String?> basis = const Value.absent(),
+    Value<String?> sourceRefs = const Value.absent(),
+    Value<double?> confidence = const Value.absent(),
+  }) => IngredientFunctionalComponent(
+    ingredientId: ingredientId ?? this.ingredientId,
+    componentId: componentId ?? this.componentId,
+    fractionGPer100g: fractionGPer100g ?? this.fractionGPer100g,
+    basis: basis.present ? basis.value : this.basis,
+    sourceRefs: sourceRefs.present ? sourceRefs.value : this.sourceRefs,
+    confidence: confidence.present ? confidence.value : this.confidence,
+  );
+  IngredientFunctionalComponent copyWithCompanion(
+    IngredientFunctionalComponentsCompanion data,
+  ) {
+    return IngredientFunctionalComponent(
+      ingredientId: data.ingredientId.present
+          ? data.ingredientId.value
+          : this.ingredientId,
+      componentId: data.componentId.present
+          ? data.componentId.value
+          : this.componentId,
+      fractionGPer100g: data.fractionGPer100g.present
+          ? data.fractionGPer100g.value
+          : this.fractionGPer100g,
+      basis: data.basis.present ? data.basis.value : this.basis,
+      sourceRefs: data.sourceRefs.present
+          ? data.sourceRefs.value
+          : this.sourceRefs,
+      confidence: data.confidence.present
+          ? data.confidence.value
+          : this.confidence,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientFunctionalComponent(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('componentId: $componentId, ')
+          ..write('fractionGPer100g: $fractionGPer100g, ')
+          ..write('basis: $basis, ')
+          ..write('sourceRefs: $sourceRefs, ')
+          ..write('confidence: $confidence')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    ingredientId,
+    componentId,
+    fractionGPer100g,
+    basis,
+    sourceRefs,
+    confidence,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IngredientFunctionalComponent &&
+          other.ingredientId == this.ingredientId &&
+          other.componentId == this.componentId &&
+          other.fractionGPer100g == this.fractionGPer100g &&
+          other.basis == this.basis &&
+          other.sourceRefs == this.sourceRefs &&
+          other.confidence == this.confidence);
+}
+
+class IngredientFunctionalComponentsCompanion
+    extends UpdateCompanion<IngredientFunctionalComponent> {
+  final Value<String> ingredientId;
+  final Value<String> componentId;
+  final Value<double> fractionGPer100g;
+  final Value<String?> basis;
+  final Value<String?> sourceRefs;
+  final Value<double?> confidence;
+  final Value<int> rowid;
+  const IngredientFunctionalComponentsCompanion({
+    this.ingredientId = const Value.absent(),
+    this.componentId = const Value.absent(),
+    this.fractionGPer100g = const Value.absent(),
+    this.basis = const Value.absent(),
+    this.sourceRefs = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  IngredientFunctionalComponentsCompanion.insert({
+    required String ingredientId,
+    required String componentId,
+    required double fractionGPer100g,
+    this.basis = const Value.absent(),
+    this.sourceRefs = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : ingredientId = Value(ingredientId),
+       componentId = Value(componentId),
+       fractionGPer100g = Value(fractionGPer100g);
+  static Insertable<IngredientFunctionalComponent> custom({
+    Expression<String>? ingredientId,
+    Expression<String>? componentId,
+    Expression<double>? fractionGPer100g,
+    Expression<String>? basis,
+    Expression<String>? sourceRefs,
+    Expression<double>? confidence,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (ingredientId != null) 'ingredient_id': ingredientId,
+      if (componentId != null) 'component_id': componentId,
+      if (fractionGPer100g != null) 'fraction_g_per_100g': fractionGPer100g,
+      if (basis != null) 'basis': basis,
+      if (sourceRefs != null) 'source_refs': sourceRefs,
+      if (confidence != null) 'confidence': confidence,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  IngredientFunctionalComponentsCompanion copyWith({
+    Value<String>? ingredientId,
+    Value<String>? componentId,
+    Value<double>? fractionGPer100g,
+    Value<String?>? basis,
+    Value<String?>? sourceRefs,
+    Value<double?>? confidence,
+    Value<int>? rowid,
+  }) {
+    return IngredientFunctionalComponentsCompanion(
+      ingredientId: ingredientId ?? this.ingredientId,
+      componentId: componentId ?? this.componentId,
+      fractionGPer100g: fractionGPer100g ?? this.fractionGPer100g,
+      basis: basis ?? this.basis,
+      sourceRefs: sourceRefs ?? this.sourceRefs,
+      confidence: confidence ?? this.confidence,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (ingredientId.present) {
+      map['ingredient_id'] = Variable<String>(ingredientId.value);
+    }
+    if (componentId.present) {
+      map['component_id'] = Variable<String>(componentId.value);
+    }
+    if (fractionGPer100g.present) {
+      map['fraction_g_per_100g'] = Variable<double>(fractionGPer100g.value);
+    }
+    if (basis.present) {
+      map['basis'] = Variable<String>(basis.value);
+    }
+    if (sourceRefs.present) {
+      map['source_refs'] = Variable<String>(sourceRefs.value);
+    }
+    if (confidence.present) {
+      map['confidence'] = Variable<double>(confidence.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientFunctionalComponentsCompanion(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('componentId: $componentId, ')
+          ..write('fractionGPer100g: $fractionGPer100g, ')
+          ..write('basis: $basis, ')
+          ..write('sourceRefs: $sourceRefs, ')
+          ..write('confidence: $confidence, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FunctionalComponentsTable extends FunctionalComponents
+    with TableInfo<$FunctionalComponentsTable, FunctionalComponent> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FunctionalComponentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _componentIdMeta = const VerificationMeta(
+    'componentId',
+  );
+  @override
+  late final GeneratedColumn<String> componentId = GeneratedColumn<String>(
+    'component_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _canonicalNameMeta = const VerificationMeta(
+    'canonicalName',
+  );
+  @override
+  late final GeneratedColumn<String> canonicalName = GeneratedColumn<String>(
+    'canonical_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceOrganismMeta = const VerificationMeta(
+    'sourceOrganism',
+  );
+  @override
+  late final GeneratedColumn<String> sourceOrganism = GeneratedColumn<String>(
+    'source_organism',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _roleMeta = const VerificationMeta('role');
+  @override
+  late final GeneratedColumn<String> role = GeneratedColumn<String>(
+    'role',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _chemistryMeta = const VerificationMeta(
+    'chemistry',
+  );
+  @override
+  late final GeneratedColumn<String> chemistry = GeneratedColumn<String>(
+    'chemistry',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _thermalBehaviorMeta = const VerificationMeta(
+    'thermalBehavior',
+  );
+  @override
+  late final GeneratedColumn<String> thermalBehavior = GeneratedColumn<String>(
+    'thermal_behavior',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _solubilityMeta = const VerificationMeta(
+    'solubility',
+  );
+  @override
+  late final GeneratedColumn<String> solubility = GeneratedColumn<String>(
+    'solubility',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceRefsMeta = const VerificationMeta(
+    'sourceRefs',
+  );
+  @override
+  late final GeneratedColumn<String> sourceRefs = GeneratedColumn<String>(
+    'source_refs',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _confidenceMeta = const VerificationMeta(
+    'confidence',
+  );
+  @override
+  late final GeneratedColumn<double> confidence = GeneratedColumn<double>(
+    'confidence',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    componentId,
+    canonicalName,
+    category,
+    sourceOrganism,
+    role,
+    chemistry,
+    thermalBehavior,
+    solubility,
+    sourceRefs,
+    confidence,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'functional_components';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FunctionalComponent> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('component_id')) {
+      context.handle(
+        _componentIdMeta,
+        componentId.isAcceptableOrUnknown(
+          data['component_id']!,
+          _componentIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_componentIdMeta);
+    }
+    if (data.containsKey('canonical_name')) {
+      context.handle(
+        _canonicalNameMeta,
+        canonicalName.isAcceptableOrUnknown(
+          data['canonical_name']!,
+          _canonicalNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    }
+    if (data.containsKey('source_organism')) {
+      context.handle(
+        _sourceOrganismMeta,
+        sourceOrganism.isAcceptableOrUnknown(
+          data['source_organism']!,
+          _sourceOrganismMeta,
+        ),
+      );
+    }
+    if (data.containsKey('role')) {
+      context.handle(
+        _roleMeta,
+        role.isAcceptableOrUnknown(data['role']!, _roleMeta),
+      );
+    }
+    if (data.containsKey('chemistry')) {
+      context.handle(
+        _chemistryMeta,
+        chemistry.isAcceptableOrUnknown(data['chemistry']!, _chemistryMeta),
+      );
+    }
+    if (data.containsKey('thermal_behavior')) {
+      context.handle(
+        _thermalBehaviorMeta,
+        thermalBehavior.isAcceptableOrUnknown(
+          data['thermal_behavior']!,
+          _thermalBehaviorMeta,
+        ),
+      );
+    }
+    if (data.containsKey('solubility')) {
+      context.handle(
+        _solubilityMeta,
+        solubility.isAcceptableOrUnknown(data['solubility']!, _solubilityMeta),
+      );
+    }
+    if (data.containsKey('source_refs')) {
+      context.handle(
+        _sourceRefsMeta,
+        sourceRefs.isAcceptableOrUnknown(data['source_refs']!, _sourceRefsMeta),
+      );
+    }
+    if (data.containsKey('confidence')) {
+      context.handle(
+        _confidenceMeta,
+        confidence.isAcceptableOrUnknown(data['confidence']!, _confidenceMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {componentId};
+  @override
+  FunctionalComponent map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FunctionalComponent(
+      componentId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}component_id'],
+      )!,
+      canonicalName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}canonical_name'],
+      ),
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      ),
+      sourceOrganism: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_organism'],
+      ),
+      role: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}role'],
+      ),
+      chemistry: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}chemistry'],
+      ),
+      thermalBehavior: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}thermal_behavior'],
+      ),
+      solubility: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}solubility'],
+      ),
+      sourceRefs: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_refs'],
+      ),
+      confidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}confidence'],
+      ),
+    );
+  }
+
+  @override
+  $FunctionalComponentsTable createAlias(String alias) {
+    return $FunctionalComponentsTable(attachedDatabase, alias);
+  }
+}
+
+class FunctionalComponent extends DataClass
+    implements Insertable<FunctionalComponent> {
+  final String componentId;
+  final String? canonicalName;
+  final String? category;
+  final String? sourceOrganism;
+  final String? role;
+  final String? chemistry;
+  final String? thermalBehavior;
+  final String? solubility;
+  final String? sourceRefs;
+  final double? confidence;
+  const FunctionalComponent({
+    required this.componentId,
+    this.canonicalName,
+    this.category,
+    this.sourceOrganism,
+    this.role,
+    this.chemistry,
+    this.thermalBehavior,
+    this.solubility,
+    this.sourceRefs,
+    this.confidence,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['component_id'] = Variable<String>(componentId);
+    if (!nullToAbsent || canonicalName != null) {
+      map['canonical_name'] = Variable<String>(canonicalName);
+    }
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
+    }
+    if (!nullToAbsent || sourceOrganism != null) {
+      map['source_organism'] = Variable<String>(sourceOrganism);
+    }
+    if (!nullToAbsent || role != null) {
+      map['role'] = Variable<String>(role);
+    }
+    if (!nullToAbsent || chemistry != null) {
+      map['chemistry'] = Variable<String>(chemistry);
+    }
+    if (!nullToAbsent || thermalBehavior != null) {
+      map['thermal_behavior'] = Variable<String>(thermalBehavior);
+    }
+    if (!nullToAbsent || solubility != null) {
+      map['solubility'] = Variable<String>(solubility);
+    }
+    if (!nullToAbsent || sourceRefs != null) {
+      map['source_refs'] = Variable<String>(sourceRefs);
+    }
+    if (!nullToAbsent || confidence != null) {
+      map['confidence'] = Variable<double>(confidence);
+    }
+    return map;
+  }
+
+  FunctionalComponentsCompanion toCompanion(bool nullToAbsent) {
+    return FunctionalComponentsCompanion(
+      componentId: Value(componentId),
+      canonicalName: canonicalName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(canonicalName),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
+      sourceOrganism: sourceOrganism == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceOrganism),
+      role: role == null && nullToAbsent ? const Value.absent() : Value(role),
+      chemistry: chemistry == null && nullToAbsent
+          ? const Value.absent()
+          : Value(chemistry),
+      thermalBehavior: thermalBehavior == null && nullToAbsent
+          ? const Value.absent()
+          : Value(thermalBehavior),
+      solubility: solubility == null && nullToAbsent
+          ? const Value.absent()
+          : Value(solubility),
+      sourceRefs: sourceRefs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceRefs),
+      confidence: confidence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(confidence),
+    );
+  }
+
+  factory FunctionalComponent.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FunctionalComponent(
+      componentId: serializer.fromJson<String>(json['componentId']),
+      canonicalName: serializer.fromJson<String?>(json['canonicalName']),
+      category: serializer.fromJson<String?>(json['category']),
+      sourceOrganism: serializer.fromJson<String?>(json['sourceOrganism']),
+      role: serializer.fromJson<String?>(json['role']),
+      chemistry: serializer.fromJson<String?>(json['chemistry']),
+      thermalBehavior: serializer.fromJson<String?>(json['thermalBehavior']),
+      solubility: serializer.fromJson<String?>(json['solubility']),
+      sourceRefs: serializer.fromJson<String?>(json['sourceRefs']),
+      confidence: serializer.fromJson<double?>(json['confidence']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'componentId': serializer.toJson<String>(componentId),
+      'canonicalName': serializer.toJson<String?>(canonicalName),
+      'category': serializer.toJson<String?>(category),
+      'sourceOrganism': serializer.toJson<String?>(sourceOrganism),
+      'role': serializer.toJson<String?>(role),
+      'chemistry': serializer.toJson<String?>(chemistry),
+      'thermalBehavior': serializer.toJson<String?>(thermalBehavior),
+      'solubility': serializer.toJson<String?>(solubility),
+      'sourceRefs': serializer.toJson<String?>(sourceRefs),
+      'confidence': serializer.toJson<double?>(confidence),
+    };
+  }
+
+  FunctionalComponent copyWith({
+    String? componentId,
+    Value<String?> canonicalName = const Value.absent(),
+    Value<String?> category = const Value.absent(),
+    Value<String?> sourceOrganism = const Value.absent(),
+    Value<String?> role = const Value.absent(),
+    Value<String?> chemistry = const Value.absent(),
+    Value<String?> thermalBehavior = const Value.absent(),
+    Value<String?> solubility = const Value.absent(),
+    Value<String?> sourceRefs = const Value.absent(),
+    Value<double?> confidence = const Value.absent(),
+  }) => FunctionalComponent(
+    componentId: componentId ?? this.componentId,
+    canonicalName: canonicalName.present
+        ? canonicalName.value
+        : this.canonicalName,
+    category: category.present ? category.value : this.category,
+    sourceOrganism: sourceOrganism.present
+        ? sourceOrganism.value
+        : this.sourceOrganism,
+    role: role.present ? role.value : this.role,
+    chemistry: chemistry.present ? chemistry.value : this.chemistry,
+    thermalBehavior: thermalBehavior.present
+        ? thermalBehavior.value
+        : this.thermalBehavior,
+    solubility: solubility.present ? solubility.value : this.solubility,
+    sourceRefs: sourceRefs.present ? sourceRefs.value : this.sourceRefs,
+    confidence: confidence.present ? confidence.value : this.confidence,
+  );
+  FunctionalComponent copyWithCompanion(FunctionalComponentsCompanion data) {
+    return FunctionalComponent(
+      componentId: data.componentId.present
+          ? data.componentId.value
+          : this.componentId,
+      canonicalName: data.canonicalName.present
+          ? data.canonicalName.value
+          : this.canonicalName,
+      category: data.category.present ? data.category.value : this.category,
+      sourceOrganism: data.sourceOrganism.present
+          ? data.sourceOrganism.value
+          : this.sourceOrganism,
+      role: data.role.present ? data.role.value : this.role,
+      chemistry: data.chemistry.present ? data.chemistry.value : this.chemistry,
+      thermalBehavior: data.thermalBehavior.present
+          ? data.thermalBehavior.value
+          : this.thermalBehavior,
+      solubility: data.solubility.present
+          ? data.solubility.value
+          : this.solubility,
+      sourceRefs: data.sourceRefs.present
+          ? data.sourceRefs.value
+          : this.sourceRefs,
+      confidence: data.confidence.present
+          ? data.confidence.value
+          : this.confidence,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FunctionalComponent(')
+          ..write('componentId: $componentId, ')
+          ..write('canonicalName: $canonicalName, ')
+          ..write('category: $category, ')
+          ..write('sourceOrganism: $sourceOrganism, ')
+          ..write('role: $role, ')
+          ..write('chemistry: $chemistry, ')
+          ..write('thermalBehavior: $thermalBehavior, ')
+          ..write('solubility: $solubility, ')
+          ..write('sourceRefs: $sourceRefs, ')
+          ..write('confidence: $confidence')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    componentId,
+    canonicalName,
+    category,
+    sourceOrganism,
+    role,
+    chemistry,
+    thermalBehavior,
+    solubility,
+    sourceRefs,
+    confidence,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FunctionalComponent &&
+          other.componentId == this.componentId &&
+          other.canonicalName == this.canonicalName &&
+          other.category == this.category &&
+          other.sourceOrganism == this.sourceOrganism &&
+          other.role == this.role &&
+          other.chemistry == this.chemistry &&
+          other.thermalBehavior == this.thermalBehavior &&
+          other.solubility == this.solubility &&
+          other.sourceRefs == this.sourceRefs &&
+          other.confidence == this.confidence);
+}
+
+class FunctionalComponentsCompanion
+    extends UpdateCompanion<FunctionalComponent> {
+  final Value<String> componentId;
+  final Value<String?> canonicalName;
+  final Value<String?> category;
+  final Value<String?> sourceOrganism;
+  final Value<String?> role;
+  final Value<String?> chemistry;
+  final Value<String?> thermalBehavior;
+  final Value<String?> solubility;
+  final Value<String?> sourceRefs;
+  final Value<double?> confidence;
+  final Value<int> rowid;
+  const FunctionalComponentsCompanion({
+    this.componentId = const Value.absent(),
+    this.canonicalName = const Value.absent(),
+    this.category = const Value.absent(),
+    this.sourceOrganism = const Value.absent(),
+    this.role = const Value.absent(),
+    this.chemistry = const Value.absent(),
+    this.thermalBehavior = const Value.absent(),
+    this.solubility = const Value.absent(),
+    this.sourceRefs = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FunctionalComponentsCompanion.insert({
+    required String componentId,
+    this.canonicalName = const Value.absent(),
+    this.category = const Value.absent(),
+    this.sourceOrganism = const Value.absent(),
+    this.role = const Value.absent(),
+    this.chemistry = const Value.absent(),
+    this.thermalBehavior = const Value.absent(),
+    this.solubility = const Value.absent(),
+    this.sourceRefs = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : componentId = Value(componentId);
+  static Insertable<FunctionalComponent> custom({
+    Expression<String>? componentId,
+    Expression<String>? canonicalName,
+    Expression<String>? category,
+    Expression<String>? sourceOrganism,
+    Expression<String>? role,
+    Expression<String>? chemistry,
+    Expression<String>? thermalBehavior,
+    Expression<String>? solubility,
+    Expression<String>? sourceRefs,
+    Expression<double>? confidence,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (componentId != null) 'component_id': componentId,
+      if (canonicalName != null) 'canonical_name': canonicalName,
+      if (category != null) 'category': category,
+      if (sourceOrganism != null) 'source_organism': sourceOrganism,
+      if (role != null) 'role': role,
+      if (chemistry != null) 'chemistry': chemistry,
+      if (thermalBehavior != null) 'thermal_behavior': thermalBehavior,
+      if (solubility != null) 'solubility': solubility,
+      if (sourceRefs != null) 'source_refs': sourceRefs,
+      if (confidence != null) 'confidence': confidence,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FunctionalComponentsCompanion copyWith({
+    Value<String>? componentId,
+    Value<String?>? canonicalName,
+    Value<String?>? category,
+    Value<String?>? sourceOrganism,
+    Value<String?>? role,
+    Value<String?>? chemistry,
+    Value<String?>? thermalBehavior,
+    Value<String?>? solubility,
+    Value<String?>? sourceRefs,
+    Value<double?>? confidence,
+    Value<int>? rowid,
+  }) {
+    return FunctionalComponentsCompanion(
+      componentId: componentId ?? this.componentId,
+      canonicalName: canonicalName ?? this.canonicalName,
+      category: category ?? this.category,
+      sourceOrganism: sourceOrganism ?? this.sourceOrganism,
+      role: role ?? this.role,
+      chemistry: chemistry ?? this.chemistry,
+      thermalBehavior: thermalBehavior ?? this.thermalBehavior,
+      solubility: solubility ?? this.solubility,
+      sourceRefs: sourceRefs ?? this.sourceRefs,
+      confidence: confidence ?? this.confidence,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (componentId.present) {
+      map['component_id'] = Variable<String>(componentId.value);
+    }
+    if (canonicalName.present) {
+      map['canonical_name'] = Variable<String>(canonicalName.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (sourceOrganism.present) {
+      map['source_organism'] = Variable<String>(sourceOrganism.value);
+    }
+    if (role.present) {
+      map['role'] = Variable<String>(role.value);
+    }
+    if (chemistry.present) {
+      map['chemistry'] = Variable<String>(chemistry.value);
+    }
+    if (thermalBehavior.present) {
+      map['thermal_behavior'] = Variable<String>(thermalBehavior.value);
+    }
+    if (solubility.present) {
+      map['solubility'] = Variable<String>(solubility.value);
+    }
+    if (sourceRefs.present) {
+      map['source_refs'] = Variable<String>(sourceRefs.value);
+    }
+    if (confidence.present) {
+      map['confidence'] = Variable<double>(confidence.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FunctionalComponentsCompanion(')
+          ..write('componentId: $componentId, ')
+          ..write('canonicalName: $canonicalName, ')
+          ..write('category: $category, ')
+          ..write('sourceOrganism: $sourceOrganism, ')
+          ..write('role: $role, ')
+          ..write('chemistry: $chemistry, ')
+          ..write('thermalBehavior: $thermalBehavior, ')
+          ..write('solubility: $solubility, ')
+          ..write('sourceRefs: $sourceRefs, ')
+          ..write('confidence: $confidence, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ExperimentalValidationCasesTable extends ExperimentalValidationCases
+    with
+        TableInfo<
+          $ExperimentalValidationCasesTable,
+          ExperimentalValidationCase
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ExperimentalValidationCasesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _caseIdMeta = const VerificationMeta('caseId');
+  @override
+  late final GeneratedColumn<String> caseId = GeneratedColumn<String>(
+    'case_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _formulationIdMeta = const VerificationMeta(
+    'formulationId',
+  );
+  @override
+  late final GeneratedColumn<String> formulationId = GeneratedColumn<String>(
+    'formulation_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ingredientIdsMeta = const VerificationMeta(
+    'ingredientIds',
+  );
+  @override
+  late final GeneratedColumn<String> ingredientIds = GeneratedColumn<String>(
+    'ingredient_ids',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _quantitiesMeta = const VerificationMeta(
+    'quantities',
+  );
+  @override
+  late final GeneratedColumn<String> quantities = GeneratedColumn<String>(
+    'quantities',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _unitsMeta = const VerificationMeta('units');
+  @override
+  late final GeneratedColumn<String> units = GeneratedColumn<String>(
+    'units',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _processSequenceMeta = const VerificationMeta(
+    'processSequence',
+  );
+  @override
+  late final GeneratedColumn<String> processSequence = GeneratedColumn<String>(
+    'process_sequence',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _measuredInputsMeta = const VerificationMeta(
+    'measuredInputs',
+  );
+  @override
+  late final GeneratedColumn<String> measuredInputs = GeneratedColumn<String>(
+    'measured_inputs',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _measuredOutputsMeta = const VerificationMeta(
+    'measuredOutputs',
+  );
+  @override
+  late final GeneratedColumn<String> measuredOutputs = GeneratedColumn<String>(
+    'measured_outputs',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _temperatureCMeta = const VerificationMeta(
+    'temperatureC',
+  );
+  @override
+  late final GeneratedColumn<double> temperatureC = GeneratedColumn<double>(
+    'temperature_C',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _phMeta = const VerificationMeta('ph');
+  @override
+  late final GeneratedColumn<double> ph = GeneratedColumn<double>(
+    'ph',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _awMeta = const VerificationMeta('aw');
+  @override
+  late final GeneratedColumn<double> aw = GeneratedColumn<double>(
+    'aw',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    caseId,
+    formulationId,
+    ingredientIds,
+    quantities,
+    units,
+    processSequence,
+    measuredInputs,
+    measuredOutputs,
+    source,
+    temperatureC,
+    ph,
+    aw,
+    notes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'experimental_validation_cases';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ExperimentalValidationCase> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('case_id')) {
+      context.handle(
+        _caseIdMeta,
+        caseId.isAcceptableOrUnknown(data['case_id']!, _caseIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_caseIdMeta);
+    }
+    if (data.containsKey('formulation_id')) {
+      context.handle(
+        _formulationIdMeta,
+        formulationId.isAcceptableOrUnknown(
+          data['formulation_id']!,
+          _formulationIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ingredient_ids')) {
+      context.handle(
+        _ingredientIdsMeta,
+        ingredientIds.isAcceptableOrUnknown(
+          data['ingredient_ids']!,
+          _ingredientIdsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('quantities')) {
+      context.handle(
+        _quantitiesMeta,
+        quantities.isAcceptableOrUnknown(data['quantities']!, _quantitiesMeta),
+      );
+    }
+    if (data.containsKey('units')) {
+      context.handle(
+        _unitsMeta,
+        units.isAcceptableOrUnknown(data['units']!, _unitsMeta),
+      );
+    }
+    if (data.containsKey('process_sequence')) {
+      context.handle(
+        _processSequenceMeta,
+        processSequence.isAcceptableOrUnknown(
+          data['process_sequence']!,
+          _processSequenceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('measured_inputs')) {
+      context.handle(
+        _measuredInputsMeta,
+        measuredInputs.isAcceptableOrUnknown(
+          data['measured_inputs']!,
+          _measuredInputsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('measured_outputs')) {
+      context.handle(
+        _measuredOutputsMeta,
+        measuredOutputs.isAcceptableOrUnknown(
+          data['measured_outputs']!,
+          _measuredOutputsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    if (data.containsKey('temperature_C')) {
+      context.handle(
+        _temperatureCMeta,
+        temperatureC.isAcceptableOrUnknown(
+          data['temperature_C']!,
+          _temperatureCMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ph')) {
+      context.handle(_phMeta, ph.isAcceptableOrUnknown(data['ph']!, _phMeta));
+    }
+    if (data.containsKey('aw')) {
+      context.handle(_awMeta, aw.isAcceptableOrUnknown(data['aw']!, _awMeta));
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {caseId};
+  @override
+  ExperimentalValidationCase map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ExperimentalValidationCase(
+      caseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}case_id'],
+      )!,
+      formulationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}formulation_id'],
+      ),
+      ingredientIds: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ingredient_ids'],
+      ),
+      quantities: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}quantities'],
+      ),
+      units: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}units'],
+      ),
+      processSequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}process_sequence'],
+      ),
+      measuredInputs: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}measured_inputs'],
+      ),
+      measuredOutputs: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}measured_outputs'],
+      ),
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      ),
+      temperatureC: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}temperature_C'],
+      ),
+      ph: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}ph'],
+      ),
+      aw: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}aw'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+    );
+  }
+
+  @override
+  $ExperimentalValidationCasesTable createAlias(String alias) {
+    return $ExperimentalValidationCasesTable(attachedDatabase, alias);
+  }
+}
+
+class ExperimentalValidationCase extends DataClass
+    implements Insertable<ExperimentalValidationCase> {
+  final String caseId;
+  final String? formulationId;
+  final String? ingredientIds;
+  final String? quantities;
+  final String? units;
+  final String? processSequence;
+  final String? measuredInputs;
+  final String? measuredOutputs;
+  final String? source;
+  final double? temperatureC;
+  final double? ph;
+  final double? aw;
+  final String? notes;
+  const ExperimentalValidationCase({
+    required this.caseId,
+    this.formulationId,
+    this.ingredientIds,
+    this.quantities,
+    this.units,
+    this.processSequence,
+    this.measuredInputs,
+    this.measuredOutputs,
+    this.source,
+    this.temperatureC,
+    this.ph,
+    this.aw,
+    this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['case_id'] = Variable<String>(caseId);
+    if (!nullToAbsent || formulationId != null) {
+      map['formulation_id'] = Variable<String>(formulationId);
+    }
+    if (!nullToAbsent || ingredientIds != null) {
+      map['ingredient_ids'] = Variable<String>(ingredientIds);
+    }
+    if (!nullToAbsent || quantities != null) {
+      map['quantities'] = Variable<String>(quantities);
+    }
+    if (!nullToAbsent || units != null) {
+      map['units'] = Variable<String>(units);
+    }
+    if (!nullToAbsent || processSequence != null) {
+      map['process_sequence'] = Variable<String>(processSequence);
+    }
+    if (!nullToAbsent || measuredInputs != null) {
+      map['measured_inputs'] = Variable<String>(measuredInputs);
+    }
+    if (!nullToAbsent || measuredOutputs != null) {
+      map['measured_outputs'] = Variable<String>(measuredOutputs);
+    }
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    if (!nullToAbsent || temperatureC != null) {
+      map['temperature_C'] = Variable<double>(temperatureC);
+    }
+    if (!nullToAbsent || ph != null) {
+      map['ph'] = Variable<double>(ph);
+    }
+    if (!nullToAbsent || aw != null) {
+      map['aw'] = Variable<double>(aw);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  ExperimentalValidationCasesCompanion toCompanion(bool nullToAbsent) {
+    return ExperimentalValidationCasesCompanion(
+      caseId: Value(caseId),
+      formulationId: formulationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(formulationId),
+      ingredientIds: ingredientIds == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ingredientIds),
+      quantities: quantities == null && nullToAbsent
+          ? const Value.absent()
+          : Value(quantities),
+      units: units == null && nullToAbsent
+          ? const Value.absent()
+          : Value(units),
+      processSequence: processSequence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(processSequence),
+      measuredInputs: measuredInputs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(measuredInputs),
+      measuredOutputs: measuredOutputs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(measuredOutputs),
+      source: source == null && nullToAbsent
+          ? const Value.absent()
+          : Value(source),
+      temperatureC: temperatureC == null && nullToAbsent
+          ? const Value.absent()
+          : Value(temperatureC),
+      ph: ph == null && nullToAbsent ? const Value.absent() : Value(ph),
+      aw: aw == null && nullToAbsent ? const Value.absent() : Value(aw),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+    );
+  }
+
+  factory ExperimentalValidationCase.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ExperimentalValidationCase(
+      caseId: serializer.fromJson<String>(json['caseId']),
+      formulationId: serializer.fromJson<String?>(json['formulationId']),
+      ingredientIds: serializer.fromJson<String?>(json['ingredientIds']),
+      quantities: serializer.fromJson<String?>(json['quantities']),
+      units: serializer.fromJson<String?>(json['units']),
+      processSequence: serializer.fromJson<String?>(json['processSequence']),
+      measuredInputs: serializer.fromJson<String?>(json['measuredInputs']),
+      measuredOutputs: serializer.fromJson<String?>(json['measuredOutputs']),
+      source: serializer.fromJson<String?>(json['source']),
+      temperatureC: serializer.fromJson<double?>(json['temperatureC']),
+      ph: serializer.fromJson<double?>(json['ph']),
+      aw: serializer.fromJson<double?>(json['aw']),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'caseId': serializer.toJson<String>(caseId),
+      'formulationId': serializer.toJson<String?>(formulationId),
+      'ingredientIds': serializer.toJson<String?>(ingredientIds),
+      'quantities': serializer.toJson<String?>(quantities),
+      'units': serializer.toJson<String?>(units),
+      'processSequence': serializer.toJson<String?>(processSequence),
+      'measuredInputs': serializer.toJson<String?>(measuredInputs),
+      'measuredOutputs': serializer.toJson<String?>(measuredOutputs),
+      'source': serializer.toJson<String?>(source),
+      'temperatureC': serializer.toJson<double?>(temperatureC),
+      'ph': serializer.toJson<double?>(ph),
+      'aw': serializer.toJson<double?>(aw),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  ExperimentalValidationCase copyWith({
+    String? caseId,
+    Value<String?> formulationId = const Value.absent(),
+    Value<String?> ingredientIds = const Value.absent(),
+    Value<String?> quantities = const Value.absent(),
+    Value<String?> units = const Value.absent(),
+    Value<String?> processSequence = const Value.absent(),
+    Value<String?> measuredInputs = const Value.absent(),
+    Value<String?> measuredOutputs = const Value.absent(),
+    Value<String?> source = const Value.absent(),
+    Value<double?> temperatureC = const Value.absent(),
+    Value<double?> ph = const Value.absent(),
+    Value<double?> aw = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
+  }) => ExperimentalValidationCase(
+    caseId: caseId ?? this.caseId,
+    formulationId: formulationId.present
+        ? formulationId.value
+        : this.formulationId,
+    ingredientIds: ingredientIds.present
+        ? ingredientIds.value
+        : this.ingredientIds,
+    quantities: quantities.present ? quantities.value : this.quantities,
+    units: units.present ? units.value : this.units,
+    processSequence: processSequence.present
+        ? processSequence.value
+        : this.processSequence,
+    measuredInputs: measuredInputs.present
+        ? measuredInputs.value
+        : this.measuredInputs,
+    measuredOutputs: measuredOutputs.present
+        ? measuredOutputs.value
+        : this.measuredOutputs,
+    source: source.present ? source.value : this.source,
+    temperatureC: temperatureC.present ? temperatureC.value : this.temperatureC,
+    ph: ph.present ? ph.value : this.ph,
+    aw: aw.present ? aw.value : this.aw,
+    notes: notes.present ? notes.value : this.notes,
+  );
+  ExperimentalValidationCase copyWithCompanion(
+    ExperimentalValidationCasesCompanion data,
+  ) {
+    return ExperimentalValidationCase(
+      caseId: data.caseId.present ? data.caseId.value : this.caseId,
+      formulationId: data.formulationId.present
+          ? data.formulationId.value
+          : this.formulationId,
+      ingredientIds: data.ingredientIds.present
+          ? data.ingredientIds.value
+          : this.ingredientIds,
+      quantities: data.quantities.present
+          ? data.quantities.value
+          : this.quantities,
+      units: data.units.present ? data.units.value : this.units,
+      processSequence: data.processSequence.present
+          ? data.processSequence.value
+          : this.processSequence,
+      measuredInputs: data.measuredInputs.present
+          ? data.measuredInputs.value
+          : this.measuredInputs,
+      measuredOutputs: data.measuredOutputs.present
+          ? data.measuredOutputs.value
+          : this.measuredOutputs,
+      source: data.source.present ? data.source.value : this.source,
+      temperatureC: data.temperatureC.present
+          ? data.temperatureC.value
+          : this.temperatureC,
+      ph: data.ph.present ? data.ph.value : this.ph,
+      aw: data.aw.present ? data.aw.value : this.aw,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ExperimentalValidationCase(')
+          ..write('caseId: $caseId, ')
+          ..write('formulationId: $formulationId, ')
+          ..write('ingredientIds: $ingredientIds, ')
+          ..write('quantities: $quantities, ')
+          ..write('units: $units, ')
+          ..write('processSequence: $processSequence, ')
+          ..write('measuredInputs: $measuredInputs, ')
+          ..write('measuredOutputs: $measuredOutputs, ')
+          ..write('source: $source, ')
+          ..write('temperatureC: $temperatureC, ')
+          ..write('ph: $ph, ')
+          ..write('aw: $aw, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    caseId,
+    formulationId,
+    ingredientIds,
+    quantities,
+    units,
+    processSequence,
+    measuredInputs,
+    measuredOutputs,
+    source,
+    temperatureC,
+    ph,
+    aw,
+    notes,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ExperimentalValidationCase &&
+          other.caseId == this.caseId &&
+          other.formulationId == this.formulationId &&
+          other.ingredientIds == this.ingredientIds &&
+          other.quantities == this.quantities &&
+          other.units == this.units &&
+          other.processSequence == this.processSequence &&
+          other.measuredInputs == this.measuredInputs &&
+          other.measuredOutputs == this.measuredOutputs &&
+          other.source == this.source &&
+          other.temperatureC == this.temperatureC &&
+          other.ph == this.ph &&
+          other.aw == this.aw &&
+          other.notes == this.notes);
+}
+
+class ExperimentalValidationCasesCompanion
+    extends UpdateCompanion<ExperimentalValidationCase> {
+  final Value<String> caseId;
+  final Value<String?> formulationId;
+  final Value<String?> ingredientIds;
+  final Value<String?> quantities;
+  final Value<String?> units;
+  final Value<String?> processSequence;
+  final Value<String?> measuredInputs;
+  final Value<String?> measuredOutputs;
+  final Value<String?> source;
+  final Value<double?> temperatureC;
+  final Value<double?> ph;
+  final Value<double?> aw;
+  final Value<String?> notes;
+  final Value<int> rowid;
+  const ExperimentalValidationCasesCompanion({
+    this.caseId = const Value.absent(),
+    this.formulationId = const Value.absent(),
+    this.ingredientIds = const Value.absent(),
+    this.quantities = const Value.absent(),
+    this.units = const Value.absent(),
+    this.processSequence = const Value.absent(),
+    this.measuredInputs = const Value.absent(),
+    this.measuredOutputs = const Value.absent(),
+    this.source = const Value.absent(),
+    this.temperatureC = const Value.absent(),
+    this.ph = const Value.absent(),
+    this.aw = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ExperimentalValidationCasesCompanion.insert({
+    required String caseId,
+    this.formulationId = const Value.absent(),
+    this.ingredientIds = const Value.absent(),
+    this.quantities = const Value.absent(),
+    this.units = const Value.absent(),
+    this.processSequence = const Value.absent(),
+    this.measuredInputs = const Value.absent(),
+    this.measuredOutputs = const Value.absent(),
+    this.source = const Value.absent(),
+    this.temperatureC = const Value.absent(),
+    this.ph = const Value.absent(),
+    this.aw = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : caseId = Value(caseId);
+  static Insertable<ExperimentalValidationCase> custom({
+    Expression<String>? caseId,
+    Expression<String>? formulationId,
+    Expression<String>? ingredientIds,
+    Expression<String>? quantities,
+    Expression<String>? units,
+    Expression<String>? processSequence,
+    Expression<String>? measuredInputs,
+    Expression<String>? measuredOutputs,
+    Expression<String>? source,
+    Expression<double>? temperatureC,
+    Expression<double>? ph,
+    Expression<double>? aw,
+    Expression<String>? notes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (caseId != null) 'case_id': caseId,
+      if (formulationId != null) 'formulation_id': formulationId,
+      if (ingredientIds != null) 'ingredient_ids': ingredientIds,
+      if (quantities != null) 'quantities': quantities,
+      if (units != null) 'units': units,
+      if (processSequence != null) 'process_sequence': processSequence,
+      if (measuredInputs != null) 'measured_inputs': measuredInputs,
+      if (measuredOutputs != null) 'measured_outputs': measuredOutputs,
+      if (source != null) 'source': source,
+      if (temperatureC != null) 'temperature_C': temperatureC,
+      if (ph != null) 'ph': ph,
+      if (aw != null) 'aw': aw,
+      if (notes != null) 'notes': notes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ExperimentalValidationCasesCompanion copyWith({
+    Value<String>? caseId,
+    Value<String?>? formulationId,
+    Value<String?>? ingredientIds,
+    Value<String?>? quantities,
+    Value<String?>? units,
+    Value<String?>? processSequence,
+    Value<String?>? measuredInputs,
+    Value<String?>? measuredOutputs,
+    Value<String?>? source,
+    Value<double?>? temperatureC,
+    Value<double?>? ph,
+    Value<double?>? aw,
+    Value<String?>? notes,
+    Value<int>? rowid,
+  }) {
+    return ExperimentalValidationCasesCompanion(
+      caseId: caseId ?? this.caseId,
+      formulationId: formulationId ?? this.formulationId,
+      ingredientIds: ingredientIds ?? this.ingredientIds,
+      quantities: quantities ?? this.quantities,
+      units: units ?? this.units,
+      processSequence: processSequence ?? this.processSequence,
+      measuredInputs: measuredInputs ?? this.measuredInputs,
+      measuredOutputs: measuredOutputs ?? this.measuredOutputs,
+      source: source ?? this.source,
+      temperatureC: temperatureC ?? this.temperatureC,
+      ph: ph ?? this.ph,
+      aw: aw ?? this.aw,
+      notes: notes ?? this.notes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (caseId.present) {
+      map['case_id'] = Variable<String>(caseId.value);
+    }
+    if (formulationId.present) {
+      map['formulation_id'] = Variable<String>(formulationId.value);
+    }
+    if (ingredientIds.present) {
+      map['ingredient_ids'] = Variable<String>(ingredientIds.value);
+    }
+    if (quantities.present) {
+      map['quantities'] = Variable<String>(quantities.value);
+    }
+    if (units.present) {
+      map['units'] = Variable<String>(units.value);
+    }
+    if (processSequence.present) {
+      map['process_sequence'] = Variable<String>(processSequence.value);
+    }
+    if (measuredInputs.present) {
+      map['measured_inputs'] = Variable<String>(measuredInputs.value);
+    }
+    if (measuredOutputs.present) {
+      map['measured_outputs'] = Variable<String>(measuredOutputs.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (temperatureC.present) {
+      map['temperature_C'] = Variable<double>(temperatureC.value);
+    }
+    if (ph.present) {
+      map['ph'] = Variable<double>(ph.value);
+    }
+    if (aw.present) {
+      map['aw'] = Variable<double>(aw.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ExperimentalValidationCasesCompanion(')
+          ..write('caseId: $caseId, ')
+          ..write('formulationId: $formulationId, ')
+          ..write('ingredientIds: $ingredientIds, ')
+          ..write('quantities: $quantities, ')
+          ..write('units: $units, ')
+          ..write('processSequence: $processSequence, ')
+          ..write('measuredInputs: $measuredInputs, ')
+          ..write('measuredOutputs: $measuredOutputs, ')
+          ..write('source: $source, ')
+          ..write('temperatureC: $temperatureC, ')
+          ..write('ph: $ph, ')
+          ..write('aw: $aw, ')
+          ..write('notes: $notes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IngredientFlavorProfilesTable extends IngredientFlavorProfiles
+    with TableInfo<$IngredientFlavorProfilesTable, IngredientFlavorProfile> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IngredientFlavorProfilesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _ingredientIdMeta = const VerificationMeta(
+    'ingredientId',
+  );
+  @override
+  late final GeneratedColumn<String> ingredientId = GeneratedColumn<String>(
+    'ingredient_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptorsMeta = const VerificationMeta(
+    'descriptors',
+  );
+  @override
+  late final GeneratedColumn<String> descriptors = GeneratedColumn<String>(
+    'descriptors',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contextMeta = const VerificationMeta(
+    'context',
+  );
+  @override
+  late final GeneratedColumn<String> context = GeneratedColumn<String>(
+    'context',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _intensityMeta = const VerificationMeta(
+    'intensity',
+  );
+  @override
+  late final GeneratedColumn<double> intensity = GeneratedColumn<double>(
+    'intensity',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _evidenceLevelMeta = const VerificationMeta(
+    'evidenceLevel',
+  );
+  @override
+  late final GeneratedColumn<String> evidenceLevel = GeneratedColumn<String>(
+    'evidence_level',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _confidenceMeta = const VerificationMeta(
+    'confidence',
+  );
+  @override
+  late final GeneratedColumn<double> confidence = GeneratedColumn<double>(
+    'confidence',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceRefsMeta = const VerificationMeta(
+    'sourceRefs',
+  );
+  @override
+  late final GeneratedColumn<String> sourceRefs = GeneratedColumn<String>(
+    'source_refs',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    ingredientId,
+    descriptors,
+    context,
+    intensity,
+    evidenceLevel,
+    confidence,
+    sourceRefs,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ingredient_flavor_profiles';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<IngredientFlavorProfile> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('ingredient_id')) {
+      context.handle(
+        _ingredientIdMeta,
+        ingredientId.isAcceptableOrUnknown(
+          data['ingredient_id']!,
+          _ingredientIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_ingredientIdMeta);
+    }
+    if (data.containsKey('descriptors')) {
+      context.handle(
+        _descriptorsMeta,
+        descriptors.isAcceptableOrUnknown(
+          data['descriptors']!,
+          _descriptorsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_descriptorsMeta);
+    }
+    if (data.containsKey('context')) {
+      context.handle(
+        _contextMeta,
+        this.context.isAcceptableOrUnknown(data['context']!, _contextMeta),
+      );
+    }
+    if (data.containsKey('intensity')) {
+      context.handle(
+        _intensityMeta,
+        intensity.isAcceptableOrUnknown(data['intensity']!, _intensityMeta),
+      );
+    }
+    if (data.containsKey('evidence_level')) {
+      context.handle(
+        _evidenceLevelMeta,
+        evidenceLevel.isAcceptableOrUnknown(
+          data['evidence_level']!,
+          _evidenceLevelMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_evidenceLevelMeta);
+    }
+    if (data.containsKey('confidence')) {
+      context.handle(
+        _confidenceMeta,
+        confidence.isAcceptableOrUnknown(data['confidence']!, _confidenceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_confidenceMeta);
+    }
+    if (data.containsKey('source_refs')) {
+      context.handle(
+        _sourceRefsMeta,
+        sourceRefs.isAcceptableOrUnknown(data['source_refs']!, _sourceRefsMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {ingredientId};
+  @override
+  IngredientFlavorProfile map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IngredientFlavorProfile(
+      ingredientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ingredient_id'],
+      )!,
+      descriptors: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}descriptors'],
+      )!,
+      context: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}context'],
+      ),
+      intensity: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}intensity'],
+      ),
+      evidenceLevel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}evidence_level'],
+      )!,
+      confidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}confidence'],
+      )!,
+      sourceRefs: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_refs'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $IngredientFlavorProfilesTable createAlias(String alias) {
+    return $IngredientFlavorProfilesTable(attachedDatabase, alias);
+  }
+}
+
+class IngredientFlavorProfile extends DataClass
+    implements Insertable<IngredientFlavorProfile> {
+  final String ingredientId;
+
+  /// Descripteurs de l'ontologie `id:intensité` séparés par `|`.
+  final String descriptors;
+
+  /// Contexte culinaire : sweet | savory | both.
+  final String? context;
+
+  /// Puissance aromatique (risque de dominance) 0..1.
+  final double? intensity;
+
+  /// measured | curated | family | default.
+  final String evidenceLevel;
+  final double confidence;
+  final String? sourceRefs;
+  final String? note;
+  const IngredientFlavorProfile({
+    required this.ingredientId,
+    required this.descriptors,
+    this.context,
+    this.intensity,
+    required this.evidenceLevel,
+    required this.confidence,
+    this.sourceRefs,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['ingredient_id'] = Variable<String>(ingredientId);
+    map['descriptors'] = Variable<String>(descriptors);
+    if (!nullToAbsent || context != null) {
+      map['context'] = Variable<String>(context);
+    }
+    if (!nullToAbsent || intensity != null) {
+      map['intensity'] = Variable<double>(intensity);
+    }
+    map['evidence_level'] = Variable<String>(evidenceLevel);
+    map['confidence'] = Variable<double>(confidence);
+    if (!nullToAbsent || sourceRefs != null) {
+      map['source_refs'] = Variable<String>(sourceRefs);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  IngredientFlavorProfilesCompanion toCompanion(bool nullToAbsent) {
+    return IngredientFlavorProfilesCompanion(
+      ingredientId: Value(ingredientId),
+      descriptors: Value(descriptors),
+      context: context == null && nullToAbsent
+          ? const Value.absent()
+          : Value(context),
+      intensity: intensity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(intensity),
+      evidenceLevel: Value(evidenceLevel),
+      confidence: Value(confidence),
+      sourceRefs: sourceRefs == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceRefs),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory IngredientFlavorProfile.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IngredientFlavorProfile(
+      ingredientId: serializer.fromJson<String>(json['ingredientId']),
+      descriptors: serializer.fromJson<String>(json['descriptors']),
+      context: serializer.fromJson<String?>(json['context']),
+      intensity: serializer.fromJson<double?>(json['intensity']),
+      evidenceLevel: serializer.fromJson<String>(json['evidenceLevel']),
+      confidence: serializer.fromJson<double>(json['confidence']),
+      sourceRefs: serializer.fromJson<String?>(json['sourceRefs']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'ingredientId': serializer.toJson<String>(ingredientId),
+      'descriptors': serializer.toJson<String>(descriptors),
+      'context': serializer.toJson<String?>(context),
+      'intensity': serializer.toJson<double?>(intensity),
+      'evidenceLevel': serializer.toJson<String>(evidenceLevel),
+      'confidence': serializer.toJson<double>(confidence),
+      'sourceRefs': serializer.toJson<String?>(sourceRefs),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  IngredientFlavorProfile copyWith({
+    String? ingredientId,
+    String? descriptors,
+    Value<String?> context = const Value.absent(),
+    Value<double?> intensity = const Value.absent(),
+    String? evidenceLevel,
+    double? confidence,
+    Value<String?> sourceRefs = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+  }) => IngredientFlavorProfile(
+    ingredientId: ingredientId ?? this.ingredientId,
+    descriptors: descriptors ?? this.descriptors,
+    context: context.present ? context.value : this.context,
+    intensity: intensity.present ? intensity.value : this.intensity,
+    evidenceLevel: evidenceLevel ?? this.evidenceLevel,
+    confidence: confidence ?? this.confidence,
+    sourceRefs: sourceRefs.present ? sourceRefs.value : this.sourceRefs,
+    note: note.present ? note.value : this.note,
+  );
+  IngredientFlavorProfile copyWithCompanion(
+    IngredientFlavorProfilesCompanion data,
+  ) {
+    return IngredientFlavorProfile(
+      ingredientId: data.ingredientId.present
+          ? data.ingredientId.value
+          : this.ingredientId,
+      descriptors: data.descriptors.present
+          ? data.descriptors.value
+          : this.descriptors,
+      context: data.context.present ? data.context.value : this.context,
+      intensity: data.intensity.present ? data.intensity.value : this.intensity,
+      evidenceLevel: data.evidenceLevel.present
+          ? data.evidenceLevel.value
+          : this.evidenceLevel,
+      confidence: data.confidence.present
+          ? data.confidence.value
+          : this.confidence,
+      sourceRefs: data.sourceRefs.present
+          ? data.sourceRefs.value
+          : this.sourceRefs,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientFlavorProfile(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('descriptors: $descriptors, ')
+          ..write('context: $context, ')
+          ..write('intensity: $intensity, ')
+          ..write('evidenceLevel: $evidenceLevel, ')
+          ..write('confidence: $confidence, ')
+          ..write('sourceRefs: $sourceRefs, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    ingredientId,
+    descriptors,
+    context,
+    intensity,
+    evidenceLevel,
+    confidence,
+    sourceRefs,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IngredientFlavorProfile &&
+          other.ingredientId == this.ingredientId &&
+          other.descriptors == this.descriptors &&
+          other.context == this.context &&
+          other.intensity == this.intensity &&
+          other.evidenceLevel == this.evidenceLevel &&
+          other.confidence == this.confidence &&
+          other.sourceRefs == this.sourceRefs &&
+          other.note == this.note);
+}
+
+class IngredientFlavorProfilesCompanion
+    extends UpdateCompanion<IngredientFlavorProfile> {
+  final Value<String> ingredientId;
+  final Value<String> descriptors;
+  final Value<String?> context;
+  final Value<double?> intensity;
+  final Value<String> evidenceLevel;
+  final Value<double> confidence;
+  final Value<String?> sourceRefs;
+  final Value<String?> note;
+  final Value<int> rowid;
+  const IngredientFlavorProfilesCompanion({
+    this.ingredientId = const Value.absent(),
+    this.descriptors = const Value.absent(),
+    this.context = const Value.absent(),
+    this.intensity = const Value.absent(),
+    this.evidenceLevel = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.sourceRefs = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  IngredientFlavorProfilesCompanion.insert({
+    required String ingredientId,
+    required String descriptors,
+    this.context = const Value.absent(),
+    this.intensity = const Value.absent(),
+    required String evidenceLevel,
+    required double confidence,
+    this.sourceRefs = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : ingredientId = Value(ingredientId),
+       descriptors = Value(descriptors),
+       evidenceLevel = Value(evidenceLevel),
+       confidence = Value(confidence);
+  static Insertable<IngredientFlavorProfile> custom({
+    Expression<String>? ingredientId,
+    Expression<String>? descriptors,
+    Expression<String>? context,
+    Expression<double>? intensity,
+    Expression<String>? evidenceLevel,
+    Expression<double>? confidence,
+    Expression<String>? sourceRefs,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (ingredientId != null) 'ingredient_id': ingredientId,
+      if (descriptors != null) 'descriptors': descriptors,
+      if (context != null) 'context': context,
+      if (intensity != null) 'intensity': intensity,
+      if (evidenceLevel != null) 'evidence_level': evidenceLevel,
+      if (confidence != null) 'confidence': confidence,
+      if (sourceRefs != null) 'source_refs': sourceRefs,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  IngredientFlavorProfilesCompanion copyWith({
+    Value<String>? ingredientId,
+    Value<String>? descriptors,
+    Value<String?>? context,
+    Value<double?>? intensity,
+    Value<String>? evidenceLevel,
+    Value<double>? confidence,
+    Value<String?>? sourceRefs,
+    Value<String?>? note,
+    Value<int>? rowid,
+  }) {
+    return IngredientFlavorProfilesCompanion(
+      ingredientId: ingredientId ?? this.ingredientId,
+      descriptors: descriptors ?? this.descriptors,
+      context: context ?? this.context,
+      intensity: intensity ?? this.intensity,
+      evidenceLevel: evidenceLevel ?? this.evidenceLevel,
+      confidence: confidence ?? this.confidence,
+      sourceRefs: sourceRefs ?? this.sourceRefs,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (ingredientId.present) {
+      map['ingredient_id'] = Variable<String>(ingredientId.value);
+    }
+    if (descriptors.present) {
+      map['descriptors'] = Variable<String>(descriptors.value);
+    }
+    if (context.present) {
+      map['context'] = Variable<String>(context.value);
+    }
+    if (intensity.present) {
+      map['intensity'] = Variable<double>(intensity.value);
+    }
+    if (evidenceLevel.present) {
+      map['evidence_level'] = Variable<String>(evidenceLevel.value);
+    }
+    if (confidence.present) {
+      map['confidence'] = Variable<double>(confidence.value);
+    }
+    if (sourceRefs.present) {
+      map['source_refs'] = Variable<String>(sourceRefs.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientFlavorProfilesCompanion(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('descriptors: $descriptors, ')
+          ..write('context: $context, ')
+          ..write('intensity: $intensity, ')
+          ..write('evidenceLevel: $evidenceLevel, ')
+          ..write('confidence: $confidence, ')
+          ..write('sourceRefs: $sourceRefs, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CulinaryPairingsTable extends CulinaryPairings
+    with TableInfo<$CulinaryPairingsTable, CulinaryPairing> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CulinaryPairingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _pairIdMeta = const VerificationMeta('pairId');
+  @override
+  late final GeneratedColumn<String> pairId = GeneratedColumn<String>(
+    'pair_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ingredientAIdMeta = const VerificationMeta(
+    'ingredientAId',
+  );
+  @override
+  late final GeneratedColumn<String> ingredientAId = GeneratedColumn<String>(
+    'ingredient_a_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ingredientBIdMeta = const VerificationMeta(
+    'ingredientBId',
+  );
+  @override
+  late final GeneratedColumn<String> ingredientBId = GeneratedColumn<String>(
+    'ingredient_b_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _kindMeta = const VerificationMeta('kind');
+  @override
+  late final GeneratedColumn<String> kind = GeneratedColumn<String>(
+    'kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _strengthMeta = const VerificationMeta(
+    'strength',
+  );
+  @override
+  late final GeneratedColumn<double> strength = GeneratedColumn<double>(
+    'strength',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    pairId,
+    ingredientAId,
+    ingredientBId,
+    kind,
+    strength,
+    source,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'culinary_pairings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CulinaryPairing> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('pair_id')) {
+      context.handle(
+        _pairIdMeta,
+        pairId.isAcceptableOrUnknown(data['pair_id']!, _pairIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_pairIdMeta);
+    }
+    if (data.containsKey('ingredient_a_id')) {
+      context.handle(
+        _ingredientAIdMeta,
+        ingredientAId.isAcceptableOrUnknown(
+          data['ingredient_a_id']!,
+          _ingredientAIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_ingredientAIdMeta);
+    }
+    if (data.containsKey('ingredient_b_id')) {
+      context.handle(
+        _ingredientBIdMeta,
+        ingredientBId.isAcceptableOrUnknown(
+          data['ingredient_b_id']!,
+          _ingredientBIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_ingredientBIdMeta);
+    }
+    if (data.containsKey('kind')) {
+      context.handle(
+        _kindMeta,
+        kind.isAcceptableOrUnknown(data['kind']!, _kindMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_kindMeta);
+    }
+    if (data.containsKey('strength')) {
+      context.handle(
+        _strengthMeta,
+        strength.isAcceptableOrUnknown(data['strength']!, _strengthMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_strengthMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {pairId};
+  @override
+  CulinaryPairing map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CulinaryPairing(
+      pairId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pair_id'],
+      )!,
+      ingredientAId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ingredient_a_id'],
+      )!,
+      ingredientBId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ingredient_b_id'],
+      )!,
+      kind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}kind'],
+      )!,
+      strength: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}strength'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $CulinaryPairingsTable createAlias(String alias) {
+    return $CulinaryPairingsTable(attachedDatabase, alias);
+  }
+}
+
+class CulinaryPairing extends DataClass implements Insertable<CulinaryPairing> {
+  final String pairId;
+  final String ingredientAId;
+  final String ingredientBId;
+
+  /// classic | regional | modern | contrast_negative.
+  final String kind;
+  final double strength;
+  final String? source;
+  final String? note;
+  const CulinaryPairing({
+    required this.pairId,
+    required this.ingredientAId,
+    required this.ingredientBId,
+    required this.kind,
+    required this.strength,
+    this.source,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['pair_id'] = Variable<String>(pairId);
+    map['ingredient_a_id'] = Variable<String>(ingredientAId);
+    map['ingredient_b_id'] = Variable<String>(ingredientBId);
+    map['kind'] = Variable<String>(kind);
+    map['strength'] = Variable<double>(strength);
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  CulinaryPairingsCompanion toCompanion(bool nullToAbsent) {
+    return CulinaryPairingsCompanion(
+      pairId: Value(pairId),
+      ingredientAId: Value(ingredientAId),
+      ingredientBId: Value(ingredientBId),
+      kind: Value(kind),
+      strength: Value(strength),
+      source: source == null && nullToAbsent
+          ? const Value.absent()
+          : Value(source),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory CulinaryPairing.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CulinaryPairing(
+      pairId: serializer.fromJson<String>(json['pairId']),
+      ingredientAId: serializer.fromJson<String>(json['ingredientAId']),
+      ingredientBId: serializer.fromJson<String>(json['ingredientBId']),
+      kind: serializer.fromJson<String>(json['kind']),
+      strength: serializer.fromJson<double>(json['strength']),
+      source: serializer.fromJson<String?>(json['source']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'pairId': serializer.toJson<String>(pairId),
+      'ingredientAId': serializer.toJson<String>(ingredientAId),
+      'ingredientBId': serializer.toJson<String>(ingredientBId),
+      'kind': serializer.toJson<String>(kind),
+      'strength': serializer.toJson<double>(strength),
+      'source': serializer.toJson<String?>(source),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  CulinaryPairing copyWith({
+    String? pairId,
+    String? ingredientAId,
+    String? ingredientBId,
+    String? kind,
+    double? strength,
+    Value<String?> source = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+  }) => CulinaryPairing(
+    pairId: pairId ?? this.pairId,
+    ingredientAId: ingredientAId ?? this.ingredientAId,
+    ingredientBId: ingredientBId ?? this.ingredientBId,
+    kind: kind ?? this.kind,
+    strength: strength ?? this.strength,
+    source: source.present ? source.value : this.source,
+    note: note.present ? note.value : this.note,
+  );
+  CulinaryPairing copyWithCompanion(CulinaryPairingsCompanion data) {
+    return CulinaryPairing(
+      pairId: data.pairId.present ? data.pairId.value : this.pairId,
+      ingredientAId: data.ingredientAId.present
+          ? data.ingredientAId.value
+          : this.ingredientAId,
+      ingredientBId: data.ingredientBId.present
+          ? data.ingredientBId.value
+          : this.ingredientBId,
+      kind: data.kind.present ? data.kind.value : this.kind,
+      strength: data.strength.present ? data.strength.value : this.strength,
+      source: data.source.present ? data.source.value : this.source,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CulinaryPairing(')
+          ..write('pairId: $pairId, ')
+          ..write('ingredientAId: $ingredientAId, ')
+          ..write('ingredientBId: $ingredientBId, ')
+          ..write('kind: $kind, ')
+          ..write('strength: $strength, ')
+          ..write('source: $source, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    pairId,
+    ingredientAId,
+    ingredientBId,
+    kind,
+    strength,
+    source,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CulinaryPairing &&
+          other.pairId == this.pairId &&
+          other.ingredientAId == this.ingredientAId &&
+          other.ingredientBId == this.ingredientBId &&
+          other.kind == this.kind &&
+          other.strength == this.strength &&
+          other.source == this.source &&
+          other.note == this.note);
+}
+
+class CulinaryPairingsCompanion extends UpdateCompanion<CulinaryPairing> {
+  final Value<String> pairId;
+  final Value<String> ingredientAId;
+  final Value<String> ingredientBId;
+  final Value<String> kind;
+  final Value<double> strength;
+  final Value<String?> source;
+  final Value<String?> note;
+  final Value<int> rowid;
+  const CulinaryPairingsCompanion({
+    this.pairId = const Value.absent(),
+    this.ingredientAId = const Value.absent(),
+    this.ingredientBId = const Value.absent(),
+    this.kind = const Value.absent(),
+    this.strength = const Value.absent(),
+    this.source = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CulinaryPairingsCompanion.insert({
+    required String pairId,
+    required String ingredientAId,
+    required String ingredientBId,
+    required String kind,
+    required double strength,
+    this.source = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : pairId = Value(pairId),
+       ingredientAId = Value(ingredientAId),
+       ingredientBId = Value(ingredientBId),
+       kind = Value(kind),
+       strength = Value(strength);
+  static Insertable<CulinaryPairing> custom({
+    Expression<String>? pairId,
+    Expression<String>? ingredientAId,
+    Expression<String>? ingredientBId,
+    Expression<String>? kind,
+    Expression<double>? strength,
+    Expression<String>? source,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (pairId != null) 'pair_id': pairId,
+      if (ingredientAId != null) 'ingredient_a_id': ingredientAId,
+      if (ingredientBId != null) 'ingredient_b_id': ingredientBId,
+      if (kind != null) 'kind': kind,
+      if (strength != null) 'strength': strength,
+      if (source != null) 'source': source,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CulinaryPairingsCompanion copyWith({
+    Value<String>? pairId,
+    Value<String>? ingredientAId,
+    Value<String>? ingredientBId,
+    Value<String>? kind,
+    Value<double>? strength,
+    Value<String?>? source,
+    Value<String?>? note,
+    Value<int>? rowid,
+  }) {
+    return CulinaryPairingsCompanion(
+      pairId: pairId ?? this.pairId,
+      ingredientAId: ingredientAId ?? this.ingredientAId,
+      ingredientBId: ingredientBId ?? this.ingredientBId,
+      kind: kind ?? this.kind,
+      strength: strength ?? this.strength,
+      source: source ?? this.source,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (pairId.present) {
+      map['pair_id'] = Variable<String>(pairId.value);
+    }
+    if (ingredientAId.present) {
+      map['ingredient_a_id'] = Variable<String>(ingredientAId.value);
+    }
+    if (ingredientBId.present) {
+      map['ingredient_b_id'] = Variable<String>(ingredientBId.value);
+    }
+    if (kind.present) {
+      map['kind'] = Variable<String>(kind.value);
+    }
+    if (strength.present) {
+      map['strength'] = Variable<double>(strength.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CulinaryPairingsCompanion(')
+          ..write('pairId: $pairId, ')
+          ..write('ingredientAId: $ingredientAId, ')
+          ..write('ingredientBId: $ingredientBId, ')
+          ..write('kind: $kind, ')
+          ..write('strength: $strength, ')
+          ..write('source: $source, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -15178,6 +19624,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $ProcessOperationsTable processOperations =
       $ProcessOperationsTable(this);
+  late final $IngredientCulinaryTable ingredientCulinary =
+      $IngredientCulinaryTable(this);
+  late final $ProcessFactorsTable processFactors = $ProcessFactorsTable(this);
+  late final $IngredientFunctionalComponentsTable
+  ingredientFunctionalComponents = $IngredientFunctionalComponentsTable(this);
+  late final $FunctionalComponentsTable functionalComponents =
+      $FunctionalComponentsTable(this);
+  late final $ExperimentalValidationCasesTable experimentalValidationCases =
+      $ExperimentalValidationCasesTable(this);
+  late final $IngredientFlavorProfilesTable ingredientFlavorProfiles =
+      $IngredientFlavorProfilesTable(this);
+  late final $CulinaryPairingsTable culinaryPairings = $CulinaryPairingsTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -15201,6 +19661,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     functionalIngredients,
     interactionRules,
     processOperations,
+    ingredientCulinary,
+    processFactors,
+    ingredientFunctionalComponents,
+    functionalComponents,
+    experimentalValidationCases,
+    ingredientFlavorProfiles,
+    culinaryPairings,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -15259,6 +19726,8 @@ typedef $$RecipesTableCreateCompanionBuilder = RecipesCompanion Function({
   required String createdAt,
   required String updatedAt,
   Value<String?> deletedAt,
+  Value<String?> nutritionMode,
+  Value<String?> nutritionJson,
   Value<int> rowid,
 });
 typedef $$RecipesTableUpdateCompanionBuilder = RecipesCompanion Function({
@@ -15271,6 +19740,8 @@ typedef $$RecipesTableUpdateCompanionBuilder = RecipesCompanion Function({
   Value<String> createdAt,
   Value<String> updatedAt,
   Value<String?> deletedAt,
+  Value<String?> nutritionMode,
+  Value<String?> nutritionJson,
   Value<int> rowid,
 });
 
@@ -15420,6 +19891,16 @@ class $$RecipesTableFilterComposer
 
   ColumnFilters<String> get deletedAt => $composableBuilder(
     column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nutritionMode => $composableBuilder(
+    column: $table.nutritionMode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nutritionJson => $composableBuilder(
+    column: $table.nutritionJson,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -15602,6 +20083,16 @@ class $$RecipesTableOrderingComposer
     column: $table.deletedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get nutritionMode => $composableBuilder(
+    column: $table.nutritionMode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nutritionJson => $composableBuilder(
+    column: $table.nutritionJson,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$RecipesTableAnnotationComposer
@@ -15645,6 +20136,16 @@ class $$RecipesTableAnnotationComposer
 
   GeneratedColumn<String> get deletedAt =>
       $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get nutritionMode => $composableBuilder(
+    column: $table.nutritionMode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get nutritionJson => $composableBuilder(
+    column: $table.nutritionJson,
+    builder: (column) => column,
+  );
 
   Expression<T> recipe_photos<T extends Object>(
     Expression<T> Function($$RecipeImagesTableAnnotationComposer a) f,
@@ -15815,6 +20316,8 @@ class $$RecipesTableTableManager
                 Value<String> createdAt = const Value.absent(),
                 Value<String> updatedAt = const Value.absent(),
                 Value<String?> deletedAt = const Value.absent(),
+                Value<String?> nutritionMode = const Value.absent(),
+                Value<String?> nutritionJson = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipesCompanion(
                 id: id,
@@ -15826,6 +20329,8 @@ class $$RecipesTableTableManager
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
+                nutritionMode: nutritionMode,
+                nutritionJson: nutritionJson,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -15839,6 +20344,8 @@ class $$RecipesTableTableManager
                 required String createdAt,
                 required String updatedAt,
                 Value<String?> deletedAt = const Value.absent(),
+                Value<String?> nutritionMode = const Value.absent(),
+                Value<String?> nutritionJson = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipesCompanion.insert(
                 id: id,
@@ -15850,6 +20357,8 @@ class $$RecipesTableTableManager
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
+                nutritionMode: nutritionMode,
+                nutritionJson: nutritionJson,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -16334,6 +20843,9 @@ typedef $$RecipeStepsTableCreateCompanionBuilder =
       required String recipeId,
       required int position,
       required String body,
+      Value<String?> opId,
+      Value<double?> temperatureC,
+      Value<double?> durationMin,
       Value<int> rowid,
     });
 typedef $$RecipeStepsTableUpdateCompanionBuilder =
@@ -16342,6 +20854,9 @@ typedef $$RecipeStepsTableUpdateCompanionBuilder =
       Value<String> recipeId,
       Value<int> position,
       Value<String> body,
+      Value<String?> opId,
+      Value<double?> temperatureC,
+      Value<double?> durationMin,
       Value<int> rowid,
     });
 
@@ -16388,6 +20903,21 @@ class $$RecipeStepsTableFilterComposer
 
   ColumnFilters<String> get body => $composableBuilder(
     column: $table.body,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get opId => $composableBuilder(
+    column: $table.opId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get temperatureC => $composableBuilder(
+    column: $table.temperatureC,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get durationMin => $composableBuilder(
+    column: $table.durationMin,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -16439,6 +20969,21 @@ class $$RecipeStepsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get opId => $composableBuilder(
+    column: $table.opId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get temperatureC => $composableBuilder(
+    column: $table.temperatureC,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get durationMin => $composableBuilder(
+    column: $table.durationMin,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$RecipesTableOrderingComposer get recipeId {
     final $$RecipesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -16480,6 +21025,19 @@ class $$RecipeStepsTableAnnotationComposer
 
   GeneratedColumn<String> get body =>
       $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<String> get opId =>
+      $composableBuilder(column: $table.opId, builder: (column) => column);
+
+  GeneratedColumn<double> get temperatureC => $composableBuilder(
+    column: $table.temperatureC,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get durationMin => $composableBuilder(
+    column: $table.durationMin,
+    builder: (column) => column,
+  );
 
   $$RecipesTableAnnotationComposer get recipeId {
     final $$RecipesTableAnnotationComposer composer = $composerBuilder(
@@ -16537,12 +21095,18 @@ class $$RecipeStepsTableTableManager
                 Value<String> recipeId = const Value.absent(),
                 Value<int> position = const Value.absent(),
                 Value<String> body = const Value.absent(),
+                Value<String?> opId = const Value.absent(),
+                Value<double?> temperatureC = const Value.absent(),
+                Value<double?> durationMin = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipeStepsCompanion(
                 id: id,
                 recipeId: recipeId,
                 position: position,
                 body: body,
+                opId: opId,
+                temperatureC: temperatureC,
+                durationMin: durationMin,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -16551,12 +21115,18 @@ class $$RecipeStepsTableTableManager
                 required String recipeId,
                 required int position,
                 required String body,
+                Value<String?> opId = const Value.absent(),
+                Value<double?> temperatureC = const Value.absent(),
+                Value<double?> durationMin = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipeStepsCompanion.insert(
                 id: id,
                 recipeId: recipeId,
                 position: position,
                 body: body,
+                opId: opId,
+                temperatureC: temperatureC,
+                durationMin: durationMin,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -18270,6 +22840,8 @@ typedef $$RecipeItemsTableCreateCompanionBuilder =
       Value<String?> ciqualCode,
       Value<String?> childRecipeId,
       Value<String?> ingredientId,
+      Value<String?> quantityText,
+      Value<String?> cookingMethod,
       Value<int> rowid,
     });
 typedef $$RecipeItemsTableUpdateCompanionBuilder =
@@ -18283,6 +22855,8 @@ typedef $$RecipeItemsTableUpdateCompanionBuilder =
       Value<String?> ciqualCode,
       Value<String?> childRecipeId,
       Value<String?> ingredientId,
+      Value<String?> quantityText,
+      Value<String?> cookingMethod,
       Value<int> rowid,
     });
 
@@ -18391,6 +22965,16 @@ class $$RecipeItemsTableFilterComposer
 
   ColumnFilters<double> get quantityG => $composableBuilder(
     column: $table.quantityG,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get quantityText => $composableBuilder(
+    column: $table.quantityText,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get cookingMethod => $composableBuilder(
+    column: $table.cookingMethod,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -18521,6 +23105,16 @@ class $$RecipeItemsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get quantityText => $composableBuilder(
+    column: $table.quantityText,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get cookingMethod => $composableBuilder(
+    column: $table.cookingMethod,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$RecipesTableOrderingComposer get recipeId {
     final $$RecipesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -18637,6 +23231,16 @@ class $$RecipeItemsTableAnnotationComposer
 
   GeneratedColumn<double> get quantityG =>
       $composableBuilder(column: $table.quantityG, builder: (column) => column);
+
+  GeneratedColumn<String> get quantityText => $composableBuilder(
+    column: $table.quantityText,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get cookingMethod => $composableBuilder(
+    column: $table.cookingMethod,
+    builder: (column) => column,
+  );
 
   $$RecipesTableAnnotationComposer get recipeId {
     final $$RecipesTableAnnotationComposer composer = $composerBuilder(
@@ -18773,6 +23377,8 @@ class $$RecipeItemsTableTableManager
                 Value<String?> ciqualCode = const Value.absent(),
                 Value<String?> childRecipeId = const Value.absent(),
                 Value<String?> ingredientId = const Value.absent(),
+                Value<String?> quantityText = const Value.absent(),
+                Value<String?> cookingMethod = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipeItemsCompanion(
                 id: id,
@@ -18784,6 +23390,8 @@ class $$RecipeItemsTableTableManager
                 ciqualCode: ciqualCode,
                 childRecipeId: childRecipeId,
                 ingredientId: ingredientId,
+                quantityText: quantityText,
+                cookingMethod: cookingMethod,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -18797,6 +23405,8 @@ class $$RecipeItemsTableTableManager
                 Value<String?> ciqualCode = const Value.absent(),
                 Value<String?> childRecipeId = const Value.absent(),
                 Value<String?> ingredientId = const Value.absent(),
+                Value<String?> quantityText = const Value.absent(),
+                Value<String?> cookingMethod = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipeItemsCompanion.insert(
                 id: id,
@@ -18808,6 +23418,8 @@ class $$RecipeItemsTableTableManager
                 ciqualCode: ciqualCode,
                 childRecipeId: childRecipeId,
                 ingredientId: ingredientId,
+                quantityText: quantityText,
+                cookingMethod: cookingMethod,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -24623,6 +29235,2064 @@ typedef $$ProcessOperationsTableProcessedTableManager =
       ProcessOperation,
       PrefetchHooks Function()
     >;
+typedef $$IngredientCulinaryTableCreateCompanionBuilder =
+    IngredientCulinaryCompanion Function({
+      required String ingredientId,
+      Value<double?> densityGPerMl,
+      Value<String?> densityNote,
+      Value<String?> unitMasses,
+      Value<double?> ph,
+      Value<double?> phConfidence,
+      Value<String?> phNote,
+      Value<int> rowid,
+    });
+typedef $$IngredientCulinaryTableUpdateCompanionBuilder =
+    IngredientCulinaryCompanion Function({
+      Value<String> ingredientId,
+      Value<double?> densityGPerMl,
+      Value<String?> densityNote,
+      Value<String?> unitMasses,
+      Value<double?> ph,
+      Value<double?> phConfidence,
+      Value<String?> phNote,
+      Value<int> rowid,
+    });
+
+class $$IngredientCulinaryTableFilterComposer
+    extends Composer<_$AppDatabase, $IngredientCulinaryTable> {
+  $$IngredientCulinaryTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get densityGPerMl => $composableBuilder(
+    column: $table.densityGPerMl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get densityNote => $composableBuilder(
+    column: $table.densityNote,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get unitMasses => $composableBuilder(
+    column: $table.unitMasses,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get ph => $composableBuilder(
+    column: $table.ph,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get phConfidence => $composableBuilder(
+    column: $table.phConfidence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get phNote => $composableBuilder(
+    column: $table.phNote,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$IngredientCulinaryTableOrderingComposer
+    extends Composer<_$AppDatabase, $IngredientCulinaryTable> {
+  $$IngredientCulinaryTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get densityGPerMl => $composableBuilder(
+    column: $table.densityGPerMl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get densityNote => $composableBuilder(
+    column: $table.densityNote,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get unitMasses => $composableBuilder(
+    column: $table.unitMasses,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get ph => $composableBuilder(
+    column: $table.ph,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get phConfidence => $composableBuilder(
+    column: $table.phConfidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get phNote => $composableBuilder(
+    column: $table.phNote,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$IngredientCulinaryTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IngredientCulinaryTable> {
+  $$IngredientCulinaryTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get densityGPerMl => $composableBuilder(
+    column: $table.densityGPerMl,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get densityNote => $composableBuilder(
+    column: $table.densityNote,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get unitMasses => $composableBuilder(
+    column: $table.unitMasses,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get ph =>
+      $composableBuilder(column: $table.ph, builder: (column) => column);
+
+  GeneratedColumn<double> get phConfidence => $composableBuilder(
+    column: $table.phConfidence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get phNote =>
+      $composableBuilder(column: $table.phNote, builder: (column) => column);
+}
+
+class $$IngredientCulinaryTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $IngredientCulinaryTable,
+          IngredientCulinaryData,
+          $$IngredientCulinaryTableFilterComposer,
+          $$IngredientCulinaryTableOrderingComposer,
+          $$IngredientCulinaryTableAnnotationComposer,
+          $$IngredientCulinaryTableCreateCompanionBuilder,
+          $$IngredientCulinaryTableUpdateCompanionBuilder,
+          (
+            IngredientCulinaryData,
+            BaseReferences<
+              _$AppDatabase,
+              $IngredientCulinaryTable,
+              IngredientCulinaryData
+            >,
+          ),
+          IngredientCulinaryData,
+          PrefetchHooks Function()
+        > {
+  $$IngredientCulinaryTableTableManager(
+    _$AppDatabase db,
+    $IngredientCulinaryTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IngredientCulinaryTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IngredientCulinaryTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IngredientCulinaryTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> ingredientId = const Value.absent(),
+                Value<double?> densityGPerMl = const Value.absent(),
+                Value<String?> densityNote = const Value.absent(),
+                Value<String?> unitMasses = const Value.absent(),
+                Value<double?> ph = const Value.absent(),
+                Value<double?> phConfidence = const Value.absent(),
+                Value<String?> phNote = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientCulinaryCompanion(
+                ingredientId: ingredientId,
+                densityGPerMl: densityGPerMl,
+                densityNote: densityNote,
+                unitMasses: unitMasses,
+                ph: ph,
+                phConfidence: phConfidence,
+                phNote: phNote,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String ingredientId,
+                Value<double?> densityGPerMl = const Value.absent(),
+                Value<String?> densityNote = const Value.absent(),
+                Value<String?> unitMasses = const Value.absent(),
+                Value<double?> ph = const Value.absent(),
+                Value<double?> phConfidence = const Value.absent(),
+                Value<String?> phNote = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientCulinaryCompanion.insert(
+                ingredientId: ingredientId,
+                densityGPerMl: densityGPerMl,
+                densityNote: densityNote,
+                unitMasses: unitMasses,
+                ph: ph,
+                phConfidence: phConfidence,
+                phNote: phNote,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$IngredientCulinaryTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $IngredientCulinaryTable,
+      IngredientCulinaryData,
+      $$IngredientCulinaryTableFilterComposer,
+      $$IngredientCulinaryTableOrderingComposer,
+      $$IngredientCulinaryTableAnnotationComposer,
+      $$IngredientCulinaryTableCreateCompanionBuilder,
+      $$IngredientCulinaryTableUpdateCompanionBuilder,
+      (
+        IngredientCulinaryData,
+        BaseReferences<
+          _$AppDatabase,
+          $IngredientCulinaryTable,
+          IngredientCulinaryData
+        >,
+      ),
+      IngredientCulinaryData,
+      PrefetchHooks Function()
+    >;
+typedef $$ProcessFactorsTableCreateCompanionBuilder =
+    ProcessFactorsCompanion Function({
+      required String factorId,
+      required String foodGroup,
+      required String method,
+      required double yieldFactor,
+      Value<double?> fatUptakeG,
+      Value<double?> fatRetention,
+      Value<String?> retention,
+      Value<double?> confidence,
+      Value<String?> source,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+typedef $$ProcessFactorsTableUpdateCompanionBuilder =
+    ProcessFactorsCompanion Function({
+      Value<String> factorId,
+      Value<String> foodGroup,
+      Value<String> method,
+      Value<double> yieldFactor,
+      Value<double?> fatUptakeG,
+      Value<double?> fatRetention,
+      Value<String?> retention,
+      Value<double?> confidence,
+      Value<String?> source,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+
+class $$ProcessFactorsTableFilterComposer
+    extends Composer<_$AppDatabase, $ProcessFactorsTable> {
+  $$ProcessFactorsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get factorId => $composableBuilder(
+    column: $table.factorId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get foodGroup => $composableBuilder(
+    column: $table.foodGroup,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get method => $composableBuilder(
+    column: $table.method,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get yieldFactor => $composableBuilder(
+    column: $table.yieldFactor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get fatUptakeG => $composableBuilder(
+    column: $table.fatUptakeG,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get fatRetention => $composableBuilder(
+    column: $table.fatRetention,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get retention => $composableBuilder(
+    column: $table.retention,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ProcessFactorsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ProcessFactorsTable> {
+  $$ProcessFactorsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get factorId => $composableBuilder(
+    column: $table.factorId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get foodGroup => $composableBuilder(
+    column: $table.foodGroup,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get method => $composableBuilder(
+    column: $table.method,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get yieldFactor => $composableBuilder(
+    column: $table.yieldFactor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get fatUptakeG => $composableBuilder(
+    column: $table.fatUptakeG,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get fatRetention => $composableBuilder(
+    column: $table.fatRetention,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get retention => $composableBuilder(
+    column: $table.retention,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ProcessFactorsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ProcessFactorsTable> {
+  $$ProcessFactorsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get factorId =>
+      $composableBuilder(column: $table.factorId, builder: (column) => column);
+
+  GeneratedColumn<String> get foodGroup =>
+      $composableBuilder(column: $table.foodGroup, builder: (column) => column);
+
+  GeneratedColumn<String> get method =>
+      $composableBuilder(column: $table.method, builder: (column) => column);
+
+  GeneratedColumn<double> get yieldFactor => $composableBuilder(
+    column: $table.yieldFactor,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get fatUptakeG => $composableBuilder(
+    column: $table.fatUptakeG,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get fatRetention => $composableBuilder(
+    column: $table.fatRetention,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get retention =>
+      $composableBuilder(column: $table.retention, builder: (column) => column);
+
+  GeneratedColumn<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$ProcessFactorsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ProcessFactorsTable,
+          ProcessFactor,
+          $$ProcessFactorsTableFilterComposer,
+          $$ProcessFactorsTableOrderingComposer,
+          $$ProcessFactorsTableAnnotationComposer,
+          $$ProcessFactorsTableCreateCompanionBuilder,
+          $$ProcessFactorsTableUpdateCompanionBuilder,
+          (
+            ProcessFactor,
+            BaseReferences<_$AppDatabase, $ProcessFactorsTable, ProcessFactor>,
+          ),
+          ProcessFactor,
+          PrefetchHooks Function()
+        > {
+  $$ProcessFactorsTableTableManager(
+    _$AppDatabase db,
+    $ProcessFactorsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ProcessFactorsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProcessFactorsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProcessFactorsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> factorId = const Value.absent(),
+                Value<String> foodGroup = const Value.absent(),
+                Value<String> method = const Value.absent(),
+                Value<double> yieldFactor = const Value.absent(),
+                Value<double?> fatUptakeG = const Value.absent(),
+                Value<double?> fatRetention = const Value.absent(),
+                Value<String?> retention = const Value.absent(),
+                Value<double?> confidence = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProcessFactorsCompanion(
+                factorId: factorId,
+                foodGroup: foodGroup,
+                method: method,
+                yieldFactor: yieldFactor,
+                fatUptakeG: fatUptakeG,
+                fatRetention: fatRetention,
+                retention: retention,
+                confidence: confidence,
+                source: source,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String factorId,
+                required String foodGroup,
+                required String method,
+                required double yieldFactor,
+                Value<double?> fatUptakeG = const Value.absent(),
+                Value<double?> fatRetention = const Value.absent(),
+                Value<String?> retention = const Value.absent(),
+                Value<double?> confidence = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ProcessFactorsCompanion.insert(
+                factorId: factorId,
+                foodGroup: foodGroup,
+                method: method,
+                yieldFactor: yieldFactor,
+                fatUptakeG: fatUptakeG,
+                fatRetention: fatRetention,
+                retention: retention,
+                confidence: confidence,
+                source: source,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ProcessFactorsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ProcessFactorsTable,
+      ProcessFactor,
+      $$ProcessFactorsTableFilterComposer,
+      $$ProcessFactorsTableOrderingComposer,
+      $$ProcessFactorsTableAnnotationComposer,
+      $$ProcessFactorsTableCreateCompanionBuilder,
+      $$ProcessFactorsTableUpdateCompanionBuilder,
+      (
+        ProcessFactor,
+        BaseReferences<_$AppDatabase, $ProcessFactorsTable, ProcessFactor>,
+      ),
+      ProcessFactor,
+      PrefetchHooks Function()
+    >;
+typedef $$IngredientFunctionalComponentsTableCreateCompanionBuilder =
+    IngredientFunctionalComponentsCompanion Function({
+      required String ingredientId,
+      required String componentId,
+      required double fractionGPer100g,
+      Value<String?> basis,
+      Value<String?> sourceRefs,
+      Value<double?> confidence,
+      Value<int> rowid,
+    });
+typedef $$IngredientFunctionalComponentsTableUpdateCompanionBuilder =
+    IngredientFunctionalComponentsCompanion Function({
+      Value<String> ingredientId,
+      Value<String> componentId,
+      Value<double> fractionGPer100g,
+      Value<String?> basis,
+      Value<String?> sourceRefs,
+      Value<double?> confidence,
+      Value<int> rowid,
+    });
+
+class $$IngredientFunctionalComponentsTableFilterComposer
+    extends Composer<_$AppDatabase, $IngredientFunctionalComponentsTable> {
+  $$IngredientFunctionalComponentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get componentId => $composableBuilder(
+    column: $table.componentId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get fractionGPer100g => $composableBuilder(
+    column: $table.fractionGPer100g,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get basis => $composableBuilder(
+    column: $table.basis,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$IngredientFunctionalComponentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IngredientFunctionalComponentsTable> {
+  $$IngredientFunctionalComponentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get componentId => $composableBuilder(
+    column: $table.componentId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get fractionGPer100g => $composableBuilder(
+    column: $table.fractionGPer100g,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get basis => $composableBuilder(
+    column: $table.basis,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$IngredientFunctionalComponentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IngredientFunctionalComponentsTable> {
+  $$IngredientFunctionalComponentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get componentId => $composableBuilder(
+    column: $table.componentId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get fractionGPer100g => $composableBuilder(
+    column: $table.fractionGPer100g,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get basis =>
+      $composableBuilder(column: $table.basis, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => column,
+  );
+}
+
+class $$IngredientFunctionalComponentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $IngredientFunctionalComponentsTable,
+          IngredientFunctionalComponent,
+          $$IngredientFunctionalComponentsTableFilterComposer,
+          $$IngredientFunctionalComponentsTableOrderingComposer,
+          $$IngredientFunctionalComponentsTableAnnotationComposer,
+          $$IngredientFunctionalComponentsTableCreateCompanionBuilder,
+          $$IngredientFunctionalComponentsTableUpdateCompanionBuilder,
+          (
+            IngredientFunctionalComponent,
+            BaseReferences<
+              _$AppDatabase,
+              $IngredientFunctionalComponentsTable,
+              IngredientFunctionalComponent
+            >,
+          ),
+          IngredientFunctionalComponent,
+          PrefetchHooks Function()
+        > {
+  $$IngredientFunctionalComponentsTableTableManager(
+    _$AppDatabase db,
+    $IngredientFunctionalComponentsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IngredientFunctionalComponentsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$IngredientFunctionalComponentsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$IngredientFunctionalComponentsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> ingredientId = const Value.absent(),
+                Value<String> componentId = const Value.absent(),
+                Value<double> fractionGPer100g = const Value.absent(),
+                Value<String?> basis = const Value.absent(),
+                Value<String?> sourceRefs = const Value.absent(),
+                Value<double?> confidence = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientFunctionalComponentsCompanion(
+                ingredientId: ingredientId,
+                componentId: componentId,
+                fractionGPer100g: fractionGPer100g,
+                basis: basis,
+                sourceRefs: sourceRefs,
+                confidence: confidence,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String ingredientId,
+                required String componentId,
+                required double fractionGPer100g,
+                Value<String?> basis = const Value.absent(),
+                Value<String?> sourceRefs = const Value.absent(),
+                Value<double?> confidence = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientFunctionalComponentsCompanion.insert(
+                ingredientId: ingredientId,
+                componentId: componentId,
+                fractionGPer100g: fractionGPer100g,
+                basis: basis,
+                sourceRefs: sourceRefs,
+                confidence: confidence,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$IngredientFunctionalComponentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $IngredientFunctionalComponentsTable,
+      IngredientFunctionalComponent,
+      $$IngredientFunctionalComponentsTableFilterComposer,
+      $$IngredientFunctionalComponentsTableOrderingComposer,
+      $$IngredientFunctionalComponentsTableAnnotationComposer,
+      $$IngredientFunctionalComponentsTableCreateCompanionBuilder,
+      $$IngredientFunctionalComponentsTableUpdateCompanionBuilder,
+      (
+        IngredientFunctionalComponent,
+        BaseReferences<
+          _$AppDatabase,
+          $IngredientFunctionalComponentsTable,
+          IngredientFunctionalComponent
+        >,
+      ),
+      IngredientFunctionalComponent,
+      PrefetchHooks Function()
+    >;
+typedef $$FunctionalComponentsTableCreateCompanionBuilder =
+    FunctionalComponentsCompanion Function({
+      required String componentId,
+      Value<String?> canonicalName,
+      Value<String?> category,
+      Value<String?> sourceOrganism,
+      Value<String?> role,
+      Value<String?> chemistry,
+      Value<String?> thermalBehavior,
+      Value<String?> solubility,
+      Value<String?> sourceRefs,
+      Value<double?> confidence,
+      Value<int> rowid,
+    });
+typedef $$FunctionalComponentsTableUpdateCompanionBuilder =
+    FunctionalComponentsCompanion Function({
+      Value<String> componentId,
+      Value<String?> canonicalName,
+      Value<String?> category,
+      Value<String?> sourceOrganism,
+      Value<String?> role,
+      Value<String?> chemistry,
+      Value<String?> thermalBehavior,
+      Value<String?> solubility,
+      Value<String?> sourceRefs,
+      Value<double?> confidence,
+      Value<int> rowid,
+    });
+
+class $$FunctionalComponentsTableFilterComposer
+    extends Composer<_$AppDatabase, $FunctionalComponentsTable> {
+  $$FunctionalComponentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get componentId => $composableBuilder(
+    column: $table.componentId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get canonicalName => $composableBuilder(
+    column: $table.canonicalName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceOrganism => $composableBuilder(
+    column: $table.sourceOrganism,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get chemistry => $composableBuilder(
+    column: $table.chemistry,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get thermalBehavior => $composableBuilder(
+    column: $table.thermalBehavior,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get solubility => $composableBuilder(
+    column: $table.solubility,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FunctionalComponentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FunctionalComponentsTable> {
+  $$FunctionalComponentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get componentId => $composableBuilder(
+    column: $table.componentId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get canonicalName => $composableBuilder(
+    column: $table.canonicalName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceOrganism => $composableBuilder(
+    column: $table.sourceOrganism,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get chemistry => $composableBuilder(
+    column: $table.chemistry,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get thermalBehavior => $composableBuilder(
+    column: $table.thermalBehavior,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get solubility => $composableBuilder(
+    column: $table.solubility,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FunctionalComponentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FunctionalComponentsTable> {
+  $$FunctionalComponentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get componentId => $composableBuilder(
+    column: $table.componentId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get canonicalName => $composableBuilder(
+    column: $table.canonicalName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceOrganism => $composableBuilder(
+    column: $table.sourceOrganism,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get role =>
+      $composableBuilder(column: $table.role, builder: (column) => column);
+
+  GeneratedColumn<String> get chemistry =>
+      $composableBuilder(column: $table.chemistry, builder: (column) => column);
+
+  GeneratedColumn<String> get thermalBehavior => $composableBuilder(
+    column: $table.thermalBehavior,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get solubility => $composableBuilder(
+    column: $table.solubility,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => column,
+  );
+}
+
+class $$FunctionalComponentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FunctionalComponentsTable,
+          FunctionalComponent,
+          $$FunctionalComponentsTableFilterComposer,
+          $$FunctionalComponentsTableOrderingComposer,
+          $$FunctionalComponentsTableAnnotationComposer,
+          $$FunctionalComponentsTableCreateCompanionBuilder,
+          $$FunctionalComponentsTableUpdateCompanionBuilder,
+          (
+            FunctionalComponent,
+            BaseReferences<
+              _$AppDatabase,
+              $FunctionalComponentsTable,
+              FunctionalComponent
+            >,
+          ),
+          FunctionalComponent,
+          PrefetchHooks Function()
+        > {
+  $$FunctionalComponentsTableTableManager(
+    _$AppDatabase db,
+    $FunctionalComponentsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FunctionalComponentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FunctionalComponentsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$FunctionalComponentsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> componentId = const Value.absent(),
+                Value<String?> canonicalName = const Value.absent(),
+                Value<String?> category = const Value.absent(),
+                Value<String?> sourceOrganism = const Value.absent(),
+                Value<String?> role = const Value.absent(),
+                Value<String?> chemistry = const Value.absent(),
+                Value<String?> thermalBehavior = const Value.absent(),
+                Value<String?> solubility = const Value.absent(),
+                Value<String?> sourceRefs = const Value.absent(),
+                Value<double?> confidence = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FunctionalComponentsCompanion(
+                componentId: componentId,
+                canonicalName: canonicalName,
+                category: category,
+                sourceOrganism: sourceOrganism,
+                role: role,
+                chemistry: chemistry,
+                thermalBehavior: thermalBehavior,
+                solubility: solubility,
+                sourceRefs: sourceRefs,
+                confidence: confidence,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String componentId,
+                Value<String?> canonicalName = const Value.absent(),
+                Value<String?> category = const Value.absent(),
+                Value<String?> sourceOrganism = const Value.absent(),
+                Value<String?> role = const Value.absent(),
+                Value<String?> chemistry = const Value.absent(),
+                Value<String?> thermalBehavior = const Value.absent(),
+                Value<String?> solubility = const Value.absent(),
+                Value<String?> sourceRefs = const Value.absent(),
+                Value<double?> confidence = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FunctionalComponentsCompanion.insert(
+                componentId: componentId,
+                canonicalName: canonicalName,
+                category: category,
+                sourceOrganism: sourceOrganism,
+                role: role,
+                chemistry: chemistry,
+                thermalBehavior: thermalBehavior,
+                solubility: solubility,
+                sourceRefs: sourceRefs,
+                confidence: confidence,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FunctionalComponentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FunctionalComponentsTable,
+      FunctionalComponent,
+      $$FunctionalComponentsTableFilterComposer,
+      $$FunctionalComponentsTableOrderingComposer,
+      $$FunctionalComponentsTableAnnotationComposer,
+      $$FunctionalComponentsTableCreateCompanionBuilder,
+      $$FunctionalComponentsTableUpdateCompanionBuilder,
+      (
+        FunctionalComponent,
+        BaseReferences<
+          _$AppDatabase,
+          $FunctionalComponentsTable,
+          FunctionalComponent
+        >,
+      ),
+      FunctionalComponent,
+      PrefetchHooks Function()
+    >;
+typedef $$ExperimentalValidationCasesTableCreateCompanionBuilder =
+    ExperimentalValidationCasesCompanion Function({
+      required String caseId,
+      Value<String?> formulationId,
+      Value<String?> ingredientIds,
+      Value<String?> quantities,
+      Value<String?> units,
+      Value<String?> processSequence,
+      Value<String?> measuredInputs,
+      Value<String?> measuredOutputs,
+      Value<String?> source,
+      Value<double?> temperatureC,
+      Value<double?> ph,
+      Value<double?> aw,
+      Value<String?> notes,
+      Value<int> rowid,
+    });
+typedef $$ExperimentalValidationCasesTableUpdateCompanionBuilder =
+    ExperimentalValidationCasesCompanion Function({
+      Value<String> caseId,
+      Value<String?> formulationId,
+      Value<String?> ingredientIds,
+      Value<String?> quantities,
+      Value<String?> units,
+      Value<String?> processSequence,
+      Value<String?> measuredInputs,
+      Value<String?> measuredOutputs,
+      Value<String?> source,
+      Value<double?> temperatureC,
+      Value<double?> ph,
+      Value<double?> aw,
+      Value<String?> notes,
+      Value<int> rowid,
+    });
+
+class $$ExperimentalValidationCasesTableFilterComposer
+    extends Composer<_$AppDatabase, $ExperimentalValidationCasesTable> {
+  $$ExperimentalValidationCasesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get caseId => $composableBuilder(
+    column: $table.caseId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get formulationId => $composableBuilder(
+    column: $table.formulationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ingredientIds => $composableBuilder(
+    column: $table.ingredientIds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get quantities => $composableBuilder(
+    column: $table.quantities,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get units => $composableBuilder(
+    column: $table.units,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get processSequence => $composableBuilder(
+    column: $table.processSequence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get measuredInputs => $composableBuilder(
+    column: $table.measuredInputs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get measuredOutputs => $composableBuilder(
+    column: $table.measuredOutputs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get temperatureC => $composableBuilder(
+    column: $table.temperatureC,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get ph => $composableBuilder(
+    column: $table.ph,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get aw => $composableBuilder(
+    column: $table.aw,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ExperimentalValidationCasesTableOrderingComposer
+    extends Composer<_$AppDatabase, $ExperimentalValidationCasesTable> {
+  $$ExperimentalValidationCasesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get caseId => $composableBuilder(
+    column: $table.caseId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get formulationId => $composableBuilder(
+    column: $table.formulationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ingredientIds => $composableBuilder(
+    column: $table.ingredientIds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get quantities => $composableBuilder(
+    column: $table.quantities,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get units => $composableBuilder(
+    column: $table.units,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get processSequence => $composableBuilder(
+    column: $table.processSequence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get measuredInputs => $composableBuilder(
+    column: $table.measuredInputs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get measuredOutputs => $composableBuilder(
+    column: $table.measuredOutputs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get temperatureC => $composableBuilder(
+    column: $table.temperatureC,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get ph => $composableBuilder(
+    column: $table.ph,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get aw => $composableBuilder(
+    column: $table.aw,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ExperimentalValidationCasesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ExperimentalValidationCasesTable> {
+  $$ExperimentalValidationCasesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get caseId =>
+      $composableBuilder(column: $table.caseId, builder: (column) => column);
+
+  GeneratedColumn<String> get formulationId => $composableBuilder(
+    column: $table.formulationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get ingredientIds => $composableBuilder(
+    column: $table.ingredientIds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get quantities => $composableBuilder(
+    column: $table.quantities,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get units =>
+      $composableBuilder(column: $table.units, builder: (column) => column);
+
+  GeneratedColumn<String> get processSequence => $composableBuilder(
+    column: $table.processSequence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get measuredInputs => $composableBuilder(
+    column: $table.measuredInputs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get measuredOutputs => $composableBuilder(
+    column: $table.measuredOutputs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<double> get temperatureC => $composableBuilder(
+    column: $table.temperatureC,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get ph =>
+      $composableBuilder(column: $table.ph, builder: (column) => column);
+
+  GeneratedColumn<double> get aw =>
+      $composableBuilder(column: $table.aw, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+}
+
+class $$ExperimentalValidationCasesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ExperimentalValidationCasesTable,
+          ExperimentalValidationCase,
+          $$ExperimentalValidationCasesTableFilterComposer,
+          $$ExperimentalValidationCasesTableOrderingComposer,
+          $$ExperimentalValidationCasesTableAnnotationComposer,
+          $$ExperimentalValidationCasesTableCreateCompanionBuilder,
+          $$ExperimentalValidationCasesTableUpdateCompanionBuilder,
+          (
+            ExperimentalValidationCase,
+            BaseReferences<
+              _$AppDatabase,
+              $ExperimentalValidationCasesTable,
+              ExperimentalValidationCase
+            >,
+          ),
+          ExperimentalValidationCase,
+          PrefetchHooks Function()
+        > {
+  $$ExperimentalValidationCasesTableTableManager(
+    _$AppDatabase db,
+    $ExperimentalValidationCasesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ExperimentalValidationCasesTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$ExperimentalValidationCasesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$ExperimentalValidationCasesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> caseId = const Value.absent(),
+                Value<String?> formulationId = const Value.absent(),
+                Value<String?> ingredientIds = const Value.absent(),
+                Value<String?> quantities = const Value.absent(),
+                Value<String?> units = const Value.absent(),
+                Value<String?> processSequence = const Value.absent(),
+                Value<String?> measuredInputs = const Value.absent(),
+                Value<String?> measuredOutputs = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<double?> temperatureC = const Value.absent(),
+                Value<double?> ph = const Value.absent(),
+                Value<double?> aw = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ExperimentalValidationCasesCompanion(
+                caseId: caseId,
+                formulationId: formulationId,
+                ingredientIds: ingredientIds,
+                quantities: quantities,
+                units: units,
+                processSequence: processSequence,
+                measuredInputs: measuredInputs,
+                measuredOutputs: measuredOutputs,
+                source: source,
+                temperatureC: temperatureC,
+                ph: ph,
+                aw: aw,
+                notes: notes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String caseId,
+                Value<String?> formulationId = const Value.absent(),
+                Value<String?> ingredientIds = const Value.absent(),
+                Value<String?> quantities = const Value.absent(),
+                Value<String?> units = const Value.absent(),
+                Value<String?> processSequence = const Value.absent(),
+                Value<String?> measuredInputs = const Value.absent(),
+                Value<String?> measuredOutputs = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<double?> temperatureC = const Value.absent(),
+                Value<double?> ph = const Value.absent(),
+                Value<double?> aw = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ExperimentalValidationCasesCompanion.insert(
+                caseId: caseId,
+                formulationId: formulationId,
+                ingredientIds: ingredientIds,
+                quantities: quantities,
+                units: units,
+                processSequence: processSequence,
+                measuredInputs: measuredInputs,
+                measuredOutputs: measuredOutputs,
+                source: source,
+                temperatureC: temperatureC,
+                ph: ph,
+                aw: aw,
+                notes: notes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ExperimentalValidationCasesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ExperimentalValidationCasesTable,
+      ExperimentalValidationCase,
+      $$ExperimentalValidationCasesTableFilterComposer,
+      $$ExperimentalValidationCasesTableOrderingComposer,
+      $$ExperimentalValidationCasesTableAnnotationComposer,
+      $$ExperimentalValidationCasesTableCreateCompanionBuilder,
+      $$ExperimentalValidationCasesTableUpdateCompanionBuilder,
+      (
+        ExperimentalValidationCase,
+        BaseReferences<
+          _$AppDatabase,
+          $ExperimentalValidationCasesTable,
+          ExperimentalValidationCase
+        >,
+      ),
+      ExperimentalValidationCase,
+      PrefetchHooks Function()
+    >;
+typedef $$IngredientFlavorProfilesTableCreateCompanionBuilder =
+    IngredientFlavorProfilesCompanion Function({
+      required String ingredientId,
+      required String descriptors,
+      Value<String?> context,
+      Value<double?> intensity,
+      required String evidenceLevel,
+      required double confidence,
+      Value<String?> sourceRefs,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+typedef $$IngredientFlavorProfilesTableUpdateCompanionBuilder =
+    IngredientFlavorProfilesCompanion Function({
+      Value<String> ingredientId,
+      Value<String> descriptors,
+      Value<String?> context,
+      Value<double?> intensity,
+      Value<String> evidenceLevel,
+      Value<double> confidence,
+      Value<String?> sourceRefs,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+
+class $$IngredientFlavorProfilesTableFilterComposer
+    extends Composer<_$AppDatabase, $IngredientFlavorProfilesTable> {
+  $$IngredientFlavorProfilesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get descriptors => $composableBuilder(
+    column: $table.descriptors,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get context => $composableBuilder(
+    column: $table.context,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get intensity => $composableBuilder(
+    column: $table.intensity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get evidenceLevel => $composableBuilder(
+    column: $table.evidenceLevel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$IngredientFlavorProfilesTableOrderingComposer
+    extends Composer<_$AppDatabase, $IngredientFlavorProfilesTable> {
+  $$IngredientFlavorProfilesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get descriptors => $composableBuilder(
+    column: $table.descriptors,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get context => $composableBuilder(
+    column: $table.context,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get intensity => $composableBuilder(
+    column: $table.intensity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get evidenceLevel => $composableBuilder(
+    column: $table.evidenceLevel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$IngredientFlavorProfilesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IngredientFlavorProfilesTable> {
+  $$IngredientFlavorProfilesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get descriptors => $composableBuilder(
+    column: $table.descriptors,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get context =>
+      $composableBuilder(column: $table.context, builder: (column) => column);
+
+  GeneratedColumn<double> get intensity =>
+      $composableBuilder(column: $table.intensity, builder: (column) => column);
+
+  GeneratedColumn<String> get evidenceLevel => $composableBuilder(
+    column: $table.evidenceLevel,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sourceRefs => $composableBuilder(
+    column: $table.sourceRefs,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$IngredientFlavorProfilesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $IngredientFlavorProfilesTable,
+          IngredientFlavorProfile,
+          $$IngredientFlavorProfilesTableFilterComposer,
+          $$IngredientFlavorProfilesTableOrderingComposer,
+          $$IngredientFlavorProfilesTableAnnotationComposer,
+          $$IngredientFlavorProfilesTableCreateCompanionBuilder,
+          $$IngredientFlavorProfilesTableUpdateCompanionBuilder,
+          (
+            IngredientFlavorProfile,
+            BaseReferences<
+              _$AppDatabase,
+              $IngredientFlavorProfilesTable,
+              IngredientFlavorProfile
+            >,
+          ),
+          IngredientFlavorProfile,
+          PrefetchHooks Function()
+        > {
+  $$IngredientFlavorProfilesTableTableManager(
+    _$AppDatabase db,
+    $IngredientFlavorProfilesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IngredientFlavorProfilesTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$IngredientFlavorProfilesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$IngredientFlavorProfilesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> ingredientId = const Value.absent(),
+                Value<String> descriptors = const Value.absent(),
+                Value<String?> context = const Value.absent(),
+                Value<double?> intensity = const Value.absent(),
+                Value<String> evidenceLevel = const Value.absent(),
+                Value<double> confidence = const Value.absent(),
+                Value<String?> sourceRefs = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientFlavorProfilesCompanion(
+                ingredientId: ingredientId,
+                descriptors: descriptors,
+                context: context,
+                intensity: intensity,
+                evidenceLevel: evidenceLevel,
+                confidence: confidence,
+                sourceRefs: sourceRefs,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String ingredientId,
+                required String descriptors,
+                Value<String?> context = const Value.absent(),
+                Value<double?> intensity = const Value.absent(),
+                required String evidenceLevel,
+                required double confidence,
+                Value<String?> sourceRefs = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientFlavorProfilesCompanion.insert(
+                ingredientId: ingredientId,
+                descriptors: descriptors,
+                context: context,
+                intensity: intensity,
+                evidenceLevel: evidenceLevel,
+                confidence: confidence,
+                sourceRefs: sourceRefs,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$IngredientFlavorProfilesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $IngredientFlavorProfilesTable,
+      IngredientFlavorProfile,
+      $$IngredientFlavorProfilesTableFilterComposer,
+      $$IngredientFlavorProfilesTableOrderingComposer,
+      $$IngredientFlavorProfilesTableAnnotationComposer,
+      $$IngredientFlavorProfilesTableCreateCompanionBuilder,
+      $$IngredientFlavorProfilesTableUpdateCompanionBuilder,
+      (
+        IngredientFlavorProfile,
+        BaseReferences<
+          _$AppDatabase,
+          $IngredientFlavorProfilesTable,
+          IngredientFlavorProfile
+        >,
+      ),
+      IngredientFlavorProfile,
+      PrefetchHooks Function()
+    >;
+typedef $$CulinaryPairingsTableCreateCompanionBuilder =
+    CulinaryPairingsCompanion Function({
+      required String pairId,
+      required String ingredientAId,
+      required String ingredientBId,
+      required String kind,
+      required double strength,
+      Value<String?> source,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+typedef $$CulinaryPairingsTableUpdateCompanionBuilder =
+    CulinaryPairingsCompanion Function({
+      Value<String> pairId,
+      Value<String> ingredientAId,
+      Value<String> ingredientBId,
+      Value<String> kind,
+      Value<double> strength,
+      Value<String?> source,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+
+class $$CulinaryPairingsTableFilterComposer
+    extends Composer<_$AppDatabase, $CulinaryPairingsTable> {
+  $$CulinaryPairingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get pairId => $composableBuilder(
+    column: $table.pairId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ingredientAId => $composableBuilder(
+    column: $table.ingredientAId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ingredientBId => $composableBuilder(
+    column: $table.ingredientBId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get strength => $composableBuilder(
+    column: $table.strength,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CulinaryPairingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CulinaryPairingsTable> {
+  $$CulinaryPairingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get pairId => $composableBuilder(
+    column: $table.pairId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ingredientAId => $composableBuilder(
+    column: $table.ingredientAId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ingredientBId => $composableBuilder(
+    column: $table.ingredientBId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get kind => $composableBuilder(
+    column: $table.kind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get strength => $composableBuilder(
+    column: $table.strength,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CulinaryPairingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CulinaryPairingsTable> {
+  $$CulinaryPairingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get pairId =>
+      $composableBuilder(column: $table.pairId, builder: (column) => column);
+
+  GeneratedColumn<String> get ingredientAId => $composableBuilder(
+    column: $table.ingredientAId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get ingredientBId => $composableBuilder(
+    column: $table.ingredientBId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get kind =>
+      $composableBuilder(column: $table.kind, builder: (column) => column);
+
+  GeneratedColumn<double> get strength =>
+      $composableBuilder(column: $table.strength, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$CulinaryPairingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CulinaryPairingsTable,
+          CulinaryPairing,
+          $$CulinaryPairingsTableFilterComposer,
+          $$CulinaryPairingsTableOrderingComposer,
+          $$CulinaryPairingsTableAnnotationComposer,
+          $$CulinaryPairingsTableCreateCompanionBuilder,
+          $$CulinaryPairingsTableUpdateCompanionBuilder,
+          (
+            CulinaryPairing,
+            BaseReferences<
+              _$AppDatabase,
+              $CulinaryPairingsTable,
+              CulinaryPairing
+            >,
+          ),
+          CulinaryPairing,
+          PrefetchHooks Function()
+        > {
+  $$CulinaryPairingsTableTableManager(
+    _$AppDatabase db,
+    $CulinaryPairingsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CulinaryPairingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CulinaryPairingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CulinaryPairingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> pairId = const Value.absent(),
+                Value<String> ingredientAId = const Value.absent(),
+                Value<String> ingredientBId = const Value.absent(),
+                Value<String> kind = const Value.absent(),
+                Value<double> strength = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CulinaryPairingsCompanion(
+                pairId: pairId,
+                ingredientAId: ingredientAId,
+                ingredientBId: ingredientBId,
+                kind: kind,
+                strength: strength,
+                source: source,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String pairId,
+                required String ingredientAId,
+                required String ingredientBId,
+                required String kind,
+                required double strength,
+                Value<String?> source = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CulinaryPairingsCompanion.insert(
+                pairId: pairId,
+                ingredientAId: ingredientAId,
+                ingredientBId: ingredientBId,
+                kind: kind,
+                strength: strength,
+                source: source,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CulinaryPairingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CulinaryPairingsTable,
+      CulinaryPairing,
+      $$CulinaryPairingsTableFilterComposer,
+      $$CulinaryPairingsTableOrderingComposer,
+      $$CulinaryPairingsTableAnnotationComposer,
+      $$CulinaryPairingsTableCreateCompanionBuilder,
+      $$CulinaryPairingsTableUpdateCompanionBuilder,
+      (
+        CulinaryPairing,
+        BaseReferences<_$AppDatabase, $CulinaryPairingsTable, CulinaryPairing>,
+      ),
+      CulinaryPairing,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -24665,4 +31335,29 @@ class $AppDatabaseManager {
       $$InteractionRulesTableTableManager(_db, _db.interactionRules);
   $$ProcessOperationsTableTableManager get processOperations =>
       $$ProcessOperationsTableTableManager(_db, _db.processOperations);
+  $$IngredientCulinaryTableTableManager get ingredientCulinary =>
+      $$IngredientCulinaryTableTableManager(_db, _db.ingredientCulinary);
+  $$ProcessFactorsTableTableManager get processFactors =>
+      $$ProcessFactorsTableTableManager(_db, _db.processFactors);
+  $$IngredientFunctionalComponentsTableTableManager
+  get ingredientFunctionalComponents =>
+      $$IngredientFunctionalComponentsTableTableManager(
+        _db,
+        _db.ingredientFunctionalComponents,
+      );
+  $$FunctionalComponentsTableTableManager get functionalComponents =>
+      $$FunctionalComponentsTableTableManager(_db, _db.functionalComponents);
+  $$ExperimentalValidationCasesTableTableManager
+  get experimentalValidationCases =>
+      $$ExperimentalValidationCasesTableTableManager(
+        _db,
+        _db.experimentalValidationCases,
+      );
+  $$IngredientFlavorProfilesTableTableManager get ingredientFlavorProfiles =>
+      $$IngredientFlavorProfilesTableTableManager(
+        _db,
+        _db.ingredientFlavorProfiles,
+      );
+  $$CulinaryPairingsTableTableManager get culinaryPairings =>
+      $$CulinaryPairingsTableTableManager(_db, _db.culinaryPairings);
 }
