@@ -165,8 +165,9 @@ class NutritionRepository {
     return selectState(all, stateId);
   }
 
-  /// Sélection d'état documentée : état demandé → `raw` → état le plus
-  /// documenté (ordre alphabétique en cas d'égalité, déterministe).
+  /// Sélection d'état documentée : état demandé → `raw` → état non cuit
+  /// le plus documenté → état le plus documenté (ordre alphabétique en
+  /// cas d'égalité, déterministe).
   @visibleForTesting
   static List<NutritionRecord> selectState(
     List<NutritionRecord> records,
@@ -183,7 +184,12 @@ class NutritionRepository {
     if (requested != null) return requested;
     final raw = byState['raw'];
     if (raw != null) return raw;
-    final keys = byState.keys.toList()
+    // Une demande « cru » ne retombe sur un état cuit (variante mesurée)
+    // qu'en dernier recours : on préfère l'état commercial (sec, fermenté…).
+    final uncooked = byState.keys
+        .where((s) => !kCookedStates.contains(s))
+        .toList();
+    final keys = (uncooked.isNotEmpty ? uncooked : byState.keys.toList())
       ..sort((a, b) {
         final byCount = byState[b]!.length.compareTo(byState[a]!.length);
         return byCount != 0 ? byCount : a.compareTo(b);

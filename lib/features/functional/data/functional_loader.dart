@@ -57,7 +57,7 @@ class FunctionalLoader {
           batch.insert(
             db.functionalIngredients,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },
@@ -83,7 +83,7 @@ class FunctionalLoader {
           batch.insert(
             db.interactionRules,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },
@@ -108,7 +108,7 @@ class FunctionalLoader {
           batch.insert(
             db.processOperations,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },

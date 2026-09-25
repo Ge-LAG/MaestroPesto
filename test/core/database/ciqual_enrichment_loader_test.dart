@@ -121,6 +121,81 @@ void main() {
     },
   );
 
+  test('ac-126 : fichier modifié → valeurs corrigées et lignes obsolètes '
+      'purgées', () async {
+    final v1 = await _writeCsv(
+      tmp,
+      [
+        _csvHeader,
+        _row('ING-A', 'ENERCKCAL', 10, 'v1'),
+        _row('ING-B', 'ENERCKCAL', 89, 'v1'),
+        '',
+      ].join('\n'),
+    );
+    await CiqualEnrichmentLoader().loadInto(db, csvPath: v1);
+    final v2 = await _writeCsv(
+      tmp,
+      [_csvHeader, _row('ING-B', 'ENERCKCAL', 92, 'v2'), ''].join('\n'),
+    );
+    var skipped = true;
+    await CiqualEnrichmentLoader().loadInto(
+      db,
+      csvPath: v2,
+      onFileSkipped: (s) => skipped = s,
+    );
+    expect(skipped, isFalse);
+    final rows = await db.select(db.nutritionRecords).get();
+    expect(rows, hasLength(1), reason: 'ING-A retiré du fichier : purgé');
+    expect(rows.single.ingredientId, 'ING-B');
+    expect(rows.single.normalizedValue, 92, reason: 'valeur corrigée');
+  });
+
+  test('Phase 10 : état, variante cuite et note d’approximation', () async {
+    const header =
+        'ingredient_id,ingredient_state_id,row_kind,ciqual_alim_code,'
+        'aliment_name,component_id,component_name,normalized_value,'
+        'normalized_unit,confidence_code,confidence,match_type,match_note,'
+        'source_citation';
+    // ING-A : couvert Phase 2 à l'état raw → seule sa variante cuite
+    // (état absent de la Phase 2) est ajoutée.
+    await db
+        .into(db.nutritionRecords)
+        .insert(
+          NutritionRecordsCompanion.insert(
+            nutritionRecordId: 'P2-1',
+            ingredientId: 'ING-A',
+            ingredientStateId: const Value('raw'),
+            sourceId: const Value('CIQUAL'),
+            componentId: const Value('ENERCKCAL'),
+            normalizedValue: const Value(30),
+          ),
+        );
+    final path = await _writeCsv(
+      tmp,
+      [
+        header,
+        'ING-A,raw,main,1,"Aliment A, cru",ENERCKCAL,E,31,kcal,A,0.95,name,,c',
+        'ING-A,boiled,cooked_variant,2,"Aliment A, bouilli",ENERCKCAL,E,25,'
+            'kcal,A,0.95,name,,c',
+        'ING-B,raw,main,3,"Aliment voisin",ENERCKCAL,E,50,kcal,B,0.85,proxy,'
+            'assimilé à un aliment voisin,c',
+        '',
+      ].join('\n'),
+    );
+    await CiqualEnrichmentLoader().loadInto(db, csvPath: path);
+    final rows = await db.select(db.nutritionRecords).get();
+    final a = rows.where((r) => r.ingredientId == 'ING-A').toList();
+    expect(a.map((r) => r.ingredientStateId).toSet(), {'raw', 'boiled'});
+    expect(
+      a.where((r) => r.ingredientStateId == 'raw').single.sourceId,
+      'CIQUAL',
+      reason: 'la Phase 2 prime sur la ligne main',
+    );
+    final b = rows.singleWhere((r) => r.ingredientId == 'ING-B');
+    expect(b.derivationMethod, contains('assimilé'));
+    expect(b.mappingConfidence, 0.6);
+  });
+
   test('fichier inexistant : remonte une exception (phase optionnelle '
       'gérée par le CsvImportService)', () async {
     expect(

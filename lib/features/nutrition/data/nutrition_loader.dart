@@ -46,7 +46,7 @@ class NutritionLoader {
           batch.insert(
             db.nutritionComponents,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },
@@ -72,7 +72,7 @@ class NutritionLoader {
           batch.insert(
             db.nutritionRecords,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },

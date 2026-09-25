@@ -25,10 +25,13 @@ class IngredientRegistryLoader {
       parseRow: IngredientCsv.fromCsvRow,
       insertRows: (batch, rows) async {
         for (final row in rows) {
+          // Phase 10 (ac-126) : upsert — une correction du registre est
+          // appliquée sans supprimer la ligne parente (FK).
+          final companion = row.toCompanion();
           batch.insert(
             db.ingredients,
-            row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            companion,
+            onConflict: DoUpdate((_) => companion),
           );
         }
       },

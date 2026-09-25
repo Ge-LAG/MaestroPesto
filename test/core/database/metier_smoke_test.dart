@@ -291,12 +291,11 @@ void main() {
         final covered = rows.map((r) => r.ingredientId).toSet().length;
         expect(
           covered,
-          greaterThan(365),
+          greaterThan(510),
           reason:
-              'Phase 2 (62) ∪ enrichissement Ciqual (367), union mesurée '
-              '371 — retour PO n°4 : « compléter à 100 % pour ne plus avoir de '
-              'trous ». Les non-couverts restants sont absents de la table '
-              'Ciqual 2025-11-03.',
+              'Phase 10 : Phase 2 ∪ enrichissement Ciqual avec alias curatés '
+              '(518/603 mesurés). Les non-couverts restants (additifs, '
+              'sauces asiatiques, préparations) sont absents de Ciqual.',
         );
       },
     );

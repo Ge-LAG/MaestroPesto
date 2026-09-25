@@ -51,7 +51,7 @@ class FlavorLoader {
           batch.insert(
             db.ingredientAromaCompounds,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },
@@ -77,7 +77,7 @@ class FlavorLoader {
           batch.insert(
             db.flavorCompatibility,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },
