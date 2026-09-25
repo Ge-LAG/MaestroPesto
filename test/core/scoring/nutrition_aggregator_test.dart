@@ -197,8 +197,11 @@ void main() {
       expect(NutritionAggregator.quantityToGrams('2'), 2);
     });
 
-    test('unknown culinary unit falls back to grams (documented v1)', () {
-      expect(NutritionAggregator.quantityToGrams('1 pincée'), 1);
+    test('culinary units are converted (Phase 10, ac-128)', () {
+      // 1 pincée ≈ 0,5 g ; 1 c. à soupe = 15 ml (densité 1 par défaut).
+      expect(NutritionAggregator.quantityToGrams('1 pincée'), 0.5);
+      expect(NutritionAggregator.quantityToGrams('1 c. à soupe'), 15);
+      expect(NutritionAggregator.quantityToGrams('2 c. à café'), 10);
     });
 
     test('decimal comma is supported', () {

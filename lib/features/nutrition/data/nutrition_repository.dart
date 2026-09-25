@@ -1,40 +1,55 @@
-// Phase 09 Lot F — repository Phase 2 nutrition.
+// Phase 09 Lot F / Phase 10 Lot A — repository Phase 2 nutrition.
 //
-// Cahier §6.2 :
-// - forIngredient(ingredientId, stateId='raw') → Future<NutritionProfile?>
-// - aggregateForRecipe(...) : async (résolution) puis calcul pur synchrone
-//   via NutritionAggregator (Lot G, dp-105)
+// Source de vérité : table `nutrition_records` (records Phase 2 et
+// enrichissement Ciqual 2025). Chaque champ du [NutritionProfile] est
+// résolu par une **liste d'expressions par priorité** (Phase 10,
+// ac-120/ac-121) : la première expression dont au moins un terme est
+// présent gagne ; ses termes sont sommés (ex. folates = folates
+// intrinsèques + acide folique). On ne moyenne JAMAIS deux expressions
+// différentes d'un même nutriment (total vs sous-ensemble, RAE vs
+// rétinol) : c'était la cause des vitamines faussées.
 //
-// Source de vérité : table `nutrition_records` (Lot A schéma Drift).
-// Mapping component_id → champ NutritionProfile — les tags réels du
-// dictionnaire Phase 2 (`component_dictionary.csv`, style Ciqual) sont
-// en premier, les alias génériques en secours :
-//   - ENERCKCAL / energy_kcal / energy → energyKcal (kcal)
-//   - ENERC / energy_kj / kj           → energyKcal (÷ 4.184)
-//   - PROTEIN / protein                → proteins
-//   - CARB / carbohydrate / carbs      → carbs
-//   - SUGAR / sugar                    → sugars
-//   - FAT / fat / lipid                → fats
-//   - FAT_SAT / saturated_fat          → saturatedFats
-//   - FIBER / fiber / fibres           → fiber
-//   - NA / sodium (mg) ou salt (g)     → salt (sel = Na × 2.5, §5.3)
-//   - WATER / water                    → waterContent
+// Tags acceptés (casse ignorée) :
+//   - Phase 2 : ENERCKCAL, ENERC, PROTEIN, CARB, SUGAR, FAT, FAT_SAT,
+//     FIBER, NA, WATER, ALCOHOL, VITA, FOL…
+//   - Ciqual 2025 (INFOODS) : PROCNT, CHOAVL, FASAT, FIB-, SALT, ALC,
+//     RAE, RETOL, CARTB, FOL, FOLFD, FOLAC, FOLDFE, VITD-, CHOCAL,
+//     ERGCAL, TOCPHA, VITK1, VITK2…
+//   - alias génériques (energy_kcal, proteins, carbohydrate…).
 //
-// Si plusieurs records par composant, on moyenne `normalized_value`.
+// Plusieurs records d'un même tag (ex. Ciqual + USDA pour la pomme) :
+// le record de plus haute confiance est retenu (moyenne en cas
+// d'égalité).
+//
+// États (ac-124) : les records d'un ingrédient ne sont jamais mélangés
+// entre états. L'état demandé est servi s'il existe, sinon l'état
+// `raw`, sinon l'état le mieux documenté — l'état réellement servi est
+// porté par le profil.
 
 import 'package:meta/meta.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/models/nutrient_catalog.dart';
 import '../../../core/models/nutrition_profile.dart';
 import '../../../core/scoring/nutrition_aggregator.dart';
 import '../../recipes/domain/recipe.dart';
+
+/// Terme d'une expression nutritionnelle : un tag source × coefficient.
+@immutable
+class _Term {
+  const _Term(this.tag, [this.coef = 1]);
+
+  final String tag;
+  final double coef;
+}
 
 /// Repository pour la Phase 2 (nutrition).
 ///
 /// Toutes les méthodes sont tolérantes aux données manquantes :
 /// - DB vide → renvoie `null` ou `NutritionProfile.empty`.
-/// - Composant absent → 0 dans le profil.
-/// - Ingrédient `stateId` non trouvé → fallback sur `raw`.
+/// - Composant absent → 0 dans le profil ET champ absent de
+///   `knownFields` (affiché « non renseigné »).
+/// - État demandé absent → repli documenté (voir en-tête).
 class NutritionRepository {
   NutritionRepository(this._db);
 
@@ -51,71 +66,57 @@ class NutritionRepository {
   }) async {
     final records = await _loadRecords(ingredientId, stateId: stateId);
     if (records.isEmpty) {
-      // Vérifier que l'ingrédient existe (sinon null)
       final exists = await _ingredientExists(ingredientId);
       return exists ? NutritionProfile.empty : null;
     }
-    return _aggregate(records, stateId: stateId);
+    return _aggregate(records);
+  }
+
+  /// Sources distinctes des records d'un ingrédient (fiche détail).
+  Future<List<NutritionSource>> sourcesFor(String ingredientId) async {
+    final records = await _loadRecords(ingredientId, stateId: 'raw');
+    return _sourcesOf(records);
   }
 
   /// Lot G (G1) — agrège la nutrition d'une recette entière, par portion.
   ///
-  /// Résout les profils de chaque ingrédient lié (`forIngredient`, async),
-  /// puis délègue le calcul au [NutritionAggregator] pur et synchrone
-  /// (dp-105). Les edge cases (ingrédient libre sans id, sous-recette,
-  /// profil manquant) sont gérés par l'agrégateur — voir ses warnings.
-  ///
-  /// Les sources des records consommés sont collectées pour être citées
-  /// in-app (retour PO 2026-08-26).
+  /// Résout les profils de chaque ingrédient lié (async), puis délègue
+  /// le calcul au [NutritionAggregator] pur et synchrone (dp-105).
+  /// [process] (Phase 10 Lot D) : procédé appliqué à chaque ligne
+  /// (rendement + rétention) — null = aucun facteur de procédé.
   Future<NutritionAggregation> aggregateForRecipe({
     required List<RecipeIngredient> ingredients,
     required int servings,
     String stateId = 'raw',
+    NutritionProcessContext? process,
   }) async {
-    // Résolution async en amont : un seul passage par ingrédient lié,
-    // avec cache local pour ne pas requêter deux fois le même id.
     final cache = <String, NutritionProfile?>{};
     final sources = <String, NutritionSource>{};
     for (final ingredient in ingredients) {
       final id = ingredient.ingredientId;
       if (id == null || id.isEmpty || cache.containsKey(id)) continue;
       final records = await _loadRecords(id, stateId: stateId);
-      for (final r in records) {
-        final sid = r.sourceId;
-        if (sid == null || sid.isEmpty) continue;
-        sources.putIfAbsent(
-          sid,
-          () => NutritionSource(
-            id: sid,
-            label: sourceLabel(sid),
-            citation: r.notes,
-          ),
-        );
+      for (final s in _sourcesOf(records)) {
+        sources.putIfAbsent(s.id, () => s);
       }
       if (records.isEmpty) {
         cache[id] = (await _ingredientExists(id))
             ? NutritionProfile.empty
             : null;
       } else {
-        cache[id] = _aggregate(records, stateId: stateId);
+        cache[id] = _aggregate(records);
       }
     }
     final aggregation = NutritionAggregator.aggregate(
       ingredients: ingredients,
       lookup: (id) => cache[id],
       servings: servings,
+      process: process,
     );
     if (sources.isEmpty) return aggregation;
     final sorted = sources.values.toList()
       ..sort((a, b) => a.id.compareTo(b.id));
-    return NutritionAggregation(
-      profilePerServing: aggregation.profilePerServing,
-      resolvedCount: aggregation.resolvedCount,
-      withDataCount: aggregation.withDataCount,
-      totalCount: aggregation.totalCount,
-      warnings: aggregation.warnings,
-      sources: sorted,
-    );
+    return aggregation.withSources(sorted);
   }
 
   /// Libellé lisible d'un `source_id` (null → id brut affiché).
@@ -128,6 +129,23 @@ class NutritionRepository {
     return null;
   }
 
+  static List<NutritionSource> _sourcesOf(List<NutritionRecord> records) {
+    final sources = <String, NutritionSource>{};
+    for (final r in records) {
+      final sid = r.sourceId;
+      if (sid == null || sid.isEmpty) continue;
+      sources.putIfAbsent(
+        sid,
+        () => NutritionSource(
+          id: sid,
+          label: sourceLabel(sid),
+          citation: r.notes,
+        ),
+      );
+    }
+    return sources.values.toList();
+  }
+
   Future<bool> _ingredientExists(String ingredientId) async {
     final query = _db.select(_db.ingredients)
       ..where((t) => t.ingredientId.equals(ingredientId))
@@ -136,184 +154,322 @@ class NutritionRepository {
     return row != null;
   }
 
+  /// Charge les records d'UN seul état (jamais de mélange d'états).
   Future<List<NutritionRecord>> _loadRecords(
     String ingredientId, {
     required String stateId,
   }) async {
-    final query = _db.select(_db.nutritionRecords)
-      ..where((t) => t.ingredientId.equals(ingredientId));
-    if (stateId != 'raw') {
-      query.where((t) => t.ingredientStateId.equals(stateId));
-    }
-    return query.get();
+    final all = await (_db.select(
+      _db.nutritionRecords,
+    )..where((t) => t.ingredientId.equals(ingredientId))).get();
+    return selectState(all, stateId);
   }
 
-  /// Agrège les records en un NutritionProfile.
-  /// Visible pour tests.
+  /// Sélection d'état documentée : état demandé → `raw` → état le plus
+  /// documenté (ordre alphabétique en cas d'égalité, déterministe).
   @visibleForTesting
-  static NutritionProfile aggregateRecords(
-    List<NutritionRecord> records, {
-    String stateId = 'raw',
-  }) => _aggregate(records, stateId: stateId);
+  static List<NutritionRecord> selectState(
+    List<NutritionRecord> records,
+    String stateId,
+  ) {
+    if (records.isEmpty) return records;
+    final byState = <String, List<NutritionRecord>>{};
+    for (final r in records) {
+      final s = (r.ingredientStateId ?? 'raw').trim();
+      byState.putIfAbsent(s.isEmpty ? 'raw' : s, () => []).add(r);
+    }
+    if (byState.length == 1) return records;
+    final requested = byState[stateId];
+    if (requested != null) return requested;
+    final raw = byState['raw'];
+    if (raw != null) return raw;
+    final keys = byState.keys.toList()
+      ..sort((a, b) {
+        final byCount = byState[b]!.length.compareTo(byState[a]!.length);
+        return byCount != 0 ? byCount : a.compareTo(b);
+      });
+    return byState[keys.first]!;
+  }
 
-  static NutritionProfile _aggregate(
-    List<NutritionRecord> records, {
-    required String stateId,
-  }) {
+  /// Agrège les records en un NutritionProfile. Visible pour tests.
+  @visibleForTesting
+  static NutritionProfile aggregateRecords(List<NutritionRecord> records) =>
+      _aggregate(records);
+
+  // ---------------------------------------------------------------------
+  // Expressions par priorité (Phase 10, ac-120 / ac-121).
+  // ---------------------------------------------------------------------
+
+  static const Map<MacroField, List<List<_Term>>> _macroExpressions = {
+    MacroField.proteins: [
+      [_Term('procnt')],
+      [_Term('protein')],
+      [_Term('proteins')],
+    ],
+    MacroField.carbs: [
+      [_Term('choavl')],
+      [_Term('carb')],
+      [_Term('carbohydrate')],
+      [_Term('carbs')],
+      [_Term('carbohydrates')],
+    ],
+    MacroField.sugars: [
+      [_Term('sugar')],
+      [_Term('sugars')],
+    ],
+    MacroField.fats: [
+      [_Term('fat')],
+      [_Term('fats')],
+      [_Term('lipid')],
+      [_Term('lipids')],
+    ],
+    MacroField.saturatedFats: [
+      [_Term('fasat')],
+      [_Term('fat_sat')],
+      [_Term('saturated_fat')],
+      [_Term('saturated_fats')],
+    ],
+    MacroField.fiber: [
+      [_Term('fib-')],
+      [_Term('fiber')],
+      [_Term('fibre')],
+      [_Term('fibres')],
+      [_Term('dietary_fiber')],
+    ],
+    // Sel (g) : direct, sinon sodium (mg) × 2,5 / 1000 (Ciqual).
+    MacroField.salt: [
+      [_Term('salt')],
+      [_Term('na', 2.5 / 1000)],
+      [_Term('sodium', 2.5 / 1000)],
+    ],
+    MacroField.alcohol: [
+      [_Term('alc')],
+      [_Term('alcohol')],
+      [_Term('ethanol')],
+    ],
+    MacroField.water: [
+      [_Term('water')],
+    ],
+    // Énergie (kcal) : kcal directe, sinon kJ ÷ 4,184.
+    MacroField.energy: [
+      [_Term('enerckcal')],
+      [_Term('energy_kcal')],
+      [_Term('energy')],
+      [_Term('enerc', 1 / 4.184)],
+      [_Term('energy_kj', 1 / 4.184)],
+      [_Term('kj', 1 / 4.184)],
+    ],
+  };
+
+  /// Micronutriments : tag canonique → expressions par priorité. Les
+  /// tags non listés ici passent par [canonicalMicroTag] (1 tag = 1
+  /// expression).
+  static const Map<String, List<List<_Term>>> _microExpressions = {
+    // Activité vitaminique A : RAE mesuré, sinon rétinol + β-carotène
+    // ÷ 12 (définition RAE, IOM 2001).
+    'VITA': [
+      [_Term('rae')],
+      [_Term('vita')],
+      [_Term('retol'), _Term('cartb', 1 / 12)],
+      [_Term('retinol'), _Term('carotene_b', 1 / 12)],
+    ],
+    // Folates totaux : total mesuré, sinon intrinsèques + acide folique
+    // ajouté, sinon équivalents DFE.
+    'FOLATES': [
+      [_Term('fol')],
+      [_Term('folfd'), _Term('folac')],
+      [_Term('foldfe')],
+    ],
+    // Vitamine D totale, sinon D3 + D2.
+    'VITD': [
+      [_Term('vitd-')],
+      [_Term('vitd')],
+      [_Term('chocal'), _Term('ergcal')],
+    ],
+    // Vitamine E : α-tocophérol (base des VNR), sinon activité totale.
+    'VITE': [
+      [_Term('tocpha')],
+      [_Term('vite')],
+      [_Term('vite-')],
+    ],
+    // Vitamine K : total, sinon K1 + K2.
+    'VITK': [
+      [_Term('vitk')],
+      [_Term('vitk1'), _Term('vitk2')],
+    ],
+  };
+
+  /// Tags sources consommés par les expressions macro — jamais
+  /// recanonisés en micronutriment.
+  static final Set<String> _macroTags = {
+    for (final alts in _macroExpressions.values)
+      for (final alt in alts)
+        for (final term in alt) term.tag,
+  };
+
+  static NutritionProfile _aggregate(List<NutritionRecord> records) {
     if (records.isEmpty) return NutritionProfile.empty;
 
-    // Bucket par component_id (lowercased)
-    final byComponent = <String, List<double>>{};
-    // Micronutriments (retour PO n°3) : tag canonique → valeurs + le
-    // libellé/unité d'un record source.
-    final microValues = <String, List<double>>{};
-    final microMeta = <String, (String name, String unit)>{};
-    var sampleCount = 0;
+    // 1. Valeur par tag : record de plus haute confiance, moyenne en
+    //    cas d'égalité.
+    final byTag = <String, List<NutritionRecord>>{};
     for (final r in records) {
-      final cid = (r.componentId ?? '').toLowerCase();
-      if (cid.isEmpty) continue;
-      final v = r.normalizedValue;
-      if (v == null) continue;
-      byComponent.putIfAbsent(cid, () => <double>[]).add(v);
-      sampleCount++;
-      // Tout composant ni macro ni alcool devient un micronutriment.
-      final canonical = canonicalMicroTag(cid);
-      if (canonical != null && !_macroTags.contains(cid)) {
-        microValues.putIfAbsent(canonical, () => <double>[]).add(v);
-        microMeta.putIfAbsent(
-          canonical,
-          () => (
-            _cleanComponentName(r.componentName ?? canonical),
-            r.normalizedUnit ?? _unitForMicro(canonical),
-          ),
-        );
+      final cid = (r.componentId ?? '').trim().toLowerCase();
+      if (cid.isEmpty || r.normalizedValue == null) continue;
+      byTag.putIfAbsent(cid, () => []).add(r);
+    }
+    final values = <String, double>{};
+    var confidenceSum = 0.0;
+    var confidenceCount = 0;
+    byTag.forEach((tag, list) {
+      final best = list
+          .map((r) => r.confidence ?? -1)
+          .reduce((a, b) => a > b ? a : b);
+      final kept = list.where((r) => (r.confidence ?? -1) == best).toList();
+      values[tag] =
+          kept.map((r) => r.normalizedValue!).reduce((a, b) => a + b) /
+          kept.length;
+      if (best >= 0) {
+        confidenceSum += best;
+        confidenceCount++;
+      }
+    });
+    final sampleCount = byTag.values.fold<int>(0, (n, l) => n + l.length);
+
+    double? resolve(List<List<_Term>> alternatives) {
+      for (final alt in alternatives) {
+        final present = alt.where((t) => values.containsKey(t.tag)).toList();
+        if (present.isEmpty) continue;
+        return present.fold<double>(0, (s, t) => s + values[t.tag]! * t.coef);
+      }
+      return null;
+    }
+
+    // 2. Macronutriments.
+    final macros = <MacroField, double>{};
+    _macroExpressions.forEach((field, alts) {
+      final v = resolve(alts);
+      if (v != null) macros[field] = v;
+    });
+    var energyEstimated = false;
+    if (!macros.containsKey(MacroField.energy)) {
+      final estimate = atwaterEnergyKcal(
+        proteins: macros[MacroField.proteins],
+        carbs: macros[MacroField.carbs],
+        fats: macros[MacroField.fats],
+        fiber: macros[MacroField.fiber],
+        alcohol: macros[MacroField.alcohol],
+      );
+      if (estimate != null) {
+        macros[MacroField.energy] = estimate;
+        energyEstimated = true;
       }
     }
 
-    double mean(String cid) {
-      final list = byComponent[cid];
-      if (list == null || list.isEmpty) return 0;
-      return list.reduce((a, b) => a + b) / list.length;
+    // 3. Micronutriments : expressions spéciales puis tags simples.
+    final micros = <String, Micronutrient>{};
+    void putMicro(String canonical, double value) {
+      if (value <= 0) return;
+      final info = NutrientCatalog.of(canonical);
+      micros[canonical] = Micronutrient(
+        tag: canonical,
+        name: info?.labelFr ?? canonical,
+        value: value,
+        unit: info?.unit ?? _unitForMicro(canonical),
+      );
     }
 
-    // Moyenne de la première clé présente (les alias sont des
-    // alternatives, jamais cumulées : un dataset n'utilise qu'un tag
-    // par composant).
-    double meanOf(List<String> aliases) {
-      for (final cid in aliases) {
-        final list = byComponent[cid];
-        if (list != null && list.isNotEmpty) {
-          return list.reduce((a, b) => a + b) / list.length;
-        }
+    _microExpressions.forEach((canonical, alts) {
+      final v = resolve(alts);
+      if (v != null) putMicro(canonical, v);
+    });
+    final simple = <String, double>{};
+    final simpleNames = <String, String>{};
+    values.forEach((tag, value) {
+      if (_macroTags.contains(tag)) return;
+      final canonical = canonicalMicroTag(tag);
+      if (canonical == null || _microExpressions.containsKey(canonical)) {
+        return;
       }
-      return 0;
-    }
+      // Deux tags sources d'un même canonique simple (ex. THIA et
+      // THIAMIN) désignent la même mesure : le premier présent gagne.
+      simple.putIfAbsent(canonical, () => value);
+      simpleNames.putIfAbsent(
+        canonical,
+        () => _cleanComponentName(byTag[tag]!.first.componentName ?? canonical),
+      );
+    });
+    simple.forEach((canonical, value) {
+      if (value <= 0) return;
+      final info = NutrientCatalog.of(canonical);
+      micros[canonical] = Micronutrient(
+        tag: canonical,
+        name: info?.labelFr ?? simpleNames[canonical] ?? canonical,
+        value: value,
+        unit: info?.unit ?? _unitForMicro(canonical),
+      );
+    });
 
-    final water = mean('water');
-    final micros = <String, Micronutrient>{
-      for (final e in microValues.entries)
-        e.key: Micronutrient(
-          tag: e.key,
-          name: microMeta[e.key]?.$1 ?? e.key,
-          value: e.value.reduce((a, b) => a + b) / e.value.length,
-          unit: microMeta[e.key]?.$2 ?? 'mg',
-        ),
-    }..removeWhere((_, m) => m.value <= 0);
-
+    final first = records.first;
+    final stateId = (first.ingredientStateId ?? 'raw').trim();
     return NutritionProfile(
-      energyKcal: _readEnergy(byComponent),
-      proteins: meanOf(const ['protein', 'proteins']),
-      carbs: meanOf(const ['carb', 'carbohydrate', 'carbs', 'carbohydrates']),
-      sugars: meanOf(const ['sugar', 'sugars']),
-      fats: meanOf(const ['fat', 'fats', 'lipid', 'lipids']),
-      saturatedFats: meanOf(const [
-        'fat_sat',
-        'saturated_fat',
-        'saturated_fats',
-      ]),
-      fiber: meanOf(const ['fiber', 'fibre', 'fibres', 'dietary_fiber']),
-      salt: _readSalt(byComponent, meanOf),
-      alcohol: meanOf(const ['alc', 'alcohol', 'ethanol']),
-      waterContent: water > 0 ? water : null,
+      energyKcal: macros[MacroField.energy] ?? 0,
+      proteins: macros[MacroField.proteins] ?? 0,
+      carbs: macros[MacroField.carbs] ?? 0,
+      sugars: macros[MacroField.sugars] ?? 0,
+      fats: macros[MacroField.fats] ?? 0,
+      saturatedFats: macros[MacroField.saturatedFats] ?? 0,
+      fiber: macros[MacroField.fiber] ?? 0,
+      salt: macros[MacroField.salt] ?? 0,
+      alcohol: macros[MacroField.alcohol] ?? 0,
+      waterContent: macros[MacroField.water],
       micronutrients: micros,
-      ingredientStateId: stateId,
-      confidence: 0.8, // Lot F v1 simplifiée
+      ingredientStateId: stateId.isEmpty ? 'raw' : stateId,
+      // ac-113 : confiance réelle = moyenne des confiances des tags
+      // retenus (0,8 historique si aucune confiance n'est renseignée).
+      confidence: confidenceCount == 0 ? 0.8 : confidenceSum / confidenceCount,
       recordCount: sampleCount,
+      knownFields: macros.keys.toSet(),
+      energyEstimated: energyEstimated,
+      sourceFoodName: first.sourceFoodName,
+      approximationNote: _approximationOf(records),
     );
   }
 
-  /// L'énergie peut être stockée en kJ ou kcal — on normalise.
-  static double _readEnergy(Map<String, List<double>> byComponent) {
-    for (final cid in const ['enerckcal', 'energy_kcal', 'energy']) {
-      final list = byComponent[cid];
-      if (list != null && list.isNotEmpty) {
-        return list.reduce((a, b) => a + b) / list.length;
-      }
+  /// Énergie (kcal/100 g) par les coefficients du règlement (UE)
+  /// 1169/2011 annexe XIV : protéines et glucides 4, lipides 9, alcool
+  /// 7, fibres 2. Null si aucun macronutriment énergétique n'est connu.
+  static double? atwaterEnergyKcal({
+    double? proteins,
+    double? carbs,
+    double? fats,
+    double? fiber,
+    double? alcohol,
+  }) {
+    if (proteins == null && carbs == null && fats == null && alcohol == null) {
+      return null;
     }
-    for (final cid in const ['enerc', 'energy_kj', 'kj']) {
-      final list = byComponent[cid];
-      if (list != null && list.isNotEmpty) {
-        final kjMean = list.reduce((a, b) => a + b) / list.length;
-        return kjMean / 4.184; // kJ → kcal
-      }
-    }
-    return 0;
+    return (proteins ?? 0) * 4 +
+        (carbs ?? 0) * 4 +
+        (fats ?? 0) * 9 +
+        (alcohol ?? 0) * 7 +
+        (fiber ?? 0) * 2;
   }
 
-  /// Sel : soit un record `salt` direct (g), soit le sodium NA (mg)
-  /// converti — sel (g) = Na (mg) × 2.5 / 1000 (§5.3 : sel = Na × 2.5).
-  static double _readSalt(
-    Map<String, List<double>> byComponent,
-    double Function(List<String>) meanOf,
-  ) {
-    final direct = meanOf(const ['salt']);
-    if (direct > 0) return direct;
-    final naMg = meanOf(const ['na', 'sodium']);
-    return naMg * 2.5 / 1000;
+  /// Note d'approximation portée par les records (colonne
+  /// `derivation_method` de l'enrichissement : alias proxy curaté).
+  static String? _approximationOf(List<NutritionRecord> records) {
+    for (final r in records) {
+      final d = r.derivationMethod?.trim();
+      if (d != null && d.isNotEmpty) return d;
+    }
+    return null;
   }
 
-  /// Tags des macronutriments (champs nommés du NutritionProfile) —
-  /// exclus des micronutriments.
-  static const Set<String> _macroTags = {
-    'enerckcal',
-    'energy_kcal',
-    'energy',
-    'enerc',
-    'energy_kj',
-    'kj',
-    'protein',
-    'proteins',
-    'fat',
-    'fats',
-    'lipid',
-    'lipids',
-    'fat_sat',
-    'saturated_fat',
-    'saturated_fats',
-    'carb',
-    'carbohydrate',
-    'carbs',
-    'carbohydrates',
-    'sugar',
-    'sugars',
-    'fiber',
-    'fibre',
-    'fibres',
-    'dietary_fiber',
-    'salt',
-    'na',
-    'sodium',
-    'water',
-    'alc',
-    'alcohol',
-    'ethanol',
-  };
-
-  /// Canonicalise un tag de micronutriment entre les deux familles de
-  /// sources : dictionnaire Phase 2 (VITA, THIAMIN, VITB6, FOL, VITD,
-  /// VITE, VITK…) et Ciqual 2025-11-03 (RETOL, RAE, THIA, VITB6-,
-  /// FOL*, TOCPHA, VITD-, VITK1/2…). Retourne null pour les tags
-  /// inconnus à ignorer.
+  /// Canonicalise un tag de micronutriment simple entre les deux
+  /// familles de sources (dictionnaire Phase 2 et INFOODS Ciqual 2025).
+  /// Retourne null pour les tags inconnus à ignorer (acides gras
+  /// individuels non retenus, codes numériques…).
   @visibleForTesting
   static String? canonicalMicroTag(String rawTag) {
     final t = rawTag.toLowerCase();
@@ -328,7 +484,7 @@ class NutritionRepository {
       'vitc' => 'VITC',
       'retol' || 'rae' || 'vita' || 'retinol' => 'VITA',
       'cartb' || 'carotene_b' => 'CAROTENE_B',
-      'vitd-' || 'vitd' || 'ergcal' => 'VITD',
+      'vitd-' || 'vitd' || 'ergcal' || 'chocal' => 'VITD',
       'tocpha' || 'vite' || 'vite-' => 'VITE',
       'vitk1' || 'vitk2' || 'vitk' => 'VITK',
       'biot' => 'BIOTINE',
@@ -351,22 +507,34 @@ class NutritionRepository {
       'ash' || 'cendres' => 'CENDRES',
       'fams' || 'fat_mono' => 'AG_MONO',
       'fapu' || 'fat_poly' => 'AG_POLY',
+      'omega3' => 'OMEGA3',
+      'omega6' => 'OMEGA6',
+      'f18d3n3' => 'ALA',
+      'f18d2cn6' => 'LA',
+      'f20d5n3' => 'EPA',
+      'f22d6n3' => 'DHA',
+      'sucs' || 'sucrose' => 'SACCHAROSE',
       'frus' || 'fructose' => 'FRUCTOSE',
       'glus' || 'glucose' => 'GLUCOSE',
       'lacs' || 'lactose' => 'LACTOSE',
       'mals' || 'maltose' => 'MALTOSE',
+      'gals' || 'galactose' => 'GALACTOSE',
+      'fiber_sol' => 'FIBRES_SOL',
+      'fiber_ins' => 'FIBRES_INS',
+      'caffeine' => 'CAFFEINE',
+      'theobrom' => 'THEOBROMINE',
+      'polyphen' => 'POLYPHENOLS',
       _ => null,
     };
   }
 
   /// Retire le suffixe d'unité du libellé source (« Fer (mg/100 g) » →
-  /// « Fer ») pour l'affichage.
+  /// « Fer ») pour l'affichage des constituants hors catalogue.
   static String _cleanComponentName(String name) {
     return name.replaceFirst(RegExp(r'\s*\([^)]*/\s*100\s*g\)\s*$'), '').trim();
   }
 
-  /// Unité par défaut d'un micronutriment quand le record n'en porte
-  /// pas (minéraux en mg, iode/sélénium en µg — réf. Ciqual).
+  /// Unité par défaut d'un micronutriment hors catalogue.
   static String _unitForMicro(String canonical) {
     return switch (canonical) {
       'I' ||
@@ -380,13 +548,4 @@ class NutritionRepository {
       _ => 'mg',
     };
   }
-}
-
-/// Helper de test : permet de mocker les records sans Drift.
-/// Visible uniquement pour tests (R-07 : non exécutable en sandbox).
-@visibleForTesting
-class FakeNutritionRecord {
-  FakeNutritionRecord({this.componentId, this.normalizedValue});
-  final String? componentId;
-  final double? normalizedValue;
 }

@@ -1,30 +1,36 @@
-// Phase 09 Lot G — G1 : agrégation nutritionnelle d'une recette.
+// Phase 09 Lot G / Phase 10 Lots A-B-D — agrégation nutritionnelle
+// d'une recette.
 //
 // dp-105 : le calcul est **synchrone** et pur (fonction sans I/O) — les
 // profils `NutritionProfile` sont résolus en amont (repository) et passés
-// via une lookup synchrone. Pas de stream, pas de Future ici.
+// via une lookup synchrone.
 //
-// Algorithme (plan §6.2) :
-//   pour chaque ingrédient i de la recette :
-//     profile_i = lookup(i.ingredientId)         // null → skip + warning
-//     contribution_i = (quantity_g_i × profile_i) / 100.0
-//   nutrition_totale = somme des contribution_i
-//   nutrition_par_portion = nutrition_totale / servings
+// Algorithme (Phase 10) :
+//   pour chaque ligne i de la recette :
+//     grammes_i   = QuantityConverter (unités culinaires, densités,
+//                   masses unitaires — hypothèses tracées)
+//     profil_i    = lookup(i.ingredientId)
+//     procédé_i   = mode de cuisson de la ligne (explicite ou inféré)
+//     facteur_i   = (groupe d'aliment, mode) → rendement, rétention,
+//                   absorption de gras (ordres de grandeur USDA RF6 /
+//                   Bognár) — jamais appliqué si le profil source décrit
+//                   déjà un aliment cuit (pas de double comptage)
+//     nutriments  = profil × grammes/100 × rétention (+ gras absorbé)
+//     masse cuite = grammes × rendement (+ gras absorbé), bornée par la
+//                   masse sèche
+//   total → par portion (÷ servings) et pour 100 g de plat cuit.
 //
-// Conversion des quantités (documentée, voir [quantityToGrams]) :
-// les quantités des recettes sont des chaînes libres ("60 g", "1 pincée",
-// "360 g"). On extrait le nombre en tête et on applique :
-//   - g / gr / gramme(s)      → tel quel
-//   - kg                      → × 1000
-//   - mg                      → ÷ 1000
-//   - ml / cl / l             → × 1 / × 10 / × 1000 (densité 1, approximation
-//                             v1 — cf. dette ac-101, pas de densité ingrédient)
-//   - unité absente ou inconnue (pincée, cuillère…) → nombre interprété
-//     comme grammes (hypothèse v1, tracée dans les warnings).
-//   - chaîne sans nombre      → contribution ignorée (warning).
+// Honnêteté (décision honest-data-display) : une ligne sans donnée
+// compte dans la masse du plat mais pas dans les nutriments ; la
+// couverture massique de chaque macronutriment est exposée
+// ([NutritionAggregation.nutrientCoverage]).
+
+import 'package:meta/meta.dart';
 
 import '../models/nutrition_profile.dart';
+import '../models/process_models.dart';
 import '../../features/recipes/domain/recipe.dart';
+import 'quantity_converter.dart';
 
 /// Lookup synchrone d'un profil nutritionnel par `ingredientId`
 /// (résolution faite en amont par le repository, cf. dp-105).
@@ -32,8 +38,7 @@ typedef NutritionProfileLookup = NutritionProfile? Function(
   String ingredientId,
 );
 
-/// Source d'une donnée nutritionnelle (traçabilité in-app, retour PO
-/// 2026-08-26 : citer les sources).
+/// Source d'une donnée nutritionnelle (traçabilité in-app).
 class NutritionSource {
   const NutritionSource({required this.id, this.label, this.citation});
 
@@ -49,8 +54,83 @@ class NutritionSource {
   String get displayLabel => label ?? id;
 }
 
+/// Contexte optionnel de conversion et de procédé (Phase 10).
+@immutable
+class NutritionProcessContext {
+  const NutritionProcessContext({
+    this.unitDataFor,
+    this.groupFor,
+    this.factorFor,
+    this.methodForLine,
+  });
+
+  /// Densité et masses unitaires d'un ingrédient (conversion d'unités).
+  final IngredientUnitData Function(String ingredientId)? unitDataFor;
+
+  /// Groupe d'aliment d'un ingrédient (facteurs de procédé).
+  final FoodGroup Function(String ingredientId)? groupFor;
+
+  /// Facteurs moyens (groupe, mode).
+  final CookingFactorLookup? factorFor;
+
+  /// Mode de cuisson résolu d'une ligne (explicite puis inféré depuis
+  /// les étapes) avec l'indicateur « inféré ».
+  final ({CookingMethod method, bool inferred})? Function(
+    int index,
+    RecipeIngredient ingredient,
+  )?
+  methodForLine;
+}
+
+/// Contribution d'une ligne de recette (explicabilité, Nutri-Score).
+@immutable
+class IngredientContribution {
+  const IngredientContribution({
+    required this.index,
+    required this.label,
+    this.ingredientId,
+    this.rawGrams,
+    this.cookedGrams,
+    this.energyKcal = 0,
+    this.hasData = false,
+    this.method,
+    this.methodInferred = false,
+    this.factorApplied = false,
+    this.alreadyCooked = false,
+    this.quantityAssumption,
+    this.sourceFoodName,
+    this.approximationNote,
+  });
+
+  final int index;
+  final String label;
+  final String? ingredientId;
+
+  /// Masse crue (g) — null si la quantité n'est pas interprétable.
+  final double? rawGrams;
+
+  /// Masse après procédé (g).
+  final double? cookedGrams;
+  final double energyKcal;
+
+  /// Vrai si la ligne alimente réellement le calcul.
+  final bool hasData;
+  final CookingMethod? method;
+  final bool methodInferred;
+
+  /// Vrai si des facteurs de rendement/rétention ont été appliqués.
+  final bool factorApplied;
+
+  /// Vrai si le profil source décrit déjà un aliment cuit (aucun
+  /// facteur appliqué pour éviter le double comptage).
+  final bool alreadyCooked;
+  final String? quantityAssumption;
+  final String? sourceFoodName;
+  final String? approximationNote;
+}
+
 /// Résultat de l'agrégation : profil **par portion** + métadonnées
-/// d'explicabilité (affichées par `RecipeNutritionPanel`, G2).
+/// d'explicabilité.
 class NutritionAggregation {
   const NutritionAggregation({
     required this.profilePerServing,
@@ -59,195 +139,363 @@ class NutritionAggregation {
     required this.totalCount,
     this.warnings = const <String>[],
     this.sources = const <NutritionSource>[],
+    this.contributions = const <IngredientContribution>[],
+    this.rawMassG = 0,
+    this.cookedMassG = 0,
+    this.profilePer100g,
+    this.nutrientCoverage = const <MacroField, double>{},
+    this.processApplied = false,
+    this.servings = 1,
   });
 
   /// Profil nutritionnel par portion (total ÷ servings).
   final NutritionProfile profilePerServing;
 
-  /// Nombre d'ingrédients dont le profil a été résolu et agrégé
-  /// (y compris les profils vides — ingrédient référencé mais sans
-  /// records en base).
+  /// Nombre d'ingrédients dont le profil a été résolu (y compris vides).
   final int resolvedCount;
 
-  /// Nombre d'ingrédients ayant réellement CONTRIBUTÉ des données
-  /// (profil avec records). Retour PO n°4 : « 4/4 » avec toutes les
-  /// valeurs à zéro était trompeur — l'UI distingue désormais les
-  /// liés sans données de ceux qui alimentent le calcul.
+  /// Nombre d'ingrédients ayant réellement CONTRIBUÉ des données.
   final int withDataCount;
 
   /// Nombre total d'ingrédients de la recette.
   final int totalCount;
 
-  /// Warnings non bloquants (skip d'ingrédient, unité inconnue…).
-  /// Aucune donnée sensible : uniquement des libellés techniques courts.
+  /// Warnings non bloquants (codes techniques courts, rendus par l'UI).
   final List<String> warnings;
 
-  /// Sources distinctes des records nutritionnels consommés
-  /// (remplies par le repository, pas par l'agrégateur pur).
+  /// Sources distinctes des records consommés (remplies par le
+  /// repository).
   final List<NutritionSource> sources;
+
+  /// Détail par ligne.
+  final List<IngredientContribution> contributions;
+
+  /// Masse totale crue des lignes interprétables (g).
+  final double rawMassG;
+
+  /// Masse estimée du plat après procédé (g).
+  final double cookedMassG;
+
+  /// Profil pour 100 g de plat (après procédé) — null si masse nulle.
+  final NutritionProfile? profilePer100g;
+
+  /// Part massique (0..1) des lignes renseignant chaque macronutriment.
+  final Map<MacroField, double> nutrientCoverage;
+
+  /// Vrai si au moins un facteur de procédé a été appliqué.
+  final bool processApplied;
+  final int servings;
 
   /// Vrai si au moins un ingrédient a contribué des données réelles.
   bool get hasData => withDataCount > 0;
+
+  /// Masse d'une portion (g), plat cuit.
+  double get servingMassG => cookedMassG / (servings > 0 ? servings : 1);
+
+  NutritionAggregation withSources(List<NutritionSource> sources) =>
+      NutritionAggregation(
+        profilePerServing: profilePerServing,
+        resolvedCount: resolvedCount,
+        withDataCount: withDataCount,
+        totalCount: totalCount,
+        warnings: warnings,
+        sources: sources,
+        contributions: contributions,
+        rawMassG: rawMassG,
+        cookedMassG: cookedMassG,
+        profilePer100g: profilePer100g,
+        nutrientCoverage: nutrientCoverage,
+        processApplied: processApplied,
+        servings: servings,
+      );
 }
 
-/// Agrégateur nutritionnel pur (plan Phase 09 §6.2, dp-105).
+/// États sources qui décrivent déjà un aliment cuit.
+const Set<String> kCookedStates = {
+  'boiled',
+  'cooked',
+  'baked',
+  'roasted',
+  'grilled',
+  'fried',
+  'steamed',
+  'stewed',
+  'sauteed',
+};
+
+/// Accumulateur interne de nutriments absolus (g, kcal, mg…).
+class _Totals {
+  double energy = 0;
+  double proteins = 0;
+  double carbs = 0;
+  double sugars = 0;
+  double fats = 0;
+  double saturatedFats = 0;
+  double fiber = 0;
+  double salt = 0;
+  double alcohol = 0;
+  final Map<String, double> micros = {};
+  final Map<String, String> microNames = {};
+  final Map<String, String> microUnits = {};
+}
+
+/// Agrégateur nutritionnel pur.
 abstract final class NutritionAggregator {
-  /// Agrège les contributions des [ingredients] en un profil par portion.
-  ///
-  /// Edge cases (plan §6.2) :
-  /// - ingrédient `source == IngredientSource.free` sans `ingredientId`
-  ///   → skip + warning ;
-  /// - ingrédient `source == IngredientSource.recipe` (sous-recette)
-  ///   → ignoré (pas de récursion, phase future) ;
-  /// - `lookup` renvoie null (ingrédient sans profil) → skip + warning ;
-  /// - [servings] ≤ 0 → ramené à 1 (défensif, une portion minimum).
   static NutritionAggregation aggregate({
     required List<RecipeIngredient> ingredients,
     required NutritionProfileLookup lookup,
     required int servings,
+    NutritionProcessContext? process,
   }) {
     final safeServings = servings > 0 ? servings : 1;
     final warnings = <String>[];
+    final contributions = <IngredientContribution>[];
+    final totals = _Totals();
     var resolved = 0;
     var withData = 0;
-
-    var energy = 0.0;
-    var proteins = 0.0;
-    var carbs = 0.0;
-    var sugars = 0.0;
-    var fats = 0.0;
-    var saturatedFats = 0.0;
-    var fiber = 0.0;
-    var salt = 0.0;
-    var alcohol = 0.0;
-    var water = 0.0;
-    var hasWater = false;
-    var confidenceSum = 0.0;
+    var rawMass = 0.0;
+    var cookedMass = 0.0;
+    var waterCooked = 0.0;
+    var waterKnownMass = 0.0;
+    var confidenceWeighted = 0.0;
+    var confidenceMass = 0.0;
     var recordCountSum = 0;
+    var processApplied = false;
+    var anyEnergyEstimated = false;
+    final knownMass = <MacroField, double>{};
 
-    // Micronutriments (retour PO n°3) : somme des contributions par
-    // tag canonique, premier libellé/unité rencontré comme référence.
-    final microTotals = <String, double>{};
-    final microNames = <String, String>{};
-    final microUnits = <String, String>{};
-
-    for (final ingredient in ingredients) {
+    for (var index = 0; index < ingredients.length; index++) {
+      final ingredient = ingredients[index];
+      final id = ingredient.ingredientId;
       if (ingredient.source == IngredientSource.recipe) {
         // Sous-recette : pas de récursion en v1 (plan §6.2 edge case).
         warnings.add('subrecipe_skipped');
+        contributions.add(
+          IngredientContribution(index: index, label: ingredient.label),
+        );
         continue;
       }
-      final id = ingredient.ingredientId;
+      final unitData = (id != null && id.isNotEmpty)
+          ? process?.unitDataFor?.call(id) ?? const IngredientUnitData()
+          : const IngredientUnitData();
+      final quantity = QuantityConverter.resolve(
+        ingredient.quantity,
+        data: unitData,
+      );
       if (id == null || id.isEmpty) {
         warnings.add('unlinked_ingredient_skipped');
+        // La masse d'un ingrédient libre compte dans le plat.
+        if (quantity != null) {
+          rawMass += quantity.grams;
+          cookedMass += quantity.grams;
+        }
+        contributions.add(
+          IngredientContribution(
+            index: index,
+            label: ingredient.label,
+            rawGrams: quantity?.grams,
+            cookedGrams: quantity?.grams,
+            quantityAssumption: quantity?.assumption,
+          ),
+        );
         continue;
       }
       final profile = lookup(id);
       if (profile == null) {
         warnings.add('profile_missing:$id');
+        if (quantity != null) {
+          rawMass += quantity.grams;
+          cookedMass += quantity.grams;
+        }
+        contributions.add(
+          IngredientContribution(
+            index: index,
+            label: ingredient.label,
+            ingredientId: id,
+            rawGrams: quantity?.grams,
+          ),
+        );
         continue;
       }
-      final grams = quantityToGrams(ingredient.quantity);
-      if (grams == null) {
+      if (quantity == null) {
         warnings.add('quantity_unparsed:$id');
+        contributions.add(
+          IngredientContribution(
+            index: index,
+            label: ingredient.label,
+            ingredientId: id,
+            hasData: false,
+          ),
+        );
         continue;
       }
-      final factor = grams / 100.0;
-      energy += profile.energyKcal * factor;
-      proteins += profile.proteins * factor;
-      carbs += profile.carbs * factor;
-      sugars += profile.sugars * factor;
-      fats += profile.fats * factor;
-      saturatedFats += profile.saturatedFats * factor;
-      fiber += profile.fiber * factor;
-      salt += profile.salt * factor;
-      alcohol += profile.alcohol * factor;
-      final w = profile.waterContent;
-      if (w != null) {
-        water += w * factor;
-        hasWater = true;
+      if (!quantity.isExact) {
+        warnings.add('quantity_assumed:$id');
       }
-      for (final micro in profile.micronutrients.values) {
-        microTotals[micro.tag] =
-            (microTotals[micro.tag] ?? 0) + micro.value * factor;
-        microNames.putIfAbsent(micro.tag, () => micro.name);
-        microUnits.putIfAbsent(micro.tag, () => micro.unit);
-      }
-      confidenceSum += profile.confidence;
-      recordCountSum += profile.recordCount;
+      final grams = quantity.grams;
       resolved++;
-      if (profile.recordCount > 0) withData++;
+      final hasData = profile.recordCount > 0;
+
+      // Procédé de la ligne.
+      final resolvedMethod = process?.methodForLine?.call(index, ingredient);
+      final method = resolvedMethod?.method;
+      final alreadyCooked = kCookedStates.contains(profile.ingredientStateId);
+      CookingFactor? factor;
+      if (method != null && method.isHeated && !alreadyCooked) {
+        final group = process?.groupFor?.call(id) ?? FoodGroup.other;
+        factor = process?.factorFor?.call(group, method);
+      }
+      if (method != null && method.isHeated && alreadyCooked) {
+        warnings.add('already_cooked:$id');
+      }
+
+      final f = grams / 100.0;
+      final fatRetention = factor?.fatRetention ?? 1;
+      final uptake = (factor?.fatUptakeG ?? 0) * f;
+      final fatsBefore = profile.fats * f;
+      final fatsAfter = fatsBefore * fatRetention + uptake;
+      final energy = profile.energyKcal * f + (fatsAfter - fatsBefore) * 9;
+
+      // Masse après procédé, bornée par la matière sèche.
+      var lineCooked = grams * (factor?.yieldFactor ?? 1) + uptake;
+      final waterRaw = profile.waterContent == null
+          ? null
+          : profile.waterContent! * f;
+      double? lineWater;
+      if (waterRaw != null) {
+        final dry = grams - waterRaw + (fatsAfter - fatsBefore);
+        if (lineCooked < dry) lineCooked = dry;
+        lineWater = lineCooked - dry;
+      }
+      rawMass += grams;
+      cookedMass += lineCooked;
+
+      if (hasData) {
+        withData++;
+        totals.energy += energy;
+        totals.proteins += profile.proteins * f;
+        totals.carbs += profile.carbs * f;
+        totals.sugars += profile.sugars * f;
+        totals.fats += fatsAfter;
+        totals.saturatedFats += profile.saturatedFats * f * fatRetention;
+        totals.fiber += profile.fiber * f;
+        totals.salt += profile.salt * f;
+        totals.alcohol +=
+            profile.alcohol *
+            f *
+            (method != null && method.isHeated && !alreadyCooked ? 0.4 : 1);
+        if (lineWater != null) {
+          waterCooked += lineWater;
+          waterKnownMass += lineCooked;
+        }
+        for (final micro in profile.micronutrients.values) {
+          final r = factor?.retentionFor(micro.tag) ?? 1;
+          totals.micros[micro.tag] =
+              (totals.micros[micro.tag] ?? 0) + micro.value * f * r;
+          totals.microNames.putIfAbsent(micro.tag, () => micro.name);
+          totals.microUnits.putIfAbsent(micro.tag, () => micro.unit);
+        }
+        for (final field in profile.knownFields) {
+          knownMass[field] = (knownMass[field] ?? 0) + grams;
+        }
+        confidenceWeighted += profile.confidence * grams;
+        confidenceMass += grams;
+        recordCountSum += profile.recordCount;
+        if (profile.energyEstimated) anyEnergyEstimated = true;
+      }
+      if (factor != null) processApplied = true;
+
+      contributions.add(
+        IngredientContribution(
+          index: index,
+          label: ingredient.label,
+          ingredientId: id,
+          rawGrams: grams,
+          cookedGrams: lineCooked,
+          energyKcal: hasData ? energy : 0,
+          hasData: hasData,
+          method: method,
+          methodInferred: resolvedMethod?.inferred ?? false,
+          factorApplied: factor != null,
+          alreadyCooked: alreadyCooked,
+          quantityAssumption: quantity.assumption,
+          sourceFoodName: profile.sourceFoodName,
+          approximationNote: profile.approximationNote,
+        ),
+      );
     }
 
-    final micros = <String, Micronutrient>{
-      for (final e in microTotals.entries)
-        e.key: Micronutrient(
-          tag: e.key,
-          name: microNames[e.key] ?? e.key,
-          value: e.value / safeServings,
-          unit: microUnits[e.key] ?? 'mg',
-        ),
+    final coverage = <MacroField, double>{
+      for (final field in kAllMacroFields)
+        field: rawMass > 0 ? (knownMass[field] ?? 0) / rawMass : 0,
     };
+    final known = {
+      for (final e in coverage.entries)
+        if (e.value > 0) e.key,
+    };
+    final confidence = confidenceMass > 0
+        ? confidenceWeighted / confidenceMass
+        : 0.0;
+    final stateId = processApplied ? 'cooked' : 'raw';
 
-    final profile = resolved == 0
+    NutritionProfile scaled(double divisor) => NutritionProfile(
+      energyKcal: totals.energy / divisor,
+      proteins: totals.proteins / divisor,
+      carbs: totals.carbs / divisor,
+      sugars: totals.sugars / divisor,
+      fats: totals.fats / divisor,
+      saturatedFats: totals.saturatedFats / divisor,
+      fiber: totals.fiber / divisor,
+      salt: totals.salt / divisor,
+      alcohol: totals.alcohol / divisor,
+      waterContent: waterKnownMass > 0 ? waterCooked / divisor : null,
+      micronutrients: {
+        for (final e in totals.micros.entries)
+          e.key: Micronutrient(
+            tag: e.key,
+            name: totals.microNames[e.key] ?? e.key,
+            value: e.value / divisor,
+            unit: totals.microUnits[e.key] ?? 'mg',
+          ),
+      },
+      ingredientStateId: stateId,
+      confidence: confidence,
+      recordCount: recordCountSum,
+      knownFields: known,
+      energyEstimated: anyEnergyEstimated,
+    );
+
+    final perServing = resolved == 0
         ? NutritionProfile.empty
-        : NutritionProfile(
-            energyKcal: energy / safeServings,
-            proteins: proteins / safeServings,
-            carbs: carbs / safeServings,
-            sugars: sugars / safeServings,
-            fats: fats / safeServings,
-            saturatedFats: saturatedFats / safeServings,
-            fiber: fiber / safeServings,
-            salt: salt / safeServings,
-            alcohol: alcohol / safeServings,
-            waterContent: hasWater ? water / safeServings : null,
-            micronutrients: micros,
-            ingredientStateId: 'raw',
-            confidence: confidenceSum / resolved,
-            recordCount: recordCountSum,
-          );
+        : scaled(safeServings.toDouble());
+    NutritionProfile? per100g;
+    if (withData > 0 && cookedMass > 0) {
+      per100g = scaled(cookedMass / 100);
+      // L'eau pour 100 g de plat : part massique des lignes renseignées.
+      if (waterKnownMass > 0) {
+        per100g = per100g.copyWith(
+          waterContent: waterCooked / waterKnownMass * 100,
+        );
+      }
+    }
 
     return NutritionAggregation(
-      profilePerServing: profile,
+      profilePerServing: perServing,
       resolvedCount: resolved,
       withDataCount: withData,
       totalCount: ingredients.length,
       warnings: warnings,
+      contributions: contributions,
+      rawMassG: rawMass,
+      cookedMassG: cookedMass,
+      profilePer100g: per100g,
+      nutrientCoverage: coverage,
+      processApplied: processApplied,
+      servings: safeServings,
     );
   }
 
-  /// Convertit une quantité libre ("60 g", "1 pincée", "360 g") en grammes.
-  /// Renvoie null si aucun nombre n'est trouvé. Voir l'en-tête du fichier
-  /// pour la table de conversion retenue.
-  static double? quantityToGrams(String raw) {
-    final match = RegExp(r'(\d+(?:[.,]\d+)?)\s*([a-zA-ZÀ-ÿ]*)')
-        .firstMatch(raw.trim());
-    if (match == null) return null;
-    final value = double.tryParse(match.group(1)!.replaceAll(',', '.'));
-    if (value == null) return null;
-    final unit = match.group(2)!.toLowerCase();
-    switch (unit) {
-      case '':
-      case 'g':
-      case 'gr':
-      case 'gramme':
-      case 'grammes':
-        return value;
-      case 'kg':
-        return value * 1000;
-      case 'mg':
-        return value / 1000;
-      case 'ml':
-        return value; // densité 1 (approximation v1)
-      case 'cl':
-        return value * 10;
-      case 'l':
-        return value * 1000;
-      default:
-        // Unité culinaire inconnue (pincée, cuillère…) : on interprète le
-        // nombre comme des grammes (hypothèse v1 documentée).
-        return value;
-    }
-  }
+  /// Compatibilité Phase 09 : quantité libre → grammes, sans données
+  /// d'ingrédient (voir [QuantityConverter]).
+  static double? quantityToGrams(String raw) => QuantityConverter.toGrams(raw);
 }

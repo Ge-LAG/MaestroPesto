@@ -69,6 +69,7 @@ class RecipeIngredient {
     required this.quantity,
     required this.source,
     this.ingredientId,
+    this.cookingMethod,
   });
 
   final String label;
@@ -80,20 +81,31 @@ class RecipeIngredient {
   /// from the 4 metier databases.
   final String? ingredientId;
 
+  /// Phase 10 Lot D — mode de cuisson explicite de la ligne
+  /// (`CookingMethod.id` : raw, boiled, roasted…). Null = non précisé :
+  /// le mode est alors inféré depuis les étapes quand c'est possible.
+  final String? cookingMethod;
+
   RecipeIngredient copyWith({
     String? label,
     String? quantity,
     IngredientSource? source,
     String? ingredientId,
+    Object? cookingMethod = _unset,
   }) {
     return RecipeIngredient(
       label: label ?? this.label,
       quantity: quantity ?? this.quantity,
       source: source ?? this.source,
       ingredientId: ingredientId ?? this.ingredientId,
+      cookingMethod: identical(cookingMethod, _unset)
+          ? this.cookingMethod
+          : cookingMethod as String?,
     );
   }
 }
+
+const Object _unset = Object();
 
 enum IngredientSource { ciqual, recipe, free }
 

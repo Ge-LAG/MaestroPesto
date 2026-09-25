@@ -11,6 +11,36 @@
 
 import 'package:meta/meta.dart';
 
+/// Champs macronutritionnels nommés d'un [NutritionProfile]. Sert à
+/// distinguer une valeur **mesurée à zéro** d'une valeur **absente de
+/// la source** (Phase 10, décision honest-data-display).
+enum MacroField {
+  energy,
+  proteins,
+  carbs,
+  sugars,
+  fats,
+  saturatedFats,
+  fiber,
+  salt,
+  alcohol,
+  water,
+}
+
+/// Tous les champs macro (valeur par défaut : profil complet).
+const Set<MacroField> kAllMacroFields = {
+  MacroField.energy,
+  MacroField.proteins,
+  MacroField.carbs,
+  MacroField.sugars,
+  MacroField.fats,
+  MacroField.saturatedFats,
+  MacroField.fiber,
+  MacroField.salt,
+  MacroField.alcohol,
+  MacroField.water,
+};
+
 /// Un micronutriment (minéral, vitamine ou constituant détaillé) :
 /// valeur pour 100 g, avec l'unité et le libellé de la source.
 @immutable
@@ -74,6 +104,10 @@ class NutritionProfile {
     required this.ingredientStateId,
     required this.confidence,
     required this.recordCount,
+    this.knownFields = kAllMacroFields,
+    this.energyEstimated = false,
+    this.sourceFoodName,
+    this.approximationNote,
   });
 
   /// Énergie en kcal pour 100 g.
@@ -120,6 +154,26 @@ class NutritionProfile {
   /// Nombre de sources qui ont contribué à ce profil.
   final int recordCount;
 
+  /// Champs macro réellement renseignés par la source. Un champ absent
+  /// vaut 0 dans le profil mais doit s'afficher « non renseigné »
+  /// (jamais un zéro mesuré).
+  final Set<MacroField> knownFields;
+
+  /// Vrai quand l'énergie n'est pas lue dans la source mais recalculée
+  /// par les coefficients d'Atwater du règlement (UE) 1169/2011.
+  final bool energyEstimated;
+
+  /// Nom de l'aliment de la table source (ex. « Camembert au lait
+  /// pasteurisé »), pour la traçabilité in-app.
+  final String? sourceFoodName;
+
+  /// Approximation assumée (ex. « valeur de l'aliment le plus proche
+  /// Ciqual ») — null pour une correspondance directe.
+  final String? approximationNote;
+
+  /// Vrai si le champ est renseigné par la source.
+  bool isKnown(MacroField field) => knownFields.contains(field);
+
   /// Profil vide (zéros, état `raw`, confiance 0).
   /// Utilisé comme fallback quand aucun record n'est trouvé.
   static const NutritionProfile empty = NutritionProfile(
@@ -134,6 +188,7 @@ class NutritionProfile {
     ingredientStateId: 'raw',
     confidence: 0,
     recordCount: 0,
+    knownFields: <MacroField>{},
   );
 
   NutritionProfile copyWith({
@@ -151,6 +206,10 @@ class NutritionProfile {
     String? ingredientStateId,
     double? confidence,
     int? recordCount,
+    Set<MacroField>? knownFields,
+    bool? energyEstimated,
+    Object? sourceFoodName = _sentinel,
+    Object? approximationNote = _sentinel,
   }) {
     return NutritionProfile(
       energyKcal: energyKcal ?? this.energyKcal,
@@ -169,6 +228,14 @@ class NutritionProfile {
       ingredientStateId: ingredientStateId ?? this.ingredientStateId,
       confidence: confidence ?? this.confidence,
       recordCount: recordCount ?? this.recordCount,
+      knownFields: knownFields ?? this.knownFields,
+      energyEstimated: energyEstimated ?? this.energyEstimated,
+      sourceFoodName: identical(sourceFoodName, _sentinel)
+          ? this.sourceFoodName
+          : sourceFoodName as String?,
+      approximationNote: identical(approximationNote, _sentinel)
+          ? this.approximationNote
+          : approximationNote as String?,
     );
   }
 
@@ -189,7 +256,11 @@ class NutritionProfile {
         _mapEq(other.micronutrients, micronutrients) &&
         other.ingredientStateId == ingredientStateId &&
         other.confidence == confidence &&
-        other.recordCount == recordCount;
+        other.recordCount == recordCount &&
+        _setEq(other.knownFields, knownFields) &&
+        other.energyEstimated == energyEstimated &&
+        other.sourceFoodName == sourceFoodName &&
+        other.approximationNote == approximationNote;
   }
 
   @override
@@ -210,6 +281,10 @@ class NutritionProfile {
     ingredientStateId,
     confidence,
     recordCount,
+    Object.hashAllUnordered(knownFields),
+    energyEstimated,
+    sourceFoodName,
+    approximationNote,
   );
 
   @override
@@ -218,6 +293,8 @@ class NutritionProfile {
       'P=$proteins, G=$carbs, L=$fats, fib=$fiber, sel=$salt, '
       'micro=${micronutrients.length}, n=$recordCount)';
 }
+
+bool _setEq<T>(Set<T> a, Set<T> b) => a.length == b.length && a.containsAll(b);
 
 bool _mapEq(Map<String, Micronutrient> a, Map<String, Micronutrient> b) {
   if (a.length != b.length) return false;

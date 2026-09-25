@@ -12,6 +12,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maestropesto/core/database/app_database.dart';
 import 'package:maestropesto/core/database/importers/csv_import_service.dart';
+import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recommendations/data/recommender.dart';
@@ -119,6 +120,63 @@ void main() {
         );
       },
     );
+  });
+
+  group('Phase 10 Lot A — justesse nutrition sur données réelles', () {
+    const camembert = 'ING-DAIRY-CAMEMBERT-000001';
+
+    test('A1 : Camembert expose protéines/glucides > 0 cohérents', () async {
+      final p = await NutritionRepository(db).forIngredient(camembert);
+      expect(p, isNotNull);
+      expect(p!.energyKcal, closeTo(275, 1));
+      expect(p.proteins, closeTo(18.8, 0.01), reason: 'PROCNT Ciqual');
+      expect(p.carbs, closeTo(1.29, 0.01), reason: 'CHOAVL Ciqual');
+      expect(p.saturatedFats, closeTo(12.6, 0.01), reason: 'FASAT Ciqual');
+      expect(p.fats, closeTo(21.5, 0.01));
+      // Cohérence énergie ↔ macros (Atwater UE : P4 G4 L9 fibres 2).
+      final atwater = p.proteins * 4 + p.carbs * 4 + p.fats * 9;
+      expect((atwater - p.energyKcal).abs() / p.energyKcal, lessThan(0.05));
+      // Sucres absents de la source : « non renseigné », pas un zéro.
+      expect(p.isKnown(MacroField.sugars), isFalse);
+      expect(p.isKnown(MacroField.proteins), isTrue);
+      expect(p.sourceFoodName, contains('Camembert'));
+    });
+
+    test('A2 : vitamine A = RAE (231 µg), folates = FOLFD + FOLAC', () async {
+      final p = (await NutritionRepository(db).forIngredient(camembert))!;
+      expect(p.micronutrients['VITA']!.value, closeTo(231, 0.01));
+      expect(p.micronutrients['FOLATES']!.value, closeTo(56.8 + 2.3, 0.01));
+      expect(p.micronutrients['CAROTENE_B']!.value, closeTo(79, 0.01));
+      expect(p.micronutrients['VITA']!.name, contains('Vitamine A'));
+      expect(p.confidence, inInclusiveRange(0.5, 0.95));
+    });
+
+    test('A1 : aucun ingrédient enrichi n’a protéines=0 avec énergie>200 '
+        'sans lipides ni glucides expliquant l’énergie', () async {
+      final ids = (await db.select(db.nutritionRecords).get())
+          .map((r) => r.ingredientId)
+          .toSet();
+      final repo = NutritionRepository(db);
+      var incoherent = 0;
+      for (final id in ids) {
+        final p = (await repo.forIngredient(id))!;
+        if (p.energyKcal < 50 || p.alcohol > 1) continue;
+        if (!p.isKnown(MacroField.proteins) ||
+            !p.isKnown(MacroField.carbs) ||
+            !p.isKnown(MacroField.fats)) {
+          continue;
+        }
+        final atwater = p.proteins * 4 + p.carbs * 4 + p.fats * 9 + p.fiber * 2;
+        if ((atwater - p.energyKcal).abs() / p.energyKcal > 0.25) {
+          incoherent++;
+        }
+      }
+      expect(
+        incoherent,
+        lessThan(ids.length * 0.03),
+        reason: 'énergie cohérente avec ses propres macros (ac-120)',
+      );
+    });
   });
 
   group('DoD §13.3 — nutrition calculée + associations aromatiques', () {
