@@ -1,0 +1,179 @@
+canonical_name_fr,ciqual_code,match_type,note
+Cajou crue,15055,proxy,noix de cajou grillée à sec sans sel (pas d'entrée crue Ciqual)
+Cajou torréfiée,15055,equivalent,noix de cajou grillée à sec sans sel ajouté
+Pécan crue,15026,equivalent,noix de pécan sans sel ajouté
+Pécan torréfiée,15026,proxy,noix de pécan sans sel (pas d'entrée torréfiée)
+Noix de Macadamia crue,15027,equivalent,noix de macadamia sans sel ajouté
+Pignon de pin torréfiée,15025,proxy,pignon de pin (entrée non torréfiée)
+Arachide crue,15001,equivalent,cacahuète sans sel ajouté
+Arachide torréfiée,15053,equivalent,cacahuète grillée sans sel ajouté
+Beurre de amande,15000,proxy,purée d'amande assimilée à l'amande entière broyée
+Beurre de noisette,15004,proxy,purée de noisette assimilée à la noisette broyée
+Beurre de pistache,15044,proxy,purée de pistache assimilée à la pistache grillée broyée
+Beurre de cajou,15055,proxy,purée de cajou assimilée à la noix de cajou broyée
+Beurre de noix du brésil,15008,proxy,purée assimilée à la noix du Brésil broyée
+Beurre de noix de macadamia,15027,proxy,purée assimilée à la noix de macadamia broyée
+Tahini,15203,equivalent,tahin ou purée de sésame
+Crème de sésame,15203,proxy,assimilée à la purée de sésame
+Café espresso,18071,equivalent,café expresso non instantané prêt à boire
+Café filtre,18004,equivalent,café non instantané prêt à boire
+Café torréfié (grains),18003,proxy,café moulu
+Thé Oolong,18020,proxy,thé infusé sans sucres ajoutés
+Thé blanc,18020,proxy,thé infusé sans sucres ajoutés
+Thé matcha,18076,proxy,thé en feuille (poudre consommée entière)
+Infusion de camomille,18022,equivalent,tisane infusée
+Infusion de verveine,18022,equivalent,tisane infusée
+Infusion de menthe,18022,equivalent,tisane infusée
+Rooibos,18022,proxy,tisane infusée
+Eau gazeuse,18046,equivalent,eau minérale gazeuse (aliment moyen)
+Boisson d'avoine,18899,equivalent,boisson à l'avoine nature sans sucres ajoutés
+Tonic water,18344,equivalent,tonic sucré
+Cola (générique),18018,equivalent,cola sucré
+Zeste de orange,13125,proxy,zeste de citron (seul zeste d'agrume Ciqual)
+Zeste de citron vert,13125,proxy,zeste de citron (seul zeste d'agrume Ciqual)
+Zeste de pamplemousse,13125,proxy,zeste de citron (seul zeste d'agrume Ciqual)
+Zeste de mandarine,13125,proxy,zeste de citron (seul zeste d'agrume Ciqual)
+Zeste de bergamote,13125,proxy,zeste de citron (seul zeste d'agrume Ciqual)
+Zeste de yuzu,13125,proxy,zeste de citron (seul zeste d'agrume Ciqual)
+Bergamote cru,13067,proxy,agrume acide assimilé au citron vert
+Yuzu cru,13067,proxy,agrume acide assimilé au citron vert
+Combava cru,13067,proxy,agrume acide assimilé au citron vert
+Mûre blanche crue,13071,proxy,mûre du mûrier (même genre Morus)
+Airelle crue,13113,proxy,canneberge (même genre Vaccinium)
+Piment fort,20151,equivalent,piment cru
+Piment oiseau,20151,proxy,piment cru
+Kashmiri chili,11088,proxy,piment de Cayenne en poudre
+Lentille verte cuit,20587,equivalent,lentille verte bouillie
+Lentille corail cuit,20589,equivalent,lentille corail bouillie
+Lentille noire sec,20359,proxy,lentille sèche (aliment moyen)
+Lentille noire cuit,20360,proxy,lentille bouillie (aliment moyen)
+Haricot noir sec,20525,proxy,haricot rouge sec (même espèce Phaseolus vulgaris)
+Haricot noir cuit,20503,proxy,haricot rouge bouilli (même espèce Phaseolus vulgaris)
+Pois cuit,20506,proxy,pois cassé bouilli
+Wakamé,20999,proxy,wakamé atlantique (Alaria esculenta) séché
+Nori,20987,equivalent,nori séchée
+Kombu,20990,equivalent,kombu japonais séché
+Dulse,20988,equivalent,dulse séchée
+Spaghetti de mer,20992,equivalent,haricot de mer (Himanthalia elongata) séché
+Blé dur grain,9060,equivalent,blé dur complet cru
+Farine de blé dur,9610,proxy,semoule de blé dur
+Flocons de blé dur,9060,proxy,blé dur complet (flocon = grain aplati)
+Flocons de épeautre,9480,proxy,farine d'épeautre
+Seigle grain,9390,equivalent,seigle complet cru
+Flocons de seigle,9390,proxy,seigle complet (flocon = grain aplati)
+Orge grain,9320,equivalent,orge complète crue
+Flocons de orge,9320,proxy,orge complète (flocon = grain aplati)
+Farine de avoine,9310,proxy,avoine crue broyée
+Flocons de maïs,32014,proxy,pétales de maïs nature non enrichis
+Riz grain,9100,equivalent,riz blanc cru
+Flocons de riz,9100,proxy,riz blanc cru
+Millet grain,9555,proxy,farine de millet
+Flocons de millet,9555,proxy,farine de millet
+Sorgho grain,9360,equivalent,sorgho complet cru
+Farine de sorgho,9360,proxy,sorgho complet cru broyé
+Flocons de sorgho,9360,proxy,sorgho complet
+Farine de quinoa,9340,proxy,quinoa cru broyé
+Flocons de quinoa,9340,proxy,quinoa cru
+Sarrasin grain,9380,equivalent,sarrasin complet cru
+Flocons de sarrasin,9380,proxy,sarrasin complet
+Farine de amarante,9345,proxy,amarante crue broyée
+Flocons de amarante,9345,proxy,amarante crue
+Graine de cumin,11042,equivalent,cumin en graine
+Muscade,11048,equivalent,noix de muscade
+Fenugrec en poudre,11077,equivalent,fenugrec en graine
+Céleri branche (feuille),20023,proxy,céleri branche cru
+Ras el hanout,11081,proxy,épice (aliment moyen)
+Zaatar,11060,proxy,herbes de Provence séchées (thym/origan)
+Lait concentré sucré,19027,equivalent,lait concentré sucré entier
+Crème liquide allégée,19436,equivalent,crème 12 à 20 % MG fluide
+Crème double,19411,proxy,crème d'Isigny ≥ 35 % MG
+Crème aigre,19431,proxy,crème légère épaisse 12-25 % MG
+Crème de coco,18041,proxy,lait de coco (crème plus concentrée)
+Babeurre,19801,equivalent,lait ribot maigre
+Feta,12066,equivalent,feta brebis ≥ 70 % et chèvre
+Pecorino Romano,12122,equivalent,pecorino (fromage de brebis)
+Yaourt grec,19860,equivalent,yaourt à la grecque nature
+Cassonade,31017,equivalent,sucre roux
+Sucre glace,31016,proxy,sucre blanc (sucre glace = sucre broyé + ~3 % d'amidon)
+Sucre candi,31016,proxy,sucre blanc cristallisé
+Huile d'olive,17270,proxy,huile d'olive vierge extra
+Amidon de maïs (modifié),9510,proxy,amidon de maïs natif
+Amidon de maïs natif,9510,equivalent,amidon ou fécule de maïs
+Amidon de pomme de terre,4090,equivalent,fécule de pomme de terre
+Amidon modifié E1422,9510,proxy,amidon de maïs natif
+Lécithine de tournesol,42200,proxy,lécithine de soja
+Gélatine en poudre,11007,equivalent,gélatine sèche
+Sel rose de l'Himalaya,11017,proxy,sel blanc non iodé
+Levure boulangère sèche,11045,equivalent,levure de boulanger déshydratée
+Levure boulangère fraîche,11010,equivalent,levure de boulanger fraîche
+Vinaigre blanc,11018,equivalent,vinaigre
+Vinaigre de riz,11018,proxy,vinaigre
+Vin blanc moelleux,1006,proxy,vin doux
+Vin jaune,5215,proxy,vin blanc sec
+Porto,1006,proxy,vin doux (vin muté)
+Madère,1006,proxy,vin doux (vin muté)
+Xérès (Sherry),1007,proxy,apéritif à base de vin
+Crémant,5201,equivalent,vin blanc mousseux
+Rhum blanc,1004,equivalent,rhum
+Tequila blanco,1008,proxy,spiritueux 40 % assimilé à la vodka
+Tequila reposado,1008,proxy,spiritueux 40 % assimilé à la vodka
+Mezcal,1008,proxy,spiritueux 40 % assimilé à la vodka
+Absinthe,1000,proxy,pastis (spiritueux anisé)
+Armagnac,1023,equivalent,eau de vie de vin type armagnac
+Kirsch,1001,equivalent,eau de vie de fruits
+Triple sec,1003,proxy,liqueur
+Vermouth rouge,1007,equivalent,apéritif à base de vin ou vermouth
+Vermouth blanc,1007,equivalent,apéritif à base de vin ou vermouth
+Bière ambrée,5010,proxy,bière spéciale 5-6°
+Bière IPA,5010,proxy,bière spéciale 5-6°
+Bière stout,5000,proxy,bière brune
+Bière de blé,5009,equivalent,bière blanche
+Bière pils,5001,equivalent,bière cœur de marché 4-5°
+Sour beer,5011,proxy,bière de spécialités
+Sauce tamari,11104,proxy,sauce soja
+Shoyu,11104,equivalent,sauce soja
+Miso rouge,20916,proxy,miso
+Miso jaune,20916,proxy,miso
+Sauce de poisson (Viet),11194,equivalent,sauce nuoc-mâm
+Harissa,11112,equivalent,harissa
+Sake de cuisine,1026,proxy,saké
+Vinaigrette générique,11110,equivalent,sauce vinaigrette 50-75 % d'huile
+Vinaigrette (base 3:1),11110,proxy,sauce vinaigrette 50-75 % d'huile
+Mayonnaise maison (base),11054,proxy,mayonnaise ≥ 70 % MG
+Moutarde de Meaux,11021,equivalent,moutarde à l'ancienne
+Capre,11040,equivalent,câpres au vinaigre
+Bouillon de poisson (fume),11303,proxy,fumet de poisson prêt à consommer
+Fond brun de veau,11304,proxy,fond de veau
+Fond blanc de volaille,25947,proxy,bouillon de volaille reconstitué
+Bouillon miso,25972,proxy,soupe miso reconstituée
+Consommé,25930,proxy,bouillon de bœuf reconstitué
+Pâte à tarte sucrée,23440,proxy,pâte sablée crue
+Pâte à pain,37001,proxy,pâte à pizza crue (farine eau levure sel huile)
+Basilic,11033,equivalent,basilic frais
+Persil,11014,equivalent,persil frais
+Coriandre fraîche,11094,equivalent,coriandre fraîche
+Menthe,11027,equivalent,menthe fraîche
+Thym,11070,equivalent,thym frais
+Romarin,11068,equivalent,romarin frais
+Sauge,11069,equivalent,sauge fraîche
+Aneth,11093,equivalent,aneth frais
+Estragon,11092,equivalent,estragon frais
+Cerfeuil,11002,equivalent,cerfeuil frais
+Ciboulette,11080,proxy,herbes aromatiques fraîches (seule la ciboulette séchée existe)
+Origan,11080,proxy,herbes aromatiques fraîches (seul l'origan séché existe)
+Marjolaine,11080,proxy,herbes aromatiques fraîches (seule la marjolaine séchée existe)
+Veau (viande),6521,proxy,veau escalope crue (morceau représentatif)
+Agneau (viande),21502,proxy,agneau gigot cru (morceau représentatif)
+Porc (viande),28300,proxy,porc rôti cru (morceau représentatif)
+Bouillon de bœuf,25930,equivalent,bouillon de bœuf reconstitué prêt à consommer
+Bouillon de légumes,25948,equivalent,bouillon de légumes reconstitué prêt à consommer
+Bouillon de volaille,25947,equivalent,bouillon de volaille reconstitué prêt à consommer
+Noix du Brésil crue,15008,equivalent,noix du Brésil sans sel ajouté
+Pistache crue,15044,proxy,pistache grillée sans sel (pas d'entrée crue)
+Pistache torréfiée,15044,equivalent,pistache grillée sans sel ajouté
+Noisette torréfiée,15033,equivalent,noisette grillée sans sel ajouté
+Parmigiano Reggiano,12120,equivalent,parmesan
+Moutarde de Dijon,11013,equivalent,moutarde
+Bière blonde (lager),5001,equivalent,bière cœur de marché 4-5°
+Maïs grain,20233,proxy,maïs doux cru (grain frais)
+Crème liquide entière,19417,equivalent,crème 30 % MG fluide UHT

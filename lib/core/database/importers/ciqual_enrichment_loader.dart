@@ -3,23 +3,25 @@ import 'package:drift/drift.dart';
 import '../app_database.dart';
 import 'csv_toolkit.dart' show CsvLoadOutcome, runCsvImport;
 
-/// Enrichissement nutritionnel Ciqual (session 2026-08-26, retour PO).
+/// Enrichissement nutritionnel Ciqual (session 2026-08-26 ; Phase 10).
 ///
 /// Insère les records du CSV dérivé `assets/database-enrichment/
 /// ciqual_nutrition.csv` (généré par `tool/generate_ciqual_enrichment.dart`
 /// depuis les XML ANSES Ciqual 2025-11-03 du repo, avec citations par
-/// valeur) dans `nutrition_records`, en respectant deux règles :
+/// valeur) dans `nutrition_records`, en respectant trois règles :
 ///
-/// 1. **Complément, pas doublon** : seuls les ingrédients SANS record
-///    Phase 2 préexistant sont enrichis (la base Phase 2 prime).
-/// 2. **Idempotent** : `nutrition_record_id` déterministe
-///    (`CIQ-<ingredient>-<composant>`) + INSERT OR IGNORE + hash
-///    SHA-256 du fichier dans `import_state` (re-import skippé si le
-///    fichier n'a pas changé).
-///
-/// Chaque record porte `source_id = ciqual_2025_11_03`, l'aliment
-/// Ciqual source (`source_food_name`) et sa citation complète
-/// (`notes`) — restitués in-app par le panneau nutrition.
+/// 1. **Complément, pas doublon** : la Phase 2 prime. Les lignes
+///    `main` d'un ingrédient déjà couvert par la Phase 2 sont ignorées ;
+///    ses variantes cuites mesurées (`cooked_variant`) ne sont ajoutées
+///    que pour les états absents de la Phase 2.
+/// 2. **Ré-import fiable (ac-126)** : quand le fichier change (hash
+///    SHA-256 différent), les records de la source sont purgés puis
+///    réinsérés — une correction de données atteint les installations
+///    existantes. Fichier inchangé → import sauté.
+/// 3. **Traçabilité** : `source_id = ciqual_2025_11_03`, aliment Ciqual
+///    source, citation complète ; les correspondances approchées
+///    (`match_type = proxy`) portent leur justification dans
+///    `derivation_method`, restituée in-app.
 class CiqualEnrichmentLoader {
   static const String sourceName = 'enrichment/ciqual_nutrition';
   static const String sourceId = 'ciqual_2025_11_03';
@@ -30,18 +32,24 @@ class CiqualEnrichmentLoader {
     required String csvPath,
     void Function(bool skipped)? onFileSkipped,
   }) async {
-    // Règle 1 : ingrédients déjà couverts par la Phase 2.
+    // Règle 1 : états couverts par la Phase 2 (hors enrichissement).
     final coveredRows = await db
         .customSelect(
-          'SELECT DISTINCT ingredient_id FROM nutrition_records '
-          'WHERE source_id IS NOT NULL AND source_id != ?',
+          'SELECT DISTINCT ingredient_id, ingredient_state_id '
+          'FROM nutrition_records '
+          'WHERE source_id IS NULL OR source_id != ?',
           variables: [Variable.withString(sourceId)],
         )
         .get();
-    final covered = coveredRows
-        .map((r) => r.read<String>('ingredient_id'))
-        .toSet();
+    final coveredIngredients = <String>{};
+    final coveredStates = <String>{};
+    for (final r in coveredRows) {
+      final id = r.read<String>('ingredient_id');
+      coveredIngredients.add(id);
+      coveredStates.add('$id@${r.readNullable<String>('ingredient_state_id')}');
+    }
 
+    var purged = false;
     return runCsvImport<CiqualNutritionRow>(
       db: db,
       csvPath: csvPath,
@@ -49,12 +57,28 @@ class CiqualEnrichmentLoader {
       tableName: db.nutritionRecords.actualTableName,
       parseRow: (row, header) => CiqualNutritionRow.fromCsvRow(row, header),
       insertRows: (batch, rows) async {
+        if (!purged) {
+          // Règle 2 : fichier modifié → purge de la source avant
+          // réinsertion (le premier lot n'est produit que si le hash a
+          // changé).
+          batch.deleteWhere(
+            db.nutritionRecords,
+            (t) => t.sourceId.equals(sourceId),
+          );
+          purged = true;
+        }
         for (final row in rows) {
-          if (covered.contains(row.ingredientId)) continue;
+          if (row.isMain && coveredIngredients.contains(row.ingredientId)) {
+            continue;
+          }
+          if (!row.isMain &&
+              coveredStates.contains('${row.ingredientId}@${row.stateId}')) {
+            continue;
+          }
           batch.insert(
             db.nutritionRecords,
             row.toCompanion(),
-            mode: InsertMode.insertOrIgnore,
+            mode: InsertMode.insertOrReplace,
           );
         }
       },
@@ -76,10 +100,21 @@ class CiqualNutritionRow {
     required this.confidenceCode,
     required this.confidence,
     required this.sourceCitation,
+    this.stateId = 'raw',
+    this.isMain = true,
+    this.matchType = 'name',
+    this.matchNote = '',
   });
 
   factory CiqualNutritionRow.fromCsvRow(List<String> row, List<String> header) {
     String at(String name) => row[header.indexOf(name)].trim();
+    String opt(String name, String fallback) {
+      final i = header.indexOf(name);
+      if (i == -1 || i >= row.length) return fallback;
+      final v = row[i].trim();
+      return v.isEmpty ? fallback : v;
+    }
+
     return CiqualNutritionRow(
       ingredientId: at('ingredient_id'),
       ciqualAlimCode: at('ciqual_alim_code'),
@@ -91,6 +126,10 @@ class CiqualNutritionRow {
       confidenceCode: at('confidence_code'),
       confidence: double.parse(at('confidence')),
       sourceCitation: at('source_citation'),
+      stateId: opt('ingredient_state_id', 'raw'),
+      isMain: opt('row_kind', 'main') == 'main',
+      matchType: opt('match_type', 'name'),
+      matchNote: opt('match_note', ''),
     );
   }
 
@@ -105,11 +144,35 @@ class CiqualNutritionRow {
   final double confidence;
   final String sourceCitation;
 
+  /// État de préparation déduit du nom Ciqual (raw, dried, boiled…).
+  final String stateId;
+
+  /// Ligne de l'aliment principal (vs variante cuite mesurée).
+  final bool isMain;
+
+  /// code | name | equivalent | proxy (voir le générateur).
+  final String matchType;
+  final String matchNote;
+
+  /// Confiance du rapprochement ingrédient ↔ aliment Ciqual.
+  double get mappingConfidence => switch (matchType) {
+    'code' => 0.95,
+    'equivalent' => 0.9,
+    'name' => 0.8,
+    _ => 0.6,
+  };
+
+  /// Justification d'une approximation (null pour une correspondance
+  /// directe).
+  String? get derivationNote => matchType == 'proxy'
+      ? 'Valeur approchée : ${matchNote.isEmpty ? alimentName : matchNote}'
+      : null;
+
   NutritionRecordsCompanion toCompanion() {
     return NutritionRecordsCompanion.insert(
-      nutritionRecordId: 'CIQ-$ingredientId-$componentId',
+      nutritionRecordId: 'CIQ-$ingredientId-$stateId-$componentId',
       ingredientId: ingredientId,
-      ingredientStateId: const Value('raw'),
+      ingredientStateId: Value(stateId),
       sourceId: const Value(CiqualEnrichmentLoader.sourceId),
       sourceFoodId: Value(ciqualAlimCode),
       sourceFoodName: Value(alimentName),
@@ -119,6 +182,8 @@ class CiqualNutritionRow {
       normalizedValue: Value(normalizedValue),
       normalizedUnit: Value(normalizedUnit),
       confidence: Value(confidence),
+      mappingConfidence: Value(mappingConfidence),
+      derivationMethod: Value(derivationNote),
       valueQualifier: Value('Code de confiance Ciqual $confidenceCode'),
       notes: Value(sourceCitation),
     );

@@ -187,6 +187,7 @@ void main(List<String> args) {
   final outPath = args.length > 2
       ? args[2]
       : 'assets/database-enrichment/ciqual_nutrition.csv';
+  final aliasPath = args.length > 3 ? args[3] : 'tool/data/ciqual_aliases.csv';
 
   // 1. Dictionnaire des constituants : const_code → (nom FR, INFOODS).
   final constNames = <String, String>{};
@@ -236,6 +237,7 @@ void main(List<String> args) {
   final idCol = header.indexOf('ingredient_id');
   final nameCol = header.indexOf('canonical_name_fr');
   final ciqualCol = header.indexOf('ciqual_ids');
+  final cat2Col = header.indexOf('category_level_2');
   if (idCol == -1 || nameCol == -1 || ciqualCol == -1) {
     stderr.writeln('Colonnes manquantes dans le registre');
     exitCode = 1;
@@ -243,6 +245,7 @@ void main(List<String> args) {
   }
   final ingredientCiqual = <String, String>{};
   final ingredientNames = <String, String>{};
+  final ingredientCategory2 = <String, String>{};
   for (final row in registry.skip(1)) {
     if (row.length <= ciqualCol) continue;
     final id = row[idCol].trim();
@@ -252,6 +255,9 @@ void main(List<String> args) {
     // Retour PO n°4 : TOUS les ingrédients du registre sont traités
     // (les 450 sans ciqual_ids passent par la résolution par nom).
     ingredientNames[id] = name;
+    if (cat2Col != -1 && row.length > cat2Col) {
+      ingredientCategory2[id] = row[cat2Col].trim();
+    }
     final ciqual = row[ciqualCol].trim();
     // Plusieurs codes possibles séparés par '|' : on garde le premier
     // (l'aliment Ciqual le plus proche du canonique).
@@ -274,6 +280,50 @@ void main(List<String> args) {
     if (code.isNotEmpty && name.isNotEmpty) alimNames[code] = name;
   });
   stdout.writeln('alim.xml : ${alimNames.length} aliments lus');
+
+  // 5 bis. Alias curatés (Phase 10, ac-116/ac-119) : table
+  // tool/data/ciqual_aliases.csv (nom canonique → code Ciqual 2025,
+  // type equivalent|proxy, justification). Prioritaires sur toute autre
+  // résolution ; un même aliment peut servir plusieurs ingrédients
+  // (proxy assumé, restitué in-app comme approximation).
+  final matchType = <String, String>{};
+  final matchNote = <String, String>{};
+  final aliasedAlim = <String, String>{};
+  final aliasRows = _readCsv(aliasPath);
+  final aliasHeader = aliasRows.first;
+  final aName = aliasHeader.indexOf('canonical_name_fr');
+  final aCode = aliasHeader.indexOf('ciqual_code');
+  final aType = aliasHeader.indexOf('match_type');
+  final aNote = aliasHeader.indexOf('note');
+  final idByName = <String, String>{
+    for (final e in ingredientNames.entries) e.value: e.key,
+  };
+  for (final row in aliasRows.skip(1)) {
+    if (row.length < 4 || row[aName].trim().isEmpty) continue;
+    final name = row[aName].trim();
+    final code = row[aCode].trim();
+    final id = idByName[name];
+    if (id == null) {
+      stderr.writeln('Alias : ingrédient inconnu du registre « $name »');
+      exitCode = 1;
+      return;
+    }
+    if (!alimNames.containsKey(code)) {
+      stderr.writeln('Alias : code Ciqual inconnu $code pour « $name »');
+      exitCode = 1;
+      return;
+    }
+    final type = row[aType].trim();
+    if (type != 'equivalent' && type != 'proxy') {
+      stderr.writeln('Alias : type invalide « $type » pour « $name »');
+      exitCode = 1;
+      return;
+    }
+    aliasedAlim[id] = code;
+    matchType[id] = type;
+    matchNote[id] = row[aNote].trim();
+  }
+  stdout.writeln('Alias curatés : ${aliasedAlim.length}');
 
   // 6. Résolution ingrédient → aliment Ciqual. Les ciqual_ids du
   // référentiel Phase 1 proviennent d'une autre édition de la table
@@ -341,12 +391,16 @@ void main(List<String> args) {
   for (final entry in ingredientNames.entries) {
     final ingredientId = entry.key;
     final ingredientName = entry.value;
-    if (resolvedAlim.containsKey(ingredientId)) continue;
+    if (resolvedAlim.containsKey(ingredientId) ||
+        aliasedAlim.containsKey(ingredientId)) {
+      continue;
+    }
     final code = ingredientCiqual[ingredientId];
     if (code != null &&
         alimNames.containsKey(code) &&
         _namesCoherent(ingredientName, alimNames[code]!)) {
       resolvedAlim[ingredientId] = code;
+      matchType[ingredientId] = 'code';
       byCode++;
       continue;
     }
@@ -499,6 +553,7 @@ void main(List<String> args) {
   }
   for (final e in alimOwner.entries) {
     resolvedAlim[e.value] = e.key;
+    matchType[e.value] = 'name';
     byName++;
     final registryCode = ingredientCiqual[e.value];
     final hint = registryCode == null
@@ -531,11 +586,6 @@ void main(List<String> args) {
     'Sel fin': 'Sel blanc alimentaire, non iodé, non fluoré',
     'Sel de Guérande': 'Sel marin gris, non iodé, non fluoré',
     "Sel rose de l'Himalaya": 'Sel blanc alimentaire, non iodé, non fluoré',
-    'Cajou crue': 'Noix de cajou, grillée, salée',
-    'Cajou torréfiée': 'Noix de cajou, grillée, salée',
-    'Pécan crue': 'Noix de pécan, sans sel ajouté',
-    'Pécan torréfiée': 'Noix de pécan, sans sel ajouté',
-    'Café espresso': 'Café, moulu',
     'Calvados': 'Eau de vie type calvados',
     'Vin doux naturel': 'Vin doux',
   };
@@ -548,7 +598,9 @@ void main(List<String> args) {
         break;
       }
     }
-    if (ingredientId == null || resolvedAlim.containsKey(ingredientId)) {
+    if (ingredientId == null ||
+        resolvedAlim.containsKey(ingredientId) ||
+        aliasedAlim.containsKey(ingredientId)) {
       continue;
     }
     final target = _normalizeText(entry.value);
@@ -577,6 +629,8 @@ void main(List<String> args) {
         continue;
       }
       resolvedAlim[ingredientId] = bestCode;
+      matchType[ingredientId] = 'proxy';
+      matchNote[ingredientId] = 'standin curaté : $bestName';
       byStandin++;
       stdout.writeln(
         '  ⌂ standin curaté : ${entry.key} → "$bestName" ($bestCode)',
@@ -588,14 +642,68 @@ void main(List<String> args) {
     '$byStandin standins curatés, $unresolved non résolus',
   );
 
-  final ciqualToIngredient = <String, String>{
-    for (final e in resolvedAlim.entries) e.value: e.key,
+  // 6 ter. Fusion alias + résolution, puis variantes cuites mesurées
+  // (Phase 10 Lot D, ac-124) : pour un aliment principal cru ou sec,
+  // les entrées Ciqual du même aliment préparé (bouilli, vapeur, rôti,
+  // grillé, frit…) sont exportées avec leur état — l'agrégateur les
+  // préfère aux facteurs de rétention génériques.
+  final finalAlim = <String, String>{...resolvedAlim, ...aliasedAlim};
+  final alimCore = <String, Set<String>>{
+    for (final e in alimNames.entries) e.key: _coreTokens(e.value),
   };
+  // alim → [(ingrédient, état, principal ?)]
+  final rowsByAlim = <String, List<(String, String, bool)>>{};
+  var variantCount = 0;
+  for (final e in finalAlim.entries) {
+    final mainName = alimNames[e.value] ?? '';
+    final mainState = _stateFromAlimName(mainName);
+    rowsByAlim.putIfAbsent(e.value, () => []).add((e.key, mainState, true));
+    if (mainState != 'raw' && mainState != 'dried') continue;
+    // Pas de variante pour une approximation (proxy), une farine, une
+    // purée ou un aliment sec hors légumineuses/céréales (une tomate
+    // séchée ne se « bout » pas comme une tomate fraîche).
+    if (matchType[e.key] == 'proxy') continue;
+    final ingredientName = _normalizeText(ingredientNames[e.key] ?? '');
+    if (ingredientName.startsWith('farine') ||
+        ingredientName.startsWith('beurre')) {
+      continue;
+    }
+    final cat2 = ingredientCategory2[e.key] ?? '';
+    if (mainState == 'dried' &&
+        !cat2.contains('légumineuse') &&
+        !cat2.contains('céréale')) {
+      continue;
+    }
+    final core = alimCore[e.value]!;
+    if (core.isEmpty) continue;
+    final bestByState = <String, String>{};
+    for (final candidate in alimNames.entries) {
+      if (candidate.key == e.value) continue;
+      final state = _stateFromAlimName(candidate.value);
+      if (!_cookedStates.contains(state)) continue;
+      final norm = _normalizeText(candidate.value);
+      if (_variantDenylist.any(norm.contains)) continue;
+      final cCore = alimCore[candidate.key]!;
+      if (cCore.length != core.length || !cCore.containsAll(core)) continue;
+      final current = bestByState[state];
+      if (current == null ||
+          candidate.value.length < (alimNames[current] ?? '').length) {
+        bestByState[state] = candidate.key;
+      }
+    }
+    for (final v in bestByState.entries) {
+      rowsByAlim.putIfAbsent(v.value, () => []).add((e.key, v.key, false));
+      variantCount++;
+    }
+  }
+  stdout.writeln('Variantes cuites mesurées : $variantCount');
+
   final out = StringBuffer()
     ..writeln(
-      'ingredient_id,ciqual_alim_code,aliment_name,component_id,'
-      'component_name,normalized_value,normalized_unit,confidence_code,'
-      'confidence,source_citation',
+      'ingredient_id,ingredient_state_id,row_kind,ciqual_alim_code,'
+      'aliment_name,component_id,component_name,normalized_value,'
+      'normalized_unit,confidence_code,confidence,match_type,match_note,'
+      'source_citation',
     );
   var kept = 0;
   var scanned = 0;
@@ -604,8 +712,8 @@ void main(List<String> args) {
   _parseXmlBlocks('$ciqualDir/compo_2025_11_03.xml', 'COMPO', (fields) {
     scanned++;
     final alim = fields['alim_code'] ?? '';
-    final ingredientId = ciqualToIngredient[alim];
-    if (ingredientId == null) return;
+    final targets = rowsByAlim[alim];
+    if (targets == null) return;
     final sel = selected[fields['const_code'] ?? ''];
     if (sel == null) return;
     final raw = fields['teneur'] ?? '';
@@ -623,28 +731,38 @@ void main(List<String> args) {
     final citation =
         citations[fields['source_code'] ?? ''] ??
         'ANSES — table Ciqual 2025-11-03';
-    enrichedIngredients.add(ingredientId);
-    out
-      ..write(ingredientId)
-      ..write(',')
-      ..write(alim)
-      ..write(',')
-      ..write(_csvCell(alimNames[alim] ?? ''))
-      ..write(',')
-      ..write(sel.$1)
-      ..write(',')
-      ..write(_csvCell(constNames[fields['const_code']] ?? ''))
-      ..write(',')
-      ..write(value)
-      ..write(',')
-      ..write(sel.$2)
-      ..write(',')
-      ..write(confidenceCode)
-      ..write(',')
-      ..write(confidence)
-      ..write(',')
-      ..writeln(_csvCell('ANSES Ciqual 2025-11-03 — $citation'));
-    kept++;
+    for (final (ingredientId, state, isMain) in targets) {
+      enrichedIngredients.add(ingredientId);
+      out
+        ..write(ingredientId)
+        ..write(',')
+        ..write(state)
+        ..write(',')
+        ..write(isMain ? 'main' : 'cooked_variant')
+        ..write(',')
+        ..write(alim)
+        ..write(',')
+        ..write(_csvCell(alimNames[alim] ?? ''))
+        ..write(',')
+        ..write(sel.$1)
+        ..write(',')
+        ..write(_csvCell(constNames[fields['const_code']] ?? ''))
+        ..write(',')
+        ..write(value)
+        ..write(',')
+        ..write(sel.$2)
+        ..write(',')
+        ..write(confidenceCode)
+        ..write(',')
+        ..write(confidence)
+        ..write(',')
+        ..write(matchType[ingredientId] ?? 'name')
+        ..write(',')
+        ..write(_csvCell(matchNote[ingredientId] ?? ''))
+        ..write(',')
+        ..writeln(_csvCell('ANSES Ciqual 2025-11-03 — $citation'));
+      kept++;
+    }
   });
 
   // 7. Écriture.
@@ -660,6 +778,105 @@ void main(List<String> args) {
       'ingrédients enrichis ($kb Ko)',
     );
 }
+
+/// États de préparation cuits reconnus dans les noms Ciqual.
+const Set<String> _cookedStates = {
+  'boiled',
+  'steamed',
+  'roasted',
+  'grilled',
+  'sauteed',
+  'fried',
+  'stewed',
+  'cooked',
+};
+
+/// Variantes écartées : conserves, surgelés, plats et formes
+/// transformées (on veut le même aliment, simplement cuit).
+const List<String> _variantDenylist = [
+  'appertis',
+  'surgel',
+  'preemball',
+  'puree',
+  'conserve',
+  'micro',
+  'pression',
+  'preleve',
+  'cuisine',
+  'sauce',
+  'farci',
+  'pane',
+  'fume',
+  'sale',
+];
+
+/// État de préparation déduit du nom Ciqual (Phase 10, ac-124 : les
+/// entrées cuites ne sont plus marquées `raw`).
+String _stateFromAlimName(String name) {
+  final n = _normalizeText(name);
+  // Produit déshydraté puis reconstitué : prêt à consommer.
+  if (n.contains('reconstitu')) return 'raw';
+  if (RegExp(r'\bfrit|friture').hasMatch(n)) return 'fried';
+  if (n.contains('vapeur')) return 'steamed';
+  if (RegExp(r"bouilli|cuite? a l.eau|poche").hasMatch(n)) return 'boiled';
+  if (RegExp(r'\broti|cuite? au four').hasMatch(n)) return 'roasted';
+  if (n.contains('grille')) return 'grilled';
+  if (RegExp(r'saute|poele').hasMatch(n)) return 'sauteed';
+  if (RegExp(r'braise|etouffee|mijote').hasMatch(n)) return 'stewed';
+  if (RegExp(r'\bcuite?s?\b').hasMatch(n)) return 'cooked';
+  if (RegExp(r'\bseche?s?\b|sechee?s?\b|deshydrate').hasMatch(n)) {
+    return 'dried';
+  }
+  return 'raw';
+}
+
+/// Mots d'état et qualificatifs neutres retirés pour comparer deux
+/// entrées Ciqual du même aliment.
+const Set<String> _stateWords = {
+  'bouilli',
+  'bouillie',
+  'cuit',
+  'cuite',
+  'cuits',
+  'cuites',
+  'eau',
+  'vapeur',
+  'roti',
+  'rotie',
+  'four',
+  'grille',
+  'grillee',
+  'poele',
+  'poelee',
+  'saute',
+  'sautee',
+  'frit',
+  'frite',
+  'braise',
+  'braisee',
+  'etouffee',
+  'mijote',
+  'croquant',
+  'fondant',
+  'sans',
+  'sel',
+  'ajoute',
+  'aliment',
+  'moyen',
+  'seche',
+  'sechee',
+  'secs',
+  'poche',
+  'pochee',
+  'matiere',
+  'grasse',
+  'avec',
+  'crus',
+  'crues',
+};
+
+Set<String> _coreTokens(String name) =>
+    _significantTokens(name).difference(_stateWords);
 
 /// Vrai si le nom Ciqual désigne l'état brut (« cru », « crue », ou
 /// aucun qualificatif de préparation cuit/séché/concentré).
