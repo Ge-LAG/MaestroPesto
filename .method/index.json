@@ -2206,6 +2206,57 @@
       ]
     },
     {
+      "id": "phase10-mandat-arbitrages",
+      "path": "records/phase10-mandat-arbitrages.html",
+      "title": "Décision : arbitrages phase 10 sous mandat PO du 2026-09-26",
+      "summary": "Arbitrages techniques pris en autonomie sous le mandat PO du 2026-09-26 (sources arômes internes, alias Ciqual signalés, lot F complet, persistance recettes) — à relire par le PO.",
+      "tags": [
+        "decision",
+        "phase-10",
+        "mandat",
+        "licence",
+        "flavor",
+        "nutrition",
+        "alias",
+        "procede",
+        "persistance"
+      ],
+      "kind": "decision",
+      "status": "review",
+      "sha256": "9a7ee76d65b54efcccd040bd9f0dea3899f5499c29f468e3f17629ba5c1a73e1",
+      "chars": 3398,
+      "size": 4774,
+      "mtime_ns": 1790376339885801900,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "f67aec49aa64c2a9a89935535636078b17284e75e847b02cff9a8122d74efcf3",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "honest-data-display.html#honest-data-display"
+      ],
+      "anchors": [
+        "phase10-mandat-arbitrages"
+      ]
+    },
+    {
       "id": "start",
       "path": "START.html",
       "title": "Start here",
@@ -2924,12 +2975,12 @@
         "priorite"
       ],
       "kind": "work",
-      "status": "ready",
-      "sha256": "52ebda81b504d811a1da58658519b61c209e691d3e60886851a78592161008c4",
-      "chars": 5130,
-      "size": 7132,
-      "mtime_ns": 1789589827444447500,
-      "revision": 3,
+      "status": "active",
+      "sha256": "f5a2488534f43ddb13106f6481ec7a091e0781625b3f0e601c6b3b373448b603",
+      "chars": 6874,
+      "size": 9113,
+      "mtime_ns": 1790376364122674900,
+      "revision": 4,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -2969,12 +3020,24 @@
           "text": "Une paire prédite sans support de données ne s'affiche plus « À éviter » (teinte pas-de-donnée ou confiance signalée)."
         },
         {
+          "id": "A6",
+          "text": "Chaque ingrédient du référentiel (603/603) dispose d'un profil sensoriel avec niveau de preuve et confiance ; la heatmap d'une recette réelle affiche un score pour toutes ses paires liées et les benchmarks classiques phase 3 obtiennent un score ≥ 0,70 (contrastes négatifs < 0,40)."
+        },
+        {
+          "id": "A7",
+          "text": "La nutrition d'une recette tient compte du procédé (rendement, rétention) et affiche Nutri-Score estimé, %VNR et poids cuit estimé, avec leurs hypothèses."
+        },
+        {
+          "id": "A8",
+          "text": "Une recette créée puis l'application relancée : la recette, ses quantités (60 g reste 60 g) et ses étapes sont relues depuis la base."
+        },
+        {
           "id": "A5",
           "text": "flutter test, flutter analyze et dart format --set-exit-if-changed . verts sur le lot livré."
         }
       ],
       "evidence": [],
-      "body_digest": "202cbe5165a0cf969607a1b50d74d805ff6a3f775875a5aedede11e79f3a0dc6",
+      "body_digest": "6241406aaf28bc066dc45c1b5ea491895a95da78b9e836309c23260bcf9a3edf",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -2999,7 +3062,8 @@
         "../records/ac-114.html#ac-114",
         "../records/ac-116.html#ac-116",
         "../records/ac-114.html#ac-114",
-        "../records/delivery-gate.html#delivery-gate"
+        "../records/delivery-gate.html#delivery-gate",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages"
       ],
       "anchors": [
         "phase10-coherence-procede"
