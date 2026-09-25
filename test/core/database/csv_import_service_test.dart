@@ -294,7 +294,14 @@ void main() {
       },
     );
 
-    expect(phases, ['phase1', 'phase2', 'phase3', 'phase4', 'enrichment']);
+    expect(phases, [
+      'phase1',
+      'phase2',
+      'phase3',
+      'phase4',
+      'enrichment',
+      'metier',
+    ]);
     expect(report.rowsImported['phase1'], 2);
     expect(report.rowsImported['phase2'], 3);
     expect(report.rowsImported['phase3'], 2);
@@ -305,7 +312,7 @@ void main() {
     expect(report.skipped['enrichment'], isTrue);
     expect(
       report.skipped.entries
-          .where((e) => e.key != 'enrichment')
+          .where((e) => e.key != 'enrichment' && e.key != 'metier')
           .map((e) => e.value),
       everyElement(isFalse),
     );
