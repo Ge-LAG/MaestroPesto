@@ -1,0 +1,446 @@
+ingredient_a,ingredient_b,kind,strength,note
+Tomate fraîche,Basilic,classic,0.95,cuisine italienne : caprese, sauce tomate
+Tomate fraîche,Mozzarella,classic,0.92,caprese
+Tomate fraîche,Huile d'olive vierge extra,classic,0.92,cuisine méditerranéenne
+Tomate fraîche,Ail,classic,0.9,sauce tomate, bruschetta
+Tomate fraîche,Oignon,classic,0.88,sauce, salsa
+Tomate fraîche,Origan,classic,0.88,pizza, sauce
+Tomate fraîche,Thym,classic,0.82,sauce provençale
+Tomate fraîche,Parmigiano Reggiano,classic,0.85,pâtes à la tomate
+Tomate fraîche,Poivron rouge,classic,0.85,ratatouille, gaspacho
+Tomate fraîche,Aubergine,classic,0.85,ratatouille, caponata
+Tomate fraîche,Courgette,classic,0.82,ratatouille
+Tomate fraîche,Concombre,classic,0.82,salade grecque, gaspacho
+Tomate fraîche,Feta,classic,0.85,salade grecque
+Tomate fraîche,Vinaigre balsamique,classic,0.82,salade
+Tomate fraîche,Coriandre fraîche,classic,0.8,salsa
+Tomate fraîche,Piment fort,classic,0.8,salsa, sauce arrabbiata
+Tomate fraîche,Capre,regional,0.78,sauce puttanesca
+Tomate fraîche,Olive noire en saumure,classic,0.82,puttanesca, niçoise
+Tomate fraîche,Anchois,regional,0.8,puttanesca, niçoise
+Tomate fraîche,Fraise crue,modern,0.72,gaspacho de fraise (furanéol commun)
+Tomate séchée,Parmigiano Reggiano,classic,0.85,umami concentré
+Tomate séchée,Basilic,classic,0.82,antipasti
+Basilic,Huile d'olive vierge extra,classic,0.92,pesto
+Basilic,Ail,classic,0.9,pesto
+Basilic,Pignon de pin crue,classic,0.9,pesto
+Basilic,Parmigiano Reggiano,classic,0.9,pesto
+Basilic,Fraise crue,modern,0.78,dessert
+Basilic,Citron jaune cru,modern,0.75,sorbet, vinaigrette
+Ail,Huile d'olive vierge extra,classic,0.92,aïoli, aglio e olio
+Ail,Persil,classic,0.9,persillade
+Ail,Beurre doux,classic,0.88,beurre d'escargot
+Ail,Thym,classic,0.85,rôtis
+Ail,Romarin,classic,0.88,agneau et pommes de terre rôties
+Ail,Gingembre,classic,0.9,cuisines asiatiques
+Ail,Piment fort,classic,0.85,cuisines asiatiques et méditerranéennes
+Ail,Citron jaune cru,classic,0.82,gremolata, marinades
+Ail,Crevette,classic,0.85,crevettes à l'ail
+Ail,Champignon de Paris,classic,0.85,poêlée
+Ail,Sauce soja,classic,0.85,marinades
+Oignon,Beurre doux,classic,0.85,soupe à l'oignon
+Oignon,Thym,classic,0.85,fond, soupe
+Oignon,Carotte,classic,0.9,mirepoix
+Oignon,Céleri branche,classic,0.88,mirepoix, soffritto
+Oignon,Laurier,classic,0.85,bouillon
+Oignon,Vin blanc sec,classic,0.82,déglaçage
+Oignon,Bœuf (viande),classic,0.88,bourguignon, carbonade
+Oignon,Gruyère,classic,0.85,soupe à l'oignon gratinée
+Échalote,Vin blanc sec,classic,0.88,beurre blanc
+Échalote,Vinaigre de vin rouge,classic,0.88,sauce mignonnette
+Échalote,Estragon,classic,0.88,sauce béarnaise
+Échalote,Beurre doux,classic,0.85,beurre blanc
+Échalote,Bœuf (viande),classic,0.85,entrecôte bordelaise
+Carotte,Cumin moulu,classic,0.85,cuisine maghrébine
+Carotte,Orange cru,classic,0.82,salade, velouté
+Carotte,Gingembre,classic,0.85,velouté
+Carotte,Coriandre fraîche,classic,0.8,salade
+Carotte,Miel,classic,0.8,carottes glacées
+Carotte,Persil,classic,0.78,carottes Vichy
+Pomme de terre,Beurre doux,classic,0.9,purée
+Pomme de terre,Crème liquide entière,classic,0.88,gratin dauphinois
+Pomme de terre,Romarin,classic,0.88,pommes de terre rôties
+Pomme de terre,Ail,classic,0.88,gratin, rôties
+Pomme de terre,Thym,classic,0.82,rôties
+Pomme de terre,Poireau,classic,0.88,vichyssoise
+Pomme de terre,Muscade,classic,0.85,purée, gratin
+Pomme de terre,Ciboulette,classic,0.85,pomme de terre au four
+Pomme de terre,Comté,classic,0.85,tartiflette, gratin
+Pomme de terre,Œuf de poule,classic,0.82,tortilla
+Poireau,Crème liquide entière,classic,0.85,fondue de poireaux
+Poireau,Beurre doux,classic,0.82,fondue de poireaux
+Épinard,Muscade,classic,0.85,épinards à la crème
+Épinard,Ail,classic,0.82,sauté
+Épinard,Crème liquide entière,classic,0.82,épinards à la crème
+Épinard,Ricotta,classic,0.85,ravioli
+Épinard,Œuf de poule,classic,0.8,florentine
+Chou vert,Porc (viande),classic,0.85,potée
+Chou blanc,Carvi,classic,0.8,choucroute
+Chou rouge,Pomme crue,classic,0.85,chou rouge braisé
+Chou rouge,Vinaigre de cidre,classic,0.8,chou rouge aigre-doux
+Brocoli,Ail,classic,0.82,sauté
+Brocoli,Parmigiano Reggiano,classic,0.8,gratin
+Chou-fleur,Muscade,classic,0.8,gratin
+Chou-fleur,Curcuma,classic,0.82,cuisine indienne
+Courgette,Menthe,classic,0.8,cuisine méditerranéenne
+Courgette,Chèvre frais,classic,0.82,tarte
+Aubergine,Ail,classic,0.85,caviar d'aubergine
+Aubergine,Tahini,classic,0.85,baba ganoush
+Aubergine,Parmigiano Reggiano,classic,0.85,parmigiana
+Aubergine,Miso blanc,modern,0.8,nasu dengaku
+Poivron rouge,Paprika,classic,0.8,piperade
+Poivron rouge,Huile d'olive vierge extra,classic,0.82,poivrons marinés
+Champignon de Paris,Crème liquide entière,classic,0.88,sauce forestière
+Champignon de Paris,Persil,classic,0.85,persillade
+Champignon de Paris,Beurre doux,classic,0.85,poêlée
+Champignon de Paris,Échalote,classic,0.85,duxelles
+Champignon de Paris,Thym,classic,0.82,poêlée
+Cèpe,Persil,classic,0.88,cèpes à la bordelaise
+Cèpe,Ail,classic,0.88,cèpes à la bordelaise
+Girolle,Beurre doux,classic,0.85,poêlée
+Morille,Crème liquide entière,classic,0.9,poulet aux morilles
+Morille,Vin jaune,regional,0.9,poulet au vin jaune et morilles
+Truffe noire,Œuf de poule,classic,0.9,brouillade truffée
+Truffe noire,Pomme de terre,classic,0.85,purée truffée
+Shiitake,Sauce soja,classic,0.88,cuisine japonaise
+Shiitake,Gingembre,classic,0.82,sauté
+Bœuf (viande),Poivre noir,classic,0.92,steak au poivre
+Bœuf (viande),Beurre doux,classic,0.9,steak au beurre
+Bœuf (viande),Vin rouge,classic,0.9,bourguignon
+Bœuf (viande),Thym,classic,0.85,rôti
+Bœuf (viande),Moutarde de Dijon,classic,0.85,rôti, tartare
+Bœuf (viande),Carotte,classic,0.85,bœuf carottes
+Bœuf (viande),Champignon de Paris,classic,0.85,bourguignon
+Bœuf (viande),Roquefort,classic,0.82,sauce roquefort
+Bœuf (viande),Raifort,classic,0.8,rosbif
+Bœuf (viande),Sauce soja,classic,0.82,marinade asiatique
+Bœuf (viande),Laurier,classic,0.8,pot-au-feu
+Agneau (viande),Romarin,classic,0.92,gigot
+Agneau (viande),Ail,classic,0.9,gigot
+Agneau (viande),Thym,classic,0.88,gigot
+Agneau (viande),Menthe,classic,0.8,sauce à la menthe
+Agneau (viande),Cumin moulu,classic,0.85,méchoui, tajine
+Agneau (viande),Abricot crue,regional,0.8,tajine
+Agneau (viande),Pruneau,regional,0.82,tajine
+Agneau (viande),Harissa,regional,0.8,couscous
+Porc (viande),Pomme crue,classic,0.88,rôti de porc aux pommes
+Porc (viande),Sauge,classic,0.85,saltimbocca
+Porc (viande),Moutarde à l'ancienne,classic,0.85,filet mignon
+Porc (viande),Miel,classic,0.82,travers laqués
+Porc (viande),Sauce soja,classic,0.82,porc laqué
+Porc (viande),Gingembre,classic,0.8,cuisine asiatique
+Porc (viande),Prune crue,classic,0.8,porc aux pruneaux
+Porc (viande),Fenouil,regional,0.8,porchetta
+Veau (viande),Citron jaune cru,classic,0.85,escalope milanaise
+Veau (viande),Sauge,classic,0.88,saltimbocca
+Veau (viande),Crème liquide entière,classic,0.85,blanquette
+Veau (viande),Champignon de Paris,classic,0.85,blanquette
+Poulet (viande),Thym,classic,0.88,poulet rôti
+Poulet (viande),Citron jaune cru,classic,0.9,poulet au citron
+Poulet (viande),Estragon,classic,0.9,poulet à l'estragon
+Poulet (viande),Ail,classic,0.88,poulet rôti
+Poulet (viande),Romarin,classic,0.85,poulet rôti
+Poulet (viande),Crème liquide entière,classic,0.85,poulet à la crème
+Poulet (viande),Curry en poudre,classic,0.85,poulet au curry
+Poulet (viande),Lait de coco,classic,0.85,curry thaï
+Poulet (viande),Gingembre,classic,0.82,cuisine asiatique
+Poulet (viande),Paprika,classic,0.82,poulet paprika
+Poulet (viande),Morille,classic,0.88,poulet aux morilles
+Poulet (viande),Olive verte en saumure,regional,0.8,tajine
+Poulet (viande),Vin blanc sec,classic,0.82,cocotte
+Canard (viande),Orange cru,classic,0.92,canard à l'orange
+Canard (viande),Cerise crue,classic,0.88,magret aux cerises
+Canard (viande),Miel,classic,0.85,magret au miel
+Canard (viande),Figue,classic,0.85,magret aux figues
+Canard (viande),Poivre de Sichuan,modern,0.8,canard laqué
+Canard (viande),Anis étoilé,classic,0.82,canard laqué
+Lapin (viande),Moutarde de Dijon,classic,0.88,lapin à la moutarde
+Lapin (viande),Prune crue,classic,0.8,lapin aux pruneaux
+Lapin (viande),Romarin,classic,0.82,lapin rôti
+Saumon,Aneth,classic,0.9,gravlax
+Saumon,Citron jaune cru,classic,0.92,saumon au citron
+Saumon,Crème aigre,classic,0.85,saumon fumé
+Saumon,Sauce soja,classic,0.85,teriyaki
+Saumon,Gingembre,classic,0.82,cuisine asiatique
+Saumon,Oseille,classic,0.85,saumon à l'oseille
+Saumon,Graine de sésame,modern,0.78,tataki
+Cabillaud,Citron jaune cru,classic,0.88,poisson au citron
+Cabillaud,Huile d'olive vierge extra,classic,0.8,cuisine méditerranéenne
+Cabillaud,Persil,classic,0.82,persillade
+Cabillaud,Beurre doux,classic,0.85,beurre blanc
+Sole,Beurre doux,classic,0.9,sole meunière
+Sole,Citron jaune cru,classic,0.88,sole meunière
+Thon,Graine de sésame,classic,0.85,tataki
+Thon,Sauce soja,classic,0.85,sashimi
+Thon,Citron vert cru,classic,0.82,ceviche
+Maquereau,Moutarde de Dijon,classic,0.82,maquereau à la moutarde
+Maquereau,Vin blanc sec,classic,0.85,maquereaux au vin blanc
+Sardine,Citron jaune cru,classic,0.85,sardines grillées
+Anchois,Beurre doux,classic,0.85,beurre d'anchois
+Anchois,Ail,classic,0.85,anchoïade
+Anchois,Capre,classic,0.82,tapenade
+Anchois,Olive noire en saumure,classic,0.85,tapenade
+Huître,Citron jaune cru,classic,0.95,huîtres
+Huître,Échalote,classic,0.88,sauce mignonnette
+Huître,Vin blanc sec,classic,0.85,accord mets-vin
+Moule,Vin blanc sec,classic,0.9,moules marinières
+Moule,Persil,classic,0.85,moules marinières
+Moule,Crème liquide entière,classic,0.85,moules à la crème
+Moule,Échalote,classic,0.85,moules marinières
+Crevette,Citron vert cru,classic,0.85,ceviche
+Crevette,Coriandre fraîche,classic,0.85,cuisine thaïe
+Crevette,Lait de coco,classic,0.85,curry
+Coquille Saint-Jacques,Beurre doux,classic,0.9,noix de Saint-Jacques poêlées
+Coquille Saint-Jacques,Citron jaune cru,classic,0.85,carpaccio
+Homard,Beurre doux,classic,0.92,homard au beurre
+Calmar,Ail,classic,0.85,calamars à l'ail
+Calmar,Citron jaune cru,classic,0.85,friture
+Œuf de poule,Beurre doux,classic,0.85,œufs brouillés
+Œuf de poule,Ciboulette,classic,0.85,omelette
+Œuf de poule,Parmigiano Reggiano,classic,0.85,carbonara
+Œuf de poule,Sucre blanc,classic,0.88,pâtisserie
+Œuf de poule,Lait entier,classic,0.88,crème anglaise, flan
+Œuf de poule,Vanille (gousse),classic,0.85,crème anglaise
+Jaune d'œuf,Huile de colza,classic,0.85,mayonnaise
+Jaune d'œuf,Moutarde de Dijon,classic,0.88,mayonnaise
+Jaune d'œuf,Sucre blanc,classic,0.88,crème pâtissière
+Blanc d'œuf,Sucre blanc,classic,0.9,meringue
+Mozzarella,Huile d'olive vierge extra,classic,0.85,caprese
+Parmigiano Reggiano,Poivre noir,classic,0.88,cacio e pepe
+Pecorino Romano,Poivre noir,classic,0.9,cacio e pepe
+Pecorino Romano,Miel,regional,0.8,fromage et miel
+Chèvre frais,Miel,classic,0.88,toast chèvre miel
+Chèvre frais,Thym,classic,0.82,chèvre chaud
+Chèvre frais,Betterave,classic,0.82,salade
+Roquefort,Noix crue,classic,0.88,salade
+Roquefort,Poire,classic,0.88,tarte
+Roquefort,Porto,classic,0.85,accord fromage-vin
+Comté,Noix crue,classic,0.82,plateau de fromages
+Comté,Vin jaune,regional,0.9,Jura
+Camembert,Pomme crue,classic,0.85,Normandie
+Camembert,Calvados,regional,0.85,Normandie
+Brie,Truffe noire,classic,0.85,brie truffé
+Feta,Pastèque,modern,0.78,salade
+Feta,Olive noire en saumure,classic,0.85,salade grecque
+Feta,Origan,classic,0.85,salade grecque
+Ricotta,Miel,classic,0.82,dessert
+Mascarpone,Café espresso,classic,0.9,tiramisu
+Mascarpone,Cacao en poudre,classic,0.85,tiramisu
+Yaourt nature,Concombre,classic,0.85,tzatziki
+Yaourt nature,Menthe,classic,0.85,raïta
+Yaourt nature,Miel,classic,0.85,dessert
+Crème liquide entière,Vanille (gousse),classic,0.9,crème brûlée
+Beurre doux,Citron jaune cru,classic,0.85,beurre blanc
+Beurre doux,Sucre blanc,classic,0.85,caramel beurre salé
+Beurre demi-sel,Caramel,classic,0.9,caramel au beurre salé
+Chocolat noir 70%,Framboise crue,classic,0.88,dessert
+Chocolat noir 70%,Orange cru,classic,0.88,orangettes
+Chocolat noir 70%,Café espresso,classic,0.9,moka
+Chocolat noir 70%,Noisette torréfiée,classic,0.92,praliné, gianduja
+Chocolat noir 70%,Menthe,classic,0.82,after eight
+Chocolat noir 70%,Piment fort,modern,0.75,mole, chocolat pimenté
+Chocolat noir 70%,Beurre doux,classic,0.88,fondant
+Chocolat noir 70%,Crème liquide entière,classic,0.9,ganache
+Chocolat noir 70%,Poire,classic,0.85,poire belle-Hélène
+Chocolat noir 70%,Banane,classic,0.82,dessert
+Chocolat noir 70%,Cerise crue,classic,0.85,forêt noire
+Chocolat noir 70%,Fleur de sel,modern,0.82,chocolat au sel
+Chocolat noir 70%,Whisky,modern,0.78,truffes
+Chocolat au lait,Noisette torréfiée,classic,0.9,gianduja
+Chocolat blanc,Framboise crue,classic,0.82,dessert
+Chocolat blanc,Fruit de la passion,modern,0.82,dessert
+Cacao en poudre,Cannelle,classic,0.82,chocolat mexicain
+Vanille (gousse),Fraise crue,classic,0.92,dessert
+Vanille (gousse),Pomme cuite,classic,0.85,compote
+Vanille (gousse),Lait entier,classic,0.88,riz au lait
+Vanille (gousse),Rhum ambré,classic,0.85,cannelés, baba
+Vanille (gousse),Pêche crue,classic,0.85,pêche Melba
+Cannelle,Pomme cuite,classic,0.95,tarte aux pommes
+Cannelle,Sucre roux,classic,0.88,cannelle-sucre
+Cannelle,Orange cru,classic,0.82,vin chaud
+Cannelle,Café espresso,classic,0.8,café épicé
+Cannelle,Agneau (viande),regional,0.8,tajine
+Pomme cuite,Beurre doux,classic,0.88,tarte tatin
+Pomme cuite,Caramel,classic,0.9,tarte tatin
+Pomme crue,Céleri branche,classic,0.8,salade Waldorf
+Pomme crue,Noix crue,classic,0.82,salade
+Fraise crue,Crème liquide entière,classic,0.9,fraises à la crème
+Fraise crue,Sucre blanc,classic,0.85,dessert
+Fraise crue,Rhubarbe,classic,0.88,tarte
+Fraise crue,Vinaigre balsamique,modern,0.8,dessert
+Fraise crue,Poivre noir,modern,0.68,dessert (rotundone)
+Fraise crue,Menthe,classic,0.82,salade de fruits
+Framboise crue,Pêche crue,classic,0.88,pêche Melba
+Framboise crue,Rose,modern,0.85,Ispahan
+Framboise crue,Litchi,modern,0.85,Ispahan
+Pêche crue,Vin blanc moelleux,classic,0.82,dessert
+Abricot crue,Amande crue,classic,0.9,tarte (benzaldéhyde commun)
+Abricot crue,Romarin,modern,0.78,dessert
+Cerise crue,Amande crue,classic,0.88,clafoutis (benzaldéhyde)
+Cerise crue,Kirsch,classic,0.88,forêt noire
+Prune crue,Cannelle,classic,0.82,tarte
+Banane,Rhum ambré,classic,0.88,banane flambée
+Banane,Caramel,classic,0.85,dessert
+Mangue crue,Citron vert cru,classic,0.88,dessert
+Mangue crue,Piment fort,modern,0.75,salade (mangue pimentée)
+Mangue crue,Lait de coco,classic,0.85,riz gluant
+Mangue crue,Fruit de la passion,classic,0.85,dessert
+Ananas,Rhum blanc,classic,0.88,piña colada
+Ananas,Lait de coco,classic,0.88,piña colada
+Ananas,Porc (viande),regional,0.8,porc aigre-doux
+Citron jaune cru,Sucre blanc,classic,0.88,tarte au citron
+Citron jaune cru,Thym,modern,0.8,marinade
+Citron jaune cru,Miel,classic,0.85,boissons, desserts
+Citron vert cru,Coriandre fraîche,classic,0.88,cuisines mexicaine et thaïe
+Citron vert cru,Rhum blanc,classic,0.9,mojito, daïquiri
+Citron vert cru,Menthe,classic,0.9,mojito
+Citron vert cru,Tequila blanco,classic,0.9,margarita
+Orange cru,Chocolat au lait,classic,0.82,dessert
+Orange cru,Fenouil,classic,0.82,salade sicilienne
+Orange cru,Carotte,classic,0.8,salade
+Menthe,Petit pois,classic,0.82,petits pois à la menthe
+Menthe,Concombre,classic,0.82,salade
+Coriandre fraîche,Gingembre,classic,0.85,cuisine asiatique
+Coriandre fraîche,Lait de coco,classic,0.82,curry
+Gingembre,Sauce soja,classic,0.9,cuisine asiatique
+Gingembre,Citron jaune cru,classic,0.82,infusion
+Gingembre,Miel,classic,0.82,infusion
+Gingembre,Carotte,classic,0.85,velouté
+Gingembre,Lait de coco,classic,0.85,curry
+Curcuma,Lait de coco,classic,0.82,curry
+Curcuma,Gingembre,classic,0.85,curry, golden milk
+Curcuma,Poivre noir,classic,0.82,curry (pipérine)
+Cumin moulu,Coriandre fraîche,classic,0.82,cuisines indienne et mexicaine
+Cumin moulu,Pois chiche cuit,classic,0.88,houmous, falafel
+Pois chiche cuit,Tahini,classic,0.92,houmous
+Pois chiche cuit,Citron jaune cru,classic,0.88,houmous
+Pois chiche cuit,Ail,classic,0.85,houmous
+Lentille verte cuit,Lardons,classic,0.85,petit salé
+Lentille verte cuit,Carotte,classic,0.82,lentilles
+Lentille corail cuit,Lait de coco,classic,0.85,dal
+Lentille corail cuit,Curcuma,classic,0.85,dal
+Haricot rouge cuit,Cumin moulu,classic,0.85,chili
+Haricot blanc cuit,Romarin,classic,0.82,cuisine toscane
+Haricot blanc cuit,Tomate fraîche,classic,0.82,haricots à la tomate
+Riz grain,Lait de coco,classic,0.82,riz coco
+Riz grain,Safran,classic,0.88,paella, risotto milanese
+Riz grain,Parmigiano Reggiano,classic,0.85,risotto
+Farine de blé tendre,Beurre doux,classic,0.9,pâtisserie
+Farine de blé tendre,Sucre blanc,classic,0.88,pâtisserie
+Farine de blé tendre,Œuf de poule,classic,0.9,pâtisserie
+Farine de blé tendre,Levure boulangère sèche,classic,0.9,pain
+Farine de blé tendre,Sel fin,classic,0.85,pain
+Farine de sarrasin,Œuf de poule,regional,0.85,galette bretonne
+Farine de sarrasin,Beurre demi-sel,regional,0.88,galette bretonne
+Amande crue,Miel,classic,0.85,nougat
+Amande crue,Fleur d'oranger,regional,0.85,pâtisserie orientale
+Amande crue,Eau de fleur d'oranger,regional,0.85,pâtisserie orientale
+Noisette torréfiée,Café espresso,classic,0.85,dessert
+Noix crue,Miel,classic,0.85,dessert
+Noix crue,Figue,classic,0.82,plateau de fromages
+Pistache crue,Framboise crue,modern,0.82,dessert
+Pistache crue,Eau de rose,regional,0.85,pâtisserie orientale
+Pistache crue,Chocolat blanc,modern,0.8,dessert
+Arachide torréfiée,Chocolat au lait,classic,0.85,confiserie
+Arachide torréfiée,Sauce soja,classic,0.82,sauce satay
+Arachide torréfiée,Citron vert cru,regional,0.82,pad thaï
+Graine de sésame,Sauce soja,classic,0.88,cuisine japonaise
+Graine de sésame,Miel,classic,0.82,confiserie
+Châtaigne crue,Chocolat noir 70%,classic,0.82,dessert
+Châtaigne crue,Vanille (gousse),classic,0.82,crème de marrons
+Miel,Thym,classic,0.8,miel de thym
+Miel,Moutarde à l'ancienne,classic,0.82,sauce miel-moutarde
+Miel,Fromage frais,classic,0.8,dessert
+Sirop d'érable,Noix crue,classic,0.85,dessert
+Sirop d'érable,Porc (viande),regional,0.8,bacon à l'érable
+Café espresso,Lait entier,classic,0.9,cappuccino
+Café espresso,Sucre roux,classic,0.82,café
+Café espresso,Cardamome,regional,0.82,café arabe
+Café espresso,Vanille (gousse),classic,0.82,dessert
+Café espresso,Whisky,classic,0.82,irish coffee
+Thé vert,Menthe,regional,0.88,thé à la menthe
+Thé matcha,Chocolat blanc,modern,0.82,dessert
+Thé noir,Lait entier,classic,0.85,thé au lait
+Thé noir,Bergamote cru,classic,0.9,Earl Grey
+Vin rouge,Bœuf (viande),classic,0.9,accord mets-vin
+Vin rouge,Cannelle,classic,0.82,vin chaud
+Vin rouge,Poire,classic,0.85,poires au vin
+Vin blanc sec,Moule,classic,0.9,moules marinières
+Champagne brut,Huître,classic,0.88,accord mets-vin
+Gin,Tonic water,classic,0.92,gin tonic
+Gin,Concombre,modern,0.82,gin tonic concombre
+Rhum blanc,Menthe,classic,0.9,mojito
+Whisky,Miel,classic,0.82,hot toddy
+Sauce soja,Miel,classic,0.82,laquage
+Sauce soja,Sucre roux,classic,0.82,teriyaki
+Sauce soja,Mirin,classic,0.9,teriyaki
+Miso blanc,Beurre doux,modern,0.82,beurre miso
+Miso blanc,Saumon,modern,0.82,saumon au miso
+Sauce de poisson (Viet),Citron vert cru,classic,0.9,nuoc cham
+Sauce nuoc-mâm,Citron vert cru,classic,0.9,nuoc cham
+Lait de coco,Citronnelle,classic,0.88,cuisine thaïe
+Lait de coco,Piment fort,classic,0.85,curry
+Kombu,Bonite,classic,0.92,dashi
+Moutarde de Dijon,Vinaigre de vin rouge,classic,0.85,vinaigrette
+Huile d'olive vierge extra,Vinaigre balsamique,classic,0.88,vinaigrette
+Huile d'olive vierge extra,Citron jaune cru,classic,0.88,vinaigrette
+Laurier,Thym,classic,0.88,bouquet garni
+Persil,Thym,classic,0.85,bouquet garni
+Persil,Citron jaune cru,classic,0.85,taboulé
+Persil,Menthe,classic,0.85,taboulé
+Estragon,Moutarde de Dijon,classic,0.82,sauce
+Aneth,Concombre,classic,0.88,salade
+Aneth,Pomme de terre,classic,0.82,cuisine scandinave
+Ciboulette,Crème aigre,classic,0.88,sauce
+Sauge,Beurre doux,classic,0.88,beurre de sauge
+Sauge,Courge butternut,classic,0.88,ravioli
+Romarin,Citron jaune cru,modern,0.78,marinade
+Thym,Citron jaune cru,modern,0.78,marinade
+Muscade,Crème liquide entière,classic,0.85,béchamel
+Muscade,Lait entier,classic,0.85,béchamel
+Safran,Moule,classic,0.85,mouclade
+Safran,Poisson,classic,0.85,bouillabaisse
+Safran,Riz grain,classic,0.88,paella
+Clou de girofle,Orange cru,classic,0.82,vin chaud, pomander
+Clou de girofle,Oignon,classic,0.8,bouillon (oignon piqué)
+Anis étoilé,Poire,classic,0.82,poires pochées
+Cardamome,Orange cru,modern,0.8,dessert
+Cardamome,Riz grain,regional,0.82,biryani, kheer
+Paprika,Poulet (viande),classic,0.82,goulash
+Poivre noir,Fraise crue,modern,0.68,dessert
+Piment d'Espelette,Œuf de poule,regional,0.82,piperade
+Piment d'Espelette,Chocolat noir 70%,modern,0.75,dessert pimenté
+Courge butternut,Muscade,classic,0.85,velouté
+Courge butternut,Crème liquide entière,classic,0.82,velouté
+Potiron,Cannelle,classic,0.85,pumpkin pie
+Betterave,Chèvre frais,classic,0.85,salade
+Betterave,Orange cru,modern,0.8,salade
+Betterave,Raifort,regional,0.82,cuisine d'Europe de l'Est
+Endive,Roquefort,classic,0.85,salade
+Endive,Noix crue,classic,0.85,salade
+Endive,Jambon,classic,0.82,endives au jambon
+Fenouil,Orange cru,classic,0.82,salade sicilienne
+Fenouil,Saumon,classic,0.8,poisson au fenouil
+Asperge,Beurre doux,classic,0.85,sauce hollandaise
+Radis,Beurre doux,classic,0.85,radis beurre
+Concombre,Menthe,classic,0.85,tzatziki
+Avocat,Citron vert cru,classic,0.9,guacamole
+Avocat,Coriandre fraîche,classic,0.88,guacamole
+Avocat,Tomate fraîche,classic,0.85,guacamole
+Olive noire en saumure,Romarin,classic,0.8,olives marinées
+Tahini,Citron jaune cru,classic,0.88,sauce tahini
+Chocolat noir 70%,Anchois,contrast_negative,0.2,contraste désagréable (benchmark phase 3)
+Vin rouge,Citron jaune cru,contrast_negative,0.25,acidité excessive et tanins durcis (benchmark phase 3)
+Vin rouge,Huître,contrast_negative,0.25,tanins + iode : goût métallique
+Vin rouge,Chocolat blanc,contrast_negative,0.3,tanins contre sucre gras
+Lait entier,Citron jaune cru,contrast_negative,0.25,caillage acide du lait
+Thé vert,Lait entier,contrast_negative,0.35,masquage des notes végétales
+Menthe,Café espresso,contrast_negative,0.35,fraîcheur mentholée contre amertume torréfiée
+Ail,Chocolat au lait,contrast_negative,0.15,incompatibilité sucré-soufré
+Oignon,Fraise crue,contrast_negative,0.2,incompatibilité soufré-fruité
+Vinaigre blanc,Chocolat noir 70%,contrast_negative,0.25,acidité agressive
+Anchois,Fraise crue,contrast_negative,0.15,incompatibilité marin-fruité
+Sauce de poisson (Viet),Chocolat au lait,contrast_negative,0.15,incompatibilité
+Moutarde de Dijon,Chocolat au lait,contrast_negative,0.2,incompatibilité piquant-lacté
+Cumin moulu,Fraise crue,contrast_negative,0.3,terreux contre fruité délicat
+Café espresso,Citron jaune cru,contrast_negative,0.35,acidité excessive

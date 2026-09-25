@@ -1,0 +1,604 @@
+ingredient_id,density_g_per_ml,density_note,unit_masses,ph,ph_confidence,ph_note
+ING-PLANT-POMME-000001,,,piece:150,3.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pomme : pectine HM naturelle"
+ING-PLANT-POMME-000002,,,piece:150,3.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pomme : pectine HM naturelle"
+ING-PLANT-POMME-000003,,,,,,
+ING-PLANT-POMME-000004,1.04,jus,,,,
+ING-PLANT-ORANGE-000001,,,piece:180,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agrume"
+ING-PLANT-ZESTEORANGE-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — zeste : riche en pectine HM"
+ING-PLANT-CITRONJAUNE-000001,,,piece:110,2.3,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — citron : acide citrique ≈ 5 % du jus"
+ING-PLANT-ZESTECITRONJ-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — zeste : riche en pectine HM"
+ING-PLANT-CITRONVERT-000001,,,piece:60,2.1,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agrume très acide (acide citrique du jus)"
+ING-PLANT-ZESTECITRONV-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — zeste : riche en pectine HM"
+ING-PLANT-PAMPLEMOUSSE-000001,,,piece:300,3.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agrume acide"
+ING-PLANT-ZESTEPAMPLEM-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — zeste : riche en pectine HM"
+ING-PLANT-MANDARINE-000001,,,piece:70,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agrume"
+ING-PLANT-ZESTEMANDARI-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — zeste : riche en pectine HM"
+ING-PLANT-BERGAMOTE-000001,,,,3.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agrume acide"
+ING-PLANT-ZESTEBERGAMO-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — zeste : riche en pectine HM"
+ING-PLANT-YUZU-000001,,,,3.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agrume acide"
+ING-PLANT-ZESTEYUZU-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — zeste : riche en pectine HM"
+ING-PLANT-COMBAVA-000001,,,,2.1,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agrume très acide (acide citrique du jus)"
+ING-PLANT-FRAISE-000001,,,piece:15,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fraise"
+ING-PLANT-FRAMBOISE-000001,,,piece:4,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies"
+ING-PLANT-MYRTILLE-000001,,,,3.1,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies"
+ING-PLANT-MRE-000001,,,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies"
+ING-PLANT-CASSIS-000001,,,,3.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies riches en pectine et en acide"
+ING-PLANT-GROSEILLE-000001,,,,3.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies riches en pectine et en acide"
+ING-PLANT-CANNEBERGE-000001,,,,3.1,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies"
+ING-PLANT-MREBLANCHE-000001,,,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies"
+ING-PLANT-AIRELLE-000001,,,,3.1,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies"
+ING-PLANT-GROSEILLEMAQ-000001,,,,3.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — baies riches en pectine et en acide"
+ING-PLANT-PCHE-000001,,,piece:150,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pêche"
+ING-PLANT-ABRICOT-000001,,,piece:45,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — abricot"
+ING-PLANT-PRUNE-000001,,,piece:30,3.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — prune"
+ING-PLANT-CERISE-000001,,,piece:7,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cerise"
+ING-PLANT-OLIVE-000001,,,piece:4,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — conserve acidifiée ou saumurée"
+ING-PLANT-MANGUE-000001,,,piece:300,4.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — mangue"
+ING-PLANT-BANANE-000001,,,piece:120,4.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — banane"
+ING-PLANT-ANANAS-000001,,,piece:900,3.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — ananas"
+ING-PLANT-FRUITDELAPAS-000001,,,,,,
+ING-PLANT-PAPAYE-000001,,,,,,
+ING-PLANT-GOYAVE-000001,,,,,,
+ING-PLANT-LITCHI-000001,,,,,,
+ING-PLANT-FRUITDUDRAGO-000001,,,,,,
+ING-PLANT-KAKI-000001,,,,,,
+ING-PLANT-GRENADE-000001,,,piece:250,,,
+ING-PLANT-CARAMBOLE-000001,,,,,,
+ING-PLANT-KIWI-000001,,,piece:80,3.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — kiwi"
+ING-PLANT-PHYSALIS-000001,,,,,,
+ING-PLANT-RAISIN-000001,,,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — raisin (acide tartrique assimilé)"
+ING-PLANT-RAISINSEC-000001,,,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — raisin (acide tartrique assimilé)"
+ING-PLANT-AMANDE-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-AMANDETORRFI-000001,0.55,fruits à coque hachés,,,,
+ING-TECH-BEURREDEAMAN-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-PLANT-NOISETTE-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-NOISETTETORR-000001,0.55,fruits à coque hachés,,,,
+ING-TECH-BEURREDENOIS-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-PLANT-NOIX-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-NOIXTORRFIE-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-PISTACHE-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-PISTACHETORR-000001,0.55,fruits à coque hachés,,,,
+ING-TECH-BEURREDEPIST-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-PLANT-CAJOU-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-CAJOUTORRFIE-000001,0.55,fruits à coque hachés,,,,
+ING-TECH-BEURREDECAJO-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-PLANT-PCAN-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-PCANTORRFIE-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-NOIXDUBRSIL-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-NOIXDUBRSILT-000001,0.55,fruits à coque hachés,,,,
+ING-TECH-BEURREDENOIX-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-PLANT-NOIXDEMACADA-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-NOIXDEMACADA-000002,0.55,fruits à coque hachés,,,,
+ING-TECH-BEURREDENOIX-000002,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-PLANT-PIGNONDEPIN-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-PIGNONDEPINT-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-CHTAIGNE-000001,,,,,,
+ING-PLANT-CHTAIGNETORR-000001,,,,,,
+ING-PLANT-ARACHIDE-000001,0.55,fruits à coque hachés,,,,
+ING-PLANT-ARACHIDETORR-000001,0.55,fruits à coque hachés,,,,
+ING-TECH-BEURREDEARAC-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-FERMENT-CONFITUREFRA-000001,,,,,,
+ING-FERMENT-CONFITUREABR-000001,,,,,,
+ING-FERMENT-MARMELADEORA-000001,,,,,,
+ING-PLANT-TOMATE-000001,1.02,tomate moyenne,piece:120,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tomate : glutamate libre et acide citrique"
+ING-PLANT-TOMATESCHE-000001,1.02,tomate moyenne,piece:120,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tomate séchée : glutamate libre concentré"
+ING-FERMENT-CONCENTRDETO-000001,,,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tomate : glutamate libre et acide citrique"
+ING-FERMENT-COULISDETOMA-000001,,,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tomate : glutamate libre et acide citrique"
+ING-PLANT-POIVRONROUGE-000001,,,piece:170,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-POIVRONVERT-000001,,,piece:170,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-PIMENTFORT-000001,,,piece:10,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-PIMENTDESPEL-000001,,,piece:10,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-PIMENTOISEAU-000001,,,piece:10,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-AUBERGINE-000001,,,piece:300,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-POMMEDETERRE-000001,,,piece:150,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tubercule amylacé"
+ING-PLANT-COURGETTE-000001,,,piece:250,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-COURGEBUTTER-000001,0.60,graines,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-POTIRON-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CONCOMBRE-000001,,,piece:350,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-MELON-000001,,,piece:900,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — melon"
+ING-PLANT-PASTQUE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — melon"
+ING-PLANT-LAITUE-000001,,,piece:300,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-PINARD-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-ROQUETTE-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CHOUVERT-000001,,,piece:1000,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CHOUFRIS-000001,,,piece:1000,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CHOUROUGE-000001,,,piece:1000,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CHOUBLANC-000001,,,piece:1000,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CHOUFLEUR-000001,,,piece:800,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-BROCOLI-000001,,,piece:400,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-MCHE-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CRESSON-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-PISSENLIT-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-BETTE-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-ENDIVE-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-POUSSESDPINA-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CAROTTE-000001,,,piece:100,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-BETTERAVE-000001,,,piece:150,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-NAVET-000001,,,piece:120,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-RADIS-000001,,,piece:10,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-PANAIS-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-PATATEDOUCE-000001,,,piece:250,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tubercule amylacé"
+ING-PLANT-MANIOC-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tubercule amylacé"
+ING-PLANT-TOPINAMBOUR-000001,,,,5.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — topinambour : inuline"
+ING-PLANT-OIGNON-000001,,,piece:110,5.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — oignon : fructanes"
+ING-PLANT-AIL-000001,,,gousse:5|piece:40,5.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — ail : fructanes"
+ING-PLANT-CHALOTE-000001,,,piece:25,5.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — oignon : fructanes"
+ING-PLANT-POIREAU-000001,,,piece:160,4.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poire"
+ING-PLANT-CLERIRAVE-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-CLERIBRANCHE-000001,,,piece:40,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-RUTABAGA-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume (valeur médiane)"
+ING-PLANT-POISCHICHE-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de pois"
+ING-PLANT-POISCHICHECU-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de pois"
+ING-PLANT-LENTILLEVERT-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-LENTILLEVERT-000002,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-LENTILLECORA-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-LENTILLECORA-000002,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-LENTILLENOIR-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-LENTILLENOIR-000002,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-HARICOTROUGE-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-HARICOTROUGE-000002,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-HARICOTBLANC-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-HARICOTBLANC-000002,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-HARICOTNOIR-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-HARICOTNOIRC-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-FLAGEOLET-000001,,,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-FLAGEOLETCUI-000001,,,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-POISCASS-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de pois"
+ING-PLANT-POISCASSCUIT-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de pois"
+ING-PLANT-POIS-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de pois"
+ING-PLANT-POISCUIT-000001,0.80,légumineuse sèche,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de pois"
+ING-PLANT-FVE-000001,,,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-FVECUIT-000001,,,,6.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légumineuse"
+ING-PLANT-SOJA-000001,,,,6.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de soja"
+ING-PLANT-SOJACUIT-000001,,,,6.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de soja"
+ING-PLANT-LUPIN-000001,,,,,,
+ING-PLANT-LUPINCUIT-000001,,,,,,
+ING-FUNGUS-CHAMPIGNONDE-000001,,,piece:20,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — champignon"
+ING-FUNGUS-CPE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — champignon"
+ING-FUNGUS-GIROLLE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — champignon"
+ING-FUNGUS-PLEUROTE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — champignon"
+ING-FUNGUS-SHIITAKE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — shiitake séché : glutamate et guanylate"
+ING-FUNGUS-MORILLE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — champignon"
+ING-FUNGUS-TRUFFENOIRE-000001,,,,,,
+ING-MARINE-WAKAM-000001,,,,6.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — algue"
+ING-MARINE-NORI-000001,,,,6.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — algue"
+ING-MARINE-KOMBU-000001,,,,6.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — kombu : glutamate libre très élevé"
+ING-MARINE-DULSE-000001,,,,6.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — algue"
+ING-MARINE-SPAGHETTIDEM-000001,,,,6.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — algue"
+ING-MARINE-LAITUEDEMER-000001,,,piece:300,6.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — algue"
+ING-MARINE-SPIRULINE-000001,,,,,,
+ING-PLANT-BLTENDRE-000001,,,,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-TECH-FARINEDEBLTE-000001,0.55,poudre (cuillère rase),,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-TECH-FLOCONSDEBLT-000001,0.40,flocons,,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-PLANT-BLDUR-000001,,,,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-TECH-FARINEDEBLDU-000001,0.55,poudre (cuillère rase),,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-TECH-FLOCONSDEBLD-000001,0.40,flocons,,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-PLANT-PEAUTRE-000001,,,,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-TECH-FARINEDEPEAU-000001,0.55,poudre (cuillère rase),,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blé : gluten ≈ 80 % des protéines"
+ING-TECH-FLOCONSDEPEA-000001,0.40,flocons,,,,
+ING-PLANT-SEIGLE-000001,,,,6.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — seigle/orge : réseau gluten faible"
+ING-TECH-FARINEDESEIG-000001,0.55,poudre (cuillère rase),,6.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — seigle/orge : réseau gluten faible"
+ING-TECH-FLOCONSDESEI-000001,0.40,flocons,,6.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — seigle/orge : réseau gluten faible"
+ING-PLANT-ORGE-000001,,,,6.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — seigle/orge : réseau gluten faible"
+ING-TECH-FARINEDEORGE-000001,0.55,poudre (cuillère rase),,,,
+ING-TECH-FLOCONSDEORG-000001,0.40,flocons,,6.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — seigle/orge : réseau gluten faible"
+ING-PLANT-AVOINE-000001,,,,,,
+ING-TECH-FARINEDEAVOI-000001,0.55,poudre (cuillère rase),,,,
+ING-TECH-FLOCONSDEAVO-000001,0.40,flocons,,,,
+ING-PLANT-MAS-000001,,,,6.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — maïs"
+ING-TECH-FARINEDEMAS-000001,0.55,poudre (cuillère rase),,6.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — maïs"
+ING-TECH-FLOCONSDEMAS-000001,0.40,flocons,,6.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — maïs"
+ING-PLANT-RIZ-000001,0.85,riz cru,,6.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — riz"
+ING-TECH-FARINEDERIZ-000001,0.55,poudre (cuillère rase),,6.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — riz"
+ING-TECH-FLOCONSDERIZ-000001,0.40,flocons,,6.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — riz"
+ING-PLANT-MILLET-000001,,,,,,
+ING-TECH-FARINEDEMILL-000001,0.55,poudre (cuillère rase),,,,
+ING-TECH-FLOCONSDEMIL-000001,0.40,flocons,,,,
+ING-PLANT-SORGHO-000001,,,,,,
+ING-TECH-FARINEDESORG-000001,0.55,poudre (cuillère rase),,,,
+ING-TECH-FLOCONSDESOR-000001,0.40,flocons,,,,
+ING-PLANT-QUINOA-000001,,,,,,
+ING-TECH-FARINEDEQUIN-000001,0.55,poudre (cuillère rase),,,,
+ING-TECH-FLOCONSDEQUI-000001,0.40,flocons,,,,
+ING-PLANT-SARRASIN-000001,,,,,,
+ING-TECH-FARINEDESARR-000001,0.55,poudre (cuillère rase),,,,
+ING-TECH-FLOCONSDESAR-000001,0.40,flocons,,,,
+ING-PLANT-AMARANTE-000001,,,,,,
+ING-TECH-FARINEDEAMAR-000001,0.55,poudre (cuillère rase),,,,
+ING-TECH-FLOCONSDEAMA-000001,0.40,flocons,,,,
+ING-PLANT-GRAINEDESSAM-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDELIN-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDECHIA-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDECOUR-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDETOUR-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDEPAVO-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDECUMI-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDEFENU-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDECORI-000001,0.60,graines,,,,
+ING-PLANT-GRAINEDEMOUT-000001,0.60,graines,,,,
+ING-PLANT-CARDAMOME-000001,0.50,épice en poudre,,,,
+ING-PLANT-ANISVERT-000001,0.50,épice en poudre,,,,
+ING-PLANT-BASILIC-000001,0.25,herbes fraîches,botte:40|brin:2|feuille:0.5,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-PERSIL-000001,0.25,herbes fraîches hachées,botte:50|brin:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-CORIANDREFRA-000001,0.25,herbes fraîches hachées,botte:50|brin:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-MENTHE-000001,0.25,herbes fraîches,botte:40|brin:2|feuille:0.5,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-THYM-000001,,,brin:1|branche:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-ROMARIN-000001,,,brin:1|branche:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-SAUGE-000001,,,brin:1|branche:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-CIBOULETTE-000001,0.25,herbes fraîches hachées,botte:50|brin:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-ANETH-000001,0.25,herbes fraîches hachées,botte:50|brin:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-ESTRAGON-000001,0.25,herbes fraîches hachées,botte:50|brin:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-CLERIBRANCHE-000002,,,piece:40,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-LAURIER-000001,,,feuille:0.2|piece:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-ORIGAN-000001,,,brin:1|branche:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-MARJOLAINE-000001,,,brin:1|branche:1|feuille:0.2,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-CERFEUIL-000001,0.25,herbes fraîches hachées,botte:50|brin:1|feuille:0.2,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-PLANT-VERVEINE-000001,,,,6.0,0.3,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — herbe aromatique"
+ING-PLANT-POIVRENOIR-000001,0.50,épice en poudre,,,,
+ING-PLANT-POIVREBLANC-000001,0.50,épice en poudre,,,,
+ING-PLANT-PAPRIKA-000001,0.50,épice en poudre,,,,
+ING-PLANT-CUMINMOULU-000001,0.50,épice en poudre,,,,
+ING-PLANT-CURCUMA-000001,0.50,épice en poudre,,,,
+ING-PLANT-CANNELLE-000001,0.50,épice en poudre,,,,
+ING-PLANT-CLOUDEGIROFL-000001,0.50,épice en poudre,,,,
+ING-PLANT-MUSCADE-000001,0.50,épice en poudre,,,,
+ING-PLANT-GINGEMBRE-000001,0.95,spiritueux 40 %,,,,
+ING-PLANT-SAFRAN-000001,0.50,épice en poudre,,,,
+ING-PLANT-VANILLEGOUSS-000001,,,gousse:3|piece:3,,,
+ING-PLANT-ANISTOIL-000001,0.50,épice en poudre,,,,
+ING-PLANT-FENUGRECENPO-000001,0.50,épice en poudre,,,,
+ING-PLANT-SUMAC-000001,0.50,épice en poudre,,,,
+ING-PLANT-CURRYENPOUDR-000001,0.50,épice en poudre,,,,
+ING-PLANT-QUATREPICES-000001,0.50,épice en poudre,,,,
+ING-PLANT-PIMENTDECAYE-000001,,,piece:10,,,
+ING-PLANT-POIVREDESICH-000001,0.50,épice en poudre,,,,
+ING-PLANT-KASHMIRICHIL-000001,,,,,,
+ING-PLANT-RASELHANOUT-000001,0.50,épice en poudre,,,,
+ING-PLANT-ZAATAR-000001,0.50,épice en poudre,,,,
+ING-ANIMAL-BUFVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-VEAUVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-PORCVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-AGNEAUVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-MOUTONVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-CHEVALVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-LAPINVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-SANGLIERVIAN-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-CERFVIANDE-000001,,,,5.7,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — viande (pH ultime post-mortem)"
+ING-ANIMAL-CANARDVIANDE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — volaille"
+ING-ANIMAL-POULETVIANDE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — volaille"
+ING-ANIMAL-DINDEVIANDE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — volaille"
+ING-ANIMAL-OIEVIANDE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — volaille"
+ING-ANIMAL-PINTADEVIAND-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — volaille"
+ING-ANIMAL-CAILLEVIANDE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — volaille"
+ING-ANIMAL-FAISANVIANDE-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — volaille"
+ING-ANIMAL-FOIEDEVEAU-000001,,,,,,
+ING-ANIMAL-FOIEDEVOLAIL-000001,,,,,,
+ING-ANIMAL-ROGNONDEVEAU-000001,,,,,,
+ING-ANIMAL-ROGNONDEPORC-000001,,,,,,
+ING-ANIMAL-CURDEBUF-000001,,,,,,
+ING-ANIMAL-LANGUEDEBUF-000001,,,,,,
+ING-ANIMAL-TRIPES-000001,,,,,,
+ING-ANIMAL-RISDEVEAU-000001,,,,,,
+ING-ANIMAL-CERVELLE-000001,,,,,,
+ING-MARINE-SAUMON-000001,,,,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — salmonidé"
+ING-MARINE-THON-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-CABILLAUD-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-LIEUNOIR-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-SOLE-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-BAR-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-DORADE-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-TRUITE-000001,,,,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — salmonidé"
+ING-MARINE-MAQUEREAU-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-SARDINE-000001,,,piece:50,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-ANCHOIS-000001,,,piece:4,5.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — anchois salé"
+ING-MARINE-HARENG-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-COLIN-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-HADDOCKFUM-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-ESPADON-000001,,,,6.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — poisson"
+ING-MARINE-CREVETTE-000001,,,piece:10,7.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — crustacé"
+ING-MARINE-LANGOUSTE-000001,,,,7.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — crustacé"
+ING-MARINE-HOMARD-000001,,,,7.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — crustacé"
+ING-MARINE-CRABE-000001,,,,7.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — crustacé"
+ING-MARINE-CREVISSE-000001,,,,7.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — crustacé"
+ING-MARINE-HUTRE-000001,,,piece:15,6.1,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — mollusque"
+ING-MARINE-MOULE-000001,,,piece:5,6.1,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — mollusque"
+ING-MARINE-COQUILLESAIN-000001,,,piece:25,6.1,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — mollusque"
+ING-MARINE-PALOURDE-000001,,,,6.1,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — mollusque"
+ING-MARINE-BULOT-000001,,,,,,
+ING-MARINE-CALMAR-000001,,,,,,
+ING-MARINE-POULPE-000001,,,,,,
+ING-MARINE-SEICHE-000001,,,,,,
+ING-DAIRY-LAITENTIER-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITDEMICRM-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITCRM-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITCRU-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITUHT-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITCONCENTR-000001,1.30,lait concentré sucré,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITCONCENTR-000002,1.30,lait concentré sucré,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITENPOUDRE-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITDECHVRE-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITDEBREBIS-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-LAITDEJUMENT-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-CRMELIQUIDEE-000001,1.00,crème,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-CRMELIQUIDEA-000001,1.00,crème,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-CRMEPAISSE-000001,1.00,crème,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-CRMEDOUBLE-000001,1.00,crème,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-CRMEAIGRE-000001,1.00,crème,,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — laitage fermenté acide"
+ING-DAIRY-CRMEFRACHEDI-000001,1.00,crème,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-CRMEDECOCO-000001,1.00,crème,,,,
+ING-DAIRY-BABEURRE-000001,,,,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — laitage fermenté acide"
+ING-DAIRY-BEURREDOUX-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-DAIRY-BEURREDEMISE-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-DAIRY-BEURRECLARIF-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-DAIRY-FROMAGEFRAIS-000001,,,,5.3,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage"
+ING-DAIRY-MOZZARELLA-000001,,,,5.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pâte filée"
+ING-DAIRY-RICOTTA-000001,,,,6.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines sériques"
+ING-DAIRY-MASCARPONE-000001,,,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-DAIRY-CHVREFRAIS-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage frais ou saumuré"
+ING-DAIRY-FETA-000001,,,,4.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage frais ou saumuré"
+ING-DAIRY-PARMIGIANORE-000001,0.40,fromage râpé,,5.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage affiné : glutamate libre élevé"
+ING-DAIRY-PECORINOROMA-000001,0.40,fromage râpé,,5.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage affiné : glutamate libre élevé"
+ING-DAIRY-COMT-000001,0.40,fromage râpé,,5.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage à pâte pressée"
+ING-DAIRY-EMMENTAL-000001,0.40,fromage râpé,,5.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage à pâte pressée"
+ING-DAIRY-GRUYRE-000001,0.40,fromage râpé,,5.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage à pâte pressée"
+ING-DAIRY-CAMEMBERT-000001,,,,6.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pâte molle affinée (pH remonte à l'affinage)"
+ING-DAIRY-BRIE-000001,,,,6.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pâte molle affinée (pH remonte à l'affinage)"
+ING-DAIRY-ROQUEFORT-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage à pâte persillée"
+ING-DAIRY-CHEDDAR-000001,,,,5.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage à pâte pressée"
+ING-DAIRY-GORGONZOLA-000001,,,,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — fromage à pâte persillée"
+ING-FERMENT-YAOURTNATURE-000001,1.03,produit laitier fermenté,,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — laitage fermenté acide"
+ING-FERMENT-YAOURTGREC-000001,1.03,produit laitier fermenté,,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — laitage fermenté acide"
+ING-FERMENT-KFIR-000001,,,,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — laitage fermenté acide"
+ING-FERMENT-SKYR-000001,1.03,produit laitier fermenté,,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — laitage fermenté acide"
+ING-FERMENT-LAITRIBOT-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-FERMENT-LASSINATURE-000001,,,,4.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — laitage fermenté acide"
+ING-ANIMAL-UFDEPOULE-000001,1.03,œuf moyen calibre M sans coquille,piece:50,7.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — œuf entier"
+ING-ANIMAL-JAUNEDUF-000001,1.03,jaune d'un œuf moyen,piece:18,6.2,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — jaune : lécithines (émulsifiant) ; protéines coagulables assimilées"
+ING-ANIMAL-BLANCDUF-000001,1.04,blanc d'un œuf moyen,piece:32,8.5,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — blanc d'œuf : ovalbumine majoritaire"
+ING-ANIMAL-UFDECANE-000001,,,,7.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — œuf entier"
+ING-ANIMAL-UFDECAILLE-000001,,,piece:10,7.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — œuf entier"
+ING-ANIMAL-UFDOIE-000001,,,,7.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — œuf entier"
+ING-TECH-SUCREBLANC-000001,0.85,sucre cristallisé,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — saccharose"
+ING-TECH-SUCREROUX-000001,0.80,sucre roux,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — saccharose"
+ING-TECH-CASSONADE-000001,0.80,sucre roux,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — saccharose"
+ING-TECH-SUCREGLACE-000001,0.56,sucre glace,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — saccharose"
+ING-TECH-SUCRECANDI-000001,0.85,sucre cristallisé,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — saccharose"
+ING-TECH-SIROPDRABLE-000001,1.33,sirop,,6.9,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sirop d'érable"
+ING-TECH-MIEL-000001,1.42,miel,,3.9,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — miel"
+ING-TECH-SIROPDEGLUCO-000001,1.33,sirop,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sirop de glucose (DE moyen)"
+ING-TECH-SIROPDEFRUCT-000001,1.33,sirop,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sirop riche en fructose"
+ING-TECH-SIROPDAGAVE-000001,1.33,sirop,,,,
+ING-TECH-MLASSE-000001,,,,,,
+ING-TECH-SIROPDEBL-000001,1.33,sirop,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sirop de glucose (DE moyen)"
+ING-TECH-SIROPDERIZ-000001,1.33,sirop,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sirop de glucose (DE moyen)"
+ING-TECH-SUCREINVERTI-000001,0.85,sucre cristallisé,,4.5,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sucre inverti"
+ING-TECH-DEXTROSE-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — dextrose monohydraté"
+ING-TECH-FRUCTOSE-000001,,,,,,
+ING-TECH-SORBITOLE420-000001,,,,,,
+ING-TECH-MANNITOLE421-000001,,,,,,
+ING-TECH-XYLITOLE967-000001,,,,,,
+ING-TECH-ERYTHRITOLE9-000001,,,,,,
+ING-TECH-MALTITOLE965-000001,,,,,,
+ING-TECH-HUILEDOLIVE-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDOLIVEV-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDETOURN-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDECOLZA-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDEPALME-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDENOIX-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDENOISE-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDAVOCAT-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDESSAME-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDARACHI-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDECOCO-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDELIN-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDEPPINS-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDECARTH-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEDEMAS-000001,0.92,huile végétale,,,,
+ING-ANIMAL-BEURREDECACA-000001,0.91,beurre (noix ≈ 10 g),noix:10,6.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — beurre"
+ING-ANIMAL-GRAISSEDECAN-000001,0.92,huile végétale,,,,
+ING-ANIMAL-SAINDOUX-000001,,,,,,
+ING-TECH-CACAOENPOUDR-000001,0.45,cacao en poudre,,5.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cacao"
+ING-TECH-PTEDECACAO-000001,,,,5.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cacao"
+ING-TECH-CHOCOLATNOIR-000001,,,,5.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cacao"
+ING-TECH-CHOCOLATAULA-000001,,,,5.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cacao"
+ING-TECH-CHOCOLATBLAN-000001,,,,5.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cacao"
+ING-TECH-CHOCOLATNOIR-000002,,,,5.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cacao"
+ING-TECH-CHOCOLATNOIR-000003,,,,5.6,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cacao"
+ING-TECH-GLATINE-000001,,,feuille:2|piece:2,5.5,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — gélatine"
+ING-TECH-AGARAGAR-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — agar-agar"
+ING-TECH-PECTINEHM-000001,,,,3.5,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pectine haut méthoxyle"
+ING-TECH-PECTINELM-000001,,,,4.5,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — pectine bas méthoxyle"
+ING-TECH-CARRAGHNANEK-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — carraghénane κ"
+ING-TECH-CARRAGHNANEI-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — carraghénane ι"
+ING-TECH-CARRAGHNANEL-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — carraghénane λ"
+ING-TECH-ALGINATEDESO-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — alginate de sodium"
+ING-TECH-GOMMEXANTHAN-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — gomme xanthane"
+ING-TECH-GOMMEGUAR-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — gomme guar"
+ING-TECH-GOMMEARABIQU-000001,,,,4.5,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — gomme arabique"
+ING-TECH-GOMMEDECAROU-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — gomme de caroube"
+ING-TECH-AMIDONDEMASM-000001,0.55,poudre (cuillère rase),,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — amidon : ≈ 25 % d'amylose"
+ING-TECH-AMIDONDEMASN-000001,0.55,poudre (cuillère rase),,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — amidon : ≈ 25 % d'amylose"
+ING-TECH-AMIDONDEPOMM-000001,0.55,poudre (cuillère rase),,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — amidon : ≈ 25 % d'amylose"
+ING-TECH-LCITHINEDESO-000001,,,,6.5,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lécithine"
+ING-TECH-LCITHINEDETO-000001,,,,6.5,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lécithine"
+ING-TECH-MONOETDIGLYC-000001,,,,7.0,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — E471"
+ING-TECH-SELFIN-000001,1.20,sel fin,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — chlorure de sodium"
+ING-TECH-SELDEGURANDE-000001,1.20,sel fin,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — chlorure de sodium"
+ING-TECH-FLEURDESEL-000001,,,,,,
+ING-TECH-SELROSEDELHI-000001,1.20,sel fin,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — chlorure de sodium"
+ING-TECH-BICARBONATED-000001,0.90,poudre levante (sachet ≈ 11 g),sachet:11,,,
+ING-TECH-LEVURECHIMIQ-000001,0.90,poudre levante (sachet ≈ 11 g),sachet:11,,,
+ING-FERMENT-LEVUREBOULAN-000001,0.60,levure sèche (sachet ≈ 5 g),sachet:5,,,
+ING-FERMENT-LEVUREBOULAN-000002,0.60,levure sèche (sachet ≈ 5 g),sachet:5,,,
+ING-FERMENT-LEVAINPTE-000001,,,,,,
+ING-TECH-ACIDECITRIQU-000001,,,,2.2,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — acide citrique (pH d'une solution à 1 %)"
+ING-TECH-ACIDEASCORBI-000001,,,,2.8,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — acide ascorbique"
+ING-TECH-ACIDETARTRIQ-000001,,,,2.3,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — acide tartrique"
+ING-TECH-CRMEDETARTRE-000001,,,,2.3,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — acide tartrique"
+ING-TECH-VINAIGREBLAN-000001,1.01,vinaigre,,2.8,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vinaigre ≈ 6 % d'acide acétique"
+ING-TECH-VINAIGREDEVI-000001,1.01,vinaigre,,2.8,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vinaigre ≈ 6 % d'acide acétique"
+ING-TECH-VINAIGREBALS-000001,1.01,vinaigre,,2.8,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vinaigre ≈ 6 % d'acide acétique"
+ING-TECH-VINAIGREDECI-000001,1.01,vinaigre,,2.8,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vinaigre ≈ 6 % d'acide acétique"
+ING-TECH-VINAIGREDERI-000001,1.01,vinaigre,,3.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vinaigre de riz ≈ 4,5 % d'acide acétique"
+ING-TECH-EXTRAITDEVAN-000001,,,,,,
+ING-TECH-EAUDEROSE-000001,1.00,eau,,7.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — eau"
+ING-TECH-EAUDEFLEURDO-000001,1.00,eau,,7.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — eau"
+ING-TECH-ARMENATURELD-000001,,,,,,
+ING-TECH-COLORANTALIM-000001,,,,,,
+ING-TECH-HUILEESSENTI-000001,0.92,huile végétale,,,,
+ING-TECH-HUILEESSENTI-000002,0.92,huile végétale,,,,
+ING-TECH-HUILEESSENTI-000003,0.92,huile végétale,,,,
+ING-TECH-HUILEESSENTI-000004,0.92,huile végétale,,,,
+ING-TECH-TAHINI-000001,,,,,,
+ING-TECH-CRMEDESSAME-000001,,,,,,
+ING-BEV-EAU-000001,1.00,eau,,7.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — eau"
+ING-BEV-EAUGAZEUSE-000001,1.00,eau,,7.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — eau"
+ING-BEV-EAUMINRALE-000001,1.00,eau,,7.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — eau"
+ING-BEV-EAUDESOURCE-000001,1.00,eau,,7.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — eau"
+ING-BEV-CAFESPRESSO-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — café"
+ING-BEV-CAFFILTRE-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — café"
+ING-BEV-CAFVERTGRAIN-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — café"
+ING-BEV-CAFTORRFIGRA-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — café"
+ING-BEV-CAFSOLUBLE-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — café"
+ING-BEV-THVERT-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-THNOIR-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-THOOLONG-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-THBLANC-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-THMATCHA-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-INFUSIONDECA-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-INFUSIONDEVE-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-INFUSIONDEME-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-ROOIBOS-000001,,,,5.5,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — infusion"
+ING-BEV-VINROUGE-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-VINBLANCSEC-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-VINBLANCMOEL-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-VINROS-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-VINJAUNE-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-VINDOUXNATUR-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-PORTO-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-XRSSHERRY-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-MADRE-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-CHAMPAGNEBRU-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-CRMANT-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-CIDREBRUT-000001,0.99,vin,,3.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cidre"
+ING-BEV-CIDREDOUX-000001,0.99,vin,,3.6,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cidre"
+ING-BEV-EAUDEVIEDEVI-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-WHISKY-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-RHUMBLANC-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-RHUMAMBR-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-VODKA-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-GIN-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-TEQUILABLANC-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-TEQUILAREPOS-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-MEZCAL-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-PASTIS-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-ABSINTHE-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-ARMAGNAC-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-CALVADOS-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-KIRSCH-000001,0.95,spiritueux 40 %,,,,
+ING-BEV-LIQUEURDECAF-000001,1.05,liqueur,,,,
+ING-BEV-TRIPLESEC-000001,1.05,liqueur,,,,
+ING-BEV-VERMOUTHROUG-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-VERMOUTHBLAN-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-BEV-BIREBLONDELA-000001,1.01,bière,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — bière"
+ING-BEV-BIREAMBRE-000001,1.01,bière,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — bière"
+ING-BEV-BIREIPA-000001,1.01,bière,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — bière"
+ING-BEV-BIRESTOUT-000001,1.01,bière,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — bière"
+ING-BEV-BIREDEBL-000001,1.01,bière,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — bière"
+ING-BEV-BIREPILS-000001,1.01,bière,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — bière"
+ING-BEV-BIRESANSALCO-000001,1.01,bière,,4.3,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — bière"
+ING-BEV-SOURBEER-000001,,,,,,
+ING-BEV-JUSDORANGE-000001,1.04,jus,,,,
+ING-BEV-JUSDECITRON-000001,1.04,jus,,2.3,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — citron : acide citrique ≈ 5 % du jus"
+ING-BEV-JUSDANANAS-000001,1.04,jus,,,,
+ING-BEV-JUSDECRANBER-000001,1.04,jus,,,,
+ING-BEV-JUSDETOMATE-000001,1.04,jus,,,,
+ING-BEV-JUSDEPOMME-000001,1.04,jus,,,,
+ING-BEV-JUSDERAISIN-000001,1.04,jus,,,,
+ING-BEV-SIROPDESUCRE-000001,1.33,sirop,,,,
+ING-BEV-LAITDECOCO-000001,1.03,lait,,6.7,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — lait : caséines 80 % et protéines sériques 20 %"
+ING-BEV-BOISSONDESOJ-000001,,,,,,
+ING-BEV-BOISSONDAVOI-000001,,,,,,
+ING-BEV-BOISSONDAMAN-000001,,,,,,
+ING-BEV-BOISSONDERIZ-000001,,,,,,
+ING-BEV-KOMBUCHA-000001,,,,,,
+ING-BEV-TONICWATER-000001,,,,2.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — tonic (acide citrique)"
+ING-BEV-COLAGNRIQUE-000001,,,,2.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — cola (acide phosphorique)"
+ING-COND-SAUCESOJA-000001,1.20,sauce soja,,4.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sauce soja : glutamate libre"
+ING-COND-SAUCETAMARI-000001,,,,,,
+ING-COND-SHOYU-000001,1.20,sauce soja,,4.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sauce soja : glutamate libre"
+ING-COND-MISOBLANC-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — miso"
+ING-COND-MISOROUGE-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — miso"
+ING-COND-MISOJAUNE-000001,,,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — miso"
+ING-COND-NATTO-000001,,,,,,
+ING-COND-TEMPEH-000001,,,,6.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines de soja"
+ING-COND-SAUCENUOCMM-000001,,,,,,
+ING-COND-SAUCEDEPOISS-000001,,,,5.5,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sauce de poisson : glutamate libre"
+ING-COND-SAUCEDHUTRE-000001,,,,,,
+ING-COND-SAUCEHOISIN-000001,,,,,,
+ING-COND-SAUCETERIYAK-000001,,,,,,
+ING-COND-SAUCESRIRACH-000001,,,,,,
+ING-COND-SAUCEHARISSA-000001,,,,,,
+ING-COND-SRIRACHA-000001,,,,,,
+ING-COND-HARISSA-000001,,,,,,
+ING-COND-SAUCEGOCHUJA-000001,,,,,,
+ING-COND-SAUCEKIMCHI-000001,,,,,,
+ING-COND-PTEDECURRYRO-000001,,,,,,
+ING-COND-PTEDECURRYVE-000001,,,,,,
+ING-COND-TOMYUMPTE-000001,,,,,,
+ING-COND-TOMKHAPTE-000001,,,,,,
+ING-COND-DASHI-000001,,,,,,
+ING-COND-MIRIN-000001,,,,,,
+ING-COND-SAKEDECUISIN-000001,,,,,,
+ING-COND-VINAIGRETTEG-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-COND-KETCHUP-000001,1.05,sauce émulsionnée,,3.8,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — ketchup"
+ING-COND-MOUTARDEDEDI-000001,1.05,moutarde,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — moutarde (acide acétique)"
+ING-COND-MOUTARDELANC-000001,1.05,moutarde,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — moutarde (acide acétique)"
+ING-COND-MOUTARDEDEME-000001,1.05,moutarde,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — moutarde (acide acétique)"
+ING-COND-MAYONNAISE-000001,1.05,sauce émulsionnée,,3.8,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — mayonnaise"
+ING-COND-SAUCEBARNAIS-000001,,,,,,
+ING-COND-SAUCEHOLLAND-000001,,,,,,
+ING-COND-SAUCEBCHAMEL-000001,,,,,,
+ING-COND-SAUCEVELOUT-000001,,,,,,
+ING-COND-SAUCEESPAGNO-000001,,,,,,
+ING-COND-SAUCETOMATEC-000001,,,,,,
+ING-COND-SAUCEBARBECU-000001,,,,,,
+ING-FERMENT-CORNICHONAIG-000001,,,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — conserve acidifiée ou saumurée"
+ING-FERMENT-PICKLEDECHOU-000001,,,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — légume lacto-fermenté"
+ING-FERMENT-OLIVENOIREEN-000001,,,piece:4,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — conserve acidifiée ou saumurée"
+ING-FERMENT-OLIVEVERTEEN-000001,,,piece:4,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — conserve acidifiée ou saumurée"
+ING-FERMENT-CAPRE-000001,,,,3.8,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — conserve acidifiée ou saumurée"
+ING-FERMENT-LEVAINDESEIG-000001,,,,,,
+ING-FERMENT-LEVAINDEBL-000001,,,,,,
+ING-TECH-BOUILLONDEVO-000001,1.00,bouillon,,,,
+ING-TECH-BOUILLONDEBU-000001,1.00,bouillon,,,,
+ING-TECH-BOUILLONDELG-000001,1.00,bouillon,,,,
+ING-TECH-BOUILLONDEPO-000001,1.00,bouillon,,,,
+ING-TECH-FONDBRUNDEVE-000001,1.00,bouillon,,,,
+ING-TECH-FONDBLANCDEV-000001,1.00,bouillon,,,,
+ING-TECH-BOUILLONDASH-000001,1.00,bouillon,,,,
+ING-TECH-BOUILLONMISO-000001,1.00,bouillon,,,,
+ING-TECH-CONSOMM-000001,1.00,bouillon,,,,
+ING-TECH-SAUMURE5SEL-000001,,,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — chlorure de sodium"
+ING-TECH-SAUMURE10SEL-000001,,,,7.0,0.8,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — chlorure de sodium"
+ING-TECH-LACTOSRUMPET-000001,,,,6.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — protéines sériques"
+ING-TECH-GLATINEENPOU-000001,,,feuille:2|piece:2,5.5,0.7,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — gélatine"
+ING-TECH-AMIDONMODIFI-000001,0.55,poudre (cuillère rase),,6.0,0.6,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — amidon : ≈ 25 % d'amylose"
+ING-TECH-SIROPDEMAS-000001,1.33,sirop,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sirop de glucose (DE moyen)"
+ING-TECH-SIROPDEMASHA-000001,1.33,sirop,,5.0,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — sirop riche en fructose"
+ING-MIX-PTEBRISE-000001,,,,,,
+ING-MIX-PTEFEUILLETE-000001,,,,,,
+ING-MIX-PTESABLE-000001,,,,,,
+ING-MIX-PTECHOUX-000001,,,,,,
+ING-MIX-PTELEVE-000001,,,,,,
+ING-MIX-PTEPAIN-000001,,,,,,
+ING-MIX-PTEPIZZA-000001,,,,,,
+ING-MIX-PTETARTESUCR-000001,,,,,,
+ING-MIX-MAYONNAISEMA-000001,1.05,sauce émulsionnée,,3.8,0.4,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — mayonnaise"
+ING-MIX-VINAIGRETTEB-000001,0.99,vin,,3.4,0.5,"FDA/CFSAN, Approximate pH of Foods (valeur médiane) — vin"
+ING-MIX-BOUQUETGARNI-000001,,,piece:10,,,
+ING-MIX-MIREPOIX-000001,,,,,,
+ING-MIX-ROUXBLANC-000001,,,,,,
+ING-MIX-ROUXBLOND-000001,,,,,,
+ING-MIX-ROUXBRUN-000001,,,,,,
+ING-MIX-SACHETDPICES-000001,,,,,,

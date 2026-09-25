@@ -1,0 +1,104 @@
+name_regex,category2_regex,density_g_per_ml,unit_masses,note
+^oeuf de poule$,,1.03,piece:50,œuf moyen calibre M sans coquille
+^jaune d.oeuf,,1.03,piece:18,jaune d'un œuf moyen
+^blanc d.oeuf,,1.04,piece:32,blanc d'un œuf moyen
+^oeuf de caille,,,piece:10,œuf de caille sans coquille
+^ail$|^ail ,,,gousse:5|piece:40,1 gousse ≈ 5 g ; 1 tête ≈ 40 g
+^oignon,,,piece:110,oignon moyen épluché
+^echalote,,,piece:25,échalote moyenne
+^tomate cerise,,,piece:15,tomate cerise
+^tomate,,1.02,piece:120,tomate moyenne
+^citron vert|^lime,,,piece:60,citron vert moyen
+^citron( |$),,,piece:110,citron jaune moyen
+^orange,,,piece:180,orange moyenne épluchée
+^clementine|^mandarine,,,piece:70,agrume moyen épluché
+^pamplemousse,,,piece:300,pamplemousse épluché
+^pomme de terre,,,piece:150,pomme de terre moyenne
+^patate douce,,,piece:250,patate douce moyenne
+^pomme,,,piece:150,pomme moyenne
+^poire,,,piece:160,poire moyenne
+^banane,,,piece:120,banane épluchée
+^peche|^nectarine,,,piece:150,pêche moyenne
+^abricot,,,piece:45,abricot dénoyauté
+^prune|^mirabelle|^quetsche,,,piece:30,prune
+^kiwi,,,piece:80,kiwi épluché
+^avocat,,,piece:150,chair d'un avocat
+^mangue,,,piece:300,chair d'une mangue
+^ananas,,,piece:900,chair d'un ananas
+^figue,,,piece:50,figue fraîche
+^datte,,,piece:8,datte dénoyautée
+^fraise,,,piece:15,fraise
+^framboise,,,piece:4,framboise
+^cerise,,,piece:7,cerise
+^grenade,,,piece:250,grenade
+^melon,,,piece:900,chair d'un melon
+^carotte,,,piece:100,carotte moyenne
+^courgette,,,piece:250,courgette moyenne
+^aubergine,,,piece:300,aubergine moyenne
+^poivron,,,piece:170,poivron moyen
+^concombre,,,piece:350,concombre
+^poireau,,,piece:150,poireau paré
+^navet,,,piece:120,navet moyen
+^betterave,,,piece:150,betterave
+^radis,,,piece:10,radis rose
+^celeri branche,,,piece:40,branche de céleri
+^fenouil,,,piece:250,bulbe de fenouil
+^artichaut,,,piece:250,artichaut
+^laitue|^salade,,,piece:300,salade entière
+^champignon de paris,,,piece:20,champignon moyen
+^piment,,,piece:10,piment
+^brocoli,,,piece:400,tête de brocoli
+^chou-fleur,,,piece:800,chou-fleur
+^chou,,,piece:1000,chou entier
+^olive,,,piece:4,olive
+^vanille,,,gousse:3|piece:3,gousse de vanille
+^laurier,,,feuille:0.2|piece:0.2,feuille de laurier
+^gelatine,,,feuille:2|piece:2,feuille de gélatine
+^persil|^coriandre|^cerfeuil|^aneth|^ciboulette|^estragon,,0.25,botte:50|brin:1|feuille:0.2,herbes fraîches hachées
+^basilic|^menthe,,0.25,botte:40|brin:2|feuille:0.5,herbes fraîches
+^thym|^romarin|^sauge|^origan|^marjolaine,,,brin:1|branche:1|feuille:0.2,brin d'herbe
+^crevette,,,piece:10,crevette décortiquée
+^noix de saint-jacques|^coquille saint-jacques,,,piece:25,noix de Saint-Jacques
+^anchois,,,piece:4,filet d'anchois
+^sardine,,,piece:50,sardine
+^huitre,,,piece:15,huître (chair)
+^moule,,,piece:5,moule (chair)
+^pain,,,tranche:30,tranche de pain
+^jambon,,,tranche:45,tranche de jambon
+^bouquet garni,,,piece:10,bouquet garni
+^huile|^graisse,,0.92,,huile végétale
+^beurre|^ghee,,0.91,noix:10,beurre (noix ≈ 10 g)
+^lait concentre,,1.30,,lait concentré sucré
+^lait( |$),,1.03,,lait
+^creme,produit laitier,1.00,,crème
+^yaourt|^skyr|^fromage blanc,,1.03,,produit laitier fermenté
+^miel,,1.42,,miel
+^sirop,,1.33,,sirop
+^vinaigre( |$)|^vinaigre ,,1.01,,vinaigre
+^sauce soja|^shoyu|^tamari,,1.20,,sauce soja
+^vin|^porto|^madere|^xeres|^vermouth|^cremant|^champagne|^cidre,,0.99,,vin
+^biere,,1.01,,bière
+^rhum|^whisky|^vodka|^gin|^tequila|^mezcal|^cognac|^armagnac|^calvados|^kirsch|^absinthe|^eau-de-vie|^pastis,,0.95,,spiritueux 40 %
+^liqueur|^triple sec|^creme de cassis,,1.05,,liqueur
+^eau( |$)|^eau (minerale|de source|gazeuse),,1.00,,eau
+^jus,,1.04,,jus
+^bouillon|^fond |^fumet|^consomme,,1.00,,bouillon
+^farine|^fecule|^amidon|^maizena,,0.55,,poudre (cuillère rase)
+^sucre glace,,0.56,,sucre glace
+^cassonade|^vergeoise|^sucre roux,,0.80,,sucre roux
+^sucre,,0.85,,sucre cristallisé
+^sel,,1.20,,sel fin
+^cacao,,0.45,,cacao en poudre
+^levure chimique|^bicarbonate,,0.90,sachet:11,poudre levante (sachet ≈ 11 g)
+^levure,,0.60,sachet:5,levure sèche (sachet ≈ 5 g)
+^riz,,0.85,,riz cru
+^semoule|^couscous|^polenta,,0.70,,semoule
+^flocons,,0.40,,flocons
+^lentille|^pois|^haricot,,0.80,,légumineuse sèche
+^parmesan|^parmigiano|^pecorino|^gruyere|^comte|^emmental,,0.40,,fromage râpé
+^amande|^noisette|^noix|^pistache|^cajou|^pecan|^pignon|^arachide|^macadamia,,0.55,,fruits à coque hachés
+^graine|^sesame|^lin|^chia|^pavot|^tournesol|^courge,,0.60,,graines
+^poivre|^cumin|^curcuma|^paprika|^cannelle|^gingembre en poudre|^muscade|^curry|^piment d.espelette|^cardamome|^coriandre graine|^fenugrec|^ras el hanout|^zaatar|^sumac|^quatre-epices|^clou de girofle|^anis|^carvi|^fenouil graine|^safran,,0.50,,épice en poudre
+^moutarde,,1.05,,moutarde
+^ketchup|^mayonnaise,,1.05,,sauce émulsionnée
+^chapelure,,0.45,,chapelure

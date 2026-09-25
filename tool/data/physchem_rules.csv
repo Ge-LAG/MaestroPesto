@@ -1,0 +1,116 @@
+name_regex,category2_regex,ph,components,confidence,note
+^citron vert|^lime|^combava,,2.1,SM_CIT=5.5,0.6,agrume très acide (acide citrique du jus)
+^citron( |$)|^jus de citron,,2.3,SM_CIT=5.0,0.6,citron : acide citrique ≈ 5 % du jus
+^zeste,,4.5,POLY_PEC_HM=3.0|POLY_PECTINE=3.0,0.5,zeste : riche en pectine HM
+^pamplemousse|^yuzu|^bergamote,,3.2,SM_CIT=2.0,0.5,agrume acide
+^orange|^clementine|^mandarine,,3.8,SM_CIT=1.0,0.5,agrume
+^pomme cuite,,3.6,POLY_PEC_HM=0.6|POLY_PECTINE=0.6,0.5,pomme : pectine HM naturelle
+^pomme crue|^pomme$,,3.5,POLY_PEC_HM=0.6|POLY_PECTINE=0.6,0.5,pomme : pectine HM naturelle
+^coing,,3.6,POLY_PEC_HM=0.9|POLY_PECTINE=0.9,0.5,coing : très riche en pectine
+^groseille|^cassis,,3.0,POLY_PEC_HM=1.0|POLY_PECTINE=1.0|SM_CIT=1.5,0.5,baies riches en pectine et en acide
+^framboise|^mure,,3.4,POLY_PEC_HM=0.8|POLY_PECTINE=0.8|SM_CIT=1.0,0.5,baies
+^fraise,,3.4,POLY_PEC_HM=0.6|POLY_PECTINE=0.6|SM_CIT=0.8,0.5,fraise
+^myrtille|^airelle|^canneberge,,3.1,POLY_PEC_HM=0.5|POLY_PECTINE=0.5,0.5,baies
+^abricot,,3.8,POLY_PEC_HM=0.9|POLY_PECTINE=0.9,0.5,abricot
+^prune|^mirabelle|^quetsche,,3.5,POLY_PEC_HM=0.9|POLY_PECTINE=0.9,0.5,prune
+^peche|^nectarine,,3.8,POLY_PEC_HM=0.6|POLY_PECTINE=0.6,0.5,pêche
+^poire,,4.0,POLY_PEC_HM=0.5|POLY_PECTINE=0.5,0.5,poire
+^cerise,,3.8,POLY_PEC_HM=0.3|POLY_PECTINE=0.3,0.5,cerise
+^raisin,,3.8,SM_CIT=0.5,0.5,raisin (acide tartrique assimilé)
+^ananas,,3.5,SM_CIT=0.8,0.5,ananas
+^mangue,,4.0,,0.5,mangue
+^banane,,4.8,POLY_INULIN=0.5,0.5,banane
+^kiwi,,3.3,SM_CIT=1.0,0.5,kiwi
+^rhubarbe,,3.2,,0.5,rhubarbe (acide oxalique)
+^melon|^pasteque,,6.2,,0.5,melon
+^figue,,4.8,,0.5,figue
+^avocat,,6.4,,0.5,avocat
+^tomate sechee,,4.4,SM_GLU=0.9|SM_CIT=1.2,0.5,tomate séchée : glutamate libre concentré
+^tomate|^coulis de tomate|^concentre de tomate,,4.3,SM_GLU=0.25|SM_CIT=0.4,0.5,tomate : glutamate libre et acide citrique
+^kombu( |$),,6.5,SM_GLU=2.2|POLY_ALG=20,0.5,kombu : glutamate libre très élevé
+^nori|^wakame|^dulse|^spaghetti de mer|^laitue de mer,,6.5,SM_GLU=0.3,0.4,algue
+^shiitake,,6.2,SM_GLU=1.0|SM_5GMP=0.15,0.5,shiitake séché : glutamate et guanylate
+^champignon|^girolle|^cepe|^morille|^pleurote,,6.2,SM_GLU=0.18,0.5,champignon
+^parmesan|^parmigiano|^pecorino|^grana,,5.3,SM_GLU=1.2|PROT_CASEINE=protein*0.95,0.5,fromage affiné : glutamate libre élevé
+^comte|^gruyere|^beaufort|^emmental|^cheddar|^gouda|^mimolette,,5.6,SM_GLU=0.3|PROT_CASEINE=protein*0.95,0.5,fromage à pâte pressée
+^roquefort|^bleu|^gorgonzola,,6.2,SM_GLU=0.4|PROT_CASEINE=protein*0.95,0.5,fromage à pâte persillée
+^camembert|^brie|^coulommiers,,6.8,PROT_CASEINE=protein*0.95,0.5,pâte molle affinée (pH remonte à l'affinage)
+^mozzarella|^burrata,,5.3,PROT_CASEINE=protein*0.95,0.5,pâte filée
+^feta|^chevre|^fromage de chevre,,4.5,PROT_CASEINE=protein*0.95,0.5,fromage frais ou saumuré
+^fromage,,5.3,PROT_CASEINE=protein*0.95,0.4,fromage
+^ricotta|^lactoserum|^petit-lait|^brousse,,6.0,PROT_WHEY=protein*0.9,0.5,protéines sériques
+^yaourt|^skyr|^lassi|^kefir|^babeurre|^lait fermente|^fromage blanc|^faisselle|^creme aigre,,4.4,PROT_CASEINE=protein*0.8|PROT_WHEY=protein*0.2,0.5,laitage fermenté acide
+^lait( |$)|^creme (liquide|double|fraiche|epaisse|fleurette|entiere|legere)|^mascarpone|^lait concentre,,6.7,PROT_CASEINE=protein*0.8|PROT_WHEY=protein*0.2,0.6,lait : caséines 80 % et protéines sériques 20 %
+^beurre|^ghee,,6.3,PROT_CASEINE=protein*0.8,0.5,beurre
+^blanc d.oeuf,,8.5,PROT_OVALB=protein*0.95,0.6,blanc d'œuf : ovalbumine majoritaire
+^jaune d.oeuf,,6.2,LIP_PHOSPH=10|PROT_OVALB=protein*0.4,0.5,jaune : lécithines (émulsifiant) ; protéines coagulables assimilées
+^oeuf,,7.6,LIP_PHOSPH=3|PROT_OVALB=protein*0.5,0.5,œuf entier
+^mayonnaise,,3.8,LIP_PHOSPH=1,0.4,mayonnaise
+^gelatine,,5.5,PROT_GEL=protein,0.7,gélatine
+^agar,,7.0,POLY_AGAR=80,0.7,agar-agar
+^pectine hm,,3.5,POLY_PEC_HM=85|POLY_PECTINE=85,0.7,pectine haut méthoxyle
+^pectine lm,,4.5,POLY_PEC_LM=85|POLY_PECTINE=85,0.7,pectine bas méthoxyle
+^carraghenane \(kappa,,7.0,POLY_CARRK=80,0.7,carraghénane κ
+^carraghenane \(iota,,7.0,POLY_CARRI=80,0.7,carraghénane ι
+^carraghenane \(lambda,,7.0,POLY_CARRL=80,0.7,carraghénane λ
+^alginate,,7.0,POLY_ALG=90,0.7,alginate de sodium
+^gomme xanthane,,7.0,POLY_XANTHAN=90,0.7,gomme xanthane
+^gomme guar,,7.0,POLY_GUAR=80,0.7,gomme guar
+^gomme de caroube,,7.0,POLY_LBG=80,0.7,gomme de caroube
+^gomme arabique,,4.5,POLY_GACACIA=90,0.7,gomme arabique
+^lecithine,,6.5,LIP_PHOSPH=95,0.7,lécithine
+^mono- et diglycerides,,7.0,LIP_MDG=100,0.7,E471
+^amidon|^fecule|^maizena,,6.0,POLY_AMYLOSE=starch*0.25|POLY_AMYLOPEC=starch*0.75,0.6,amidon : ≈ 25 % d'amylose
+^farine de ble|^farine de epeautre|^ble( |$)|^ble dur|^ble tendre|^epeautre|^semoule|^boulgour|^pates|^pain|^flocons de ble|^farine de ble dur|^khorasan,,6.0,PROT_GLU=protein*0.8|POLY_AMYLOSE=starch*0.25|POLY_AMYLOPEC=starch*0.75,0.6,blé : gluten ≈ 80 % des protéines
+^farine de seigle|^seigle|^orge|^flocons de seigle|^flocons de orge,,6.0,PROT_GLU=protein*0.2|POLY_AMYLOSE=starch*0.25|POLY_AMYLOPEC=starch*0.75,0.5,seigle/orge : réseau gluten faible
+^riz|^farine de riz|^flocons de riz,,6.4,POLY_AMYLOSE=starch*0.2|POLY_AMYLOPEC=starch*0.8,0.5,riz
+^mais|^farine de mais|^polenta|^flocons de mais,,6.5,POLY_AMYLOSE=starch*0.25|POLY_AMYLOPEC=starch*0.75,0.5,maïs
+^pomme de terre|^patate douce|^manioc|^igname,,5.7,POLY_AMYLOSE=starch*0.22|POLY_AMYLOPEC=starch*0.78,0.5,tubercule amylacé
+^topinambour,,5.8,POLY_INULIN=16,0.5,topinambour : inuline
+^ail( |$),,5.8,POLY_INULIN=12,0.5,ail : fructanes
+^oignon|^echalote,,5.5,POLY_INULIN=5,0.5,oignon : fructanes
+^poireau,,5.9,POLY_INULIN=5,0.5,poireau : fructanes
+^asperge,,6.2,POLY_INULIN=2,0.5,asperge
+^soja|^tofu|^tempeh|^isolat de soja|^boisson au soja,,6.5,PROT_SOY=protein*0.9,0.5,protéines de soja
+^pois( |$)|^petit pois|^pois casse|^pois chiche,,6.3,PROT_PEA=protein*0.8,0.4,protéines de pois
+^lentille|^haricot|^feve|^flageolet,,6.3,,0.4,légumineuse
+^vinaigre de riz,,3.0,SM_ACET=4.5,0.6,vinaigre de riz ≈ 4,5 % d'acide acétique
+^vinaigre( |$)|^vinaigre (blanc|de vin|de cidre|balsamique),,2.8,SM_ACET=6,0.6,vinaigre ≈ 6 % d'acide acétique
+^acide citrique,,2.2,SM_CIT=99.5,0.8,acide citrique (pH d'une solution à 1 %)
+^acide tartrique|^creme de tartre,,2.3,,0.6,acide tartrique
+^acide ascorbique,,2.8,,0.6,acide ascorbique
+^sucre inverti,,4.5,SM_GLU_MONO=37|SM_FRUCTOSE=37,0.6,sucre inverti
+^sirop de glucose|^sirop de ble|^sirop de riz|^sirop de mais$,,5.0,SM_GLU_MONO=40,0.5,sirop de glucose (DE moyen)
+^sirop de fructose|^sirop de mais a haute,,5.0,SM_FRUCTOSE=42|SM_GLU_MONO=30,0.5,sirop riche en fructose
+^dextrose,,7.0,SM_GLU_MONO=91,0.7,dextrose monohydraté
+^sucre|^cassonade|^vergeoise,,7.0,SM_SUCROSE=sugar,0.8,saccharose
+^miel,,3.9,,0.6,miel
+^sirop d.erable,,6.9,,0.5,sirop d'érable
+^sel|^saumure,,7.0,,0.8,chlorure de sodium
+^sauce soja|^shoyu|^tamari,,4.8,SM_GLU=0.8,0.5,sauce soja : glutamate libre
+^sauce de poisson|^nuoc,,5.5,SM_GLU=1.0,0.5,sauce de poisson : glutamate libre
+^miso,,5.0,SM_GLU=0.2|PROT_SOY=protein*0.8,0.5,miso
+^anchois,,5.8,SM_GLU=0.6,0.5,anchois salé
+^jambon cru|^jambon sec|^jambon de bayonne|^jambon de parme,,5.9,SM_GLU=0.34,0.5,jambon sec
+^moutarde,,3.8,,0.5,moutarde (acide acétique)
+^ketchup,,3.8,SM_GLU=0.3,0.4,ketchup
+^vin|^porto|^madere|^xeres|^vermouth|^cremant|^champagne,,3.4,,0.5,vin
+^biere,,4.3,,0.5,bière
+^cidre,,3.6,,0.5,cidre
+^cafe,,5.0,,0.5,café
+^the|^infusion|^rooibos,,5.5,,0.4,infusion
+^cola,,2.5,,0.5,cola (acide phosphorique)
+^tonic,,2.8,,0.5,tonic (acide citrique)
+^eau( |$)|^eau (minerale|de source|gazeuse),,7.0,,0.6,eau
+^chocolat|^cacao|^pate de cacao,,5.6,,0.4,cacao
+^kimchi|^choucroute|^pickle,,3.8,,0.5,légume lacto-fermenté
+^capre|^cornichon|^olive,,3.8,,0.5,conserve acidifiée ou saumurée
+^boeuf|^veau|^agneau|^mouton|^porc|^cheval|^cerf|^sanglier|^chevreuil|^lapin,,5.7,,0.5,viande (pH ultime post-mortem)
+^poulet|^dinde|^canard|^oie|^caille|^pintade|^faisan,,6.2,,0.5,volaille
+^saumon|^truite,,6.3,,0.5,salmonidé
+^crevette|^crabe|^homard|^langouste|^ecrevisse,,7.0,,0.5,crustacé
+^huitre|^moule|^palourde|^coquille,,6.1,,0.5,mollusque
+,poisson,6.6,,0.4,poisson
+,légume,6.0,,0.3,légume (valeur médiane)
+,herbe aromatique,6.0,,0.3,herbe aromatique
+,matière grasse,,,0.5,matière grasse (phase non aqueuse)

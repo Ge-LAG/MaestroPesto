@@ -1,0 +1,226 @@
+name_regex,category2_regex,descriptors,context,intensity,note
+^tomate sechee,,umami:0.9|sweet:0.5|sour:0.4|fruity:0.4|jammy:0.5|herbal:0.2|roasted:0.2,savory,0.7,tomate séchée : umami concentré
+^tomate|^coulis de tomate|^concentre de tomate|^jus de tomate|^sauce tomate,,umami:0.6|sour:0.5|sweet:0.4|green:0.5|fruity:0.4|herbal:0.2,savory,0.5,tomate : umami + vert (hexanal)
+^poivron rouge,,sweet:0.5|green:0.4|fruity:0.4|roasted:0.1,savory,0.5,poivron rouge
+^poivron vert,,green:0.8|bitter:0.3|herbal:0.3|earthy:0.2,savory,0.6,poivron vert : pyrazines
+^piment d.espelette,,pungent:0.4|fruity:0.5|smoky:0.2|warming:0.4|sweet:0.2,savory,0.6,piment d'Espelette
+^piment|^kashmiri chili,,pungent:0.9|warming:0.8|fruity:0.4|green:0.2,both,0.9,piment : capsaïcine
+^aubergine,,bitter:0.3|earthy:0.3|green:0.3|fatty:0.1,savory,0.3,aubergine
+^pomme de terre,,earthy:0.5|sweet:0.1|nutty:0.2,savory,0.2,pomme de terre
+^courgette,,green:0.5|fresh:0.3|sweet:0.2|herbal:0.2,savory,0.2,courgette
+^courge|^potiron,,sweet:0.6|nutty:0.4|earthy:0.3|caramel:0.2,both,0.4,courge
+^concombre,,green:0.8|cooling:0.6|fresh:0.5|melon:0.3,savory,0.3,concombre
+^melon,,sweet:0.7|fruity:0.8|stone_fruit:0.2|floral:0.3|green:0.2,both,0.5,melon
+^pasteque,,sweet:0.7|fruity:0.6|green:0.3|cooling:0.3,sweet,0.3,pastèque
+^laitue$|^mache|^pousses d.epinard,,green:0.6|leafy:0.7|sweet:0.1,savory,0.2,salade douce
+^epinard,,green:0.5|leafy:0.7|earthy:0.3|bitter:0.2|metallic:0.2,savory,0.3,épinard
+^roquette|^cresson,,peppery:0.7|pungent:0.4|bitter:0.4|leafy:0.6|green:0.5,savory,0.6,crucifère poivrée
+^pissenlit|^endive,,bitter:0.8|green:0.5|leafy:0.5,savory,0.5,amertume
+^chou|^brocoli|^rutabaga,,sulfurous:0.6|green:0.5|bitter:0.3|earthy:0.3|sweet:0.1,savory,0.5,crucifère : composés soufrés
+^bette( |$),,earthy:0.5|green:0.5|leafy:0.4|bitter:0.2,savory,0.3,bette
+^carotte,,sweet:0.6|earthy:0.4|woody:0.2|herbal:0.2|floral:0.1,both,0.4,carotte
+^betterave,,earthy:0.9|sweet:0.6,both,0.6,betterave : géosmine
+^navet|^radis,,peppery:0.5|pungent:0.3|earthy:0.3|sulfurous:0.3|bitter:0.2,savory,0.4,crucifère racine
+^panais|^celeri-rave|^celeri rave,,sweet:0.4|earthy:0.4|herbal:0.4|nutty:0.3,savory,0.4,racine aromatique
+^patate douce,,sweet:0.7|caramel:0.3|earthy:0.3|nutty:0.2,both,0.4,patate douce
+^manioc,,earthy:0.3|nutty:0.2,savory,0.2,manioc
+^topinambour,,nutty:0.5|earthy:0.5|sweet:0.3,savory,0.4,topinambour : goût d'artichaut
+^oignon,,sulfurous:0.8|pungent:0.6|sweet:0.4,savory,0.7,oignon : thiosulfinates
+^ail,,sulfurous:0.9|pungent:0.8|roasted:0.1,savory,0.9,ail : allicine
+^echalote,,sulfurous:0.6|pungent:0.4|sweet:0.4|fruity:0.1,savory,0.6,échalote
+^poireau,,sulfurous:0.5|green:0.5|sweet:0.3,savory,0.4,poireau
+^celeri branche,,herbal:0.7|green:0.6|fresh:0.4|salty:0.2|bitter:0.2,savory,0.5,céleri : phtalides
+^olive,,fatty:0.5|fermented:0.5|bitter:0.5|salty:0.6|fruity:0.3|herbal:0.2,savory,0.6,olive saumurée
+^pomme cuite|^compote de pomme,,sweet:0.7|fruity:0.7|caramel:0.3|jammy:0.4|sour:0.3,sweet,0.5,pomme cuite
+^pomme|^jus de pomme,,fruity:0.8|sweet:0.6|sour:0.5|green:0.4|floral:0.2,both,0.5,pomme : esters fruités + hexanal
+^poire,,fruity:0.8|sweet:0.7|floral:0.3|green:0.2,sweet,0.5,poire
+^zeste,,citrus:0.95|bitter:0.4|floral:0.4|resinous:0.2|fresh:0.6,both,0.9,zeste : limonène
+^citron vert|^combava|^lime,,citrus:0.9|sour:0.95|fresh:0.6|floral:0.2|herbal:0.2,both,0.8,citron vert
+^citron|^jus de citron,,citrus:0.9|sour:0.95|fresh:0.6|bitter:0.1,both,0.8,citron
+^yuzu|^bergamote,,citrus:0.9|floral:0.6|sour:0.8|bitter:0.3|fresh:0.5,both,0.8,agrume aromatique
+^pamplemousse,,citrus:0.8|bitter:0.6|sour:0.6|sweet:0.3,both,0.6,pamplemousse
+^orange|^jus d.orange|^marmelade d.orange,,citrus:0.8|sweet:0.6|sour:0.4|floral:0.3|fruity:0.5,both,0.6,orange
+^mandarine|^clementine,,citrus:0.8|sweet:0.7|floral:0.3|fruity:0.5,sweet,0.6,mandarine
+^fraise|^confiture de fraise,,berry:0.9|fruity:0.8|sweet:0.7|sour:0.3|floral:0.3|caramel:0.2|green:0.2,sweet,0.6,fraise : furanéol + esters
+^framboise,,berry:0.9|fruity:0.8|floral:0.5|violet:0.4|sour:0.5|sweet:0.5,sweet,0.7,framboise : ionones
+^myrtille|^airelle|^canneberge|^jus de cranberry,,berry:0.9|sour:0.6|astringent:0.4|sweet:0.4|floral:0.2,sweet,0.6,baies bleues/rouges
+^mure|^cassis|^groseille,,berry:0.9|sour:0.6|fruity:0.6|green:0.3|sweet:0.4,sweet,0.7,baies acidulées
+^peche|^abricot|^confiture d.abricot|^nectarine,,stone_fruit:0.9|fruity:0.8|sweet:0.7|floral:0.4|sour:0.3,sweet,0.6,fruit à noyau : lactones
+^prune|^cerise|^mirabelle,,stone_fruit:0.8|fruity:0.7|sweet:0.6|sour:0.4|nutty:0.2,sweet,0.6,fruit à noyau
+^mangue|^papaye|^goyave|^fruit de la passion|^litchi|^carambole|^fruit du dragon|^ananas|^jus d.ananas,,tropical:0.9|fruity:0.8|sweet:0.7|sour:0.4|floral:0.4,sweet,0.7,fruit tropical
+^banane,,fruity:0.8|sweet:0.7|tropical:0.4|creamy:0.3,sweet,0.5,banane : acétate d'isoamyle
+^kiwi,,fruity:0.7|sour:0.6|green:0.5|sweet:0.4,sweet,0.5,kiwi
+^raisin sec,,sweet:0.8|jammy:0.6|caramel:0.4|fruity:0.5,both,0.5,raisin sec
+^raisin|^jus de raisin,,fruity:0.7|sweet:0.7|sour:0.3|floral:0.2,sweet,0.4,raisin
+^figue,,sweet:0.8|jammy:0.5|honey:0.3|fruity:0.5,both,0.5,figue
+^kaki|^physalis,,sweet:0.6|fruity:0.6|tropical:0.3|astringent:0.2,sweet,0.4,fruit doux
+^grenade,,fruity:0.7|sour:0.5|astringent:0.4|sweet:0.5|berry:0.3,both,0.5,grenade
+^chataigne,,nutty:0.7|sweet:0.5|earthy:0.4|roasted:0.3,both,0.5,châtaigne
+^amande torrefiee|^beurre de amande,,nutty:0.8|roasted:0.6|toasted:0.5|sweet:0.2|fatty:0.4,both,0.6,amande grillée
+^amande,,nutty:0.7|sweet:0.3|fatty:0.3|floral:0.2,both,0.4,amande : benzaldéhyde doux
+^noisette torrefiee|^beurre de noisette,,nutty:0.9|roasted:0.7|toasted:0.5|cocoa:0.2|fatty:0.4,both,0.7,noisette grillée : filbertone
+^noisette,,nutty:0.8|sweet:0.3|fatty:0.4,both,0.5,noisette
+^noix de macadamia|^beurre de noix de macadamia|^noix du bresil|^beurre de noix du bresil,,nutty:0.6|fatty:0.8|buttery:0.4|sweet:0.2,both,0.4,noix grasses
+^noix,,nutty:0.8|bitter:0.3|astringent:0.3|woody:0.2|fatty:0.4,both,0.6,noix
+^pistache|^beurre de pistache,,nutty:0.8|green:0.3|sweet:0.3|fatty:0.4|resinous:0.1,both,0.5,pistache
+^cajou|^beurre de cajou,,nutty:0.6|sweet:0.4|buttery:0.3|fatty:0.5,both,0.4,cajou
+^pecan,,nutty:0.8|caramel:0.4|buttery:0.3|fatty:0.5,sweet,0.5,pécan
+^pignon,,nutty:0.7|resinous:0.4|fatty:0.5|sweet:0.2,both,0.5,pignon de pin
+^arachide|^beurre de arachide,,nutty:0.8|roasted:0.6|fatty:0.5|salty:0.1,both,0.6,arachide : pyrazines
+^graine de sesame|^tahini|^creme de sesame|^huile de sesame,,nutty:0.8|toasted:0.7|roasted:0.5|bitter:0.2|fatty:0.5,both,0.7,sésame grillé
+^graine de pavot,,nutty:0.6|sweet:0.2|earthy:0.2,both,0.3,pavot
+^graine de lin|^graine de chia|^huile de lin,,nutty:0.4|earthy:0.3|green:0.2|bitter:0.2,both,0.3,graines oléagineuses
+^graine de courge|^graine de tournesol|^huile de tournesol,,nutty:0.6|green:0.2|roasted:0.3|fatty:0.4,both,0.3,graines de courge/tournesol
+^graine de cumin|^cumin,,warming:0.7|earthy:0.7|spicy:0.6|woody:0.3|bitter:0.2,savory,0.9,cumin : cuminaldéhyde
+^graine de coriandre,,citrus:0.6|floral:0.5|spicy:0.4|woody:0.3|warming:0.3,both,0.6,coriandre graine : linalol
+^graine de fenugrec|^fenugrec,,caramel:0.6|bitter:0.5|spicy:0.3|nutty:0.3|warming:0.3,savory,0.7,fenugrec : sotolon (sirop d'érable)
+^graine de moutarde,,pungent:0.8|spicy:0.5|bitter:0.3,savory,0.7,moutarde graine
+^cardamome,,cooling:0.6|citrus:0.5|resinous:0.5|floral:0.4|spicy:0.5,both,0.8,cardamome : cinéole
+^anis|^pastis|^absinthe,,spicy:0.5|sweet:0.4|herbal:0.5|cooling:0.4|medicinal:0.2,both,0.9,anisé : anéthole
+^basilic|^huile essentielle de basilic,,herbal:0.9|green:0.5|spicy:0.5|floral:0.4|cooling:0.3|peppery:0.2,both,0.8,basilic : linalol + estragole
+^persil,,herbal:0.8|green:0.8|fresh:0.5|bitter:0.2,savory,0.6,persil
+^coriandre fraiche,,herbal:0.8|citrus:0.5|green:0.6|fresh:0.6|soapy:0.2,savory,0.8,coriandre : aldéhydes
+^menthe|^infusion de menthe|^huile essentielle de menthe,,cooling:0.95|herbal:0.8|fresh:0.8|sweet:0.2,both,0.9,menthe : menthol
+^thym,,herbal:0.8|woody:0.5|spicy:0.4|medicinal:0.3|warming:0.3,savory,0.8,thym : thymol
+^romarin,,resinous:0.8|herbal:0.8|woody:0.5|cooling:0.3|bitter:0.2,savory,0.9,romarin : cinéole + camphre
+^sauge,,herbal:0.8|resinous:0.5|woody:0.4|bitter:0.3|medicinal:0.3,savory,0.8,sauge
+^ciboulette,,sulfurous:0.5|green:0.6|herbal:0.4|pungent:0.2,savory,0.5,ciboulette
+^aneth,,herbal:0.8|fresh:0.6|green:0.5|citrus:0.3|spicy:0.2,savory,0.7,aneth : carvone
+^estragon,,herbal:0.8|spicy:0.5|sweet:0.3|cooling:0.3,savory,0.7,estragon : estragole anisé
+^laurier,,herbal:0.7|woody:0.5|resinous:0.4|spicy:0.3|bitter:0.2,savory,0.6,laurier : cinéole
+^origan|^marjolaine|^zaatar,,herbal:0.8|woody:0.4|spicy:0.4|warming:0.3|bitter:0.2,savory,0.7,origan : carvacrol
+^cerfeuil,,herbal:0.6|sweet:0.3|green:0.5|fresh:0.4,savory,0.4,cerfeuil anisé doux
+^verveine|^infusion de verveine,,citrus:0.8|herbal:0.6|floral:0.4|fresh:0.4,both,0.6,verveine citronnée
+^infusion de camomille,,floral:0.8|honey:0.4|herbal:0.4|sweet:0.2,sweet,0.4,camomille
+^poivre noir|^poivre blanc,,peppery:0.95|pungent:0.7|woody:0.4|spicy:0.6|citrus:0.2,both,0.8,poivre : pipérine + rotundone
+^poivre de sichuan,,peppery:0.6|citrus:0.7|pungent:0.5|floral:0.3|cooling:0.3,savory,0.8,sichuan : effet fourmillant
+^paprika,,sweet:0.4|fruity:0.4|smoky:0.4|earthy:0.3|warming:0.3,savory,0.6,paprika
+^piment de cayenne,,pungent:0.95|warming:0.8|fruity:0.2,savory,0.9,piment de Cayenne
+^curcuma,,earthy:0.8|bitter:0.5|woody:0.3|warming:0.3,savory,0.6,curcuma
+^cannelle,,spicy:0.8|warming:0.8|sweet:0.6|woody:0.5,both,0.9,cannelle : cinnamaldéhyde
+^clou de girofle,,spicy:0.9|warming:0.8|medicinal:0.5|woody:0.4|pungent:0.4,both,0.95,girofle : eugénol
+^muscade,,spicy:0.8|warming:0.7|woody:0.5|sweet:0.3,both,0.8,muscade : myristicine
+^gingembre,,pungent:0.7|citrus:0.5|spicy:0.6|warming:0.7|fresh:0.4,both,0.8,gingembre : gingérols
+^safran,,floral:0.6|honey:0.5|earthy:0.4|bitter:0.3|metallic:0.2,both,0.8,safran : safranal
+^vanille|^extrait de vanille|^arome naturel de vanille,,vanillic:0.95|sweet:0.6|floral:0.3|woody:0.2|caramel:0.3,sweet,0.8,vanille : vanilline
+^anis etoile,,spicy:0.7|sweet:0.5|herbal:0.4|warming:0.5,both,0.9,badiane : anéthole
+^sumac,,sour:0.8|fruity:0.4|astringent:0.4|citrus:0.3,savory,0.6,sumac acidulé
+^curry|^ras el hanout|^quatre-epices|^sachet d.epices,,spicy:0.8|warming:0.7|earthy:0.5|woody:0.3|pungent:0.4,savory,0.9,mélange d'épices
+^champignon de paris,,mushroom:0.8|earthy:0.5|umami:0.5,savory,0.4,champignon : octénol
+^cepe|^morille|^girolle|^pleurote,,mushroom:0.9|earthy:0.6|umami:0.6|nutty:0.3|woody:0.3,savory,0.7,champignon sauvage
+^shiitake,,mushroom:0.8|umami:0.9|earthy:0.4|smoky:0.2|sulfurous:0.2,savory,0.8,shiitake : lenthionine
+^truffe,,truffle:0.95|earthy:0.8|sulfurous:0.5|mushroom:0.5|umami:0.4,savory,0.95,truffe : sulfure de diméthyle
+^kombu( |$)|^dashi|^bouillon dashi,,umami:0.95|marine:0.7|salty:0.3,savory,0.6,kombu : glutamate
+^nori|^wakame|^dulse|^spaghetti de mer|^laitue de mer|^spiruline,,marine:0.8|umami:0.6|salty:0.4|green:0.3,savory,0.5,algue
+^huitre|^sauce d.huitre,,marine:0.95|salty:0.6|umami:0.6|metallic:0.3|green:0.2,savory,0.7,huître
+^moule|^palourde|^bulot|^coquille saint-jacques,,marine:0.8|sweet:0.4|umami:0.6|salty:0.4,savory,0.5,coquillage
+^calmar|^poulpe|^seiche,,marine:0.6|sweet:0.3|umami:0.4,savory,0.3,céphalopode
+^crevette|^langouste|^homard|^crabe|^ecrevisse,,marine:0.7|sweet:0.6|umami:0.6|nutty:0.3|roasted:0.2,savory,0.5,crustacé
+^saumon|^truite,,fatty:0.7|marine:0.4|buttery:0.3|umami:0.5,savory,0.5,poisson gras rosé
+^haddock|^hareng|^maquereau|^sardine,,fatty:0.7|marine:0.7|umami:0.5|smoky:0.2,savory,0.7,poisson gras
+^anchois,,salty:0.9|umami:0.9|marine:0.8|fermented:0.4|fatty:0.4,savory,0.9,anchois salé
+^thon|^espadon,,meaty:0.6|umami:0.5|marine:0.4,savory,0.4,poisson à chair ferme
+,poisson,marine:0.5|sweet:0.3|umami:0.4,savory,0.3,poisson blanc
+^boeuf|^cheval|^sanglier|^cerf,,meaty:0.9|umami:0.7|roasted:0.3|metallic:0.3|fatty:0.4,savory,0.7,viande rouge
+^agneau|^mouton,,meaty:0.8|fatty:0.6|umami:0.6|herbal:0.2|cheesy:0.2,savory,0.8,agneau : acides gras ramifiés
+^veau,,meaty:0.6|umami:0.5|dairy:0.2|sweet:0.1,savory,0.4,veau
+^porc,,meaty:0.7|fatty:0.5|umami:0.5|sweet:0.2,savory,0.5,porc
+^lapin|^poulet|^dinde|^pintade,,meaty:0.6|umami:0.5|fatty:0.3,savory,0.4,volaille
+^canard|^oie|^caille|^faisan,,meaty:0.8|fatty:0.7|umami:0.6|metallic:0.2,savory,0.6,volaille grasse
+^foie,,metallic:0.6|umami:0.6|meaty:0.6|bitter:0.3|creamy:0.3,savory,0.7,foie
+,abats,meaty:0.7|umami:0.5|metallic:0.4,savory,0.6,abats
+^oeuf|^jaune d.oeuf|^blanc d.oeuf,,sulfurous:0.3|fatty:0.4|umami:0.3|buttery:0.2,both,0.3,œuf
+^parmigiano|^parmesan|^pecorino,,umami:0.95|salty:0.8|nutty:0.6|cheesy:0.7|fruity:0.3|fatty:0.5,both,0.8,fromage affiné : glutamate
+^comte|^gruyere|^emmental|^cheddar,,nutty:0.7|cheesy:0.6|buttery:0.4|umami:0.6|salty:0.5|fatty:0.6|fruity:0.2,both,0.6,pâte pressée cuite
+^roquefort|^gorgonzola,,cheesy:0.9|mushroom:0.4|salty:0.8|fermented:0.6|fatty:0.7|pungent:0.3,both,0.9,pâte persillée : méthylcétones
+^camembert|^brie,,mushroom:0.6|cheesy:0.7|buttery:0.5|fatty:0.7|sulfurous:0.3|earthy:0.3,savory,0.7,pâte molle croûte fleurie
+^chevre|^feta,,cheesy:0.6|sour:0.5|salty:0.6|dairy:0.6|fatty:0.5|herbal:0.1,both,0.6,fromage de chèvre/brebis
+^mozzarella|^ricotta|^fromage frais|^mascarpone|^burrata,,dairy:0.8|creamy:0.7|sweet:0.2|fatty:0.5|sour:0.2,both,0.3,fromage frais doux
+^yaourt|^skyr|^kefir|^lait ribot|^lassi|^babeurre|^creme aigre,,dairy:0.7|sour:0.7|fermented:0.4|creamy:0.4,both,0.4,laitage fermenté
+^beurre de cacao,,fatty:0.9|cocoa:0.3,both,0.2,beurre de cacao désodorisé
+^beurre clarifie|^ghee,,buttery:0.8|nutty:0.6|caramel:0.3|fatty:0.9,both,0.6,beurre clarifié : notes noisette
+^beurre,,buttery:0.9|dairy:0.7|fatty:0.9|creamy:0.5,both,0.5,beurre : diacétyle
+^acide citrique|^acide tartrique|^creme de tartre|^acide ascorbique,,sour:0.9,both,0.3,acidulant
+^creme de coco|^lait de coco|^huile de coco,,tropical:0.5|nutty:0.6|creamy:0.6|sweet:0.3|fatty:0.7,both,0.5,coco : lactones
+^creme( |$)|^creme (liquide|double|fraiche|epaisse|fleurette|entiere|legere),,dairy:0.8|creamy:0.9|fatty:0.8|buttery:0.3|sweet:0.2,both,0.3,crème
+^lait,,dairy:0.8|sweet:0.4|creamy:0.4,both,0.2,lait
+^huile essentielle de citron|^huile essentielle d.orange,,citrus:0.95|fresh:0.6|resinous:0.2,both,0.95,huile essentielle d'agrume
+^huile d.olive,,fruity:0.6|green:0.7|bitter:0.4|pungent:0.4|herbal:0.3|fatty:0.9,savory,0.6,huile d'olive : polyphénols
+^huile de noix|^huile de noisette,,nutty:0.9|fatty:0.9|roasted:0.3,both,0.6,huile de fruit à coque
+^huile d.arachide,,nutty:0.4|fatty:0.9,both,0.2,huile d'arachide
+^huile de palme|^saindoux|^graisse,,fatty:0.9|meaty:0.2,savory,0.3,graisse
+^huile,,fatty:0.9,both,0.1,huile neutre
+^cacao|^pate de cacao|^chocolat noir,,cocoa:0.95|bitter:0.8|roasted:0.5|fruity:0.3|astringent:0.4|sweet:0.2,both,0.8,cacao : pyrazines
+^chocolat au lait,,cocoa:0.7|sweet:0.8|dairy:0.5|caramel:0.4|creamy:0.4,sweet,0.6,chocolat au lait
+^chocolat blanc,,sweet:0.9|dairy:0.6|vanillic:0.5|creamy:0.6|fatty:0.6,sweet,0.5,chocolat blanc
+^cafe|^liqueur de cafe,,coffee:0.95|roasted:0.9|bitter:0.8|caramel:0.3|smoky:0.2|sour:0.2,both,0.9,café : furfurylthiol
+^the vert|^the matcha|^the blanc,,green:0.7|grassy:0.6|bitter:0.5|astringent:0.6|umami:0.3|floral:0.2,both,0.6,thé vert
+^the,,astringent:0.6|bitter:0.5|malty:0.4|floral:0.3|woody:0.3,both,0.5,thé noir/oolong
+^rooibos,,sweet:0.4|woody:0.5|honey:0.4|vanillic:0.2,sweet,0.4,rooibos
+^miel,,honey:0.95|sweet:0.9|floral:0.6|caramel:0.3,both,0.7,miel
+^sirop d.erable,,caramel:0.9|sweet:0.9|woody:0.3|vanillic:0.2,both,0.7,sirop d'érable : sotolon
+^melasse,,caramel:0.8|bitter:0.4|sweet:0.7|smoky:0.3|metallic:0.2,both,0.7,mélasse
+^sucre roux|^cassonade,,sweet:0.9|caramel:0.5|honey:0.2,both,0.3,sucre roux
+^sirop d.agave,,sweet:0.9|caramel:0.2,both,0.2,sirop d'agave
+^sucre|^sirop|^dextrose|^fructose|^sorbitol|^mannitol|^xylitol|^erythritol|^maltitol,,sweet:0.95,both,0.1,sucrant pur
+^confiture,,jammy:0.8|sweet:0.8|fruity:0.6,sweet,0.5,confiture
+^vinaigre balsamique,,sour:0.7|sweet:0.5|caramel:0.5|fruity:0.4|woody:0.3,both,0.8,balsamique
+^vinaigre( |$)|^vinaigre (blanc|de vin|de cidre|de riz),,sour:0.95|pungent:0.4|fermented:0.3|fruity:0.2,both,0.7,vinaigre : acide acétique
+^sel|^fleur de sel|^saumure,,salty:0.95,both,0.2,sel
+^sauce soja|^sauce tamari|^shoyu|^sauce teriyaki,,umami:0.9|salty:0.9|fermented:0.6|caramel:0.3|roasted:0.3,savory,0.8,sauce soja : fermentation
+^miso|^bouillon miso,,umami:0.9|salty:0.8|fermented:0.7|nutty:0.3|sweet:0.2,savory,0.7,miso
+^natto|^tempeh,,fermented:0.8|nutty:0.4|umami:0.6|cheesy:0.3,savory,0.7,soja fermenté
+^sauce nuoc|^sauce de poisson,,umami:0.95|salty:0.9|fermented:0.8|marine:0.6|cheesy:0.2,savory,0.9,sauce de poisson
+^sauce hoisin,,sweet:0.7|umami:0.6|spicy:0.4|fermented:0.4|salty:0.5,savory,0.7,hoisin
+^sauce sriracha|^sriracha|^harissa|^sauce harissa|^sauce gochujang,,pungent:0.9|warming:0.7|sour:0.3|sweet:0.3|fermented:0.3|umami:0.3,savory,0.9,sauce pimentée
+^sauce kimchi|^kimchi|^pickle de chou,,sour:0.8|fermented:0.8|pungent:0.5|sulfurous:0.3|umami:0.4,savory,0.8,lacto-fermentation
+^pate de curry|^tom yum|^tom kha,,spicy:0.8|pungent:0.7|citrus:0.5|herbal:0.5|umami:0.4|warming:0.6,savory,0.9,pâte de curry thaïe
+^mirin|^sake,,sweet:0.6|fermented:0.5|fruity:0.3|umami:0.2,savory,0.4,mirin/saké
+^cornichon|^capre,,sour:0.8|salty:0.6|green:0.4|pungent:0.3|herbal:0.3,savory,0.7,condiment acidulé
+^ketchup|^sauce barbecue,,sweet:0.7|sour:0.5|umami:0.4|spicy:0.3|smoky:0.2,savory,0.5,sauce tomate sucrée
+^moutarde,,pungent:0.8|sour:0.5|spicy:0.4|salty:0.3,savory,0.7,moutarde : isothiocyanates
+^mayonnaise|^sauce bearnaise|^sauce hollandaise,,fatty:0.8|creamy:0.7|sour:0.4|buttery:0.3|umami:0.2,savory,0.4,sauce émulsionnée
+^sauce bechamel|^sauce veloute|^roux,,dairy:0.5|creamy:0.6|nutty:0.3|toasted:0.2,savory,0.3,sauce liée
+^sauce espagnole|^fond brun|^consomme|^bouillon de boeuf,,meaty:0.8|umami:0.8|roasted:0.6|salty:0.4|caramel:0.2,savory,0.6,fond brun
+^fond blanc|^bouillon de volaille,,meaty:0.6|umami:0.7|herbal:0.2|salty:0.4,savory,0.4,fond blanc
+^bouillon de legumes|^mirepoix|^bouquet garni,,herbal:0.6|sweet:0.3|umami:0.4|earthy:0.2,savory,0.4,base aromatique
+^bouillon de poisson,,marine:0.7|smoky:0.4|umami:0.6|salty:0.4,savory,0.6,fumet
+^vinaigrette,,sour:0.7|fatty:0.7|pungent:0.3|herbal:0.2,savory,0.5,vinaigrette
+^levain|^levure boulangere|^levure fraiche,,yeasty:0.9|fermented:0.6|sour:0.4|malty:0.2,savory,0.5,levure : fermentation
+^levure chimique|^bicarbonate,,salty:0.3|bitter:0.3|metallic:0.3,both,0.2,poudre levante
+^pate a pain|^pate a pizza|^pate levee,,yeasty:0.7|malty:0.3|toasted:0.2,savory,0.3,pâte levée
+^pate a choux|^pate brisee|^pate feuilletee,,buttery:0.7|toasted:0.4|nutty:0.2,both,0.3,pâte au beurre
+^pate sablee|^pate a tarte sucree,,buttery:0.7|sweet:0.6|vanillic:0.2|toasted:0.3,sweet,0.3,pâte sucrée
+^farine de sarrasin|^flocons de sarrasin|^sarrasin,,nutty:0.6|earthy:0.5|bitter:0.3|roasted:0.3,both,0.5,sarrasin
+^farine de mais|^flocons de mais|^mais,,sweet:0.5|nutty:0.3|toasted:0.2,both,0.3,maïs
+^farine de riz|^flocons de riz|^riz|^boisson de riz,,sweet:0.2|nutty:0.2,both,0.1,riz neutre
+^farine de avoine|^flocons de avoine|^avoine|^boisson d.avoine,,nutty:0.4|sweet:0.3|malty:0.2|creamy:0.2,both,0.2,avoine
+^farine de seigle|^flocons de seigle|^seigle,,malty:0.4|sour:0.2|earthy:0.4|bitter:0.2,savory,0.4,seigle
+^farine de chataigne,,nutty:0.6|sweet:0.4,both,0.4,châtaigne
+^farine|^flocons|^ble( |$)|^epeautre|^orge|^millet|^sorgho|^quinoa|^amarante,,nutty:0.3|toasted:0.1|sweet:0.1,both,0.1,céréale neutre
+^lentille|^pois|^haricot|^flageolet|^feve|^lupin|^soja,,earthy:0.5|nutty:0.3|green:0.2|umami:0.2,savory,0.2,légumineuse
+^tofu|^boisson de soja,,nutty:0.2|green:0.2|creamy:0.3,both,0.1,soja doux
+^boisson d.amande,,nutty:0.6|sweet:0.3,both,0.2,boisson d'amande
+^amidon|^fecule|^gomme|^agar|^pectine|^carraghenane|^alginate|^gelatine|^lecithine|^mono- et diglycerides|^colorant,,sweet:0.05,both,0.02,texturant quasi neutre
+^eau de rose,,rose:0.95|floral:0.9|sweet:0.2,both,0.8,eau de rose : géraniol
+^eau de fleur d.oranger,,floral:0.95|citrus:0.4|sweet:0.2,both,0.8,fleur d'oranger : linalol
+^eau( |$)|^eau (minerale|de source|gazeuse)|^lactoserum,,sweet:0.02,both,0.0,neutre
+^tonic,,bitter:0.8|sweet:0.5|citrus:0.3,both,0.5,tonic : quinine
+^cola,,sweet:0.9|spicy:0.3|citrus:0.3|caramel:0.4|sour:0.3,sweet,0.5,cola
+^kombucha,,sour:0.7|fermented:0.6|fruity:0.4|sweet:0.3,both,0.5,kombucha
+^jus,,fruity:0.7|sweet:0.6|sour:0.4,sweet,0.4,jus de fruit
+^vin rouge|^porto,,fruity:0.7|berry:0.6|astringent:0.6|woody:0.4|sour:0.5|spicy:0.2,both,0.7,vin rouge : tanins
+^vin blanc moelleux|^vin doux|^madere|^xeres|^vin jaune,,sweet:0.6|nutty:0.5|caramel:0.4|fruity:0.5|honey:0.3,both,0.7,vin oxydatif ou moelleux
+^vin|^champagne|^cremant,,fruity:0.7|sour:0.6|floral:0.4|citrus:0.3|yeasty:0.2,both,0.6,vin blanc/rosé
+^cidre|^calvados,,fruity:0.8|sour:0.4|fermented:0.4|sweet:0.3,both,0.6,cidre/pomme
+^biere stout,,roasted:0.8|coffee:0.5|bitter:0.7|malty:0.8|cocoa:0.3,savory,0.7,stout
+^biere|^sour beer,,malty:0.7|bitter:0.6|fermented:0.4|yeasty:0.4|floral:0.3|citrus:0.2,both,0.5,bière
+^whisky|^rhum ambre|^eau-de-vie de vin|^armagnac|^cognac,,woody:0.8|caramel:0.6|vanillic:0.5|smoky:0.3|warming:0.6|fruity:0.3,both,0.8,spiritueux vieilli en fût
+^rhum|^tequila|^mezcal|^vodka|^gin|^kirsch,,warming:0.7|fruity:0.3|herbal:0.3|solvent:0.3,both,0.7,spiritueux blanc
+^triple sec|^liqueur,,citrus:0.7|sweet:0.8|warming:0.4,sweet,0.7,liqueur
+^vermouth,,herbal:0.7|bitter:0.5|sweet:0.4|spicy:0.3|fruity:0.3,both,0.7,vermouth
+,céréale,nutty:0.3|sweet:0.1,both,0.1,céréale (famille)
+,légume,green:0.5|earthy:0.3,savory,0.3,légume (famille)
+,fruit,fruity:0.7|sweet:0.6|sour:0.3,sweet,0.5,fruit (famille)
+,épice,spicy:0.7|warming:0.6|woody:0.3,both,0.7,épice (famille)
+,herbe aromatique,herbal:0.7|green:0.5,savory,0.6,herbe (famille)
