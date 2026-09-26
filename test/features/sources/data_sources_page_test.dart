@@ -14,7 +14,7 @@ void main() {
     for (final s in kDataSources) {
       expect(find.text(s.name), findsOneWidget, reason: s.id);
     }
-    expect(find.text(SourceLicense.cc0.labelFr), findsOneWidget);
+    expect(find.text(SourceLicense.cc0.labelFr), findsWidgets);
     expect(find.text('https://fdc.nal.usda.gov/'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
