@@ -333,6 +333,24 @@ void main() {
       expect(baked.checks.first.met, isTrue);
     });
 
+    test('Maillard : un rôti de viande brunit sans sucre ajouté', () {
+      final roast = [
+        MixLine(
+          index: 0,
+          label: 'Gigot',
+          ingredientId: 'GIGOT',
+          grams: 1500,
+          profile: comp(water: 62, proteins: 17, fats: 20),
+        ),
+      ];
+      final m = find(
+        run(mix(roast, ['Enfourner 1 h à 200 °C'])),
+        'RULE-MAILLARD',
+      )!;
+      expect(m.checks.first.met, isTrue);
+      expect(m.checks[1].detail, contains('musculaires'));
+    });
+
     test('activité de l’eau : denrée périssable signalée en info', () {
       final a = find(run(mix([water(500), sugar(10)])), 'RULE-AW-MICRO')!;
       expect(a.severity, FunctionalSeverity.info);

@@ -462,7 +462,11 @@ abstract final class FunctionalConstraintSolver {
           s.hasComponent('SM_GLU_MONO', minPct: 0.05) ||
           s.hasComponent('SM_FRUCTOSE', minPct: 0.05) ||
           s.sugarPct >= 0.5;
-      if (!reducing || s.proteinPct < 1) return null;
+      // Viandes et poissons : glucose et ribose musculaires (≈ 0,1 %)
+      // suffisent au brunissement d'un rôti (retour test visuel : gigot
+      // rôti à 200 °C sans Maillard).
+      final muscle = s.proteinPct >= 8;
+      if ((!reducing && !muscle) || s.proteinPct < 1) return null;
       final dry = s.maxDryHeatC;
       if (dry == null) return null;
       return _Evaluation(
@@ -477,8 +481,9 @@ abstract final class FunctionalConstraintSolver {
           _Check(
             'Sucres réducteurs et protéines',
             true,
-            detail:
-                'sucres ${_n(s.sugarPct)} %, protéines ${_n(s.proteinPct)} %',
+            detail: reducing
+                ? 'sucres ${_n(s.sugarPct)} %, protéines ${_n(s.proteinPct)} %'
+                : 'sucres musculaires, protéines ${_n(s.proteinPct)} %',
           ),
           _Check('aw de surface 0,4–0,85', null, critical: false),
         ],
@@ -635,8 +640,8 @@ abstract final class FunctionalConstraintSolver {
         triggers: const [],
         checks: [
           _Check(
-            'aw > 0,86 (croissance microbienne possible)',
-            perishable,
+            'Stabilité : aw ≤ 0,86 ou pH ≤ 4,6',
+            !perishable,
             detail:
                 'aw estimée ${_n(aw, 2)}'
                 '${ph == null ? '' : ', pH ${_n(ph)}'}',
