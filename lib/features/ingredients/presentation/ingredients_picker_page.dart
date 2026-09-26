@@ -17,6 +17,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/models/allergens.dart';
 
 import '../../../core/models/ingredient_summary.dart';
 import '../data/ingredient_alias_index.dart';
@@ -266,7 +267,9 @@ class _IngredientRow extends StatelessWidget {
           if (summary.isFermented) const Icon(Icons.eco_outlined, size: 18),
           if (summary.hasAllergens)
             Tooltip(
-              message: 'Allergènes : ${summary.allergenTags.join(", ")}',
+              message:
+                  'Allergènes : '
+                  '${summary.allergenTags.map(allergenLabelFr).join(", ")}',
               child: const Icon(
                 Icons.warning_amber_outlined,
                 color: Colors.orange,

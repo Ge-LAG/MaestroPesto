@@ -11,7 +11,7 @@ void main() {
   tearDown(() => db.close());
 
   test(
-    'charge les 7 fichiers réels, puis saute un ré-import inchangé',
+    'charge les 8 fichiers réels, puis saute un ré-import inchangé',
     () async {
       final report = await MetierEnrichmentLoader().loadInto(
         db,
@@ -27,6 +27,7 @@ void main() {
       expect(report['enrichment/process_factors'], greaterThan(60));
       expect(report['phase4/functional_components'], 40);
       expect(report['phase4/experimental_validation_cases'], 10);
+      expect(report['enrichment/ingredient_allergens'], greaterThan(200));
 
       final skipped = <String>[];
       await MetierEnrichmentLoader().loadInto(
@@ -37,7 +38,7 @@ void main() {
           if (s) skipped.add(source);
         },
       );
-      expect(skipped, hasLength(7));
+      expect(skipped, hasLength(8));
       expect(
         await db.select(db.ingredientFlavorProfiles).get(),
         hasLength(603),

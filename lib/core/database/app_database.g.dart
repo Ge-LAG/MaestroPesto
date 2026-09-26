@@ -19590,6 +19590,401 @@ class CulinaryPairingsCompanion extends UpdateCompanion<CulinaryPairing> {
   }
 }
 
+class $IngredientAllergensTable extends IngredientAllergens
+    with TableInfo<$IngredientAllergensTable, IngredientAllergen> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IngredientAllergensTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _ingredientIdMeta = const VerificationMeta(
+    'ingredientId',
+  );
+  @override
+  late final GeneratedColumn<String> ingredientId = GeneratedColumn<String>(
+    'ingredient_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _declaredTagsMeta = const VerificationMeta(
+    'declaredTags',
+  );
+  @override
+  late final GeneratedColumn<String> declaredTags = GeneratedColumn<String>(
+    'declared_tags',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _inferredTagsMeta = const VerificationMeta(
+    'inferredTags',
+  );
+  @override
+  late final GeneratedColumn<String> inferredTags = GeneratedColumn<String>(
+    'inferred_tags',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _removedTagsMeta = const VerificationMeta(
+    'removedTags',
+  );
+  @override
+  late final GeneratedColumn<String> removedTags = GeneratedColumn<String>(
+    'removed_tags',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    ingredientId,
+    declaredTags,
+    inferredTags,
+    removedTags,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ingredient_allergens';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<IngredientAllergen> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('ingredient_id')) {
+      context.handle(
+        _ingredientIdMeta,
+        ingredientId.isAcceptableOrUnknown(
+          data['ingredient_id']!,
+          _ingredientIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_ingredientIdMeta);
+    }
+    if (data.containsKey('declared_tags')) {
+      context.handle(
+        _declaredTagsMeta,
+        declaredTags.isAcceptableOrUnknown(
+          data['declared_tags']!,
+          _declaredTagsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('inferred_tags')) {
+      context.handle(
+        _inferredTagsMeta,
+        inferredTags.isAcceptableOrUnknown(
+          data['inferred_tags']!,
+          _inferredTagsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('removed_tags')) {
+      context.handle(
+        _removedTagsMeta,
+        removedTags.isAcceptableOrUnknown(
+          data['removed_tags']!,
+          _removedTagsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {ingredientId};
+  @override
+  IngredientAllergen map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IngredientAllergen(
+      ingredientId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ingredient_id'],
+      )!,
+      declaredTags: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}declared_tags'],
+      ),
+      inferredTags: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}inferred_tags'],
+      ),
+      removedTags: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}removed_tags'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $IngredientAllergensTable createAlias(String alias) {
+    return $IngredientAllergensTable(attachedDatabase, alias);
+  }
+}
+
+class IngredientAllergen extends DataClass
+    implements Insertable<IngredientAllergen> {
+  final String ingredientId;
+
+  /// Étiquettes du référentiel conservées, séparées par `|`.
+  final String? declaredTags;
+
+  /// Allergènes déduits du nom et de la catégorie, séparés par `|`.
+  final String? inferredTags;
+
+  /// Étiquettes du référentiel corrigées (retirées), séparées par `|`.
+  final String? removedTags;
+  final String? note;
+  const IngredientAllergen({
+    required this.ingredientId,
+    this.declaredTags,
+    this.inferredTags,
+    this.removedTags,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['ingredient_id'] = Variable<String>(ingredientId);
+    if (!nullToAbsent || declaredTags != null) {
+      map['declared_tags'] = Variable<String>(declaredTags);
+    }
+    if (!nullToAbsent || inferredTags != null) {
+      map['inferred_tags'] = Variable<String>(inferredTags);
+    }
+    if (!nullToAbsent || removedTags != null) {
+      map['removed_tags'] = Variable<String>(removedTags);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  IngredientAllergensCompanion toCompanion(bool nullToAbsent) {
+    return IngredientAllergensCompanion(
+      ingredientId: Value(ingredientId),
+      declaredTags: declaredTags == null && nullToAbsent
+          ? const Value.absent()
+          : Value(declaredTags),
+      inferredTags: inferredTags == null && nullToAbsent
+          ? const Value.absent()
+          : Value(inferredTags),
+      removedTags: removedTags == null && nullToAbsent
+          ? const Value.absent()
+          : Value(removedTags),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory IngredientAllergen.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IngredientAllergen(
+      ingredientId: serializer.fromJson<String>(json['ingredientId']),
+      declaredTags: serializer.fromJson<String?>(json['declaredTags']),
+      inferredTags: serializer.fromJson<String?>(json['inferredTags']),
+      removedTags: serializer.fromJson<String?>(json['removedTags']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'ingredientId': serializer.toJson<String>(ingredientId),
+      'declaredTags': serializer.toJson<String?>(declaredTags),
+      'inferredTags': serializer.toJson<String?>(inferredTags),
+      'removedTags': serializer.toJson<String?>(removedTags),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  IngredientAllergen copyWith({
+    String? ingredientId,
+    Value<String?> declaredTags = const Value.absent(),
+    Value<String?> inferredTags = const Value.absent(),
+    Value<String?> removedTags = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+  }) => IngredientAllergen(
+    ingredientId: ingredientId ?? this.ingredientId,
+    declaredTags: declaredTags.present ? declaredTags.value : this.declaredTags,
+    inferredTags: inferredTags.present ? inferredTags.value : this.inferredTags,
+    removedTags: removedTags.present ? removedTags.value : this.removedTags,
+    note: note.present ? note.value : this.note,
+  );
+  IngredientAllergen copyWithCompanion(IngredientAllergensCompanion data) {
+    return IngredientAllergen(
+      ingredientId: data.ingredientId.present
+          ? data.ingredientId.value
+          : this.ingredientId,
+      declaredTags: data.declaredTags.present
+          ? data.declaredTags.value
+          : this.declaredTags,
+      inferredTags: data.inferredTags.present
+          ? data.inferredTags.value
+          : this.inferredTags,
+      removedTags: data.removedTags.present
+          ? data.removedTags.value
+          : this.removedTags,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientAllergen(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('declaredTags: $declaredTags, ')
+          ..write('inferredTags: $inferredTags, ')
+          ..write('removedTags: $removedTags, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(ingredientId, declaredTags, inferredTags, removedTags, note);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IngredientAllergen &&
+          other.ingredientId == this.ingredientId &&
+          other.declaredTags == this.declaredTags &&
+          other.inferredTags == this.inferredTags &&
+          other.removedTags == this.removedTags &&
+          other.note == this.note);
+}
+
+class IngredientAllergensCompanion extends UpdateCompanion<IngredientAllergen> {
+  final Value<String> ingredientId;
+  final Value<String?> declaredTags;
+  final Value<String?> inferredTags;
+  final Value<String?> removedTags;
+  final Value<String?> note;
+  final Value<int> rowid;
+  const IngredientAllergensCompanion({
+    this.ingredientId = const Value.absent(),
+    this.declaredTags = const Value.absent(),
+    this.inferredTags = const Value.absent(),
+    this.removedTags = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  IngredientAllergensCompanion.insert({
+    required String ingredientId,
+    this.declaredTags = const Value.absent(),
+    this.inferredTags = const Value.absent(),
+    this.removedTags = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : ingredientId = Value(ingredientId);
+  static Insertable<IngredientAllergen> custom({
+    Expression<String>? ingredientId,
+    Expression<String>? declaredTags,
+    Expression<String>? inferredTags,
+    Expression<String>? removedTags,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (ingredientId != null) 'ingredient_id': ingredientId,
+      if (declaredTags != null) 'declared_tags': declaredTags,
+      if (inferredTags != null) 'inferred_tags': inferredTags,
+      if (removedTags != null) 'removed_tags': removedTags,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  IngredientAllergensCompanion copyWith({
+    Value<String>? ingredientId,
+    Value<String?>? declaredTags,
+    Value<String?>? inferredTags,
+    Value<String?>? removedTags,
+    Value<String?>? note,
+    Value<int>? rowid,
+  }) {
+    return IngredientAllergensCompanion(
+      ingredientId: ingredientId ?? this.ingredientId,
+      declaredTags: declaredTags ?? this.declaredTags,
+      inferredTags: inferredTags ?? this.inferredTags,
+      removedTags: removedTags ?? this.removedTags,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (ingredientId.present) {
+      map['ingredient_id'] = Variable<String>(ingredientId.value);
+    }
+    if (declaredTags.present) {
+      map['declared_tags'] = Variable<String>(declaredTags.value);
+    }
+    if (inferredTags.present) {
+      map['inferred_tags'] = Variable<String>(inferredTags.value);
+    }
+    if (removedTags.present) {
+      map['removed_tags'] = Variable<String>(removedTags.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IngredientAllergensCompanion(')
+          ..write('ingredientId: $ingredientId, ')
+          ..write('declaredTags: $declaredTags, ')
+          ..write('inferredTags: $inferredTags, ')
+          ..write('removedTags: $removedTags, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -19638,6 +20033,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CulinaryPairingsTable culinaryPairings = $CulinaryPairingsTable(
     this,
   );
+  late final $IngredientAllergensTable ingredientAllergens =
+      $IngredientAllergensTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -19668,6 +20065,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     experimentalValidationCases,
     ingredientFlavorProfiles,
     culinaryPairings,
+    ingredientAllergens,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -31293,6 +31691,230 @@ typedef $$CulinaryPairingsTableProcessedTableManager =
       CulinaryPairing,
       PrefetchHooks Function()
     >;
+typedef $$IngredientAllergensTableCreateCompanionBuilder =
+    IngredientAllergensCompanion Function({
+      required String ingredientId,
+      Value<String?> declaredTags,
+      Value<String?> inferredTags,
+      Value<String?> removedTags,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+typedef $$IngredientAllergensTableUpdateCompanionBuilder =
+    IngredientAllergensCompanion Function({
+      Value<String> ingredientId,
+      Value<String?> declaredTags,
+      Value<String?> inferredTags,
+      Value<String?> removedTags,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+
+class $$IngredientAllergensTableFilterComposer
+    extends Composer<_$AppDatabase, $IngredientAllergensTable> {
+  $$IngredientAllergensTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get declaredTags => $composableBuilder(
+    column: $table.declaredTags,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get inferredTags => $composableBuilder(
+    column: $table.inferredTags,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get removedTags => $composableBuilder(
+    column: $table.removedTags,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$IngredientAllergensTableOrderingComposer
+    extends Composer<_$AppDatabase, $IngredientAllergensTable> {
+  $$IngredientAllergensTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get declaredTags => $composableBuilder(
+    column: $table.declaredTags,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get inferredTags => $composableBuilder(
+    column: $table.inferredTags,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get removedTags => $composableBuilder(
+    column: $table.removedTags,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$IngredientAllergensTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IngredientAllergensTable> {
+  $$IngredientAllergensTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get ingredientId => $composableBuilder(
+    column: $table.ingredientId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get declaredTags => $composableBuilder(
+    column: $table.declaredTags,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get inferredTags => $composableBuilder(
+    column: $table.inferredTags,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get removedTags => $composableBuilder(
+    column: $table.removedTags,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$IngredientAllergensTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $IngredientAllergensTable,
+          IngredientAllergen,
+          $$IngredientAllergensTableFilterComposer,
+          $$IngredientAllergensTableOrderingComposer,
+          $$IngredientAllergensTableAnnotationComposer,
+          $$IngredientAllergensTableCreateCompanionBuilder,
+          $$IngredientAllergensTableUpdateCompanionBuilder,
+          (
+            IngredientAllergen,
+            BaseReferences<
+              _$AppDatabase,
+              $IngredientAllergensTable,
+              IngredientAllergen
+            >,
+          ),
+          IngredientAllergen,
+          PrefetchHooks Function()
+        > {
+  $$IngredientAllergensTableTableManager(
+    _$AppDatabase db,
+    $IngredientAllergensTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IngredientAllergensTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IngredientAllergensTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$IngredientAllergensTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> ingredientId = const Value.absent(),
+                Value<String?> declaredTags = const Value.absent(),
+                Value<String?> inferredTags = const Value.absent(),
+                Value<String?> removedTags = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientAllergensCompanion(
+                ingredientId: ingredientId,
+                declaredTags: declaredTags,
+                inferredTags: inferredTags,
+                removedTags: removedTags,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String ingredientId,
+                Value<String?> declaredTags = const Value.absent(),
+                Value<String?> inferredTags = const Value.absent(),
+                Value<String?> removedTags = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => IngredientAllergensCompanion.insert(
+                ingredientId: ingredientId,
+                declaredTags: declaredTags,
+                inferredTags: inferredTags,
+                removedTags: removedTags,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$IngredientAllergensTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $IngredientAllergensTable,
+      IngredientAllergen,
+      $$IngredientAllergensTableFilterComposer,
+      $$IngredientAllergensTableOrderingComposer,
+      $$IngredientAllergensTableAnnotationComposer,
+      $$IngredientAllergensTableCreateCompanionBuilder,
+      $$IngredientAllergensTableUpdateCompanionBuilder,
+      (
+        IngredientAllergen,
+        BaseReferences<
+          _$AppDatabase,
+          $IngredientAllergensTable,
+          IngredientAllergen
+        >,
+      ),
+      IngredientAllergen,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -31360,4 +31982,6 @@ class $AppDatabaseManager {
       );
   $$CulinaryPairingsTableTableManager get culinaryPairings =>
       $$CulinaryPairingsTableTableManager(_db, _db.culinaryPairings);
+  $$IngredientAllergensTableTableManager get ingredientAllergens =>
+      $$IngredientAllergensTableTableManager(_db, _db.ingredientAllergens);
 }

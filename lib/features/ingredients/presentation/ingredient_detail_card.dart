@@ -14,6 +14,7 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/models/allergens.dart';
 
 import '../../../core/models/ingredient_detail.dart';
 import '../../../core/models/nutrition_profile.dart';
@@ -105,7 +106,7 @@ class IngredientDetailCard extends StatelessWidget {
                         border: Border.all(color: Colors.red.shade200),
                       ),
                       child: Text(
-                        a,
+                        allergenLabelFr(a),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.red.shade900,

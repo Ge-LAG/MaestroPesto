@@ -18,6 +18,7 @@ import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recommendations/data/recommender.dart';
+import 'package:maestropesto/features/analysis/data/metier_reference.dart';
 import 'package:maestropesto/features/analysis/data/recipe_analysis_service.dart';
 import 'package:maestropesto/features/recipes/data/demo_recipes.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
@@ -443,6 +444,39 @@ void main() {
       expect(p.isKnown(MacroField.saturatedFats), isTrue);
       expect(p.derivedFields, contains(MacroField.fats));
       expect(p.fats, 0);
+    });
+  });
+
+  group('Allergènes enrichis (annexe II UE)', () {
+    test('lait, poisson déduits ; étiquettes erronées corrigées', () async {
+      final ref = await MetierReference.of(db);
+      List<String> a(String id) => ref.ingredients[id]!.allergens;
+      expect(a('ING-DAIRY-LAITENTIER-000001'), contains('milk'));
+      expect(a('ING-DAIRY-BEURREDOUX-000001'), contains('milk'));
+      expect(a('ING-MARINE-SAUMON-000001'), contains('fish'));
+      expect(
+        ref.ingredients['ING-MARINE-SAUMON-000001']!.inferredAllergens,
+        contains('fish'),
+      );
+      expect(a('ING-BEV-JUSDORANGE-000001'), isNot(contains('peanuts')));
+      expect(a('ING-BEV-LAITDECOCO-000001'), isEmpty);
+      expect(a('ING-PLANT-LAITUE-000001'), isEmpty, reason: 'laitue ≠ lait');
+    });
+
+    test('crème pâtissière : lait, œufs, gluten dans l’analyse', () async {
+      final creme = demoRecipes.firstWhere(
+        (r) => r.title.startsWith('Crème pâtissière'),
+      );
+      final analysis = await RecipeAnalysisService(db).analyze(
+        ingredients: creme.ingredients,
+        steps: creme.steps,
+        servings: creme.servings,
+        withSuggestions: false,
+      );
+      expect(
+        analysis.allergens.keys,
+        containsAll(<String>['milk', 'eggs', 'gluten']),
+      );
     });
   });
 }

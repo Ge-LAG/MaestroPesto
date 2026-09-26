@@ -138,3 +138,23 @@ class CulinaryPairings extends Table {
   @override
   Set<Column> get primaryKey => {pairId};
 }
+
+/// Allergènes par ingrédient (refonte UX 2026-09-26) : étiquettes du
+/// référentiel conservées, allergènes déduits (annexe II du règlement UE
+/// 1169/2011, règles curatées) et étiquettes erronées retirées.
+class IngredientAllergens extends Table {
+  TextColumn get ingredientId => text().named('ingredient_id')();
+
+  /// Étiquettes du référentiel conservées, séparées par `|`.
+  TextColumn get declaredTags => text().named('declared_tags').nullable()();
+
+  /// Allergènes déduits du nom et de la catégorie, séparés par `|`.
+  TextColumn get inferredTags => text().named('inferred_tags').nullable()();
+
+  /// Étiquettes du référentiel corrigées (retirées), séparées par `|`.
+  TextColumn get removedTags => text().named('removed_tags').nullable()();
+  TextColumn get note => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {ingredientId};
+}

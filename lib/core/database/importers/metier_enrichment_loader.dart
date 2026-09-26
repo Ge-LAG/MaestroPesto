@@ -84,6 +84,12 @@ class MetierEnrichmentLoader {
       parseCulinaryPairing,
     );
     await load(
+      'enrichment/ingredient_allergens',
+      p.join(enrichmentDir, 'ingredient_allergens.csv'),
+      db.ingredientAllergens,
+      parseIngredientAllergens,
+    );
+    await load(
       'phase4/functional_components',
       p.join(phase4Dir, 'functional_components.csv'),
       db.functionalComponents,
@@ -114,6 +120,20 @@ Insertable<IngredientCulinaryData> parseIngredientCulinary(
     ph: Value(c.dbl('ph')),
     phConfidence: Value(c.dbl('ph_confidence')),
     phNote: Value(c.str('ph_note')),
+  );
+}
+
+Insertable<IngredientAllergen> parseIngredientAllergens(
+  List<String> row,
+  List<String> header,
+) {
+  final c = CsvCells(row, columnIndex(header));
+  return IngredientAllergensCompanion(
+    ingredientId: Value(c.reqStr('ingredient_id')),
+    declaredTags: Value(c.str('declared_tags')),
+    inferredTags: Value(c.str('inferred_tags')),
+    removedTags: Value(c.str('removed_tags')),
+    note: Value(c.str('note')),
   );
 }
 

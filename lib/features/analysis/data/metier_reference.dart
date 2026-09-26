@@ -26,6 +26,8 @@ class IngredientReference {
     this.unitMasses = const <String, double>{},
     this.ph,
     this.components = const <String, double>{},
+    this.allergens = const <String>[],
+    this.inferredAllergens = const <String>{},
   });
 
   final String id;
@@ -40,6 +42,14 @@ class IngredientReference {
 
   /// Composants fonctionnels (g/100 g).
   final Map<String, double> components;
+
+  /// Allergènes de l'ingrédient : étiquettes du référentiel corrigées
+  /// et allergènes déduits (enrichissement `ingredient_allergens`).
+  final List<String> allergens;
+
+  /// Sous-ensemble de [allergens] déduit par règle (non déclaré au
+  /// référentiel).
+  final Set<String> inferredAllergens;
 
   String get normalizedName => _normalize(name);
 
@@ -156,8 +166,21 @@ class MetierReference {
       final d = r.densityGPerMl;
       if (d != null) measuredDensity[r.ingredientId] = d;
     }
+    final allergenRows = {
+      for (final r in await db.select(db.ingredientAllergens).get())
+        r.ingredientId: r,
+    };
+    List<String> split(String? raw) => [
+      for (final t in (raw ?? '').split('|'))
+        if (t.trim().isNotEmpty) t.trim(),
+    ];
     final ingredients = <String, IngredientReference>{};
     for (final r in await db.select(db.ingredients).get()) {
+      final enriched = allergenRows[r.ingredientId];
+      final inferred = split(enriched?.inferredTags).toSet();
+      final allergens = enriched == null
+          ? split(r.allergenTags)
+          : {...split(enriched.declaredTags), ...inferred}.toList();
       final c = culinary[r.ingredientId];
       final measured = measuredDensity[r.ingredientId];
       ingredients[r.ingredientId] = IngredientReference(
@@ -171,6 +194,8 @@ class MetierReference {
         unitMasses: _parseUnitMasses(c?.unitMasses),
         ph: c?.ph,
         components: components[r.ingredientId] ?? const {},
+        allergens: allergens,
+        inferredAllergens: inferred,
       );
     }
     final factors = <(FoodGroup, CookingMethod), CookingFactor>{};

@@ -27,6 +27,39 @@ class IngredientsRepository implements IngredientCandidatesSource {
         .getSingleOrNull();
   }
 
+  /// Allergènes enrichis de chaque ingrédient (étiquettes du référentiel
+  /// corrigées + allergènes déduits, table `ingredient_allergens`).
+  /// Un ingrédient absent de la table garde ses étiquettes d'origine.
+  Future<Map<String, List<String>>> enrichedAllergens() async {
+    final rows = await db.select(db.ingredientAllergens).get();
+    List<String> split(String? raw) => [
+      for (final t in (raw ?? '').split('|'))
+        if (t.trim().isNotEmpty) t.trim(),
+    ];
+    return {
+      for (final r in rows)
+        r.ingredientId: {
+          ...split(r.declaredTags),
+          ...split(r.inferredTags),
+        }.toList(),
+    };
+  }
+
+  /// Allergènes enrichis d'un ingrédient (null sans enrichissement).
+  Future<List<String>?> enrichedAllergensFor(String ingredientId) async {
+    final row =
+        await (db.select(db.ingredientAllergens)
+              ..where((t) => t.ingredientId.equals(ingredientId))
+              ..limit(1))
+            .getSingleOrNull();
+    if (row == null) return null;
+    return {
+      for (final raw in [row.declaredTags, row.inferredTags])
+        for (final t in (raw ?? '').split('|'))
+          if (t.trim().isNotEmpty) t.trim(),
+    }.toList();
+  }
+
   /// Search ingredients by partial match on the canonical French name.
   /// Used by an eventual autocomplete in the recipe form.
   Future<List<Ingredient>> searchByName(String query, {int limit = 20}) {
@@ -59,10 +92,13 @@ class IngredientsRepository implements IngredientCandidatesSource {
     final rows = await (db.select(
       db.ingredients,
     )..orderBy([(t) => OrderingTerm.asc(t.canonicalNameFr)])).get();
+    final allergens = await enrichedAllergens();
     final summaries = [
       for (final row in rows)
-        IngredientMapping.toSummary(row)
-            .copyWith(confidence: row.confidence ?? 1.0),
+        IngredientMapping.toSummary(row).copyWith(
+          confidence: row.confidence ?? 1.0,
+          allergenTags: allergens[row.ingredientId],
+        ),
     ]..sort((a, b) => compareNaturalFr(a.canonicalNameFr, b.canonicalNameFr));
     return summaries;
   }
@@ -74,8 +110,10 @@ class IngredientsRepository implements IngredientCandidatesSource {
   Future<IngredientSummary?> summaryFor(String ingredientId) async {
     final row = await getById(ingredientId);
     if (row == null) return null;
-    return IngredientMapping.toSummary(row)
-        .copyWith(confidence: row.confidence ?? 1.0);
+    return IngredientMapping.toSummary(row).copyWith(
+      confidence: row.confidence ?? 1.0,
+      allergenTags: await enrichedAllergensFor(ingredientId),
+    );
   }
 
   /// Phase 09 Lot H (§9.1) — candidats de substitution : même

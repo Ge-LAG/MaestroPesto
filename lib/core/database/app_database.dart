@@ -49,6 +49,7 @@ part 'app_database.g.dart';
     ExperimentalValidationCases,
     IngredientFlavorProfiles,
     CulinaryPairings,
+    IngredientAllergens,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -65,8 +66,10 @@ class AppDatabase extends _$AppDatabase {
   ///   profiles, culinary pairings, Phase 4 orphan CSVs) and recipe
   ///   persistence columns (nutrition + source, quantity text, cooking
   ///   method, typed steps).
+  /// - v5 (2026-09-26, refonte UX): `ingredient_allergens` enrichment
+  ///   (declared, inferred and corrected EU annex II allergens).
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -99,6 +102,9 @@ class AppDatabase extends _$AppDatabase {
         await m.addColumn(recipeSteps, recipeSteps.opId);
         await m.addColumn(recipeSteps, recipeSteps.temperatureC);
         await m.addColumn(recipeSteps, recipeSteps.durationMin);
+      }
+      if (from < 5) {
+        await m.createTable(ingredientAllergens);
       }
     },
     beforeOpen: (details) async {

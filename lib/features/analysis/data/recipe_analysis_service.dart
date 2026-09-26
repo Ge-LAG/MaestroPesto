@@ -55,6 +55,7 @@ class RecipeAnalysis {
     required this.insights,
     this.flavor,
     this.suggestions = const <FlavorSuggestion>[],
+    this.allergens = const <String, List<int>>{},
   });
 
   final NutritionAggregation nutrition;
@@ -68,6 +69,10 @@ class RecipeAnalysis {
   final List<ExpertInsight> insights;
   final RecipeFlavorAnalysis? flavor;
   final List<FlavorSuggestion> suggestions;
+
+  /// Allergènes déclarés (étiquette → index des lignes concernées),
+  /// d'après le référentiel des ingrédients liés.
+  final Map<String, List<int>> allergens;
 
   List<FunctionalAlert> get warnings =>
       alerts.where((a) => a.severity == FunctionalSeverity.warning).toList();
@@ -221,7 +226,25 @@ class RecipeAnalysisService {
       insights: expertInsights(state, ref, lines),
       flavor: flavor,
       suggestions: suggestions,
+      allergens: allergensOf(ingredients, ref),
     );
+  }
+
+  /// Allergènes déclarés par ligne liée (étiquette → index des lignes).
+  @visibleForTesting
+  static Map<String, List<int>> allergensOf(
+    List<RecipeIngredient> ingredients,
+    MetierReference ref,
+  ) {
+    final result = <String, List<int>>{};
+    for (var i = 0; i < ingredients.length; i++) {
+      final id = ingredients[i].ingredientId;
+      if (id == null) continue;
+      for (final tag in ref.ingredients[id]?.allergens ?? const <String>[]) {
+        result.putIfAbsent(tag, () => []).add(i);
+      }
+    }
+    return result;
   }
 
   /// Mode de cuisson de chaque ligne (voir l'en-tête du fichier).
