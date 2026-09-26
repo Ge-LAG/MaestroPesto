@@ -635,11 +635,11 @@
       ],
       "kind": "project",
       "status": "active",
-      "sha256": "a33fe58256aa9722c3c453a4c76c6a81c371dc8c2cacc323d41e2eb9311a289d",
-      "chars": 2600,
-      "size": 3715,
-      "mtime_ns": 1790421803695605800,
-      "revision": 5,
+      "sha256": "f7d9b15beb2ce98a3bd6511f7a896d161e30310564d90461fbbce8e04dafbc1d",
+      "chars": 2844,
+      "size": 3983,
+      "mtime_ns": 1790429137505249900,
+      "revision": 6,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -656,7 +656,7 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "92ea9701fbaa94ee6369cd32f304757a410b6b44af435ef1df8fe8d8b1e3335d",
+      "body_digest": "4da86a82bf16a2f73b77d62c15c83c095619c6aef9abba7e3a50a7e2cc8fb067",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -664,6 +664,8 @@
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-ux-refonte.html#phase10-ux-refonte",
         "../records/ac-129.html#ac-129",
+        "../work/phase10-sources-ouvertes.html#phase10-sources-ouvertes",
+        "../records/ac-130.html#ac-130",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../work/idea-ocr-recettes.html#idea-ocr-recettes",
@@ -1766,6 +1768,53 @@
       ]
     },
     {
+      "id": "ac-130",
+      "path": "records/ac-130.html",
+      "title": "Majeur : rapprochements Ciqual par nom erronés",
+      "summary": "Environ 25 ingrédients rattachés par nom à un mauvais aliment Ciqual (bière sans alcool → bière forte, fromage frais → fromage de tête, noix → muscade, yaourt → yaourt à la grecque…).",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "ciqual",
+        "rapprochement",
+        "fiabilite"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "9245fa7214bb416bfc10f3dc399770bd6fb79ecde353a40a19942378f4b1bf73",
+      "chars": 1498,
+      "size": 2645,
+      "mtime_ns": 1790429112293564800,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "71805cd96e12c1b789ecbdf7f575725a83783464fd9eb2051bb742cf161fd9f5",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-sources-ouvertes.html#phase10-sources-ouvertes"
+      ],
+      "anchors": [
+        "ac-130"
+      ]
+    },
+    {
       "id": "ac-F-004",
       "path": "records/ac-F-004.html",
       "title": "Dette : cache global IngredientAliasIndex",
@@ -2116,11 +2165,11 @@
       ],
       "kind": "acceptance",
       "status": "ready",
-      "sha256": "0b7c5d51fa4a46ee4e7a6a611d7beb46228b75116fd684b0cc52665416006253",
-      "chars": 3123,
-      "size": 4714,
-      "mtime_ns": 1790421802353012100,
-      "revision": 3,
+      "sha256": "db3895a8527a41d3963eb681c7390853593dd61adb1bf57d354fa4acd8a23dee",
+      "chars": 3551,
+      "size": 5199,
+      "mtime_ns": 1790429136861546900,
+      "revision": 4,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -2128,30 +2177,32 @@
       "review_digest": "",
       "requires": [
         "phase10-coherence-procede",
-        "phase10-ux-refonte"
+        "phase10-ux-refonte",
+        "phase10-sources-ouvertes"
       ],
       "supersedes": [],
       "components": [],
       "applies_to": [],
       "paths": [],
       "watch": [],
-      "candidate": "7e30d40 (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "candidate": "d6d0544 (branche Ge-LAG/db-connection-strategies, non poussée)",
       "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
       "evidence_digest": "",
       "criteria": [
         {
           "id": "A1",
-          "text": "Les 12 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
+          "text": "Les 13 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
         }
       ],
       "evidence": [],
-      "body_digest": "c952ff6ee5d2f3a19a3a638cbe45f6c12b37bafdf00654fee10e53430af79ec1",
+      "body_digest": "1a6f99cf909c31c3b01d5af5ee69eaa6a4b4a85dfe26f191515bce6ea448aacc",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-ux-refonte.html#phase10-ux-refonte",
+        "../work/phase10-sources-ouvertes.html#phase10-sources-ouvertes",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "delivery-gate.html#delivery-gate",
@@ -3272,6 +3323,184 @@
       ],
       "anchors": [
         "phase10-coherence-procede"
+      ]
+    },
+    {
+      "id": "phase10-sources-ouvertes",
+      "path": "work/phase10-sources-ouvertes.html",
+      "title": "Enrichissement et fiabilisation par sources ouvertes",
+      "summary": "Nutrition, pH, portions, rétentions, allergènes, activité de l'eau et accords aromatiques enrichis ou vérifiés avec des sources en libre accès (domaine public, CC0, Etalab), citées dans l'application.",
+      "tags": [
+        "phase-10",
+        "donnees",
+        "sources-ouvertes",
+        "usda",
+        "fda",
+        "escoffier",
+        "nutrition",
+        "flavor",
+        "physchem",
+        "review"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "5e47e71e7aa62dc6db7aaf10daf6c8df5fd4a26ee73a53ae49e2ce656ebbf810",
+      "chars": 4212,
+      "size": 8216,
+      "mtime_ns": 1790429113413336200,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-coherence-procede"
+      ],
+      "supersedes": [],
+      "components": [
+        "data-pipeline",
+        "nutrition",
+        "flavor",
+        "functional",
+        "ingredients",
+        "analysis"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [
+        "tool/generate_usda_enrichment.dart",
+        "tool/generate_corpus_pairings.dart",
+        "tool/generate_metier_enrichment.dart",
+        "tool/data/ciqual_aliases.csv",
+        "tool/data/fda_ph_map.csv",
+        "tool/data/usda_portions_map.csv",
+        "tool/data/rf6_map.csv",
+        "assets/database-enrichment/usda_nutrition.csv",
+        "assets/database-enrichment/computed_nutrition.csv",
+        "assets/database-enrichment/ingredient_culinary.csv",
+        "assets/database-enrichment/culinary_pairings.csv",
+        "assets/database-enrichment/process_factors.csv",
+        "lib/core/models/data_sources.dart",
+        "lib/core/scoring/physchem_estimator.dart",
+        "test/core/database/metier_smoke_test.dart",
+        "test/features/analysis/experimental_cases_golden_test.dart"
+      ],
+      "candidate": "d6d0544 (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "fee7328f4a2e08f1f036eae6b66b71e7d9ce6a2d6c2cd24e165764d70768ac43",
+      "criteria": [
+        {
+          "id": "S1",
+          "text": "Les ingrédients sans entrée Ciqual sont couverts par une source ouverte ou un calcul documenté ; aucun zéro n'est inventé."
+        },
+        {
+          "id": "S2",
+          "text": "Les rapprochements Ciqual erronés sont corrigés et contrôlés."
+        },
+        {
+          "id": "S3",
+          "text": "Un pH n'est attribué à la FDA que s'il vient de la liste FDA ; les autres sont signalés comme estimations."
+        },
+        {
+          "id": "S4",
+          "text": "Les conversions d'unités s'appuient sur des poids mesurés et citent leur source."
+        },
+        {
+          "id": "S5",
+          "text": "Les accords documentés s'enrichissent d'un corpus du domaine public, cité."
+        },
+        {
+          "id": "S6",
+          "text": "L'activité de l'eau des mélanges salés suit les valeurs de référence."
+        },
+        {
+          "id": "S7",
+          "text": "L'application présente ses sources ; flutter test, flutter analyze et dart format verts ; le build release importe tout."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S1",
+          "text": "Couverture > 580/603 ; shiitake cru USDA ; roux 42 g de lipides ; érythritol 0 kcal ; restent volontairement « non renseigné » les ingrédients sans source fiable (anis étoilé, sumac, pâtes de curry…)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (rapprochements corrigés)",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S2",
+          "text": "Bière sans alcool < 1,5 g d'alcool, fromage frais ≠ fromage de tête, noix > 55 g de lipides, yaourt nature < 4,5 g, confiture > 45 g de sucres, saumon cru peu salé."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (pH FDA)",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S3",
+          "text": "155 pH FDA ; tomate 4,3–4,9 citée ; toute autre note commence par « Estimation par catégorie »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/scoring/quantity_converter_test.dart test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S4",
+          "text": "Gousse d'ail 3 g (USDA FDC), cannelle 0,53 g/ml (USDA FDC) ; hypothèse affichée « 1 pièce ≈ 110 g (USDA FDC) »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (Escoffier)",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S5",
+          "text": "1 194 accords dont > 700 issus du corpus ; cerfeuil × estragon documenté, explication citant Escoffier ; calibration A6 inchangée (benchmarks ≥ 0,70)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/analysis/experimental_cases_golden_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S6",
+          "text": "Saumure 10 % : 0,935 ± 0,01 ; sauce soja dans la tolérance (Ciqual moins salée que la sauce mesurée par la FDA)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test ; flutter analyze ; dart format --set-exit-if-changed ; flutter build windows --release puis exécutable sur base isolée",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S7",
+          "text": "322/322, analyse propre, page « Sources des données » testée ; release : schéma v5, 20 sources importées, 8 recettes."
+        }
+      ],
+      "body_digest": "ff82cdf664e351c10c7a8767a1b9980ae6f87c54436515316a382cbe71da6666",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/ac-130.html#ac-130",
+        "../records/acceptance-phase10.html#acceptance-phase10"
+      ],
+      "anchors": [
+        "phase10-sources-ouvertes"
       ]
     },
     {
