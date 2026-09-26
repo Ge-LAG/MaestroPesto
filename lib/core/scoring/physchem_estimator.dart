@@ -83,6 +83,7 @@ class PhysChemState {
     this.aw,
     this.ph,
     this.phCoverage = 0,
+    this.evaporatedG = 0,
     this.lineGrams = const <int, double>{},
     this.lineIngredientIds = const <int, String>{},
     this.tags = const <String, List<int>>{},
@@ -123,6 +124,10 @@ class PhysChemState {
   /// Part de l'eau du mélange portée par des ingrédients au pH connu.
   final double phCoverage;
 
+  /// Eau évaporée estimée pendant les cuissons (g), déjà retranchée
+  /// de [waterG] et [totalMassG].
+  final double evaporatedG;
+
   /// Masse (g) et ingrédient de chaque ligne (index → valeur).
   final Map<int, double> lineGrams;
   final Map<int, String> lineIngredientIds;
@@ -132,11 +137,15 @@ class PhysChemState {
 
   bool hasTag(String tag) => tags[tag]?.isNotEmpty ?? false;
 
-  /// Part massique (0..1) d'un ensemble de lignes.
+  /// Masse des ingrédients mis en œuvre, avant évaporation (g).
+  double get rawMassG => totalMassG + evaporatedG;
+
+  /// Part massique (0..1) d'un ensemble de lignes, rapportée aux
+  /// ingrédients mis en œuvre (les lignes sont des masses crues).
   double shareOfLines(Iterable<int> lines) {
-    if (totalMassG <= 0) return 0;
+    if (rawMassG <= 0) return 0;
     final g = lines.toSet().fold<double>(0, (s, i) => s + (lineGrams[i] ?? 0));
-    return g / totalMassG;
+    return math.min(1.0, g / rawMassG);
   }
 
   double _pct(double g) => totalMassG <= 0 ? 0 : g / totalMassG * 100;
@@ -214,6 +223,39 @@ class PhysChemState {
 }
 
 abstract final class PhysChemEstimator {
+  /// Eau évaporée pendant les étapes (g), ordre de grandeur :
+  /// - ébullition, frémissement ou réduction à découvert : ≈ 15 g/min
+  ///   pour 1,5 kg de préparation, proportionnel à la surface (masse
+  ///   exposant 2/3) ;
+  /// - cuisson au four : ≈ 0,25 % de la masse par minute ;
+  /// - une cuisson « à couvert » n'évapore presque rien.
+  /// Bornée à 75 % de l'eau disponible ; nulle sans durée explicite.
+  static double evaporatedWater(
+    List<ParsedStep> steps, {
+    required double total,
+    required double water,
+  }) {
+    if (total <= 0 || water <= 0) return 0;
+    var loss = 0.0;
+    for (final s in steps) {
+      final minutes = s.durationMin;
+      final op = s.primary?.opId;
+      if (minutes == null || op == null) continue;
+      final covered = s.text.toLowerCase().contains('couvert');
+      if (covered) continue;
+      if (op == 'PROC_BOUILLIR' ||
+          op == 'PROC_REDUIRE' ||
+          op == 'PROC_FREMIR' ||
+          (op == 'PROC_CUIRE' && !s.isDryHeat)) {
+        final rate = (15 * math.pow(total / 1500, 2 / 3)).clamp(2.0, 30.0);
+        loss += rate * minutes;
+      } else if (op == 'PROC_ROTIR') {
+        loss += total * 0.0025 * minutes;
+      }
+    }
+    return math.min(loss, water * 0.75);
+  }
+
   /// Estime l'état du mélange.
   static PhysChemState estimate(
     List<MixLine> lines, {
@@ -282,6 +324,12 @@ abstract final class PhysChemEstimator {
         sources.putIfAbsent(cid, () => []).add(line.index);
       });
     }
+
+    // Évaporation (Phase 10, retour du test visuel : une confiture
+    // correcte était jugée « trop peu sucrée » faute de réduction).
+    final evaporated = evaporatedWater(steps, total: total, water: water);
+    water -= evaporated;
+    total -= evaporated;
 
     // Brix de la phase aqueuse.
     double? brix;
@@ -368,13 +416,16 @@ abstract final class PhysChemEstimator {
       fiberG: fiber,
       componentsG: components,
       componentSources: sources,
-      compositionCoverage: total <= 0 ? 0 : known / total,
+      compositionCoverage: total + evaporated <= 0
+          ? 0
+          : math.min(1.0, known / (total + evaporated)),
       liquidOilG: oil,
       steps: steps,
       brix: brix,
       aw: aw,
       ph: ph,
       phCoverage: water <= 0 ? 0 : math.min(1.0, hWeight / water),
+      evaporatedG: evaporated,
       lineGrams: lineGrams,
       lineIngredientIds: lineIds,
       tags: tags,
