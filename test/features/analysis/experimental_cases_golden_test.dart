@@ -136,4 +136,44 @@ void main() {
     );
     expect(bread.feedback.intakes, isNotEmpty);
   });
+
+  test(
+    'aw : sauce soja ≈ 0,80 (FDA, Inspection Technical Guide n° 39)',
+    () async {
+      final a = await RecipeAnalysisService(db).analyze(
+        ingredients: const [
+          RecipeIngredient(
+            label: 'Sauce soja',
+            quantity: '100 g',
+            source: IngredientSource.ciqual,
+            ingredientId: 'ING-COND-SAUCESOJA-000001',
+          ),
+        ],
+        steps: const [],
+        servings: 1,
+        withSuggestions: false,
+      );
+      // La sauce soja Ciqual est moins salée (13 % de sel, 75 % d'eau)
+      // que celle mesurée par la FDA (≈ 17 %) : l'estimation reste dans la
+      // tolérance des cas expérimentaux.
+      expect(a.physchem.aw, closeTo(0.80, 0.08));
+    },
+  );
+
+  test('aw : saumure à 10 % de NaCl ≈ 0,935 (coefficient osmotique)', () async {
+    final a = await RecipeAnalysisService(db).analyze(
+      ingredients: const [
+        RecipeIngredient(
+          label: 'Saumure',
+          quantity: '100 g',
+          source: IngredientSource.ciqual,
+          ingredientId: 'ING-TECH-SAUMURE10SEL-000001',
+        ),
+      ],
+      steps: const [],
+      servings: 1,
+      withSuggestions: false,
+    );
+    expect(a.physchem.aw, closeTo(0.935, 0.01));
+  });
 }

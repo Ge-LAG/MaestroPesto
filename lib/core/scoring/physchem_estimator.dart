@@ -344,7 +344,12 @@ abstract final class PhysChemEstimator {
       final nWater = water / 18.015;
       final nSucrose = (sucrose + otherSugar) / 342.3;
       final nMono = monosaccharides / 180.16;
-      final nSalt = 2 * salt / 58.44;
+      // NaCl non idéal : coefficient osmotique φ croissant avec la
+      // molalité (≈ 0,93 jusqu'à 1 mol/kg, ≈ 1,12 à 4 mol/kg, valeurs
+      // tabulées à 25 °C), ajusté linéairement φ = 0,869 + 0,067·m.
+      final saltMolality = (salt / 58.44) / (water / 1000);
+      final phi = math.max(0.93, 0.869 + 0.067 * saltMolality);
+      final nSalt = 2 * phi * salt / 58.44;
       final nAlcohol = alcohol / 46.07;
       final nPolyol = polyols / 182.17;
       final nTotal = nWater + nSucrose + nMono + nSalt + nAlcohol + nPolyol;
