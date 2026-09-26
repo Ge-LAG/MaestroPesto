@@ -11,6 +11,7 @@
 // Flutter desktop ; la mémoire de session est l'équivalent v1).
 
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/flavor_match.dart';
@@ -99,7 +100,7 @@ Future<RecommendationAnalysis> analyzeRecipeProblems({
           label: labels[id] ?? id,
           explanation:
               '${labels[id] ?? id} × ${labels[other] ?? other} : '
-              'score ${pair.overallScore.toStringAsFixed(2)}',
+              'score ${fmtNum(pair.overallScore, 2)}',
         ),
       );
     }
@@ -402,7 +403,7 @@ class _SubstituteTile extends StatelessWidget {
             ),
           ),
           Text(
-            recommendation.score.toStringAsFixed(2),
+            fmtNum(recommendation.score, 2),
             style: Theme.of(context).textTheme.titleSmall
                 ?.copyWith(fontWeight: FontWeight.w900),
           ),

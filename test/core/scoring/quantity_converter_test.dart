@@ -32,7 +32,7 @@ void main() {
         data: const IngredientUnitData(densityGPerMl: 0.92),
       )!;
       expect(r.grams, closeTo(27.6, 1e-9));
-      expect(r.assumption, contains('0.92'));
+      expect(r.assumption, contains('0,92'));
     });
 
     test('volume sans densité : 1 g/ml signalé', () {

@@ -56,7 +56,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Compatibilités aromatiques'), findsOneWidget);
       // La paire apparaît dans les deux cellules symétriques.
-      expect(find.text('0.87'), findsNWidgets(2));
+      expect(find.text('0,87'), findsNWidgets(2));
     });
 
     testWidgets('renders a 3×3 matrix and unknown pairs stay blank', (
@@ -74,10 +74,10 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('0.87'), findsNWidgets(2));
-      expect(find.text('0.32'), findsNWidgets(2));
+      expect(find.text('0,87'), findsNWidgets(2));
+      expect(find.text('0,32'), findsNWidgets(2));
       // Paire ING-B × ING-C inconnue → aucun score affiché pour elle.
-      expect(find.text('0.00'), findsNothing);
+      expect(find.text('0,00'), findsNothing);
     });
 
     testWidgets('tapping a cell opens the detail bottom sheet', (tester) async {
@@ -92,7 +92,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('0.87').first);
+      await tester.tap(find.text('0,87').first);
       await tester.pumpAndSettle();
       expect(find.text('ING-A × ING-B'), findsOneWidget);
       expect(find.text('Explication ING-A × ING-B'), findsOneWidget);

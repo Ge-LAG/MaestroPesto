@@ -6,6 +6,7 @@
 // parmi les 603 ingrédients du référentiel.
 
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/flavor_analysis.dart';
@@ -150,7 +151,7 @@ class _Harmony extends StatelessWidget {
               ),
               Center(
                 child: Text(
-                  score.toStringAsFixed(2),
+                  fmtNum(score, 2),
                   style: theme.textTheme.labelLarge?.copyWith(
                     fontWeight: FontWeight.w900,
                   ),
@@ -342,7 +343,7 @@ class _Suggestions extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${s.name} — ${s.score.toStringAsFixed(2)}',
+                        '${s.name} — ${fmtNum(s.score, 2)}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),

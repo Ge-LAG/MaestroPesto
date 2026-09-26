@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/functional_alert.dart';
@@ -422,7 +423,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
           pairTexts.add(
             '${nameA ?? pair.ingredientAId} × '
             '${nameB ?? pair.ingredientBId} '
-            '(${pair.overallScore.toStringAsFixed(2)})',
+            '(${fmtNum(pair.overallScore, 2)})',
           );
         }
         parts.add(
@@ -928,7 +929,7 @@ class _NutritionSection extends StatelessWidget {
             ),
           ),
           Text(
-            '${value.toStringAsFixed(value < 10 ? 1 : 0)} $unit',
+            '${fmtNum(value, value < 10 ? 1 : 0)} $unit',
             style: Theme.of(context).textTheme.bodyMedium
                 ?.copyWith(fontWeight: FontWeight.w900),
           ),

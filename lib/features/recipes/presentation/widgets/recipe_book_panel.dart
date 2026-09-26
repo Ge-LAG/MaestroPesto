@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
@@ -561,7 +562,7 @@ class _RecipeQuickFacts extends StatelessWidget {
         if (recipe.nutrition.energyKcal > 0)
           _QuickFact(
             icon: Icons.bolt_outlined,
-            label: '${recipe.nutrition.energyKcal.toStringAsFixed(0)} kcal',
+            label: '${fmtNum(recipe.nutrition.energyKcal, 0)} kcal',
           ),
       ],
     );

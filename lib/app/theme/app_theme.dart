@@ -52,6 +52,8 @@ ThemeData buildAppTheme() {
         height: 1.2,
         fontWeight: FontWeight.w700,
       ),
+      // Lisibilité : aucun texte d'interface sous 12 px.
+      labelSmall: TextStyle(color: muted, fontSize: 12, height: 1.3),
     ),
     appBarTheme: const AppBarTheme(
       centerTitle: false,

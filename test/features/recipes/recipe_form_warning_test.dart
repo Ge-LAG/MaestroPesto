@@ -166,7 +166,7 @@ void main() {
     // Le banner vit dans le cacheExtent du ListView (sous le pli) :
     // skipOffstage:false pour le trouver.
     expect(
-      find.textContaining('Abricot × Aneth (0.03)', skipOffstage: false),
+      find.textContaining('Abricot × Aneth (0,03)', skipOffstage: false),
       findsOneWidget,
       reason: 'le warning cite la paire incompatible avec son score',
     );

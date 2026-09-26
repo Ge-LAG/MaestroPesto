@@ -11,6 +11,7 @@
 //   et les sous-scores (similarité, équilibre, contexte, dominance).
 
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/flavor_match.dart';
@@ -362,10 +363,10 @@ class _HeatmapCell extends StatelessWidget {
                       child: m == null
                           ? const SizedBox.shrink()
                           : Text(
-                              m.match.overallScore.toStringAsFixed(2),
+                              fmtNum(m.match.overallScore, 2),
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -418,10 +419,7 @@ class _HeatmapCell extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      v.toStringAsFixed(2),
-                      style: theme.textTheme.labelSmall,
-                    ),
+                    Text(fmtNum(v, 2), style: theme.textTheme.labelSmall),
                   ],
                 ),
               );
@@ -452,7 +450,7 @@ class _HeatmapCell extends StatelessWidget {
                   Expanded(
                     child: Text(
                       '${strings.flavorOverallScore} : '
-                      '${match.overallScore.toStringAsFixed(2)} — '
+                      '${fmtNum(match.overallScore, 2)} — '
                       '${flavorMatchLabel(strings, match)}',
                       style: theme.textTheme.titleSmall,
                     ),

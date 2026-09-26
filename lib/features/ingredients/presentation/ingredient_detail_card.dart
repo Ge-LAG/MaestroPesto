@@ -12,6 +12,7 @@
 // - Badges alcoolisé / fermenté
 
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 
 import '../../../core/models/ingredient_detail.dart';
@@ -153,7 +154,7 @@ class _Badge extends StatelessWidget {
           const SizedBox(width: 2),
           Text(
             label,
-            style: TextStyle(fontSize: 11, color: Colors.amber.shade900),
+            style: TextStyle(fontSize: 12, color: Colors.amber.shade900),
           ),
         ],
       ),
@@ -220,7 +221,7 @@ class _MiniNutritionSection extends StatelessWidget {
     int digits,
     AppStrings strings,
   ) => n.isKnown(field)
-      ? '${value.toStringAsFixed(digits)} $unit'
+      ? '${fmtNum(value, digits)} $unit'
       : strings.nutritionNotProvided;
 
   Widget _nutritionChip(String label, String value) {
@@ -230,7 +231,7 @@ class _MiniNutritionSection extends StatelessWidget {
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text('$label: $value', style: const TextStyle(fontSize: 11)),
+      child: Text('$label: $value', style: const TextStyle(fontSize: 12)),
     );
   }
 }

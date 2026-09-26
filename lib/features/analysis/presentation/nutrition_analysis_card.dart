@@ -11,6 +11,7 @@
 // Sans donnée liée : valeur saisie manuellement, message honnête.
 
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
@@ -243,7 +244,7 @@ class _EnergySplitBar extends StatelessWidget {
                 children: [
                   Container(width: 10, height: 10, color: color),
                   const SizedBox(width: 4),
-                  Text('$label ${pct.toStringAsFixed(0)} %', style: style),
+                  Text('$label ${fmtNum(pct, 0)} %', style: style),
                 ],
               ),
           ],

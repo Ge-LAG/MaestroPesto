@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 
 class AppStrings {
   const AppStrings();
@@ -170,7 +171,7 @@ class AppStrings {
       'Certains ingrédients de cette recette s’opposent aromatiquement '
       'ou déclenchent une alerte physico-chimique.';
   String recommendationProblemPair(String a, String b, double score) =>
-      '$a × $b : score ${score.toStringAsFixed(2)}';
+      '$a × $b : score ${fmtNum(score, 2)}';
   String recommendationSubstitutesFor(String name) =>
       'Substituts proposés pour $name';
   String get recommendationReasonBetterAffinity =>

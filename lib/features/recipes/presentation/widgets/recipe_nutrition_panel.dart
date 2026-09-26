@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
@@ -402,13 +403,13 @@ class _EnergyBlock extends StatelessWidget {
                 Text(
                   coverage == 0
                       ? context.strings.nutritionNotProvided
-                      : '${value.toStringAsFixed(0)} kcal',
+                      : '${fmtNum(value, 0)} kcal',
                   style: Theme.of(context).textTheme.titleLarge
                       ?.copyWith(fontWeight: FontWeight.w900),
                 ),
                 if (percent != null && coverage != 0)
                   Text(
-                    '${percent!.toStringAsFixed(0)} % AR',
+                    '${fmtNum(percent!, 0)} % AR',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 if (coverage != null && coverage! > 0 && coverage! < 0.95)
@@ -610,14 +611,14 @@ class _ValueText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          '${value.toStringAsFixed(digits)} $unit',
+          '${fmtNum(value, digits)} $unit',
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w900,
           ),
         ),
         if (percent != null)
           Text(
-            '${percent!.toStringAsFixed(0)} % AR',
+            '${fmtNum(percent!, 0)} % AR',
             style: theme.textTheme.labelSmall,
           ),
         if (coverage != null && coverage! > 0 && coverage! < 0.95)

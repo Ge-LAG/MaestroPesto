@@ -6,6 +6,7 @@
 // expertes. Toutes les grandeurs sont des estimations signalées.
 
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/core/scoring/physchem_estimator.dart';
@@ -127,7 +128,7 @@ class _Title extends StatelessWidget {
   );
 }
 
-String _n(double v, [int d = 1]) => v.toStringAsFixed(d).replaceAll('.', ',');
+String _n(double v, [int d = 1]) => fmtNum(v, d);
 
 class _Composition extends StatelessWidget {
   const _Composition({required this.state});

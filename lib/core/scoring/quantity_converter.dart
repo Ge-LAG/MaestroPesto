@@ -320,5 +320,5 @@ abstract final class QuantityConverter {
 
   static String _fmt(double v) => v == v.roundToDouble()
       ? v.toStringAsFixed(0)
-      : v.toStringAsFixed(v < 1 ? 2 : 1);
+      : v.toStringAsFixed(v < 1 ? 2 : 1).replaceAll('.', ',');
 }
