@@ -561,4 +561,17 @@ void main() {
       },
     );
   });
+
+  group('Portions USDA FoodData Central (CC0)', () {
+    test('masses unitaires et densités sourcées', () async {
+      final ref = await MetierReference.of(db);
+      final ail = ref.ingredients['ING-PLANT-AIL-000001']!.unitData;
+      expect(ail.unitMasses['gousse'], 3);
+      expect(ail.unitSources['gousse'], 'USDA FDC');
+      final cannelle = ref.ingredients['ING-PLANT-CANNELLE-000001']!.unitData;
+      // 1 c. à café de cannelle = 2,6 g (USDA) → 0,53 g/ml.
+      expect(cannelle.densityGPerMl, closeTo(0.527, 0.005));
+      expect(cannelle.densitySource, 'USDA FDC');
+    });
+  });
 }

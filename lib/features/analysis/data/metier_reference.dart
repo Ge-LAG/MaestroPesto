@@ -65,11 +65,34 @@ class IngredientReference {
     return g;
   }
 
-  IngredientUnitData get unitData => IngredientUnitData(
-    densityGPerMl: densityGPerMl,
-    densitySource: densityNote,
-    unitMasses: unitMasses,
-  );
+  IngredientUnitData get unitData {
+    final sources = unitSourcesOf(densityNote);
+    return IngredientUnitData(
+      densityGPerMl: densityGPerMl,
+      densitySource: sources['densite'] ?? densityNote,
+      unitMasses: unitMasses,
+      unitSources: sources,
+    );
+  }
+
+  /// Sources courtes d'une note culinaire structurée
+  /// (« densite : USDA FDC 170000 (…) | piece : estimation par
+  /// catégorie (…) ») : clé → « USDA FDC » ou « estimation ».
+  static Map<String, String> unitSourcesOf(String? note) {
+    final out = <String, String>{};
+    for (final segment in (note ?? '').split(' | ')) {
+      final i = segment.indexOf(' : ');
+      if (i <= 0) continue;
+      final key = segment.substring(0, i).trim();
+      final rest = segment.substring(i + 3);
+      out[key] = rest.startsWith('USDA')
+          ? 'USDA FDC'
+          : rest.startsWith('estimation')
+          ? 'estimation'
+          : rest;
+    }
+    return out;
+  }
 
   /// Classe Nutri-Score « fruits, légumes, légumineuses ».
   FvlClass get fvlClass {

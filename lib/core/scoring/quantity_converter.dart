@@ -71,6 +71,7 @@ class IngredientUnitData {
     this.densityGPerMl,
     this.densitySource,
     this.unitMasses = const <String, double>{},
+    this.unitSources = const <String, String>{},
   });
 
   /// Densité (g/ml) — null = inconnue.
@@ -80,6 +81,9 @@ class IngredientUnitData {
   /// Masse (g) par unité de compte : clé = id d'unité (`piece`,
   /// `gousse`, `feuille`…).
   final Map<String, double> unitMasses;
+
+  /// Source courte de chaque masse unitaire (« USDA FDC », « estimation »).
+  final Map<String, String> unitSources;
 }
 
 abstract final class QuantityConverter {
@@ -294,6 +298,7 @@ abstract final class QuantityConverter {
           unit: unit,
           assumption: specific != null
               ? '1 ${unit.labelFr} ≈ ${_fmt(perUnit)} g'
+                    '${_source(data.unitSources[unit.id])}'
               : '1 ${unit.labelFr} ≈ ${_fmt(perUnit)} g (masse générique)',
         );
       case QuantityUnitKind.none:
@@ -303,7 +308,9 @@ abstract final class QuantityConverter {
             grams: value * pieceMass,
             value: value,
             unit: piece,
-            assumption: '1 pièce ≈ ${_fmt(pieceMass)} g',
+            assumption:
+                '1 pièce ≈ ${_fmt(pieceMass)} g'
+                '${_source(data.unitSources['piece'])}',
           );
         }
         return QuantityResolution(
@@ -314,6 +321,8 @@ abstract final class QuantityConverter {
         );
     }
   }
+
+  static String _source(String? s) => s == null ? '' : ' ($s)';
 
   /// Compatibilité : conversion sans données d'ingrédient.
   static double? toGrams(String raw) => resolve(raw)?.grams;

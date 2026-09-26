@@ -64,4 +64,17 @@ void main() {
       expect(r.grams, 18);
     });
   });
+
+  test('masse unitaire sourcée : la source apparaît dans l’hypothèse', () {
+    const data = IngredientUnitData(
+      unitMasses: {'piece': 110, 'gousse': 3},
+      unitSources: {'piece': 'USDA FDC', 'gousse': 'estimation'},
+    );
+    final oignon = QuantityConverter.resolve('1 oignon', data: data)!;
+    expect(oignon.grams, 110);
+    expect(oignon.assumption, contains('(USDA FDC)'));
+    final ail = QuantityConverter.resolve('2 gousses', data: data)!;
+    expect(ail.grams, 6);
+    expect(ail.assumption, contains('(estimation)'));
+  });
 }

@@ -230,6 +230,10 @@ void main() {
     );
   }
   var fromFda = 0;
+  // Densités et masses unitaires mesurées : portions USDA FoodData
+  // Central SR Legacy (CC0), prioritaires sur les règles par catégorie.
+  final usdaUnits = _usdaPortions(nameToId);
+  var fromUsda = 0;
   final culinaryOut = StringBuffer()
     ..writeln(
       'ingredient_id,density_g_per_ml,density_note,unit_masses,ph,'
@@ -252,7 +256,32 @@ void main() {
     final cat2 = row['category_level_2'] ?? '';
     final unit = _firstMatch(unitRules, name, cat2);
     final phys = _firstMatch(physRules, name, cat2);
-    final density = unit?['density_g_per_ml'] ?? '';
+    final usda = usdaUnits[id];
+    final density = usda?.density != null
+        ? usda!.density!.toStringAsFixed(3)
+        : unit?['density_g_per_ml'] ?? '';
+    final masses = <String, String>{
+      for (final pair in (unit?['unit_masses'] ?? '').split('|'))
+        if (pair.contains(':')) pair.split(':')[0]: pair.split(':')[1],
+      ...?usda?.masses.map((k, v) => MapEntry(k, _num(v))),
+    };
+    final ruleNote = density.isEmpty && masses.isEmpty
+        ? ''
+        : unit?['note'] ?? '';
+    // Note structurée, une source par grandeur :
+    // « densite : USDA FDC 170000 (1 tbsp chopped = 10 g) | piece : … ».
+    final segments = <String>[
+      if (density.isNotEmpty)
+        usda?.density != null
+            ? 'densite : USDA FDC ${usda!.fdcId} (${usda.densityEvidence})'
+            : 'densite : estimation par catégorie ($ruleNote)',
+      for (final k in masses.keys)
+        usda?.masses[k] != null
+            ? '$k : USDA FDC ${usda!.fdcId} (${usda.massEvidence[k]})'
+            : '$k : estimation par catégorie ($ruleNote)',
+    ];
+    final unitNote = segments.join(' | ');
+    if (usda != null) fromUsda++;
     if (density.isNotEmpty) withDensity++;
     final fda = fdaById[id];
     String fmt(double v) => v.toStringAsFixed(2).replaceAll('.', ',');
@@ -278,8 +307,8 @@ void main() {
       [
         id,
         density,
-        _cell(density.isEmpty ? '' : unit!['note'] ?? ''),
-        unit?['unit_masses'] ?? '',
+        _cell(unitNote),
+        masses.entries.map((e) => '${e.key}:${e.value}').join('|'),
         ph,
         ph.isEmpty ? '' : phConfidence,
         _cell(phNote),
@@ -368,7 +397,7 @@ void main() {
     }
   }
   stdout.writeln(
-    'Culinaire : densité $withDensity, pH $withPh (dont $fromFda FDA) ; composants : '
+    'Culinaire : densité $withDensity (USDA $fromUsda), pH $withPh (dont $fromFda FDA) ; composants : '
     '$componentRows lignes pour ${componentIngredients.length} ingrédients',
   );
 
@@ -572,6 +601,119 @@ Map<String, Map<String, double>> _loadNutrition() {
       if (key == null || v == null) continue;
       out.putIfAbsent(id, () => {})[key] = v;
     }
+  }
+  return out;
+}
+
+String _num(double v) => v == v.roundToDouble()
+    ? v.toStringAsFixed(0)
+    : v.toStringAsFixed(v < 10 ? 2 : 1);
+
+/// Portions USDA FoodData Central (SR Legacy, CC0) retenues par
+/// `tool/data/usda_portions_map.csv` : densité (portion en tasse ou
+/// cuillère) et masses unitaires (pièce, gousse, brin, feuille,
+/// tranche), avec la portion source citée.
+Map<
+  String,
+  ({
+    String fdcId,
+    double? density,
+    String densityEvidence,
+    Map<String, double> masses,
+    Map<String, String> massEvidence,
+  })
+>
+_usdaPortions(Map<String, String> nameToId) {
+  const srDir = 'tool/.cache/sr/FoodData_Central_sr_legacy_food_csv_2018-04';
+  final map = _records('tool/data/usda_portions_map.csv');
+  final wanted = {for (final m in map) m['fdc_id']!};
+  final portions = <String, List<(double, String, double)>>{};
+  for (final r in _records('$srDir/food_portion.csv')) {
+    final fdc = r['fdc_id']!;
+    if (!wanted.contains(fdc)) continue;
+    final amount = double.tryParse(r['amount'] ?? '') ?? 1;
+    final grams = double.tryParse(r['gram_weight'] ?? '');
+    if (grams == null || amount <= 0) continue;
+    portions.putIfAbsent(fdc, () => []).add((
+      amount,
+      r['modifier'] ?? '',
+      grams,
+    ));
+  }
+  double? volumeMl(String modifier) {
+    final m = modifier.toLowerCase();
+    if (RegExp(r'\bcup').hasMatch(m)) return 236.588;
+    if (RegExp(r'\btbsp|\btablespoon').hasMatch(m)) return 14.787;
+    if (RegExp(r'\btsp|\bteaspoon').hasMatch(m)) return 4.929;
+    return null;
+  }
+
+  (double, String, double)? find(
+    String fdc,
+    String needle, {
+    bool countOnly = false,
+  }) {
+    if (needle.isEmpty) return null;
+    for (final p in portions[fdc] ?? const <(double, String, double)>[]) {
+      // Unité de comptage : jamais une portion en volume (« cup, sliced »
+      // n'est pas une tranche).
+      if (countOnly && volumeMl(p.$2) != null) continue;
+      if (p.$2.toLowerCase().contains(needle.toLowerCase())) return p;
+    }
+    throw StateError('Portion « $needle » introuvable pour FDC $fdc');
+  }
+
+  String fmt(double v) => _num(v).replaceAll('.', ',');
+  final out =
+      <
+        String,
+        ({
+          String fdcId,
+          double? density,
+          String densityEvidence,
+          Map<String, double> masses,
+          Map<String, String> massEvidence,
+        })
+      >{};
+  for (final m in map) {
+    final id = nameToId[m['canonical_name_fr']];
+    if (id == null) {
+      throw StateError(
+        'usda_portions_map : ingrédient inconnu ${m['canonical_name_fr']}',
+      );
+    }
+    final fdc = m['fdc_id']!;
+    double? density;
+    var densityEvidence = '';
+    final d = find(fdc, m['density'] ?? '');
+    if (d != null) {
+      final ml = volumeMl(d.$2);
+      if (ml == null) throw StateError('Portion sans volume : ${d.$2}');
+      density = d.$3 / (d.$1 * ml);
+      densityEvidence = '${fmt(d.$1)} ${d.$2} = ${fmt(d.$3)} g';
+    }
+    final masses = <String, double>{};
+    final massEvidence = <String, String>{};
+    for (final (column, key) in [
+      ('piece', 'piece'),
+      ('gousse', 'gousse'),
+      ('brin', 'brin'),
+      ('feuille', 'feuille'),
+      ('branche', 'brin'),
+      ('tranche', 'tranche'),
+    ]) {
+      final p = find(fdc, m[column] ?? '', countOnly: true);
+      if (p == null) continue;
+      masses[key] = p.$3 / p.$1;
+      massEvidence[key] = '${fmt(p.$1)} ${p.$2} = ${fmt(p.$3)} g';
+    }
+    out[id] = (
+      fdcId: fdc,
+      density: density,
+      densityEvidence: densityEvidence,
+      masses: masses,
+      massEvidence: massEvidence,
+    );
   }
   return out;
 }
