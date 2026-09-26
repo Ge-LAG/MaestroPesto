@@ -75,8 +75,14 @@ flutter:
 
   # Lot E — bundle the 4 metier databases as Flutter assets so the
   # CsvImportService can read them at runtime via rootBundle.
+  # Les dossiers d'assets ne sont pas récursifs : chaque sous-dossier
+  # de phase doit être déclaré (sinon le build release n'embarque pas
+  # les CSV métier).
   assets:
-    - assets/database-metier/
+    - assets/database-metier/phase1-referentiel/
+    - assets/database-metier/phase2-nutrition/
+    - assets/database-metier/phase3-flavour/
+    - assets/database-metier/phase4-functional/
     - assets/database-enrichment/
 
   # An image asset can refer to one or more resolution-specific "variants", see

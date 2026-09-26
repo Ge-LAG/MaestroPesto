@@ -83,18 +83,38 @@ class AppServices {
   /// If `metierRoot` starts with `assets/`, switches to a Flutter asset
   /// reader (Lot E) so the bundled CSVs can be loaded at runtime.
   /// Otherwise falls back to the file-based reader (Lot B tests).
-  Future<ImportReport> importMetier() {
-    if (metierRoot.startsWith('assets/')) {
+  ///
+  /// [onPhaseProgress] reçoit chaque avancement de phase (barre de
+  /// progression du premier lancement).
+  Future<ImportReport> importMetier({
+    void Function(String phase, int rowsDone)? onPhaseProgress,
+  }) async {
+    final useAssets = metierRoot.startsWith('assets/');
+    if (useAssets) {
       activeCsvReader = _assetReader;
     }
     try {
-      return importer.importAll();
+      // Attendre la fin de l'import AVANT de retirer le lecteur d'assets :
+      // les loaders lisent leurs fichiers de manière asynchrone (sinon
+      // l'exécutable release, lancé hors du dossier du projet, cherchait
+      // `assets/…` sur le disque).
+      return await importer.importAll(onPhaseProgress: onPhaseProgress);
     } finally {
       // Always clear the override so a future import with a file root
       // is not accidentally routed through the asset reader.
-      activeCsvReader = null;
+      if (useAssets) activeCsvReader = null;
     }
   }
+
+  /// Phases de l'import, dans l'ordre (libellés de progression).
+  static const List<(String, String)> importPhases = [
+    ('phase1', 'référentiel des ingrédients'),
+    ('phase2', 'nutrition'),
+    ('phase3', 'arômes'),
+    ('phase4', 'interactions fonctionnelles'),
+    ('enrichment', 'enrichissement Ciqual'),
+    ('metier', 'profils et procédés'),
+  ];
 
   /// Stream a Flutter asset as chunked bytes. The asset path must
   /// match the prefix declared in `pubspec.yaml` (here: `assets/`).
@@ -103,7 +123,9 @@ class AppServices {
     // `assets/database-metier/phase1-referentiel/ingredient_registry_v1.csv`.
     // rootBundle.loadString returns a single chunk so we wrap it as a
     // single-element stream to match the byte-stream signature.
-    final bytes = await rootBundle.load(csvPath);
+    // Les clés d'assets utilisent toujours « / » (p.join produit des
+    // « \ » sous Windows).
+    final bytes = await rootBundle.load(csvPath.replaceAll(r'\', '/'));
     yield bytes.buffer.asUint8List();
   }
 
