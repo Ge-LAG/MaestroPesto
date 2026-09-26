@@ -635,11 +635,11 @@
       ],
       "kind": "project",
       "status": "active",
-      "sha256": "f7d9b15beb2ce98a3bd6511f7a896d161e30310564d90461fbbce8e04dafbc1d",
-      "chars": 2844,
-      "size": 3983,
-      "mtime_ns": 1790429137505249900,
-      "revision": 6,
+      "sha256": "ce8429aa2c43f084edf771c89f57366079e357946137401166d8707cc0c06eb4",
+      "chars": 3325,
+      "size": 4503,
+      "mtime_ns": 1790434590190432900,
+      "revision": 7,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -656,7 +656,7 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "4da86a82bf16a2f73b77d62c15c83c095619c6aef9abba7e3a50a7e2cc8fb067",
+      "body_digest": "dce035fb2ab26cefb8465468a6745eaa0bd57bb95a8dd6251a185a759226b445",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -666,8 +666,10 @@
         "../records/ac-129.html#ac-129",
         "../work/phase10-sources-ouvertes.html#phase10-sources-ouvertes",
         "../records/ac-130.html#ac-130",
+        "../work/phase10-parametres.html#phase10-parametres",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../work/idea-recette-inversee.html#idea-recette-inversee",
         "../work/idea-ocr-recettes.html#idea-ocr-recettes",
         "../work/phase08-foundations.html#phase08-foundations"
       ],
@@ -2165,11 +2167,11 @@
       ],
       "kind": "acceptance",
       "status": "ready",
-      "sha256": "0d026c62c120b86ed8cbe08b8bc428ad9852cd3bce421331297b83bbcd4774d2",
+      "sha256": "2fd0f90359567bbdd17e021030ac5428b08ea5e4e13c6701baa10461cc17116e",
       "chars": 4003,
-      "size": 5682,
-      "mtime_ns": 1790433332005848900,
-      "revision": 5,
+      "size": 5701,
+      "mtime_ns": 1790434589438983200,
+      "revision": 6,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -2178,7 +2180,8 @@
       "requires": [
         "phase10-coherence-procede",
         "phase10-ux-refonte",
-        "phase10-sources-ouvertes"
+        "phase10-sources-ouvertes",
+        "phase10-parametres"
       ],
       "supersedes": [],
       "components": [],
@@ -2934,6 +2937,57 @@
       ]
     },
     {
+      "id": "idea-recette-inversee",
+      "path": "work/idea-recette-inversee.html",
+      "title": "Idée : recette à l'envers (conception par objectifs)",
+      "summary": "L'utilisateur fixe d'abord des objectifs physico-chimiques/procédé, aromatiques et nutritionnels, avec un ordre de priorité réglable ; l'application compose ensuite les ingrédients, quantités et procédé.",
+      "tags": [
+        "backlog",
+        "idee",
+        "produit",
+        "phase-11",
+        "conception-inverse",
+        "optimisation",
+        "nutrition",
+        "flavor",
+        "physchem"
+      ],
+      "kind": "work",
+      "status": "draft",
+      "sha256": "451dda11a2da0799b81f62f9cc487e0f47bff19c79a4ba67ac4c9bfa000b75dd",
+      "chars": 5377,
+      "size": 6964,
+      "mtime_ns": 1790434569090110700,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "17a08263340521d192cf2ef13fa8574212b80042da4d683da0cb4da91af55621",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/honest-data-display.html#honest-data-display",
+        "../records/delivery-gate.html#delivery-gate"
+      ],
+      "anchors": [
+        "idea-recette-inversee"
+      ]
+    },
+    {
       "id": "phase09-closeout",
       "path": "work/phase09-closeout.html",
       "title": "Phase 09 : validation PO et livraison",
@@ -3323,6 +3377,135 @@
       ],
       "anchors": [
         "phase10-coherence-procede"
+      ]
+    },
+    {
+      "id": "phase10-parametres",
+      "path": "work/phase10-parametres.html",
+      "title": "En-tête libéré, paramètres et thème sombre",
+      "summary": "Suppression de la barre supérieure ; page Paramètres (thème Système/Clair/Sombre, taille du texte, bases métier, emplacement de la base, sources des données) ; thème sombre complet.",
+      "tags": [
+        "phase-10",
+        "ux",
+        "ui",
+        "parametres",
+        "theme",
+        "sombre",
+        "accessibilite",
+        "review"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "f0674c51710dd8bd3ecb7d9c5da37ba947c6b1f44ae1818af638837667563782",
+      "chars": 3530,
+      "size": 6666,
+      "mtime_ns": 1790434537453508500,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-ux-refonte",
+        "phase10-sources-ouvertes"
+      ],
+      "supersedes": [],
+      "components": [
+        "app-shell",
+        "settings",
+        "theme",
+        "recipes",
+        "sources",
+        "data-pipeline"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [
+        "lib/app/maestro_pesto_app.dart",
+        "lib/app/theme/app_theme.dart",
+        "lib/app/settings/app_settings.dart",
+        "lib/features/settings/presentation/settings_page.dart",
+        "lib/features/recipes/presentation/recipes_home_page.dart",
+        "lib/features/recipes/presentation/widgets/recipe_book_panel.dart",
+        "lib/core/database/database_bootstrap.dart",
+        "lib/core/database/connection/database_connection.dart",
+        "test/features/settings/settings_test.dart",
+        "test/features/recipes/home_shell_layout_test.dart",
+        "test/widget_test.dart"
+      ],
+      "candidate": "2abde3b (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "29960a87083c80e7fda748217534ff73df95cc7d48b294a6d4429966dda274f1",
+      "criteria": [
+        {
+          "id": "P1",
+          "text": "L'accueil n'a pas de barre supérieure ; sources et mise à jour des bases métier sont accessibles depuis les Paramètres."
+        },
+        {
+          "id": "P2",
+          "text": "Le thème (Système, Clair, Sombre) et la taille du texte s'appliquent sans redémarrage et sont conservés."
+        },
+        {
+          "id": "P3",
+          "text": "L'interface reste sans débordement de 360 à 1400 px, en clair avec texte standard et en sombre avec grand texte."
+        },
+        {
+          "id": "P4",
+          "text": "Les Paramètres affichent l'état réel des bases métier et permettent leur mise à jour."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/widget_test.dart test/features/recipes/home_shell_layout_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P1",
+          "text": "Aucun AppBar ; tooltip « Paramètres » présent, « Sources des données » absent de l'accueil."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/settings/settings_test.dart ; exécutable release, clic « Clair » puis lecture de maestropesto_settings.json",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P2",
+          "text": "MaterialApp en ThemeMode.dark après le choix « Sombre » ; texte ×1,15 en « Grande » ; aller-retour du fichier JSON ; fichier corrompu → valeurs par défaut ; fichier réel passé à « light »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/recipes/home_shell_layout_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P3",
+          "text": "8 variantes vertes (360, 760, 800, 1400 px × 2 thèmes) ; titre lisible et non recouvert."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/settings/settings_test.dart ; exécutable release sur base isolée",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P4",
+          "text": "États « Non importées », « Mise à jour en cours — nutrition (2/6) » (bouton désactivé) et « Chargées » ; schéma v5, 603 ingrédients, 8 recettes ; accès à la page des sources."
+        }
+      ],
+      "body_digest": "8374f8cd8dfa96a62c364827fbb899af88174cfc83a8ede503a224b3e62c4142",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/acceptance-phase10.html#acceptance-phase10"
+      ],
+      "anchors": [
+        "phase10-parametres"
       ]
     },
     {
