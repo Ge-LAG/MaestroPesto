@@ -8,6 +8,7 @@ import 'package:maestropesto/features/recipes/data/recipes_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_book_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_detail_view.dart';
+import 'package:maestropesto/features/sources/presentation/data_sources_page.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_form_dialog.dart';
 
 class RecipesHomePage extends StatefulWidget {
@@ -380,6 +381,11 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       appBar: AppBar(
         title: const SizedBox.shrink(),
         actions: [
+          IconButton(
+            tooltip: context.strings.sourcesTitle,
+            icon: const Icon(Icons.menu_book_outlined),
+            onPressed: () => showDataSourcesPage(context),
+          ),
           _MetierStatusAction(
             importing: _importing,
             metierLoaded: _metierLoaded,

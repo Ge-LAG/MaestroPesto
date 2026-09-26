@@ -22,12 +22,21 @@ import '../../nutrition/data/nutrition_repository.dart';
 
 /// Card de détail d'un ingrédient.
 class IngredientDetailCard extends StatelessWidget {
-  const IngredientDetailCard({super.key, required this.detail, this.nutrition});
+  const IngredientDetailCard({
+    super.key,
+    required this.detail,
+    this.nutrition,
+    this.culinaryLines = const <String>[],
+  });
 
   final IngredientDetail detail;
 
   /// Optionnel : nutrition pour 100 g (déjà chargée).
   final NutritionProfile? nutrition;
+
+  /// Données culinaires sourcées (pH, densité, masses unitaires), une
+  /// ligne par grandeur avec sa source.
+  final List<String> culinaryLines;
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +135,18 @@ class IngredientDetailCard extends StatelessWidget {
             ],
             const SizedBox(height: 12),
             _MiniNutritionSection(nutrition: nutrition),
+            if (culinaryLines.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Text(
+                strings.ingredientCulinaryTitle,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 2),
+              for (final line in culinaryLines)
+                Text(line, style: theme.textTheme.labelSmall),
+            ],
           ],
         ),
       ),

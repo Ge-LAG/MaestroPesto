@@ -19,6 +19,7 @@ import 'package:maestropesto/core/models/ingredient_detail.dart';
 import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/core/scoring/nutrition_feedback.dart';
 import 'package:maestropesto/core/scoring/quantity_scaler.dart';
+import 'package:maestropesto/features/analysis/data/metier_reference.dart';
 import 'package:maestropesto/features/analysis/presentation/flavor_analysis_card.dart';
 import 'package:maestropesto/features/analysis/presentation/nutrition_analysis_card.dart';
 import 'package:maestropesto/features/analysis/presentation/physchem_analysis_card.dart';
@@ -1264,16 +1265,32 @@ class _IngredientMetierDetail extends StatefulWidget {
 }
 
 class _IngredientMetierDetailState extends State<_IngredientMetierDetail> {
-  late final Future<({IngredientDetail? detail, NutritionProfile? nutrition})>
+  late final Future<
+    ({
+      IngredientDetail? detail,
+      NutritionProfile? nutrition,
+      List<String> culinary,
+    })
+  >
   _future = _load();
 
-  Future<({IngredientDetail? detail, NutritionProfile? nutrition})>
+  Future<
+    ({
+      IngredientDetail? detail,
+      NutritionProfile? nutrition,
+      List<String> culinary,
+    })
+  >
   _load() async {
     final row = await IngredientsRepository(widget.db)
         .getById(widget.ingredientId);
     if (row == null) {
-      return (detail: null, nutrition: null);
+      return (detail: null, nutrition: null, culinary: const <String>[]);
     }
+    final culinaryRow =
+        await (widget.db.select(widget.db.ingredientCulinary)
+              ..where((t) => t.ingredientId.equals(widget.ingredientId)))
+            .getSingleOrNull();
     final allergens = await IngredientsRepository(widget.db)
         .enrichedAllergensFor(widget.ingredientId);
     final nutrition = await NutritionRepository(widget.db)
@@ -1284,13 +1301,61 @@ class _IngredientMetierDetailState extends State<_IngredientMetierDetail> {
           ? detail
           : detail.copyWith(allergenTags: allergens),
       nutrition: nutrition,
+      culinary: culinaryLinesOf(culinaryRow),
     );
+  }
+
+  /// Lignes « pH / densité / masses unitaires » avec leur source.
+  static List<String> culinaryLinesOf(IngredientCulinaryData? row) {
+    if (row == null) return const [];
+    const unitLabels = {
+      'piece': 'pièce',
+      'gousse': 'gousse',
+      'brin': 'brin ou branche',
+      'feuille': 'feuille',
+      'tranche': 'tranche',
+      'botte': 'botte',
+      'sachet': 'sachet',
+      'noix': 'noix',
+    };
+    final sources = IngredientReference.unitSourcesOf(row.densityNote);
+    final lines = <String>[];
+    final ph = row.ph;
+    if (ph != null) {
+      final note = row.phNote ?? '';
+      lines.add(
+        'pH ${fmtNum(ph, 1)} — '
+        '${note.startsWith('FDA') ? note : 'estimation par catégorie'}',
+      );
+    }
+    final density = row.densityGPerMl;
+    if (density != null) {
+      lines.add(
+        'Densité ${fmtNum(density, 2)} g/ml'
+        ' (${sources['densite'] ?? 'estimation'})',
+      );
+    }
+    for (final pair in (row.unitMasses ?? '').split('|')) {
+      final kv = pair.split(':');
+      if (kv.length != 2) continue;
+      final grams = double.tryParse(kv[1]);
+      if (grams == null) continue;
+      lines.add(
+        '1 ${unitLabels[kv[0]] ?? kv[0]} ≈ ${fmtCompact(grams)} g'
+        ' (${sources[kv[0]] ?? 'estimation'})',
+      );
+    }
+    return lines;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<
-      ({IngredientDetail? detail, NutritionProfile? nutrition})
+      ({
+        IngredientDetail? detail,
+        NutritionProfile? nutrition,
+        List<String> culinary,
+      })
     >(
       future: _future,
       builder: (context, snapshot) {
@@ -1299,7 +1364,11 @@ class _IngredientMetierDetailState extends State<_IngredientMetierDetail> {
         if (detail == null) {
           return const SizedBox.shrink();
         }
-        return IngredientDetailCard(detail: detail, nutrition: data?.nutrition);
+        return IngredientDetailCard(
+          detail: detail,
+          nutrition: data?.nutrition,
+          culinaryLines: data?.culinary ?? const [],
+        );
       },
     );
   }

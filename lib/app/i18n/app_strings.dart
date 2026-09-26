@@ -299,13 +299,15 @@ class AppStrings {
   String get phHint =>
       'pH : acidité du mélange, de 0 (très acide) à 14 ; 7 = neutre. '
       'Sous 4,6, la plupart des bactéries dangereuses ne se développent '
-      'pas (conserves acides, confitures, vinaigrettes).';
+      'pas (conserves acides, confitures, vinaigrettes). Estimé à partir '
+      'du pH des ingrédients (FDA/CFSAN 2007 quand il est mesuré, sinon '
+      'estimation par catégorie).';
   String get awHint =>
       'Activité de l’eau (aw, de 0 à 1) : part de l’eau réellement '
       'disponible pour les microbes. Au-dessus de 0,86 le produit est '
       'périssable et se garde au froid ; entre 0,6 et 0,86 il se '
       'conserve mieux (confiture, fromage affiné) ; sous 0,6 il est sec '
-      'et stable (biscuit, farine).';
+      'et stable (biscuit, farine). Seuils : FDA, guide n° 39 (1984).';
   String get brixHint =>
       'Brix : pourcentage de sucres dissous dans la partie liquide du '
       'mélange. Repères : fruit frais 8–15 %, sirop 50–65 %, confiture '
@@ -378,8 +380,9 @@ class AppStrings {
       'référentiel : vérifier ${n > 1 ? 'leurs' : 'ses'} allergènes.';
   String get allergensHint =>
       'Allergènes à déclaration obligatoire (règlement UE 1169/2011, '
-      'annexe II) d’après le référentiel des ingrédients liés. Vérifiez '
-      'toujours l’étiquette des produits réellement utilisés.';
+      'annexe II) : étiquettes du référentiel, corrigées et complétées par '
+      'des règles curatées sur le nom et la catégorie des ingrédients. '
+      'Vérifiez toujours l’étiquette des produits réellement utilisés.';
   String get tabNutrition => 'Nutrition';
   String get tabFlavor => 'Arômes';
   String get tabProcess => 'Procédé';
@@ -394,6 +397,17 @@ class AppStrings {
       'Reliez au moins un ingrédient au référentiel (loupe) pour voir '
       'l’analyse se mettre à jour pendant la saisie.';
   String get editorPreviewUpdating => 'Mise à jour…';
+
+  // Sources des données.
+  String get sourcesTitle => 'Sources des données';
+  String get sourcesIntro =>
+      'MaestroPesto ne présente que des données sourcées. Chaque valeur '
+      'cite sa source au plus près (nutrition, pH, poids des portions, '
+      'accords) ; les estimations par catégorie sont signalées comme '
+      'telles. Toutes les sources externes ci-dessous sont en libre accès.';
+  String get sourcesCopyLink => 'Copier le lien';
+  String get ingredientCulinaryTitle => 'Données culinaires';
+  String get sourcesLinkCopied => 'Lien copié.';
 }
 
 const appStrings = AppStrings();
