@@ -19,6 +19,7 @@ class RecipeBookPanel extends StatefulWidget {
     required this.onClearFilters,
     required this.onCreateRecipe,
     this.compact = false,
+    this.headerActions = const <Widget>[],
     super.key,
   });
 
@@ -33,6 +34,10 @@ class RecipeBookPanel extends StatefulWidget {
   final VoidCallback onClearFilters;
   final VoidCallback onCreateRecipe;
   final bool compact;
+
+  /// Actions de l'en-tête (sources des données, bases métier), placées
+  /// avant les réglages : l'application n'a pas de barre supérieure.
+  final List<Widget> headerActions;
 
   @override
   State<RecipeBookPanel> createState() => _RecipeBookPanelState();
@@ -77,6 +82,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
             _BookHeader(
               compact: widget.compact,
               onCreateRecipe: widget.onCreateRecipe,
+              actions: widget.headerActions,
             ),
             const SizedBox(height: 18),
             SearchBar(
@@ -344,35 +350,65 @@ class _TagFilterMenu extends StatelessWidget {
 }
 
 class _BookHeader extends StatelessWidget {
-  const _BookHeader({required this.compact, required this.onCreateRecipe});
+  const _BookHeader({
+    required this.compact,
+    required this.onCreateRecipe,
+    this.actions = const <Widget>[],
+  });
 
   final bool compact;
   final VoidCallback onCreateRecipe;
+  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => _row(
+        context,
+        // Panneau étroit (fenêtre moyenne) : le logo cède sa place au
+        // titre et aux actions, sans réduire le titre.
+        showLogo: constraints.maxWidth >= 300,
+      ),
+    );
+  }
+
+  Widget _row(BuildContext context, {required bool showLogo}) {
     return Row(
       children: [
-        Icon(Icons.local_dining, color: Theme.of(context).colorScheme.primary),
-        const SizedBox(width: 10),
+        if (showLogo) ...[
+          Icon(
+            Icons.local_dining,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 10),
+        ],
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'MaestroPesto',
-                style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w900),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'MaestroPesto',
+                  style: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(fontWeight: FontWeight.w900),
+                ),
               ),
               if (!compact)
                 Text(
                   context.strings.recipeBookSubtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
             ],
           ),
         ),
-        IconButton.outlined(
+        ...actions,
+        IconButton(
+          visualDensity: VisualDensity.compact,
+          iconSize: 20,
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(context.strings.settingsTodo)),
@@ -381,7 +417,7 @@ class _BookHeader extends StatelessWidget {
           icon: const Icon(Icons.settings_outlined),
           tooltip: context.strings.settingsAction,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         IconButton.filled(
           onPressed: onCreateRecipe,
           icon: const Icon(Icons.add),
@@ -450,13 +486,23 @@ class _RecipeCardTile extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               _RecipeQuickFacts(recipe: recipe),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 6,
-                children: recipe.tags
-                    .take(3)
-                    .map((tag) => RecipeTagLabel(label: tag))
-                    .toList(),
+              const SizedBox(height: 8),
+              // Une seule ligne d'étiquettes : la carte a une hauteur
+              // fixe dans le carrousel compact.
+              ClipRect(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Row(
+                    children: [
+                      for (final tag in recipe.tags.take(3))
+                        Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: RecipeTagLabel(label: tag),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

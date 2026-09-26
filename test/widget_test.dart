@@ -1,4 +1,5 @@
 import 'package:drift/native.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:maestropesto/app/maestro_pesto_app.dart';
@@ -40,5 +41,10 @@ void main() {
 
     expect(find.text('MaestroPesto'), findsOneWidget);
     expect(find.text('Pesto maison'), findsWidgets);
+    // Pas de barre supérieure : sources et bases métier sont dans
+    // l'en-tête du classeur.
+    expect(find.byType(AppBar), findsNothing);
+    expect(find.byTooltip('Sources des données'), findsOneWidget);
+    expect(find.byIcon(Icons.menu_book_outlined), findsWidgets);
   });
 }

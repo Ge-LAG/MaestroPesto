@@ -377,96 +377,109 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const SizedBox.shrink(),
-        actions: [
-          IconButton(
-            tooltip: context.strings.sourcesTitle,
-            icon: const Icon(Icons.menu_book_outlined),
-            onPressed: () => showDataSourcesPage(context),
-          ),
-          _MetierStatusAction(
-            importing: _importing,
-            metierLoaded: _metierLoaded,
-            onImport: () => _importMetier(context),
-          ),
-        ],
-        bottom: _importing
-            ? _ImportProgressBar(step: _importStep, firstLaunch: !_metierLoaded)
-            : null,
+    // Pas de barre supérieure : les actions globales (sources des
+    // données, bases métier) vivent dans l'en-tête du classeur.
+    final headerActions = <Widget>[
+      IconButton(
+        visualDensity: VisualDensity.compact,
+        iconSize: 20,
+        tooltip: context.strings.sourcesTitle,
+        icon: const Icon(Icons.menu_book_outlined),
+        onPressed: () => showDataSourcesPage(context),
       ),
+      _MetierStatusAction(
+        importing: _importing,
+        metierLoaded: _metierLoaded,
+        onImport: () => _importMetier(context),
+      ),
+    ];
+    return Scaffold(
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final width = constraints.maxWidth;
-            final isCompact = width < 760;
-            final isWide = width >= 1120;
-            final selectedRecipe = _selectedRecipe;
-            if (_loadingRecipes) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        child: Column(
+          children: [
+            if (_importing)
+              _ImportProgressBar(
+                step: _importStep,
+                firstLaunch: !_metierLoaded,
+              ),
+            Expanded(child: _body(context, headerActions)),
+          ],
+        ),
+      ),
+    );
+  }
 
-            if (isCompact) {
-              return _CompactLayout(
-                services: widget.services,
-                dataVersion: _dataVersion,
+  Widget _body(BuildContext context, List<Widget> headerActions) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final isCompact = width < 760;
+        final isWide = width >= 1120;
+        final selectedRecipe = _selectedRecipe;
+        if (_loadingRecipes) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (isCompact) {
+          return _CompactLayout(
+            services: widget.services,
+            dataVersion: _dataVersion,
+            recipes: _filteredRecipes,
+            selectedRecipe: selectedRecipe,
+            selectedTags: _selectedTags,
+            tags: _tags,
+            query: _query,
+            onQueryChanged: (value) => setState(() => _query = value),
+            onRecipeSelected: _selectRecipe,
+            onTagsChanged: _setSelectedTags,
+            onClearFilters: _clearFilters,
+            onCreateRecipe: _createRecipe,
+            onEditRecipe: _editRecipe,
+            onDuplicateRecipe: _duplicateRecipe,
+            onDeleteRecipe: _deleteRecipe,
+            onAddIngredient: _addIngredient,
+            headerActions: headerActions,
+          );
+        }
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              width: isWide ? 360 : 320,
+              child: RecipeBookPanel(
                 recipes: _filteredRecipes,
-                selectedRecipe: selectedRecipe,
-                selectedTags: _selectedTags,
+                selectedRecipeId: selectedRecipe?.id ?? '',
                 tags: _tags,
+                selectedTags: _selectedTags,
                 query: _query,
                 onQueryChanged: (value) => setState(() => _query = value),
                 onRecipeSelected: _selectRecipe,
                 onTagsChanged: _setSelectedTags,
                 onClearFilters: _clearFilters,
                 onCreateRecipe: _createRecipe,
-                onEditRecipe: _editRecipe,
-                onDuplicateRecipe: _duplicateRecipe,
-                onDeleteRecipe: _deleteRecipe,
-                onAddIngredient: _addIngredient,
-              );
-            }
-
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  width: isWide ? 360 : 320,
-                  child: RecipeBookPanel(
-                    recipes: _filteredRecipes,
-                    selectedRecipeId: selectedRecipe?.id ?? '',
-                    tags: _tags,
-                    selectedTags: _selectedTags,
-                    query: _query,
-                    onQueryChanged: (value) => setState(() => _query = value),
-                    onRecipeSelected: _selectRecipe,
-                    onTagsChanged: _setSelectedTags,
-                    onClearFilters: _clearFilters,
-                    onCreateRecipe: _createRecipe,
-                  ),
-                ),
-                const VerticalDivider(width: 1),
-                Expanded(
-                  child: selectedRecipe == null
-                      ? EmptyRecipeState(onCreateRecipe: _createRecipe)
-                      : RecipeDetailView(
-                          key: ValueKey('${selectedRecipe.id}@$_dataVersion'),
-                          recipe: selectedRecipe,
-                          isWide: isWide,
-                          db: widget.services.db,
-                          onEdit: _editRecipe,
-                          onDuplicate: _duplicateRecipe,
-                          onDelete: _deleteRecipe,
-                          onAddIngredient: (ingredient) =>
-                              _addIngredient(selectedRecipe, ingredient),
-                        ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+                headerActions: headerActions,
+              ),
+            ),
+            const VerticalDivider(width: 1),
+            Expanded(
+              child: selectedRecipe == null
+                  ? EmptyRecipeState(onCreateRecipe: _createRecipe)
+                  : RecipeDetailView(
+                      key: ValueKey('${selectedRecipe.id}@$_dataVersion'),
+                      recipe: selectedRecipe,
+                      isWide: isWide,
+                      db: widget.services.db,
+                      onEdit: _editRecipe,
+                      onDuplicate: _duplicateRecipe,
+                      onDelete: _deleteRecipe,
+                      onAddIngredient: (ingredient) =>
+                          _addIngredient(selectedRecipe, ingredient),
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -489,6 +502,7 @@ class _CompactLayout extends StatelessWidget {
     required this.onDuplicateRecipe,
     required this.onDeleteRecipe,
     required this.onAddIngredient,
+    required this.headerActions,
   });
 
   final AppServices services;
@@ -508,6 +522,7 @@ class _CompactLayout extends StatelessWidget {
   final ValueChanged<Recipe> onDeleteRecipe;
   final void Function(Recipe recipe, RecipeIngredient ingredient)
   onAddIngredient;
+  final List<Widget> headerActions;
 
   @override
   Widget build(BuildContext context) {
@@ -528,6 +543,7 @@ class _CompactLayout extends StatelessWidget {
             onClearFilters: onClearFilters,
             onCreateRecipe: onCreateRecipe,
             compact: true,
+            headerActions: headerActions,
           ),
         ),
         SliverToBoxAdapter(
@@ -566,10 +582,11 @@ class _MetierStatusAction extends StatelessWidget {
   Widget build(BuildContext context) {
     if (importing) {
       return IconButton(
+        visualDensity: VisualDensity.compact,
         tooltip: context.strings.importMetierRunning,
         icon: const SizedBox(
-          width: 20,
-          height: 20,
+          width: 18,
+          height: 18,
           child: CircularProgressIndicator(strokeWidth: 2),
         ),
         onPressed: null,
@@ -584,6 +601,8 @@ class _MetierStatusAction extends StatelessWidget {
         ? context.strings.importMetierReady
         : context.strings.importMetierPending;
     return IconButton(
+      visualDensity: VisualDensity.compact,
+      iconSize: 20,
       tooltip: tooltip,
       icon: Icon(icon, color: color),
       onPressed: onImport,
@@ -642,16 +661,13 @@ class EmptyRecipeState extends StatelessWidget {
 }
 
 /// Progression de l'import des bases métier (premier lancement ou
-/// réimport) : barre et étape en cours, sous la barre d'application.
-class _ImportProgressBar extends StatelessWidget
-    implements PreferredSizeWidget {
+/// réimport) : barre et étape en cours, en haut de l'écran pendant
+/// l'import seulement.
+class _ImportProgressBar extends StatelessWidget {
   const _ImportProgressBar({required this.step, required this.firstLaunch});
 
   final int step;
   final bool firstLaunch;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(30);
 
   @override
   Widget build(BuildContext context) {
