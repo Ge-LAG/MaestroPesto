@@ -385,11 +385,12 @@ void main() {
         final covered = rows.map((r) => r.ingredientId).toSet().length;
         expect(
           covered,
-          greaterThan(510),
+          greaterThan(580),
           reason:
-              'Phase 10 : Phase 2 ∪ enrichissement Ciqual avec alias curatés '
-              '(518/603 mesurés). Les non-couverts restants (additifs, '
-              'sauces asiatiques, préparations) sont absents de Ciqual.',
+              'Phase 2 ∪ Ciqual (alias curatés) ∪ USDA FoodData Central ∪ '
+              'composition calculée. Restent volontairement non renseignés '
+              'les ingrédients sans source ouverte fiable (anis étoilé, '
+              'sumac, pâtes de curry, huiles essentielles…).',
         );
       },
     );
@@ -477,6 +478,59 @@ void main() {
         analysis.allergens.keys,
         containsAll(<String>['milk', 'eggs', 'gluten']),
       );
+    });
+  });
+
+  group('Sources ouvertes et rapprochements corrigés', () {
+    Future<NutritionProfile> profile(String id) async =>
+        (await NutritionRepository(db).forIngredient(id))!;
+
+    test('USDA FoodData Central comble le shiitake cru', () async {
+      final p = await profile('ING-FUNGUS-SHIITAKE-000001');
+      expect(p.sourceFoodName, contains('shiitake'));
+      expect(p.energyKcal, inInclusiveRange(20, 60));
+    });
+
+    test(
+      'composition calculée : roux = beurre + farine à parts égales',
+      () async {
+        final p = await profile('ING-MIX-ROUXBLANC-000001');
+        expect(p.fats, inInclusiveRange(38, 44));
+        expect(p.carbs, inInclusiveRange(30, 40));
+        expect(p.approximationNote, contains('Calcul par composition'));
+      },
+    );
+
+    test('érythritol : 0 kcal (UE 1169/2011 annexe XIV)', () async {
+      final p = await profile('ING-TECH-ERYTHRITOLE9-000001');
+      expect(p.energyKcal, 0);
+    });
+
+    test('rapprochements corrigés : valeurs plausibles', () async {
+      // Bière sans alcool ≠ bière forte (> 8°).
+      expect(
+        (await profile('ING-BEV-BIRESANSALCO-000001')).alcohol,
+        lessThan(1.5),
+      );
+      // Fromage frais ≠ fromage de tête.
+      expect(
+        (await profile('ING-DAIRY-FROMAGEFRAIS-000001')).sourceFoodName,
+        startsWith('Fromage frais'),
+      );
+      // Noix ≠ noix de muscade : noix très grasse.
+      expect((await profile('ING-PLANT-NOIX-000001')).fats, greaterThan(55));
+      // Yaourt nature ≠ yaourt à la grecque.
+      expect(
+        (await profile('ING-FERMENT-YAOURTNATURE-000001')).fats,
+        lessThan(4.5),
+      );
+      // Confiture classique, non allégée.
+      expect(
+        (await profile('ING-FERMENT-CONFITUREFRA-000001')).sugars,
+        greaterThan(45),
+      );
+      // Saumon cru, non fumé : peu salé.
+      expect((await profile('ING-MARINE-SAUMON-000001')).salt, lessThan(0.5));
     });
   });
 }

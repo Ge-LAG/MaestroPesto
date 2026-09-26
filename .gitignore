@@ -44,3 +44,6 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Jeux de données bruts téléchargés (sources ouvertes, régénérables)
+tool/.cache/

@@ -187,6 +187,7 @@ class NutritionRepository {
     if (lower.startsWith('ciqual_2025')) return 'ANSES Ciqual 2025-11-03';
     if (lower.contains('ciqual')) return 'ANSES Ciqual';
     if (lower.contains('usda')) return 'USDA FoodData Central';
+    if (lower.startsWith('calc_')) return 'Calcul par composition';
     return null;
   }
 

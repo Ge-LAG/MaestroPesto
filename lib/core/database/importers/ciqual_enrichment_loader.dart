@@ -22,7 +22,60 @@ import 'csv_toolkit.dart' show CsvLoadOutcome, runCsvImport;
 ///    source, citation complète ; les correspondances approchées
 ///    (`match_type = proxy`) portent leur justification dans
 ///    `derivation_method`, restituée in-app.
+///
+/// Le même chargeur sert les compléments en libre accès (même format de
+/// fichier) : USDA FoodData Central et composition calculée, qui ne
+/// comblent que les ingrédients sans autre source.
+class NutritionEnrichmentSource {
+  const NutritionEnrichmentSource({
+    required this.name,
+    required this.id,
+    required this.url,
+    required this.recordPrefix,
+  });
+
+  /// Nom de la source dans `import_state`.
+  final String name;
+
+  /// `source_id` des records produits.
+  final String id;
+  final String url;
+
+  /// Préfixe des identifiants de records (unicité entre sources).
+  final String recordPrefix;
+
+  static const ciqual = NutritionEnrichmentSource(
+    name: 'enrichment/ciqual_nutrition',
+    id: 'ciqual_2025_11_03',
+    url: 'https://ciqual.anses.fr/',
+    recordPrefix: 'CIQ',
+  );
+
+  /// USDA FoodData Central (SR Legacy, Foundation Foods) — CC0 1.0.
+  static const usda = NutritionEnrichmentSource(
+    name: 'enrichment/usda_nutrition',
+    id: 'usda_fdc',
+    url: 'https://fdc.nal.usda.gov/',
+    recordPrefix: 'USDA',
+  );
+
+  /// Composition calculée (préparations de base, substances pures).
+  static const computed = NutritionEnrichmentSource(
+    name: 'enrichment/computed_nutrition',
+    id: 'calc_composition',
+    url: 'https://eur-lex.europa.eu/eli/reg/2011/1169/oj',
+    recordPrefix: 'CALC',
+  );
+}
+
 class CiqualEnrichmentLoader {
+  const CiqualEnrichmentLoader({
+    this.source = NutritionEnrichmentSource.ciqual,
+  });
+
+  /// Source chargée (Ciqual par défaut).
+  final NutritionEnrichmentSource source;
+
   static const String sourceName = 'enrichment/ciqual_nutrition';
   static const String sourceId = 'ciqual_2025_11_03';
   static const String sourceUrl = 'https://ciqual.anses.fr/';
@@ -38,7 +91,7 @@ class CiqualEnrichmentLoader {
           'SELECT DISTINCT ingredient_id, ingredient_state_id '
           'FROM nutrition_records '
           'WHERE source_id IS NULL OR source_id != ?',
-          variables: [Variable.withString(sourceId)],
+          variables: [Variable.withString(source.id)],
         )
         .get();
     final coveredIngredients = <String>{};
@@ -53,7 +106,7 @@ class CiqualEnrichmentLoader {
     return runCsvImport<CiqualNutritionRow>(
       db: db,
       csvPath: csvPath,
-      sourceName: sourceName,
+      sourceName: source.name,
       tableName: db.nutritionRecords.actualTableName,
       parseRow: (row, header) => CiqualNutritionRow.fromCsvRow(row, header),
       insertRows: (batch, rows) async {
@@ -63,7 +116,7 @@ class CiqualEnrichmentLoader {
           // changé).
           batch.deleteWhere(
             db.nutritionRecords,
-            (t) => t.sourceId.equals(sourceId),
+            (t) => t.sourceId.equals(source.id),
           );
           purged = true;
         }
@@ -77,7 +130,7 @@ class CiqualEnrichmentLoader {
           }
           batch.insert(
             db.nutritionRecords,
-            row.toCompanion(),
+            row.toCompanion(source),
             mode: InsertMode.insertOrReplace,
           );
         }
@@ -154,29 +207,36 @@ class CiqualNutritionRow {
   final String matchType;
   final String matchNote;
 
-  /// Confiance du rapprochement ingrédient ↔ aliment Ciqual.
+  /// Confiance du rapprochement ingrédient ↔ aliment source.
   double get mappingConfidence => switch (matchType) {
     'code' => 0.95,
     'equivalent' => 0.9,
     'name' => 0.8,
+    'computed' => 0.75,
     _ => 0.6,
   };
 
   /// Justification d'une approximation (null pour une correspondance
   /// directe).
-  String? get derivationNote => matchType == 'proxy'
-      ? 'Valeur approchée : ${matchNote.isEmpty ? alimentName : matchNote}'
-      : null;
+  String? get derivationNote => switch (matchType) {
+    'proxy' =>
+      'Valeur approchée : ${matchNote.isEmpty ? alimentName : matchNote}',
+    'computed' => 'Calcul par composition : $matchNote',
+    _ => null,
+  };
 
-  NutritionRecordsCompanion toCompanion() {
+  NutritionRecordsCompanion toCompanion([
+    NutritionEnrichmentSource source = NutritionEnrichmentSource.ciqual,
+  ]) {
     return NutritionRecordsCompanion.insert(
-      nutritionRecordId: 'CIQ-$ingredientId-$stateId-$componentId',
+      nutritionRecordId:
+          '${source.recordPrefix}-$ingredientId-$stateId-$componentId',
       ingredientId: ingredientId,
       ingredientStateId: Value(stateId),
-      sourceId: const Value(CiqualEnrichmentLoader.sourceId),
+      sourceId: Value(source.id),
       sourceFoodId: Value(ciqualAlimCode),
       sourceFoodName: Value(alimentName),
-      sourceUrl: const Value(CiqualEnrichmentLoader.sourceUrl),
+      sourceUrl: Value(source.url),
       componentId: Value(componentId),
       componentName: Value(componentName),
       normalizedValue: Value(normalizedValue),
@@ -184,7 +244,11 @@ class CiqualNutritionRow {
       confidence: Value(confidence),
       mappingConfidence: Value(mappingConfidence),
       derivationMethod: Value(derivationNote),
-      valueQualifier: Value('Code de confiance Ciqual $confidenceCode'),
+      valueQualifier: Value(
+        source.id == NutritionEnrichmentSource.ciqual.id
+            ? 'Code de confiance Ciqual $confidenceCode'
+            : confidenceCode,
+      ),
       notes: Value(sourceCitation),
     );
   }

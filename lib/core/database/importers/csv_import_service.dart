@@ -135,6 +135,31 @@ class CsvImportService {
         onPhaseProgress?.call('enrichment', 0);
       }
 
+      // Compléments nutritionnels en libre accès, après Ciqual (ils ne
+      // comblent que les ingrédients sans autre source) : USDA
+      // FoodData Central (CC0) puis composition calculée.
+      for (final (source, file) in [
+        (NutritionEnrichmentSource.usda, 'usda_nutrition.csv'),
+        (NutritionEnrichmentSource.computed, 'computed_nutrition.csv'),
+      ]) {
+        try {
+          final outcome = await CiqualEnrichmentLoader(source: source).loadInto(
+            db,
+            csvPath: p.join(
+              p.dirname(databaseMetierRoot),
+              'database-enrichment',
+              file,
+            ),
+            onFileSkipped: (s) =>
+                skipped['enrichment'] = (skipped['enrichment'] ?? true) && s,
+          );
+          rowsImported['enrichment'] =
+              (rowsImported['enrichment'] ?? 0) + outcome.insertedRows;
+        } catch (_) {
+          // Complément absent (dossier de test partiel) : ignoré.
+        }
+      }
+
       // Phase 10 — enrichissement métier (profils sensoriels, accords,
       // composants fonctionnels, données culinaires, facteurs de
       // procédé) + CSV Phase 4 orphelins. Fichiers optionnels.
