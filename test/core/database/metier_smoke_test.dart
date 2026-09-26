@@ -533,4 +533,32 @@ void main() {
       expect((await profile('ING-MARINE-SAUMON-000001')).salt, lessThan(0.5));
     });
   });
+
+  group('pH : FDA/CFSAN 2007 (domaine public)', () {
+    test(
+      'valeurs mesurées citées, estimations signalées comme telles',
+      () async {
+        final rows = await db.select(db.ingredientCulinary).get();
+        final byId = {for (final r in rows) r.ingredientId: r};
+        final tomate = byId['ING-PLANT-TOMATE-000001']!;
+        expect(tomate.phNote, contains('FDA/CFSAN 2007'));
+        expect(tomate.ph, inInclusiveRange(4.3, 4.9));
+        final fda = rows
+            .where((r) => (r.phNote ?? '').startsWith('FDA'))
+            .length;
+        expect(fda, greaterThan(150));
+        // Aucune estimation par règle ne se réclame de la FDA.
+        for (final r in rows) {
+          if (r.ph == null) continue;
+          final note = r.phNote ?? '';
+          expect(
+            note.startsWith('FDA') ||
+                note.startsWith('Estimation par catégorie'),
+            isTrue,
+            reason: r.ingredientId,
+          );
+        }
+      },
+    );
+  });
 }

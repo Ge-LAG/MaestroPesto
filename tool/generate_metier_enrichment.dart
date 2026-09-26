@@ -208,6 +208,28 @@ void main() {
   // --------------------------------------------------------- B / F
   final unitRules = _rules('tool/data/culinary_units.csv');
   final physRules = _rules('tool/data/physchem_rules.csv');
+  // pH mesurés : FDA/CFSAN « Approximate pH of Foods and Food Products »
+  // (avril 2007, domaine public) — prioritaires sur les règles.
+  final fdaPh = {
+    for (final r in _records('tool/data/fda_ph_2007.csv'))
+      r['fda_item']!: (double.parse(r['ph_min']!), double.parse(r['ph_max']!)),
+  };
+  final fdaById = <String, (String, double, double, String, String)>{};
+  for (final m in _records('tool/data/fda_ph_map.csv')) {
+    final id = nameToId[m['canonical_name_fr']];
+    final range = fdaPh[m['fda_item']];
+    if (id == null || range == null) {
+      throw StateError('fda_ph_map : ligne invalide ${m['canonical_name_fr']}');
+    }
+    fdaById[id] = (
+      m['fda_item']!,
+      range.$1,
+      range.$2,
+      m['match_type']!,
+      m['note'] ?? '',
+    );
+  }
+  var fromFda = 0;
   final culinaryOut = StringBuffer()
     ..writeln(
       'ingredient_id,density_g_per_ml,density_note,unit_masses,ph,'
@@ -232,7 +254,22 @@ void main() {
     final phys = _firstMatch(physRules, name, cat2);
     final density = unit?['density_g_per_ml'] ?? '';
     if (density.isNotEmpty) withDensity++;
-    final ph = phys?['ph'] ?? '';
+    final fda = fdaById[id];
+    String fmt(double v) => v.toStringAsFixed(2).replaceAll('.', ',');
+    final ph = fda != null
+        ? ((fda.$2 + fda.$3) / 2).toStringAsFixed(2)
+        : phys?['ph'] ?? '';
+    final phConfidence = fda != null
+        ? (fda.$4 == 'equivalent' ? '0.85' : '0.7')
+        : phys?['confidence'] ?? '';
+    final phNote = fda != null
+        ? 'FDA/CFSAN 2007, Approximate pH of Foods : « ${fda.$1} » '
+              '${fda.$2 == fda.$3 ? fmt(fda.$2) : '${fmt(fda.$2)}–${fmt(fda.$3)}'}'
+              '${fda.$5.isEmpty ? '' : ' (${fda.$5})'}'
+        : ph.isEmpty
+        ? ''
+        : 'Estimation par catégorie (règle MaestroPesto) — ${phys!['note']}';
+    if (fda != null) fromFda++;
     if (ph.isNotEmpty) {
       withPh++;
       phById[id] = double.parse(ph);
@@ -244,13 +281,8 @@ void main() {
         _cell(density.isEmpty ? '' : unit!['note'] ?? ''),
         unit?['unit_masses'] ?? '',
         ph,
-        ph.isEmpty ? '' : phys!['confidence'],
-        _cell(
-          ph.isEmpty
-              ? ''
-              : 'FDA/CFSAN, Approximate pH of Foods (valeur médiane) — '
-                    '${phys!['note']}',
-        ),
+        ph.isEmpty ? '' : phConfidence,
+        _cell(phNote),
       ].join(','),
     );
 
@@ -336,7 +368,7 @@ void main() {
     }
   }
   stdout.writeln(
-    'Culinaire : densité $withDensity, pH $withPh ; composants : '
+    'Culinaire : densité $withDensity, pH $withPh (dont $fromFda FDA) ; composants : '
     '$componentRows lignes pour ${componentIngredients.length} ingrédients',
   );
 
@@ -523,15 +555,23 @@ Map<String, Map<String, double>> _loadNutrition() {
       out[r['ingredient_id']]!['salt'] = v * 2.5 / 1000;
     }
   }
-  final phase2Ids = out.keys.toSet();
-  for (final r in _records(_ciqualPath)) {
-    if (r['row_kind'] != 'main') continue;
-    final id = r['ingredient_id']!;
-    if (phase2Ids.contains(id)) continue;
-    final key = ciqualTags[r['component_id']];
-    final v = double.tryParse(r['normalized_value'] ?? '');
-    if (key == null || v == null) continue;
-    out.putIfAbsent(id, () => {})[key] = v;
+  // Compléments dans l'ordre de priorité de l'app : Ciqual, puis USDA
+  // FoodData Central, puis composition calculée (même format).
+  for (final path in [
+    _ciqualPath,
+    'assets/database-enrichment/usda_nutrition.csv',
+    'assets/database-enrichment/computed_nutrition.csv',
+  ]) {
+    final covered = out.keys.toSet();
+    for (final r in _records(path)) {
+      if (r['row_kind'] != 'main') continue;
+      final id = r['ingredient_id']!;
+      if (covered.contains(id)) continue;
+      final key = ciqualTags[r['component_id']];
+      final v = double.tryParse(r['normalized_value'] ?? '');
+      if (key == null || v == null) continue;
+      out.putIfAbsent(id, () => {})[key] = v;
+    }
   }
   return out;
 }

@@ -1,53 +1,53 @@
 ingredient_id,descriptors,context,intensity,evidence_level,confidence,source_refs,note
 ING-PLANT-POMME-000001,fruity:0.80|green:0.68|grassy:0.68|leafy:0.68|tropical:0.60|sweet:0.60|solvent:0.56|sour:0.50|floral:0.20,both,0.5,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,pomme : esters fruités + hexanal ; composés mesurés Phase 3
-ING-PLANT-POMME-000002,sweet:0.70|fruity:0.70|sour:0.42|jammy:0.40|caramel:0.30,sweet,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pomme cuite
-ING-PLANT-POMME-000003,sweet:0.75|fruity:0.70|jammy:0.40|caramel:0.30|sour:0.30,sweet,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pomme cuite
+ING-PLANT-POMME-000002,sweet:0.70|fruity:0.70|sour:0.51|jammy:0.40|caramel:0.30,sweet,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pomme cuite
+ING-PLANT-POMME-000003,sweet:0.75|fruity:0.70|sour:0.52|jammy:0.40|caramel:0.30,sweet,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pomme cuite
 ING-PLANT-POMME-000004,fruity:0.80|sweet:0.60|sour:0.50|green:0.40|floral:0.20,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pomme : esters fruités + hexanal
 ING-PLANT-ORANGE-000001,citrus:0.80|sweet:0.60|fruity:0.50|sour:0.40|floral:0.30,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,orange
 ING-PLANT-ZESTEORANGE-000001,citrus:0.95|green:0.60|bitter:0.40|floral:0.40|resinous:0.20|sweet:0.14,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,zeste : limonène
 ING-PLANT-CITRONJAUNE-000001,sour:0.96|citrus:0.90|rose:0.68|floral:0.68|green:0.60|bitter:0.10|sweet:0.08,both,0.8,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,citron ; composés mesurés Phase 3
 ING-PLANT-ZESTECITRONJ-000001,citrus:0.95|green:0.60|bitter:0.40|floral:0.40|resinous:0.20|sweet:0.14,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,zeste : limonène
-ING-PLANT-CITRONVERT-000001,sour:1.00|citrus:0.90|green:0.60|floral:0.20|herbal:0.20|sweet:0.07,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,citron vert
+ING-PLANT-CITRONVERT-000001,sour:0.95|citrus:0.90|green:0.60|floral:0.20|herbal:0.20|sweet:0.07,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,citron vert
 ING-PLANT-ZESTECITRONV-000001,citrus:0.95|green:0.60|bitter:0.40|floral:0.40|resinous:0.20|sweet:0.14,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,zeste : limonène
 ING-PLANT-PAMPLEMOUSSE-000001,citrus:0.80|bitter:0.60|sour:0.60|sweet:0.30,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pamplemousse
 ING-PLANT-ZESTEPAMPLEM-000001,citrus:0.95|green:0.60|bitter:0.40|floral:0.40|resinous:0.20|sweet:0.14,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,zeste : limonène
-ING-PLANT-MANDARINE-000001,citrus:0.80|sweet:0.70|fruity:0.50|sour:0.33|floral:0.30,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,mandarine
+ING-PLANT-MANDARINE-000001,citrus:0.80|sweet:0.70|fruity:0.50|floral:0.30|sour:0.29,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,mandarine
 ING-PLANT-ZESTEMANDARI-000001,citrus:0.95|green:0.60|bitter:0.40|floral:0.40|resinous:0.20|sweet:0.14,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,zeste : limonène
 ING-PLANT-BERGAMOTE-000001,citrus:0.90|sour:0.80|floral:0.60|green:0.50|bitter:0.30|sweet:0.07,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,agrume aromatique
 ING-PLANT-ZESTEBERGAMO-000001,citrus:0.95|green:0.60|bitter:0.40|floral:0.40|resinous:0.20|sweet:0.14,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,zeste : limonène
 ING-PLANT-YUZU-000001,citrus:0.90|sour:0.80|floral:0.60|green:0.50|bitter:0.30|sweet:0.07,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,agrume aromatique
 ING-PLANT-ZESTEYUZU-000001,citrus:0.95|green:0.60|bitter:0.40|floral:0.40|resinous:0.20|sweet:0.14,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,zeste : limonène
 ING-PLANT-COMBAVA-000001,sour:1.00|citrus:0.90|green:0.60|floral:0.20|herbal:0.20|sweet:0.07,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,citron vert
-ING-PLANT-FRAISE-000001,berry:0.90|fruity:0.80|tropical:0.72|sweet:0.70|dairy:0.68|sour:0.50|floral:0.30|caramel:0.20|green:0.20,sweet,0.6,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,fraise : furanéol + esters ; composés mesurés Phase 3
+ING-PLANT-FRAISE-000001,berry:0.90|fruity:0.80|tropical:0.72|sweet:0.70|dairy:0.68|sour:0.48|floral:0.30|caramel:0.20|green:0.20,sweet,0.6,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,fraise : furanéol + esters ; composés mesurés Phase 3
 ING-PLANT-FRAMBOISE-000001,berry:0.90|fruity:0.80|floral:0.50|sour:0.50|sweet:0.50|violet:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,framboise : ionones
-ING-PLANT-MYRTILLE-000001,berry:0.90|sour:0.62|astringent:0.40|sweet:0.40|floral:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies bleues/rouges
+ING-PLANT-MYRTILLE-000001,berry:0.90|sour:0.60|astringent:0.40|sweet:0.40|floral:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies bleues/rouges
 ING-PLANT-MRE-000001,berry:0.90|sour:0.60|fruity:0.60|sweet:0.40|green:0.30,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies acidulées
 ING-PLANT-CASSIS-000001,berry:0.90|sour:0.67|fruity:0.60|sweet:0.40|green:0.30,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies acidulées
 ING-PLANT-GROSEILLE-000001,berry:0.90|sour:0.67|fruity:0.60|sweet:0.40|green:0.30,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies acidulées
 ING-PLANT-CANNEBERGE-000001,berry:0.90|sour:0.62|astringent:0.40|sweet:0.40|floral:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies bleues/rouges
 ING-PLANT-MREBLANCHE-000001,berry:0.90|sour:0.60|fruity:0.60|sweet:0.40|green:0.30,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies acidulées
 ING-PLANT-AIRELLE-000001,berry:0.90|sour:0.62|astringent:0.40|sweet:0.40|floral:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies bleues/rouges
-ING-PLANT-GROSEILLEMAQ-000001,berry:0.90|sour:0.67|fruity:0.60|sweet:0.40|green:0.30,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies acidulées
-ING-PLANT-PCHE-000001,stone_fruit:0.90|fruity:0.80|sweet:0.70|floral:0.40|sour:0.33,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau : lactones
-ING-PLANT-ABRICOT-000001,stone_fruit:0.90|fruity:0.80|sweet:0.70|floral:0.40|sour:0.33,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau : lactones
-ING-PLANT-PRUNE-000001,stone_fruit:0.80|fruity:0.70|sweet:0.60|sour:0.46|nutty:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau
+ING-PLANT-GROSEILLEMAQ-000001,berry:0.90|sour:0.69|fruity:0.60|sweet:0.40|green:0.30,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies acidulées
+ING-PLANT-PCHE-000001,stone_fruit:0.90|fruity:0.80|sweet:0.70|floral:0.40|sour:0.39,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau : lactones
+ING-PLANT-ABRICOT-000001,stone_fruit:0.90|fruity:0.80|sweet:0.70|floral:0.40|sour:0.30,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau : lactones
+ING-PLANT-PRUNE-000001,stone_fruit:0.80|fruity:0.70|sweet:0.60|sour:0.40|nutty:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau
 ING-PLANT-CERISE-000001,stone_fruit:0.80|fruity:0.70|sweet:0.60|sour:0.40|nutty:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau
 ING-PLANT-OLIVE-000001,salty:1.00|fatty:0.50|fermented:0.50|bitter:0.50|sour:0.33|fruity:0.30|herbal:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,olive saumurée
 ING-PLANT-MANGUE-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-BANANE-000001,fruity:0.80|tropical:0.72|sweet:0.70|dairy:0.30,sweet,0.5,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,banane : acétate d'isoamyle ; composés mesurés Phase 3
-ING-PLANT-ANANAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|floral:0.68|sour:0.46,sweet,0.7,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,fruit tropical ; composés mesurés Phase 3
+ING-PLANT-ANANAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|floral:0.68|sour:0.42,sweet,0.7,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,fruit tropical ; composés mesurés Phase 3
 ING-PLANT-FRUITDELAPAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.67|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-PAPAYE-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-GOYAVE-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-LITCHI-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-FRUITDUDRAGO-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,fruit tropical
 ING-PLANT-KAKI-000001,sweet:0.60|fruity:0.60|tropical:0.30|astringent:0.20,sweet,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit doux
-ING-PLANT-GRENADE-000001,fruity:0.70|sour:0.50|sweet:0.50|astringent:0.40|berry:0.30,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,grenade
+ING-PLANT-GRENADE-000001,fruity:0.70|sour:0.64|sweet:0.50|astringent:0.40|berry:0.30,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,grenade
 ING-PLANT-CARAMBOLE-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-KIWI-000001,fruity:0.70|sour:0.60|green:0.50|sweet:0.40,sweet,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,kiwi
-ING-PLANT-PHYSALIS-000001,sweet:0.60|fruity:0.60|tropical:0.30|astringent:0.20,sweet,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,fruit doux
-ING-PLANT-RAISIN-000001,fruity:0.70|sweet:0.70|floral:0.68|citrus:0.68|woody:0.68|sour:0.33,sweet,0.4,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,raisin ; composés mesurés Phase 3
-ING-PLANT-RAISINSEC-000001,sweet:1.00|jammy:0.60|fruity:0.50|caramel:0.40|sour:0.33,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,raisin sec
+ING-PLANT-PHYSALIS-000001,sweet:0.60|fruity:0.60|tropical:0.30|astringent:0.20,sweet,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit doux
+ING-PLANT-RAISIN-000001,fruity:0.70|sweet:0.70|floral:0.68|citrus:0.68|woody:0.68|sour:0.52,sweet,0.4,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,raisin ; composés mesurés Phase 3
+ING-PLANT-RAISINSEC-000001,sweet:1.00|jammy:0.60|fruity:0.50|caramel:0.40|sour:0.27,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,raisin sec
 ING-PLANT-AMANDE-000001,fatty:0.71|nutty:0.70|sweet:0.30|floral:0.20,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,amande : benzaldéhyde doux
 ING-PLANT-AMANDETORRFI-000001,nutty:0.80|fatty:0.75|roasted:0.60|toasted:0.50|sweet:0.20,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,amande grillée
 ING-TECH-BEURREDEAMAN-000001,nutty:0.80|fatty:0.73|roasted:0.60|toasted:0.50|sweet:0.20,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,amande grillée
@@ -55,7 +55,7 @@ ING-PLANT-NOISETTE-000001,fatty:0.87|nutty:0.80|sweet:0.30,both,0.5,curated,0.6,
 ING-PLANT-NOISETTETORR-000001,nutty:0.90|fatty:0.89|roasted:0.70|toasted:0.50|cocoa:0.20|sweet:0.16,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,noisette grillée : filbertone
 ING-TECH-BEURREDENOIS-000001,nutty:0.90|fatty:0.81|roasted:0.70|toasted:0.50|cocoa:0.20|sweet:0.16,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,noisette grillée : filbertone
 ING-PLANT-NOIX-000001,fatty:0.93|nutty:0.80|bitter:0.30|astringent:0.30|woody:0.20,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,noix
-ING-PLANT-NOIXTORRFIE-000001,fatty:0.96|nutty:0.80|bitter:0.30|astringent:0.30|woody:0.20|sweet:0.10,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,noix
+ING-PLANT-NOIXTORRFIE-000001,nutty:0.80|fatty:0.52|bitter:0.30|astringent:0.30|woody:0.20|sweet:0.10,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,noix
 ING-PLANT-PISTACHE-000001,nutty:0.80|fatty:0.66|green:0.30|sweet:0.30|resinous:0.10,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pistache
 ING-PLANT-PISTACHETORR-000001,nutty:0.80|fatty:0.74|green:0.30|sweet:0.30|resinous:0.10,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pistache
 ING-TECH-BEURREDEPIST-000001,nutty:0.80|fatty:0.74|green:0.30|sweet:0.30|resinous:0.10,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pistache
@@ -77,9 +77,9 @@ ING-PLANT-CHTAIGNETORR-000001,nutty:0.70|sweet:0.50|earthy:0.40|roasted:0.30,bot
 ING-PLANT-ARACHIDE-000001,nutty:0.80|fatty:0.70|roasted:0.60|sweet:0.20|salty:0.10,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,arachide : pyrazines
 ING-PLANT-ARACHIDETORR-000001,nutty:0.80|fatty:0.74|roasted:0.60|sweet:0.20|salty:0.10,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,arachide : pyrazines
 ING-TECH-BEURREDEARAC-000001,nutty:0.80|fatty:0.73|roasted:0.60|salty:0.43|sweet:0.35,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,arachide : pyrazines
-ING-FERMENT-CONFITUREFRA-000001,sweet:1.00|berry:0.90|fruity:0.80|sour:0.30|floral:0.30|caramel:0.20|green:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fraise : furanéol + esters
+ING-FERMENT-CONFITUREFRA-000001,sweet:1.00|berry:0.90|fruity:0.80|sour:0.58|floral:0.30|caramel:0.20|green:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fraise : furanéol + esters
 ING-FERMENT-CONFITUREABR-000001,sweet:1.00|stone_fruit:0.90|fruity:0.80|floral:0.40|sour:0.30,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit à noyau : lactones
-ING-FERMENT-MARMELADEORA-000001,sweet:1.00|citrus:0.80|fruity:0.50|sour:0.40|floral:0.30,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,orange
+ING-FERMENT-MARMELADEORA-000001,sweet:1.00|citrus:0.80|sour:0.60|fruity:0.50|floral:0.30,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,orange
 ING-PLANT-TOMATE-000001,green:0.76|grassy:0.76|leafy:0.76|umami:0.60|sour:0.50|sweet:0.40|fruity:0.40|herbal:0.20,savory,0.5,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,tomate : umami + vert (hexanal) ; composés mesurés Phase 3
 ING-PLANT-TOMATESCHE-000001,sweet:1.00|umami:0.90|green:0.68|grassy:0.68|leafy:0.68|smoky:0.64|medicinal:0.64|spicy:0.64|jammy:0.50|sour:0.40|fruity:0.40|salty:0.25|herbal:0.20|roasted:0.20,savory,0.7,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,tomate séchée : umami concentré ; composés mesurés Phase 3
 ING-FERMENT-CONCENTRDETO-000001,umami:0.60|sour:0.50|green:0.50|sweet:0.44|fruity:0.40|herbal:0.20|salty:0.11,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,tomate : umami + vert (hexanal)
@@ -123,7 +123,7 @@ ING-PLANT-TOPINAMBOUR-000001,nutty:0.50|earthy:0.50|sweet:0.32,savory,0.4,curate
 ING-PLANT-OIGNON-000001,sulfurous:0.80|green:0.68|grassy:0.68|leafy:0.68|pungent:0.60|sweet:0.40,savory,0.7,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,oignon : thiosulfinates ; composés mesurés Phase 3
 ING-PLANT-AIL-000001,sulfurous:0.90|pungent:0.80|marine:0.76|roasted:0.10,savory,0.9,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,ail : allicine ; composés mesurés Phase 3
 ING-PLANT-CHALOTE-000001,sulfurous:0.60|pungent:0.40|sweet:0.40|fruity:0.10,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,échalote
-ING-PLANT-POIREAU-000001,sulfurous:0.50|green:0.50|sweet:0.30|sour:0.25,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,poireau
+ING-PLANT-POIREAU-000001,sulfurous:0.50|green:0.50|sweet:0.30,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,poireau
 ING-PLANT-CLERIRAVE-000001,sweet:0.40|earthy:0.40|herbal:0.40|nutty:0.30,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,racine aromatique
 ING-PLANT-CLERIBRANCHE-000001,herbal:0.70|green:0.60|salty:0.20|bitter:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,céleri : phtalides
 ING-PLANT-RUTABAGA-000001,sulfurous:0.60|green:0.50|bitter:0.30|earthy:0.30|sweet:0.15,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,crucifère : composés soufrés
@@ -141,23 +141,23 @@ ING-PLANT-HARICOTBLANC-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savor
 ING-PLANT-HARICOTBLANC-000002,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-HARICOTNOIR-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.07,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-HARICOTNOIRC-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
-ING-PLANT-FLAGEOLET-000001,earthy:0.50|salty:0.31|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
+ING-PLANT-FLAGEOLET-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-FLAGEOLETCUI-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-POISCASS-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.09,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-POISCASSCUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.13,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
-ING-PLANT-POIS-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.10,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
+ING-PLANT-POIS-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.09,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-POISCUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.13,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
-ING-PLANT-FVE-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
-ING-PLANT-FVECUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.19,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
+ING-PLANT-FVE-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.19,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
+ING-PLANT-FVECUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|sweet:0.06,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-SOJA-000001,earthy:0.50|nutty:0.30|fatty:0.28|sweet:0.24|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
-ING-PLANT-SOJACUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,légumineuse
+ING-PLANT-SOJACUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|fatty:0.13|sweet:0.10,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-PLANT-LUPIN-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20|fatty:0.14,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
-ING-PLANT-LUPINCUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,légumineuse
+ING-PLANT-LUPINCUIT-000001,earthy:0.50|nutty:0.30|green:0.20|umami:0.20,savory,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,légumineuse
 ING-FUNGUS-CHAMPIGNONDE-000001,mushroom:0.80|earthy:0.76|umami:0.50|sweet:0.07,savory,0.4,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,champignon : octénol ; composés mesurés Phase 3
 ING-FUNGUS-CPE-000001,mushroom:0.90|earthy:0.60|umami:0.60|nutty:0.30|woody:0.30,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,champignon sauvage
 ING-FUNGUS-GIROLLE-000001,mushroom:0.90|earthy:0.60|umami:0.60|nutty:0.30|woody:0.30,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,champignon sauvage
 ING-FUNGUS-PLEUROTE-000001,mushroom:0.90|earthy:0.60|umami:0.60|nutty:0.30|woody:0.30,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,champignon sauvage
-ING-FUNGUS-SHIITAKE-000001,umami:0.97|mushroom:0.80|earthy:0.40|smoky:0.20|sulfurous:0.20|sweet:0.07,savory,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,shiitake : lenthionine
+ING-FUNGUS-SHIITAKE-000001,umami:0.97|mushroom:0.80|earthy:0.40|smoky:0.20|sulfurous:0.20|sweet:0.08,savory,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,shiitake : lenthionine
 ING-FUNGUS-MORILLE-000001,mushroom:0.90|earthy:0.60|umami:0.60|nutty:0.30|woody:0.30,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,champignon sauvage
 ING-FUNGUS-TRUFFENOIRE-000001,truffle:0.95|earthy:0.80|sulfurous:0.50|mushroom:0.50|umami:0.40|salty:0.07,savory,0.95,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,truffe : sulfure de diméthyle
 ING-MARINE-WAKAM-000001,salty:1.00|marine:0.80|umami:0.60|green:0.30,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,algue
@@ -166,10 +166,10 @@ ING-MARINE-KOMBU-000001,umami:1.00|salty:1.00|marine:0.70,savory,0.6,curated,0.6
 ING-MARINE-DULSE-000001,salty:1.00|marine:0.80|umami:0.60|green:0.30,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,algue
 ING-MARINE-SPAGHETTIDEM-000001,salty:1.00|marine:0.80|umami:0.60|green:0.30,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,algue
 ING-MARINE-LAITUEDEMER-000001,salty:1.00|marine:0.80|umami:0.60|green:0.30,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,algue
-ING-MARINE-SPIRULINE-000001,marine:0.80|umami:0.60|salty:0.40|green:0.30,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,algue
-ING-PLANT-BLTENDRE-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,céréale neutre
+ING-MARINE-SPIRULINE-000001,marine:0.80|salty:0.76|umami:0.60|green:0.30|fatty:0.09,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,algue
+ING-PLANT-BLTENDRE-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,céréale neutre
 ING-TECH-FARINEDEBLTE-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,céréale neutre
-ING-TECH-FLOCONSDEBLT-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,céréale neutre
+ING-TECH-FLOCONSDEBLT-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,céréale neutre
 ING-PLANT-BLDUR-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,céréale neutre
 ING-TECH-FARINEDEBLDU-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,céréale neutre
 ING-TECH-FLOCONSDEBLD-000001,nutty:0.30|toasted:0.10|sweet:0.10,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,céréale neutre
@@ -209,15 +209,15 @@ ING-TECH-FLOCONSDEAMA-000001,nutty:0.30|fatty:0.10|toasted:0.10|sweet:0.10,both,
 ING-PLANT-GRAINEDESSAM-000001,nutty:0.80|fatty:0.71|toasted:0.70|roasted:0.50|bitter:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sésame grillé
 ING-PLANT-GRAINEDELIN-000001,fatty:0.58|nutty:0.40|earthy:0.30|green:0.20|bitter:0.20|sweet:0.05,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graines oléagineuses
 ING-PLANT-GRAINEDECHIA-000001,fatty:0.44|nutty:0.40|earthy:0.30|green:0.20|bitter:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graines oléagineuses
-ING-PLANT-GRAINEDECOUR-000001,nutty:0.60|fatty:0.40|roasted:0.30|green:0.20|sweet:0.05,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graines de courge/tournesol
+ING-PLANT-GRAINEDECOUR-000001,fatty:0.70|nutty:0.60|roasted:0.30|green:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graines de courge/tournesol
 ING-PLANT-GRAINEDETOUR-000001,fatty:0.79|nutty:0.60|roasted:0.30|green:0.20|sweet:0.09,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graines de courge/tournesol
 ING-PLANT-GRAINEDEPAVO-000001,nutty:0.60|fatty:0.59|sweet:0.20|earthy:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pavot
 ING-PLANT-GRAINEDECUMI-000001,warming:0.70|earthy:0.70|spicy:0.60|fatty:0.32|woody:0.30|bitter:0.20|salty:0.17|sweet:0.07,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,cumin : cuminaldéhyde
 ING-PLANT-GRAINEDEFENU-000001,caramel:0.60|bitter:0.50|spicy:0.30|nutty:0.30|warming:0.30|sweet:0.29|fatty:0.09|salty:0.07,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fenugrec : sotolon (sirop d'érable)
 ING-PLANT-GRAINEDECORI-000001,citrus:0.60|floral:0.50|spicy:0.40|woody:0.30|warming:0.30|fatty:0.25,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,coriandre graine : linalol
-ING-PLANT-GRAINEDEMOUT-000001,salty:1.00|pungent:0.80|spicy:0.50|bitter:0.30|fatty:0.16|sweet:0.06,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,moutarde graine
+ING-PLANT-GRAINEDEMOUT-000001,pungent:0.80|fatty:0.52|spicy:0.50|bitter:0.30|sweet:0.23,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,moutarde graine
 ING-PLANT-CARDAMOME-000001,cooling:0.60|citrus:0.50|resinous:0.50|spicy:0.50|floral:0.40|fatty:0.10,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,cardamome : cinéole
-ING-PLANT-ANISVERT-000001,spicy:0.50|herbal:0.50|sweet:0.40|cooling:0.40|medicinal:0.20,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,anisé : anéthole
+ING-PLANT-ANISVERT-000001,spicy:0.50|herbal:0.50|sweet:0.40|cooling:0.40|fatty:0.23|medicinal:0.20,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,anisé : anéthole
 ING-PLANT-BASILIC-000001,herbal:0.90|floral:0.72|citrus:0.72|woody:0.72|spicy:0.68|green:0.50|cooling:0.30|peppery:0.20,both,0.8,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,basilic : linalol + estragole ; composés mesurés Phase 3
 ING-PLANT-PERSIL-000001,herbal:0.80|green:0.80|salty:0.24|bitter:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,persil
 ING-PLANT-CORIANDREFRA-000001,herbal:0.80|green:0.60|citrus:0.50|floral:0.20,savory,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,coriandre : aldéhydes
@@ -313,7 +313,7 @@ ING-DAIRY-LAITDEMICRM-000001,dairy:0.80|sweet:0.40,both,0.2,curated,0.6,MAESTRO_
 ING-DAIRY-LAITCRM-000001,dairy:0.80|sweet:0.40,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
 ING-DAIRY-LAITCRU-000001,dairy:0.80|sweet:0.40|fatty:0.06,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
 ING-DAIRY-LAITUHT-000001,dairy:0.80|sweet:0.40|fatty:0.05,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
-ING-DAIRY-LAITCONCENTR-000001,sweet:1.00|dairy:0.80|fatty:0.11|salty:0.08,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
+ING-DAIRY-LAITCONCENTR-000001,dairy:0.80|sweet:0.40|salty:0.10|fatty:0.08,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
 ING-DAIRY-LAITCONCENTR-000002,sweet:1.00|dairy:0.80|fatty:0.11|salty:0.08,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
 ING-DAIRY-LAITENPOUDRE-000001,sweet:1.00|dairy:0.80|fatty:0.37|salty:0.36,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
 ING-DAIRY-LAITDECHVRE-000001,dairy:0.80|sweet:0.40,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lait
@@ -329,12 +329,12 @@ ING-DAIRY-CRMEDECOCO-000001,fatty:0.70|nutty:0.60|dairy:0.60|tropical:0.50|sweet
 ING-DAIRY-BABEURRE-000001,dairy:0.70|sour:0.70|fermented:0.40|sweet:0.13,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
 ING-DAIRY-BEURREDOUX-000001,fatty:1.00|buttery:0.90|cheesy:0.76|dairy:0.70,both,0.5,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,beurre : diacétyle ; composés mesurés Phase 3
 ING-DAIRY-BEURREDEMISE-000001,fatty:1.00|buttery:0.90|salty:0.76|dairy:0.70,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,beurre : diacétyle
-ING-DAIRY-BEURRECLARIF-000001,fatty:0.90|buttery:0.80|nutty:0.60|caramel:0.30,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,beurre clarifié : notes noisette
-ING-DAIRY-FROMAGEFRAIS-000001,salty:0.94|dairy:0.80|fatty:0.50|sweet:0.20|sour:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage frais doux
+ING-DAIRY-BEURRECLARIF-000001,fatty:1.00|buttery:0.80|nutty:0.60|caramel:0.30,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,beurre clarifié : notes noisette
+ING-DAIRY-FROMAGEFRAIS-000001,dairy:0.80|fatty:0.50|salty:0.36|sweet:0.20|sour:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage frais doux
 ING-DAIRY-MOZZARELLA-000001,dairy:0.80|fatty:0.50|sweet:0.20|sour:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage frais doux
 ING-DAIRY-RICOTTA-000001,dairy:0.80|fatty:0.50|sweet:0.20|sour:0.20|salty:0.11,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage frais doux
 ING-DAIRY-MASCARPONE-000001,dairy:0.80|fatty:0.53|sweet:0.20|sour:0.20|salty:0.05,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage frais doux
-ING-DAIRY-CHVREFRAIS-000001,cheesy:0.60|salty:0.60|dairy:0.60|sour:0.50|fatty:0.50|herbal:0.10,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage de chèvre/brebis
+ING-DAIRY-CHVREFRAIS-000001,cheesy:0.60|salty:0.60|dairy:0.60|sour:0.50|fatty:0.50|herbal:0.10|sweet:0.07,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage de chèvre/brebis
 ING-DAIRY-FETA-000001,salty:0.91|cheesy:0.60|dairy:0.60|sour:0.50|fatty:0.50|herbal:0.10,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage de chèvre/brebis
 ING-DAIRY-PARMIGIANORE-000001,umami:1.00|salty:0.80|cheesy:0.70|nutty:0.60|fatty:0.50|fruity:0.30,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage affiné : glutamate
 ING-DAIRY-PECORINOROMA-000001,umami:1.00|salty:1.00|cheesy:0.70|nutty:0.60|fatty:0.50|fruity:0.30,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fromage affiné : glutamate
@@ -346,12 +346,12 @@ ING-DAIRY-BRIE-000001,cheesy:0.70|fatty:0.70|mushroom:0.60|salty:0.57|buttery:0.
 ING-DAIRY-ROQUEFORT-000001,salty:1.00|cheesy:0.90|fatty:0.70|fermented:0.60|umami:0.57|mushroom:0.40|pungent:0.30,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte persillée : méthylcétones
 ING-DAIRY-CHEDDAR-000001,nutty:0.70|cheesy:0.60|umami:0.60|fatty:0.60|salty:0.50|buttery:0.40|fruity:0.20,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte pressée cuite
 ING-DAIRY-GORGONZOLA-000001,cheesy:0.90|salty:0.80|fatty:0.70|fermented:0.60|umami:0.57|mushroom:0.40|pungent:0.30,both,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte persillée : méthylcétones
-ING-FERMENT-YAOURTNATURE-000001,dairy:0.70|sour:0.70|fermented:0.40|fatty:0.12|sweet:0.10,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
+ING-FERMENT-YAOURTNATURE-000001,dairy:0.70|sour:0.70|fermented:0.40|sweet:0.13,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
 ING-FERMENT-YAOURTGREC-000001,dairy:0.70|sour:0.70|fermented:0.40|fatty:0.12|sweet:0.10,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
 ING-FERMENT-KFIR-000001,dairy:0.70|sour:0.70|fermented:0.40|sweet:0.11,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
-ING-FERMENT-SKYR-000001,dairy:0.70|sour:0.70|fermented:0.40,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,laitage fermenté
+ING-FERMENT-SKYR-000001,dairy:0.70|sour:0.70|fermented:0.40,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
 ING-FERMENT-LAITRIBOT-000001,dairy:0.70|sour:0.70|fermented:0.40|sweet:0.07,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
-ING-FERMENT-LASSINATURE-000001,dairy:0.70|sour:0.70|fermented:0.40,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,laitage fermenté
+ING-FERMENT-LASSINATURE-000001,dairy:0.70|sour:0.70|fermented:0.40|sweet:0.07,both,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,laitage fermenté
 ING-ANIMAL-UFDEPOULE-000001,fatty:0.40|sulfurous:0.30|umami:0.30|buttery:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,œuf
 ING-ANIMAL-JAUNEDUF-000001,fatty:0.40|sulfurous:0.30|umami:0.30|buttery:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,œuf
 ING-ANIMAL-BLANCDUF-000001,fatty:0.40|sulfurous:0.30|umami:0.30|buttery:0.20|salty:0.17,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,œuf
@@ -364,21 +364,21 @@ ING-TECH-CASSONADE-000001,sweet:1.00|caramel:0.50|honey:0.20,both,0.3,curated,0.
 ING-TECH-SUCREGLACE-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
 ING-TECH-SUCRECANDI-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
 ING-TECH-SIROPDRABLE-000001,sweet:1.00|caramel:0.90|woody:0.30|vanillic:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sirop d'érable : sotolon
-ING-TECH-MIEL-000001,sweet:1.00|honey:0.95|floral:0.60|caramel:0.30|sour:0.29,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,miel
-ING-TECH-SIROPDEGLUCO-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-SIROPDEFRUCT-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
+ING-TECH-MIEL-000001,sweet:1.00|honey:0.95|floral:0.60|caramel:0.30|sour:0.27,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,miel
+ING-TECH-SIROPDEGLUCO-000001,sweet:1.00|salty:0.06,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-SIROPDEFRUCT-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
 ING-TECH-SIROPDAGAVE-000001,sweet:1.00|caramel:0.20,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sirop d'agave
 ING-TECH-MLASSE-000001,sweet:1.00|caramel:0.80|bitter:0.40|smoky:0.30|metallic:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,mélasse
-ING-TECH-SIROPDEBL-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-SIROPDERIZ-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-SUCREINVERTI-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-DEXTROSE-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
+ING-TECH-SIROPDEBL-000001,sweet:1.00|salty:0.06,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-SIROPDERIZ-000001,sweet:1.00|salty:0.06,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-SUCREINVERTI-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-DEXTROSE-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
 ING-TECH-FRUCTOSE-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
-ING-TECH-SORBITOLE420-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-MANNITOLE421-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-XYLITOLE967-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-ERYTHRITOLE9-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-MALTITOLE965-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
+ING-TECH-SORBITOLE420-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-MANNITOLE421-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-XYLITOLE967-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-ERYTHRITOLE9-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-MALTITOLE965-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
 ING-TECH-HUILEDOLIVE-000001,fatty:1.00|green:0.70|fruity:0.60|bitter:0.40|pungent:0.40|herbal:0.30,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,huile d'olive : polyphénols
 ING-TECH-HUILEDOLIVEV-000001,fatty:1.00|green:0.70|fruity:0.60|bitter:0.40|pungent:0.40|herbal:0.30,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,huile d'olive : polyphénols
 ING-TECH-HUILEDETOURN-000001,fatty:1.00|nutty:0.60|roasted:0.30|green:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graines de courge/tournesol
@@ -392,36 +392,36 @@ ING-TECH-HUILEDARACHI-000001,fatty:1.00|nutty:0.40,both,0.2,curated,0.6,MAESTRO_
 ING-TECH-HUILEDECOCO-000001,fatty:1.00|nutty:0.60|dairy:0.60|tropical:0.50|sweet:0.30,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,coco : lactones
 ING-TECH-HUILEDELIN-000001,fatty:1.00|nutty:0.40|earthy:0.30|green:0.20|bitter:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graines oléagineuses
 ING-TECH-HUILEDEPPINS-000001,fatty:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,huile neutre
-ING-TECH-HUILEDECARTH-000001,fatty:0.90,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,huile neutre
+ING-TECH-HUILEDECARTH-000001,fatty:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,huile neutre
 ING-TECH-HUILEDEMAS-000001,fatty:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,huile neutre
 ING-ANIMAL-BEURREDECACA-000001,fatty:1.00|cocoa:0.30,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,beurre de cacao désodorisé
 ING-ANIMAL-GRAISSEDECAN-000001,fatty:1.00|meaty:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graisse
 ING-ANIMAL-SAINDOUX-000001,fatty:1.00|meaty:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,graisse
 ING-TECH-CACAOENPOUDR-000001,cocoa:0.95|bitter:0.80|roasted:0.50|astringent:0.40|fruity:0.30|fatty:0.29|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,cacao : pyrazines
-ING-TECH-PTEDECACAO-000001,cocoa:0.95|bitter:0.80|roasted:0.50|astringent:0.40|fruity:0.30|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,cacao : pyrazines
+ING-TECH-PTEDECACAO-000001,cocoa:0.95|bitter:0.80|fatty:0.75|roasted:0.50|astringent:0.40|fruity:0.30|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,cacao : pyrazines
 ING-TECH-CHOCOLATNOIR-000001,cocoa:0.95|bitter:0.80|roasted:0.72|nutty:0.72|smoky:0.72|medicinal:0.72|spicy:0.72|fatty:0.66|sweet:0.60|astringent:0.40|fruity:0.30,both,0.8,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,cacao : pyrazines ; composés mesurés Phase 3
 ING-TECH-CHOCOLATAULA-000001,sweet:1.00|cocoa:0.70|dairy:0.50|fatty:0.44|caramel:0.40|salty:0.08,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,chocolat au lait
 ING-TECH-CHOCOLATBLAN-000001,sweet:1.00|dairy:0.60|fatty:0.60|vanillic:0.50|salty:0.09,sweet,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,chocolat blanc
-ING-TECH-CHOCOLATNOIR-000002,sweet:1.00|cocoa:0.95|bitter:0.80|roasted:0.50|fatty:0.42|astringent:0.40|fruity:0.30,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,cacao : pyrazines
-ING-TECH-CHOCOLATNOIR-000003,cocoa:0.95|bitter:0.80|roasted:0.50|astringent:0.40|fruity:0.30|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,cacao : pyrazines
+ING-TECH-CHOCOLATNOIR-000002,cocoa:0.95|bitter:0.80|sweet:0.80|fatty:0.61|roasted:0.50|astringent:0.40|fruity:0.30,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,cacao : pyrazines
+ING-TECH-CHOCOLATNOIR-000003,cocoa:0.95|bitter:0.80|fatty:0.75|roasted:0.50|astringent:0.40|fruity:0.30|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,cacao : pyrazines
 ING-TECH-GLATINE-000001,salty:0.30|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
-ING-TECH-AGARAGAR-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
-ING-TECH-PECTINEHM-000001,sour:0.46|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-PECTINELM-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-CARRAGHNANEK-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-CARRAGHNANEI-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-CARRAGHNANEL-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-ALGINATEDESO-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-GOMMEXANTHAN-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-GOMMEGUAR-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-GOMMEARABIQU-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
-ING-TECH-GOMMEDECAROU-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
+ING-TECH-AGARAGAR-000001,salty:0.10|sweet:0.10,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-PECTINEHM-000001,sour:0.46|salty:0.20|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-PECTINELM-000001,salty:0.20|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-CARRAGHNANEK-000001,salty:0.13|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-CARRAGHNANEI-000001,salty:0.13|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-CARRAGHNANEL-000001,salty:0.13|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-ALGINATEDESO-000001,salty:1.00|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-GOMMEXANTHAN-000001,salty:0.13|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-GOMMEGUAR-000001,salty:0.13|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-GOMMEARABIQU-000001,salty:0.13|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
+ING-TECH-GOMMEDECAROU-000001,salty:0.13|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
 ING-TECH-AMIDONDEMASM-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
 ING-TECH-AMIDONDEMASN-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
 ING-TECH-AMIDONDEPOMM-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
 ING-TECH-LCITHINEDESO-000001,fatty:1.00|sweet:0.11,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
 ING-TECH-LCITHINEDETO-000001,fatty:1.00|sweet:0.11,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
-ING-TECH-MONOETDIGLYC-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
+ING-TECH-MONOETDIGLYC-000001,fatty:1.00|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
 ING-TECH-SELFIN-000001,salty:1.00,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sel
 ING-TECH-SELDEGURANDE-000001,salty:1.00,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sel
 ING-TECH-FLEURDESEL-000001,salty:1.00,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sel
@@ -430,20 +430,20 @@ ING-TECH-BICARBONATED-000001,salty:0.30|bitter:0.30|metallic:0.30,both,0.2,curat
 ING-TECH-LEVURECHIMIQ-000001,salty:0.30|bitter:0.30|metallic:0.30,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,poudre levante
 ING-FERMENT-LEVUREBOULAN-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20|fatty:0.09|salty:0.05,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,levure : fermentation
 ING-FERMENT-LEVUREBOULAN-000002,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,levure : fermentation
-ING-FERMENT-LEVAINPTE-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,levure : fermentation
-ING-TECH-ACIDECITRIQU-000001,sour:1.00,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
-ING-TECH-ACIDEASCORBI-000001,sour:0.90,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
-ING-TECH-ACIDETARTRIQ-000001,sour:0.96,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
-ING-TECH-CRMEDETARTRE-000001,sour:0.90,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
+ING-FERMENT-LEVAINPTE-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,levure : fermentation
+ING-TECH-ACIDECITRIQU-000001,sour:1.00,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,acidulant
+ING-TECH-ACIDEASCORBI-000001,sour:0.90,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,acidulant
+ING-TECH-ACIDETARTRIQ-000001,sour:0.96,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,acidulant
+ING-TECH-CRMEDETARTRE-000001,sour:0.90|salty:0.05,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,acidulant
 ING-TECH-VINAIGREBLAN-000001,sour:0.95|pungent:0.40|fermented:0.30|fruity:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigre : acide acétique
 ING-TECH-VINAIGREDEVI-000001,sour:0.95|pungent:0.40|fermented:0.30|fruity:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigre : acide acétique
 ING-TECH-VINAIGREBALS-000001,sour:0.75|sweet:0.60|caramel:0.50|fruity:0.40|woody:0.30,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,balsamique
 ING-TECH-VINAIGREDECI-000001,sour:0.95|pungent:0.40|fermented:0.30|fruity:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigre : acide acétique
 ING-TECH-VINAIGREDERI-000001,sour:0.95|pungent:0.40|fermented:0.30|fruity:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigre : acide acétique
 ING-TECH-EXTRAITDEVAN-000001,vanillic:0.95|dairy:0.76|sweet:0.60|floral:0.30|caramel:0.30|woody:0.20,sweet,0.8,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,vanille : vanilline ; composés mesurés Phase 3
-ING-TECH-EAUDEROSE-000001,rose:0.95|floral:0.90|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,eau de rose : géraniol
-ING-TECH-EAUDEFLEURDO-000001,floral:0.95|citrus:0.40|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,fleur d'oranger : linalol
-ING-TECH-ARMENATURELD-000001,vanillic:0.95|sweet:0.60|floral:0.30|caramel:0.30|woody:0.20,sweet,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,vanille : vanilline
+ING-TECH-EAUDEROSE-000001,rose:0.95|floral:0.90|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,eau de rose : géraniol
+ING-TECH-EAUDEFLEURDO-000001,floral:0.95|citrus:0.40|sweet:0.20,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fleur d'oranger : linalol
+ING-TECH-ARMENATURELD-000001,vanillic:0.95|sweet:0.60|floral:0.30|caramel:0.30|woody:0.20,sweet,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vanille : vanilline
 ING-TECH-COLORANTALIM-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,texturant quasi neutre
 ING-TECH-HUILEESSENTI-000001,citrus:0.95|green:0.60|resinous:0.20,both,0.95,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,huile essentielle d'agrume
 ING-TECH-HUILEESSENTI-000002,citrus:0.95|green:0.60|resinous:0.20,both,0.95,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,huile essentielle d'agrume
@@ -476,7 +476,7 @@ ING-BEV-VINROS-000001,fruity:0.70|sour:0.60|floral:0.40|citrus:0.30|yeasty:0.20,
 ING-BEV-VINJAUNE-000001,sweet:0.60|nutty:0.50|fruity:0.50|sour:0.50|caramel:0.40|honey:0.30,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin oxydatif ou moelleux
 ING-BEV-VINDOUXNATUR-000001,sweet:0.60|nutty:0.50|fruity:0.50|sour:0.50|caramel:0.40|honey:0.30,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin oxydatif ou moelleux
 ING-BEV-PORTO-000001,fruity:0.70|berry:0.60|astringent:0.60|sour:0.50|woody:0.40|sweet:0.26|spicy:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin rouge : tanins
-ING-BEV-XRSSHERRY-000001,sweet:0.60|nutty:0.50|fruity:0.50|sour:0.50|caramel:0.40|honey:0.30,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin oxydatif ou moelleux
+ING-BEV-XRSSHERRY-000001,sweet:0.60|sour:0.51|nutty:0.50|fruity:0.50|caramel:0.40|honey:0.30,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin oxydatif ou moelleux
 ING-BEV-MADRE-000001,sweet:0.60|nutty:0.50|fruity:0.50|sour:0.50|caramel:0.40|honey:0.30,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin oxydatif ou moelleux
 ING-BEV-CHAMPAGNEBRU-000001,fruity:0.70|sour:0.60|floral:0.40|citrus:0.30|yeasty:0.20,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin blanc/rosé
 ING-BEV-CRMANT-000001,fruity:0.70|sour:0.60|floral:0.40|citrus:0.30|yeasty:0.20|sweet:0.06,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vin blanc/rosé
@@ -506,16 +506,16 @@ ING-BEV-BIREIPA-000001,malty:0.70|bitter:0.60|fermented:0.40|yeasty:0.40|floral:
 ING-BEV-BIRESTOUT-000001,roasted:0.80|malty:0.80|bitter:0.70|coffee:0.50|cocoa:0.30|sweet:0.14|sour:0.12,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,stout
 ING-BEV-BIREDEBL-000001,malty:0.70|bitter:0.60|fermented:0.40|yeasty:0.40|floral:0.30|citrus:0.20|sour:0.12,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,bière
 ING-BEV-BIREPILS-000001,malty:0.70|bitter:0.60|fermented:0.40|yeasty:0.40|floral:0.30|citrus:0.20|sour:0.12,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,bière
-ING-BEV-BIRESANSALCO-000001,malty:0.70|bitter:0.60|fermented:0.40|yeasty:0.40|floral:0.30|citrus:0.20|sour:0.12,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,bière
+ING-BEV-BIRESANSALCO-000001,malty:0.70|bitter:0.60|fermented:0.40|yeasty:0.40|floral:0.30|citrus:0.20|sour:0.12|sweet:0.11,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,bière
 ING-BEV-SOURBEER-000001,malty:0.70|bitter:0.60|fermented:0.40|yeasty:0.40|floral:0.30|citrus:0.20,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,bière
 ING-BEV-JUSDORANGE-000001,citrus:0.80|sweet:0.60|fruity:0.50|sour:0.40|floral:0.30,both,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,orange
 ING-BEV-JUSDECITRON-000001,sour:0.96|citrus:0.90|green:0.60|bitter:0.10|sweet:0.08,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,citron
-ING-BEV-JUSDANANAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
-ING-BEV-JUSDECRANBER-000001,berry:0.90|sour:0.60|sweet:0.40|astringent:0.40|floral:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies bleues/rouges
+ING-BEV-JUSDANANAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.48|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
+ING-BEV-JUSDECRANBER-000001,sour:0.91|berry:0.90|sweet:0.40|astringent:0.40|floral:0.20,sweet,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,baies bleues/rouges
 ING-BEV-JUSDETOMATE-000001,umami:0.60|sour:0.50|green:0.50|sweet:0.40|fruity:0.40|herbal:0.20|salty:0.12,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,tomate : umami + vert (hexanal)
 ING-BEV-JUSDEPOMME-000001,fruity:0.80|sweet:0.60|sour:0.50|green:0.40|floral:0.20,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pomme : esters fruités + hexanal
 ING-BEV-JUSDERAISIN-000001,fruity:0.70|sweet:0.70|sour:0.30|floral:0.20,sweet,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,raisin
-ING-BEV-SIROPDESUCRE-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
+ING-BEV-SIROPDESUCRE-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
 ING-BEV-LAITDECOCO-000001,fatty:0.70|nutty:0.60|dairy:0.60|tropical:0.50|sweet:0.30,both,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,coco : lactones
 ING-BEV-BOISSONDESOJ-000001,dairy:0.30|nutty:0.20|green:0.20|sweet:0.06,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,soja doux
 ING-BEV-BOISSONDAVOI-000001,nutty:0.40|sweet:0.30|malty:0.20|dairy:0.20,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,avoine
@@ -530,16 +530,16 @@ ING-COND-SHOYU-000001,salty:1.00|umami:0.90|fermented:0.60|caramel:0.30|roasted:
 ING-COND-MISOBLANC-000001,salty:1.00|umami:0.90|fermented:0.70|nutty:0.30|sweet:0.21|fatty:0.09,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,miso
 ING-COND-MISOROUGE-000001,salty:1.00|umami:0.90|fermented:0.70|nutty:0.30|sweet:0.21|fatty:0.09,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,miso
 ING-COND-MISOJAUNE-000001,salty:1.00|umami:0.90|fermented:0.70|nutty:0.30|sweet:0.21|fatty:0.09,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,miso
-ING-COND-NATTO-000001,fermented:0.80|umami:0.60|nutty:0.40|cheesy:0.30,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,soja fermenté
+ING-COND-NATTO-000001,fermented:0.80|umami:0.60|nutty:0.40|cheesy:0.30|sweet:0.16|fatty:0.16,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,soja fermenté
 ING-COND-TEMPEH-000001,fermented:0.80|umami:0.60|nutty:0.40|cheesy:0.30|fatty:0.07,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,soja fermenté
 ING-COND-SAUCENUOCMM-000001,salty:1.00|umami:0.95|fermented:0.80|marine:0.60|sweet:0.28|cheesy:0.20,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce de poisson
 ING-COND-SAUCEDEPOISS-000001,salty:1.00|umami:0.97|fermented:0.80|marine:0.60|sweet:0.28|cheesy:0.20,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce de poisson
 ING-COND-SAUCEDHUTRE-000001,salty:1.00|marine:0.95|umami:0.60|metallic:0.30|green:0.20,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,huître
-ING-COND-SAUCEHOISIN-000001,sweet:0.70|umami:0.60|salty:0.50|spicy:0.40|fermented:0.40,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,hoisin
+ING-COND-SAUCEHOISIN-000001,salty:1.00|sweet:0.91|umami:0.60|spicy:0.40|fermented:0.40,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,hoisin
 ING-COND-SAUCETERIYAK-000001,salty:1.00|umami:0.90|fermented:0.60|sweet:0.47|caramel:0.30|roasted:0.30,savory,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce soja : fermentation
-ING-COND-SAUCESRIRACH-000001,pungent:0.90|warming:0.70|sour:0.30|sweet:0.30|fermented:0.30|umami:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sauce pimentée
+ING-COND-SAUCESRIRACH-000001,salty:1.00|pungent:0.90|warming:0.70|sweet:0.50|sour:0.30|fermented:0.30|umami:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce pimentée
 ING-COND-SAUCEHARISSA-000001,salty:1.00|pungent:0.90|warming:0.70|sour:0.30|sweet:0.30|fermented:0.30|umami:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce pimentée
-ING-COND-SRIRACHA-000001,pungent:0.90|warming:0.70|sour:0.30|sweet:0.30|fermented:0.30|umami:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sauce pimentée
+ING-COND-SRIRACHA-000001,salty:1.00|pungent:0.90|warming:0.70|sweet:0.50|sour:0.30|fermented:0.30|umami:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce pimentée
 ING-COND-HARISSA-000001,salty:1.00|pungent:0.90|warming:0.70|sour:0.30|sweet:0.30|fermented:0.30|umami:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce pimentée
 ING-COND-SAUCEGOCHUJA-000001,pungent:0.90|warming:0.70|sour:0.30|sweet:0.30|fermented:0.30|umami:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sauce pimentée
 ING-COND-SAUCEKIMCHI-000001,sour:0.80|fermented:0.80|pungent:0.50|umami:0.40|sulfurous:0.30,savory,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,lacto-fermentation
@@ -547,7 +547,7 @@ ING-COND-PTEDECURRYRO-000001,spicy:0.80|pungent:0.70|warming:0.60|citrus:0.50|he
 ING-COND-PTEDECURRYVE-000001,spicy:0.80|pungent:0.70|warming:0.60|citrus:0.50|herbal:0.50|umami:0.40,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,pâte de curry thaïe
 ING-COND-TOMYUMPTE-000001,spicy:0.80|pungent:0.70|warming:0.60|citrus:0.50|herbal:0.50|umami:0.40,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,pâte de curry thaïe
 ING-COND-TOMKHAPTE-000001,spicy:0.80|pungent:0.70|warming:0.60|citrus:0.50|herbal:0.50|umami:0.40,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,pâte de curry thaïe
-ING-COND-DASHI-000001,umami:0.95|marine:0.70|salty:0.30,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,kombu : glutamate
+ING-COND-DASHI-000001,umami:0.95|marine:0.70|salty:0.30,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,kombu : glutamate
 ING-COND-MIRIN-000001,sweet:0.60|fermented:0.50|fruity:0.30|umami:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,mirin/saké
 ING-COND-SAKEDECUISIN-000001,sweet:0.60|fermented:0.50|fruity:0.30|umami:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,mirin/saké
 ING-COND-VINAIGRETTEG-000001,salty:0.88|fatty:0.73|sour:0.70|pungent:0.30|herbal:0.20|sweet:0.07,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigrette
@@ -559,46 +559,46 @@ ING-COND-MAYONNAISE-000001,fatty:1.00|dairy:0.70|salty:0.56|sour:0.40|buttery:0.
 ING-COND-SAUCEBARNAIS-000001,fatty:0.80|salty:0.78|dairy:0.70|sour:0.40|buttery:0.30|umami:0.20|sweet:0.08,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce émulsionnée
 ING-COND-SAUCEHOLLAND-000001,fatty:0.80|dairy:0.70|salty:0.48|sour:0.40|buttery:0.30|umami:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce émulsionnée
 ING-COND-SAUCEBCHAMEL-000001,dairy:0.60|nutty:0.30|salty:0.28|toasted:0.20|fatty:0.11|sweet:0.10,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce liée
-ING-COND-SAUCEVELOUT-000001,dairy:0.60|nutty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sauce liée
-ING-COND-SAUCEESPAGNO-000001,meaty:0.80|umami:0.80|roasted:0.60|salty:0.40|caramel:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,fond brun
+ING-COND-SAUCEVELOUT-000001,dairy:0.60|nutty:0.30|toasted:0.20|salty:0.18|fatty:0.06,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce liée
+ING-COND-SAUCEESPAGNO-000001,meaty:0.80|umami:0.80|roasted:0.60|salty:0.40|caramel:0.20|fatty:0.09,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fond brun
 ING-COND-SAUCETOMATEC-000001,umami:0.60|sour:0.50|green:0.50|sweet:0.40|fruity:0.40|salty:0.38|herbal:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,tomate : umami + vert (hexanal)
 ING-COND-SAUCEBARBECU-000001,sweet:0.92|salty:0.71|sour:0.50|umami:0.40|spicy:0.30|smoky:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce tomate sucrée
 ING-FERMENT-CORNICHONAIG-000001,sour:0.80|salty:0.60|green:0.40|pungent:0.30|herbal:0.30|sweet:0.13,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,condiment acidulé
-ING-FERMENT-PICKLEDECHOU-000001,sour:0.80|fermented:0.80|pungent:0.50|umami:0.40|sulfurous:0.30,savory,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,lacto-fermentation
+ING-FERMENT-PICKLEDECHOU-000001,sour:0.80|fermented:0.80|salty:0.66|pungent:0.50|umami:0.40|sulfurous:0.30|sweet:0.06,savory,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,lacto-fermentation
 ING-FERMENT-OLIVENOIREEN-000001,salty:0.71|fatty:0.50|fermented:0.50|bitter:0.50|sour:0.33|fruity:0.30|herbal:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,olive saumurée
-ING-FERMENT-OLIVEVERTEEN-000001,salty:1.00|fatty:0.50|fermented:0.50|bitter:0.50|sour:0.33|fruity:0.30|herbal:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,olive saumurée
+ING-FERMENT-OLIVEVERTEEN-000001,salty:1.00|fatty:0.50|fermented:0.50|bitter:0.50|fruity:0.30|sour:0.21|herbal:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,olive saumurée
 ING-FERMENT-CAPRE-000001,salty:1.00|sour:0.80|green:0.40|pungent:0.30|herbal:0.30,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,condiment acidulé
-ING-FERMENT-LEVAINDESEIG-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,levure : fermentation
-ING-FERMENT-LEVAINDEBL-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,levure : fermentation
+ING-FERMENT-LEVAINDESEIG-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,levure : fermentation
+ING-FERMENT-LEVAINDEBL-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,levure : fermentation
 ING-TECH-BOUILLONDEVO-000001,umami:0.70|meaty:0.60|salty:0.40|herbal:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fond blanc
 ING-TECH-BOUILLONDEBU-000001,meaty:0.80|umami:0.80|roasted:0.60|salty:0.40|caramel:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fond brun
 ING-TECH-BOUILLONDELG-000001,herbal:0.60|umami:0.40|sweet:0.30|salty:0.24|earthy:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,base aromatique
 ING-TECH-BOUILLONDEPO-000001,salty:0.94|marine:0.70|umami:0.60|smoky:0.40|sweet:0.06,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fumet
 ING-TECH-FONDBRUNDEVE-000001,meaty:0.80|umami:0.80|roasted:0.60|salty:0.44|caramel:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fond brun
 ING-TECH-FONDBLANCDEV-000001,umami:0.70|meaty:0.60|salty:0.40|herbal:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fond blanc
-ING-TECH-BOUILLONDASH-000001,umami:0.95|marine:0.70|salty:0.30,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,kombu : glutamate
+ING-TECH-BOUILLONDASH-000001,umami:0.95|marine:0.70|salty:0.30,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,kombu : glutamate
 ING-TECH-BOUILLONMISO-000001,umami:0.90|salty:0.80|fermented:0.70|nutty:0.30|sweet:0.20,savory,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,miso
 ING-TECH-CONSOMM-000001,meaty:0.80|umami:0.80|roasted:0.60|salty:0.40|caramel:0.20,savory,0.6,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fond brun
-ING-TECH-SAUMURE5SEL-000001,salty:0.95,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sel
-ING-TECH-SAUMURE10SEL-000001,salty:0.95,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sel
-ING-TECH-LACTOSRUMPET-000001,sweet:0.02,both,0.0,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,neutre
+ING-TECH-SAUMURE5SEL-000001,salty:1.00,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sel
+ING-TECH-SAUMURE10SEL-000001,salty:1.00,both,0.2,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sel
+ING-TECH-LACTOSRUMPET-000001,sweet:0.17|salty:0.05,both,0.0,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,neutre
 ING-TECH-GLATINEENPOU-000001,salty:0.30|sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
 ING-TECH-AMIDONMODIFI-000001,sweet:0.05,both,0.02,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,texturant quasi neutre
-ING-TECH-SIROPDEMAS-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
-ING-TECH-SIROPDEMASHA-000001,sweet:0.95,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sucrant pur
+ING-TECH-SIROPDEMAS-000001,sweet:1.00|salty:0.06,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
+ING-TECH-SIROPDEMASHA-000001,sweet:1.00,both,0.1,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sucrant pur
 ING-MIX-PTEBRISE-000001,buttery:0.70|salty:0.68|toasted:0.40|fatty:0.29|nutty:0.20|sweet:0.08,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte au beurre
 ING-MIX-PTEFEUILLETE-000001,buttery:0.70|salty:0.67|toasted:0.40|fatty:0.29|nutty:0.20|sweet:0.10,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte au beurre
 ING-MIX-PTESABLE-000001,buttery:0.70|sweet:0.60|fatty:0.31|toasted:0.30|vanillic:0.20|salty:0.10,sweet,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte sucrée
-ING-MIX-PTECHOUX-000001,buttery:0.70|toasted:0.40|nutty:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,pâte au beurre
-ING-MIX-PTELEVE-000001,yeasty:0.70|malty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,pâte levée
+ING-MIX-PTECHOUX-000001,buttery:0.70|toasted:0.40|fatty:0.21|salty:0.21|nutty:0.20,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte au beurre
+ING-MIX-PTELEVE-000001,yeasty:0.70|salty:0.38|fatty:0.31|malty:0.30|sweet:0.20|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte levée
 ING-MIX-PTEPAIN-000001,yeasty:0.70|salty:0.52|malty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte levée
 ING-MIX-PTEPIZZA-000001,yeasty:0.70|salty:0.52|malty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte levée
 ING-MIX-PTETARTESUCR-000001,buttery:0.70|sweet:0.60|fatty:0.31|toasted:0.30|vanillic:0.20|salty:0.10,sweet,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,pâte sucrée
 ING-MIX-MAYONNAISEMA-000001,fatty:1.00|dairy:0.70|salty:0.56|sour:0.40|buttery:0.30|umami:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce émulsionnée
 ING-MIX-VINAIGRETTEB-000001,salty:0.88|fatty:0.73|sour:0.70|pungent:0.30|herbal:0.20|sweet:0.07,savory,0.5,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigrette
 ING-MIX-BOUQUETGARNI-000001,herbal:0.60|umami:0.40|sweet:0.30|earthy:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,base aromatique
-ING-MIX-MIREPOIX-000001,herbal:0.60|umami:0.40|sweet:0.30|earthy:0.20,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,base aromatique
-ING-MIX-ROUXBLANC-000001,dairy:0.60|nutty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sauce liée
-ING-MIX-ROUXBLOND-000001,dairy:0.60|nutty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sauce liée
-ING-MIX-ROUXBRUN-000001,dairy:0.60|nutty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,sauce liée
+ING-MIX-MIREPOIX-000001,herbal:0.60|umami:0.40|sweet:0.30|earthy:0.20|salty:0.05,savory,0.4,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,base aromatique
+ING-MIX-ROUXBLANC-000001,fatty:0.60|dairy:0.60|nutty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce liée
+ING-MIX-ROUXBLOND-000001,fatty:0.60|dairy:0.60|nutty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce liée
+ING-MIX-ROUXBRUN-000001,fatty:0.60|dairy:0.60|nutty:0.30|toasted:0.20,savory,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,sauce liée
 ING-MIX-SACHETDPICES-000001,spicy:0.80|warming:0.70|earthy:0.50|pungent:0.40|woody:0.30,savory,0.9,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,mélange d'épices

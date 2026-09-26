@@ -1,0 +1,479 @@
+fda_item,ph_min,ph_max
+Abalone,6.10,6.50
+Abalone mushroom,5.00,5.00
+Ackees,5.50,5.50
+Aloe vera,6.10,6.10
+Aloe Juice,6.00,6.80
+Anchovies,6.50,6.50
+"Anchovies, stuffed w/capers, in olive oil",5.58,5.58
+Antipesto,5.60,5.60
+"Apple, baked with sugar",3.20,3.55
+"Apple, eating",3.30,4.00
+"Apples, Delicious",3.90,3.90
+"Apples, Golden Delicious",3.60,3.60
+"Apples, Jonathan",3.33,3.33
+"Apples, McIntosh",3.34,3.34
+"Apples, Juice",3.35,4.00
+"Apples, Sauce",3.10,3.60
+"Apples, Winesap",3.47,3.47
+Apricots,3.30,4.80
+"Apricots, Canned",3.40,3.78
+"Apricots, Dried, stewed",3.30,3.51
+"Apricots, Nectar",3.78,3.78
+"Apricots, Pureed",3.42,3.83
+"Apricots, Strained",3.72,3.95
+Arrowroot Crackers,6.63,6.80
+Arrowroot Cruel,6.37,6.87
+Artichokes,5.50,6.00
+"Artichokes, canned, acidified",4.30,4.60
+"Artichokes, French, cooked",5.60,6.00
+"Artichokes, Jerusalem, cooked",5.93,6.00
+Asparagus,6.00,6.70
+"Asparagus, Buds",6.70,6.70
+"Asparagus, Stalks",6.10,6.10
+"Asparagus, cooked",6.03,6.16
+"Asparagus, canned",5.00,6.00
+"Asparagus, frozen, cooked",6.35,6.48
+"Asparagus, green, canned",5.20,5.32
+"Asparagus, strained",4.80,5.09
+Avocados,6.27,6.58
+Baby corn,5.20,5.20
+"Baby Food Soup, unstrained",5.95,6.05
+Bamboo Shoots,5.10,6.20
+"Bamboo Shoots, preserved",3.50,4.60
+Bananas,4.50,5.20
+"Bananas, red",4.58,4.75
+"Banana, yellow",5.00,5.29
+"Barley, cooked",5.19,5.32
+Basil pesto,4.90,4.90
+"Bass, sea, broiled",6.58,6.78
+"Bass, striped, broiled",6.50,6.70
+Beans,5.60,6.50
+"Beans, Black",5.78,6.02
+"Beans, Boston style",5.05,5.42
+"Beans, Kidney",5.40,6.00
+"Beans, Lima",6.50,6.50
+"Beans, Soy",6.00,6.60
+"Beans, String",5.60,5.60
+"Beans, Wax",5.30,5.70
+"Beans, pork & tomato sauce, canned",5.10,5.80
+"Beans, refried",5.90,5.90
+"Beans, vegetarian, tomato sauce, canned",5.32,5.32
+Beets,5.30,6.60
+"Beets, cooked",5.23,6.50
+"Beets, canned, acidified",4.30,4.60
+"Beets, canned",4.90,5.80
+"Beets, chopped",5.32,5.56
+"Beets, strained",5.32,5.56
+Bird's nest soup,7.20,7.60
+"Blackberries, Washington",3.85,4.50
+"Blueberries, Maine",3.12,3.33
+"Blueberries, frozen",3.11,3.22
+"Bluefish, Boston, filet, broiled",6.09,6.50
+"Bran, Flakes",5.45,5.67
+"Bran, All Bran",5.59,6.19
+"Bread, white",5.00,6.20
+"Bread, Boston, brown",6.53,6.53
+"Bread, Cracked wheat",5.43,5.50
+"Bread, pumpernickel",5.40,5.40
+"Bread, Rye",5.20,5.90
+"Bread, whole wheat",5.47,5.85
+"Breadfruit, cooked",5.33,5.33
+"Broccoli, cooked",6.30,6.52
+"Broccoli, frozen, cooked",6.30,6.85
+"Broccoli, canned",5.20,6.00
+Brussels sprout,6.00,6.30
+Buttermilk,4.41,4.83
+Cabbage,5.20,6.80
+"Cabbage, Green",5.50,6.75
+"Cabbage, Red",5.60,6.00
+"Cabbage, Savoy",6.30,6.30
+"Cabbage, White",6.20,6.20
+Cactus,4.70,4.70
+Calamary (Squid),5.80,5.80
+Cantaloupe,6.13,6.58
+Capers,6.00,6.00
+Carp,6.00,6.00
+Carrots,5.88,6.40
+"Carrots, canned",5.18,5.22
+"Carrots, chopped",5.30,5.56
+"Carrots, cooked",5.58,6.03
+"Carrots, pureed",4.55,5.80
+"Carrots, strained",5.10,5.10
+Cauliflower,5.60,5.60
+"Cauliflower, cooked",6.45,6.80
+"Caviar, American",5.70,6.00
+Celery,5.70,6.00
+"Celery, cooked",5.37,5.92
+"Celery Knob, cooked",5.71,5.85
+"Cereal, strained",6.44,6.45
+"Chayote (mirliton), cooked",6.00,6.30
+"Cheese, American, mild",4.98,4.98
+"Cheese, Camembert",7.44,7.44
+"Cheese, Cheddar",5.90,5.90
+"Cheese, Cottage",4.75,5.02
+"Cheese, Cream, Philadelphia",4.10,4.79
+Cheese Dip,5.80,5.80
+"Cheese, Edem",5.40,5.40
+"Cheese, Old English",6.15,6.15
+"Cheese, Roquefort",5.10,5.98
+"Cheese, Parmesan",5.20,5.30
+"Cheese, Stilton",5.70,5.70
+"Cheese, Swiss Gruyere",5.68,6.62
+"Cherries, California",4.01,4.54
+"Cherries, frozen",3.32,3.37
+"Cherries, black, canned",3.82,3.93
+"Cherries, Maraschino",3.47,3.52
+"Cherries, red, Water pack",3.25,3.82
+"Cherries, Royal Ann",3.80,3.83
+Chicory,5.90,6.05
+"Chili Sauce, acidified",2.77,3.70
+Chives,5.20,6.31
+Clams,6.00,7.10
+"Clam Chowder, New England",6.40,6.40
+"Coconut, fresh",5.50,7.80
+Coconut milk,6.10,7.00
+Coconut preserves,3.80,7.00
+"Codfish, boiled",5.30,6.10
+Cod liver,6.20,6.20
+Conch,7.52,8.40
+Congee,6.40,6.40
+Corn,5.90,7.30
+"Corn, canned",5.90,6.50
+Corn Flakes,4.90,5.38
+"Corn, frozen, cooked",7.33,7.68
+"Corn, Golden Bantam, cooked on cob",6.22,7.04
+Crab meat,6.50,7.00
+"Crabapple Jelly, corn",2.93,3.02
+"Cranberry Juice, canned",2.30,2.52
+"Crabmeat, cooked",6.62,6.98
+"Cream, 20 per cent",6.50,6.68
+"Cream, 40 per cent",6.44,6.80
+Cream of Asparagus,6.10,6.10
+"Cream of Coconut, canned",5.51,5.87
+Cream of Potato soup,6.00,6.00
+"Cream of Wheat, cooked",6.06,6.16
+Chrysanthemum drink,6.50,6.50
+Cucumbers,5.12,5.78
+"Cucumbers, Dill pickles",3.20,3.70
+"Cucumbers, pickled",4.20,4.60
+Curry sauce,6.00,6.00
+"Curry Paste,acidified",4.60,4.80
+Cuttlefish,6.30,6.30
+"Dates, canned",6.20,6.40
+"Dates, Dromedary",4.14,4.88
+Eggplant,5.50,6.50
+"Eggs, new-laid, whole",6.58,6.58
+"Eggs, new-laid, whole, White",7.96,7.96
+"Eggs, new-laid, whole, Yolk",6.10,6.10
+Eell,6.20,6.20
+Escarolle,5.70,6.00
+Enchalada sauce,4.40,4.70
+Fennel (Anise),5.48,5.88
+"Fennel, cooked",5.80,6.02
+"Figs, Calamyrna",5.05,5.98
+"Figs, canned",4.92,5.00
+"Flounder, boiled",6.10,6.90
+"Flounder, fi1et, broiled",6.39,6.89
+Four bean salad,5.60,5.60
+Fruit cocktail,3.60,4.00
+Garlic,5.80,5.80
+Gelatin Dessert,2.60,2.60
+"Gelatin, plain jell",6.08,6.08
+Ginger,5.60,5.90
+"Ginseng , Korean drink",6.00,6.50
+Gooseberries,2.80,3.10
+Graham Crackers,7.10,7.92
+"Grapes, canned",3.50,4.50
+"Grapes, Concord",2.80,3.00
+"Grapes, Lady Finger",3.51,3.58
+"Grapes, Malaga",3.71,3.78
+"Grapes, Niagara",2.80,3.27
+"Grapes, Ribier",3.70,3.80
+"Grapes, Seedless",2.90,3.82
+"Grapes, Tokyo",3.50,3.84
+Grapefruit,3.00,3.75
+"Grapefruit, canned",3.08,3.32
+"Grapefruit Juice, canned",2.90,3.25
+Grass jelly,5.80,7.20
+"Greens, Mixed, chopped",5.05,5.22
+"Greens, Mixed, strained",5.22,5.30
+Grenadine Syrup,2.31,2.31
+Guava nectar,5.50,5.50
+Guava Jelly,3.73,3.73
+"Haddock, Filet, broiled",6.17,6.82
+Hearts of Palm,5.70,5.70
+Herring,6.10,6.10
+"Hominy, cooked",6.00,7.50
+Honey,3.70,4.20
+Honey Aloe,4.70,4.70
+"Horseradish, freshly ground",5.35,5.35
+"Huckleberries, cooked with sugar",3.38,3.43
+Jackfruit,4.80,6.80
+"Jam, fruit",3.50,4.50
+"Jellies, fruit",3.00,3.50
+Jujube,5.20,5.20
+"Junket type Dessert:, Raspberry",6.27,6.27
+"Junket type Dessert:, Vanilla",6.49,6.49
+"Kale, cooked",6.36,6.80
+Ketchup,3.89,3.92
+"Kippered, Herring, Marshall",5.75,6.20
+"Herring, Pickled",4.50,5.00
+Kelp,6.30,6.30
+"Kumquat, Florida",3.64,4.25
+Leeks,5.50,6.17
+"Leeks, cooked",5.49,6.10
+Lemon Juice,2.00,2.60
+"Lentils, cooked",6.30,6.83
+Lentil Soup,5.80,5.80
+Lettuce,5.80,6.15
+"Lettuce, Boston",5.89,6.05
+"Lettuce, Iceberg",5.70,6.13
+Lime Juice,2.00,2.35
+Lime,2.00,2.80
+Lobster bisque,6.90,6.90
+Lobster soup,5.70,5.70
+"Lobster, cooked",7.10,7.43
+Loganberries,2.70,3.50
+Loquat (May be acidified to pH 3.8),5.10,5.10
+Lotus Root,6.90,6.90
+Lychee,4.70,5.01
+"Macaroni, cooked",5.10,6.41
+"Mackerel, King, boiled",6.26,6.50
+"Mackerel, Spanish, broiled",6.07,6.36
+"Mackerel, canned",5.90,6.40
+"Mangoes, ripe",3.40,4.80
+"Mangoes, green",5.80,6.00
+Mangostine ?,4.50,5.00
+Maple syrup,5.15,5.15
+"Maple syrup, light (Acidified)",4.60,4.60
+Matzos,5.70,5.70
+Mayhaw (a variety of strawberry),3.27,3.86
+Melba Toast,5.08,5.30
+"Melon, Casaba",5.78,6.00
+"Melons, Honey dew",6.00,6.67
+"Melons, Persian",5.90,6.38
+"Milk, cow",6.40,6.80
+"Milk, Acidophilus",4.09,4.25
+"Milk, condensed",6.33,6.33
+"Milk, evaporated",5.90,6.30
+"Milk, Goat's",6.48,6.48
+"Milk, peptonized",7.10,7.10
+"Milk, Sour, fine curd",4.70,5.65
+Milkfish,5.30,5.30
+Mint Jelly,3.01,3.01
+Molasses,4.90,5.40
+Muscadine (A variety of grape),3.20,3.40
+Mushrooms,6.00,6.70
+"Mushrooms, cooked",6.00,6.22
+"Mushroom Soup, Cream of, canned",5.95,6.40
+Mussels,6.00,6.85
+Mustard,3.55,6.00
+Nata De Coco,5.00,5.00
+Nectarines,3.92,4.18
+"Noodles, boiled",6.08,6.50
+"Oatmeal, cooked",6.20,6.60
+Octopus,6.00,6.50
+"Okra, cooked",5.50,6.60
+"Olives, black",6.00,7.00
+"Olives, green, fermented",3.60,4.60
+"Olives, ripe",6.00,7.50
+"Onions, pickled",3.70,4.60
+"Onions, red",5.30,5.80
+Onion white,5.37,5.85
+"Onions, yellow",5.32,5.60
+"Oranges, Florida",3.69,4.34
+"Oranges, Florida ""color added""",3.60,3.90
+"Orange Juice, California",3.30,4.19
+"Orange, Juice Florida",3.30,4.15
+"Orange, Marmalade",3.00,3.33
+Oysters,5.68,6.17
+"Oyster, smoked",6.00,6.00
+Oyster mushrooms,5.00,6.00
+"Palm, heart of",6.70,6.70
+Papaya,5.20,6.00
+Papaya Marmalade,3.53,4.00
+Parsley,5.70,6.00
+Parsnip,5.30,5.70
+"Parsnips, cooked",5.45,5.65
+Pate,5.90,5.90
+Peaches,3.30,4.05
+"Peaches, canned",3.70,4.20
+"Peaches, cooked with sugar",3.55,3.72
+"Peaches, frozen",3.28,3.35
+Peanut Butter,6.28,6.28
+Peanut Soup,7.50,7.50
+"Pears, Bartlett",3.50,4.60
+"Pears, canned",4.00,4.07
+"Pears, Sickle cooked w/sugar",4.04,4.21
+Pear Nectar,4.03,4.03
+"Peas, canned",5.70,6.00
+"Peas, Chick, Garbanzo",6.48,6.80
+"Peas, cooked",6.22,6.88
+"Peas, dried (split green), cooked",6.45,6.80
+"Peas, dried (split yellow), cooked",6.43,6.62
+"Peas, frozen, cooked",6.40,6.70
+"Peas, pureed",4.90,5.85
+"Pea Soup, Cream of, Canned",5.70,5.70
+"Peas, strained",5.91,6.12
+Peppers,4.65,5.45
+"Peppers, green",5.20,5.93
+Persimmons,4.42,4.70
+"Pickles, fresh pack",5.10,5.40
+Pimiento,4.40,4.90
+"Pimento, canned, acidified",4.40,4.60
+Pineapple,3.20,4.00
+"Pineapple, canned",3.35,4.10
+"Pineapple Juice, canned",3.30,3.60
+Plum Nectar,3.45,3.45
+"Plums, Blue",2.80,3.40
+"Plums, Damson",2.90,3.10
+"Plums, Frozen",3.22,3.42
+"Plums, Green Gage",3.60,4.30
+"Plums, Green Gage, canned",3.22,3.32
+"Plums, Red",3.60,4.30
+"Plums, spiced",3.64,3.64
+"Plums, Yellow",3.90,4.45
+"Pollack, filet, broiled",6.72,6.82
+Pomegranate,2.93,3.20
+"Porgy, broiled",6.40,6.49
+"Pork & Beans, rts.",5.70,5.70
+Potatoes,5.40,5.90
+"Potatoes, Mashed",5.10,5.10
+"Prunes, dried, stewed",3.63,3.92
+"Potatoes, Sweet",5.30,5.60
+"Potatoes, Tubers",5.70,5.70
+Potato Soup,5.90,5.90
+Prune Juice,3.95,3.97
+"Prune, pureed",3.60,4.30
+"Prune, strained",3.58,3.83
+Puffed Rice,6.27,6.40
+Puffed Wheat,5.26,5.77
+Pumpkin,4.90,5.50
+"Quince, fresh, stewed",3.12,3.40
+Quince Jelly,3.70,3.70
+"Radishes, red",5.85,6.05
+"Radishes, white",5.52,5.69
+"Raisins, seedless",3.80,4.10
+Rambutan (Thailand),4.90,4.90
+Raspberries,3.22,3.95
+"Raspberries, frozen",3.18,3.26
+"Raspberries, New Jersey",3.50,3.82
+Raspberry Jam,2.87,3.17
+Razor Clams,6.20,6.20
+Razor shell (sea asparagus),6.00,6.00
+"Rattan, Thailand",5.20,5.20
+Red Ginseng,5.50,5.50
+Red Pepper Relish,3.10,3.62
+"Rhubarb, California, stewed",3.20,3.34
+Rhubarb,3.10,3.40
+"Rhubarb, Canned",3.40,3.40
+"Rice (all cooked), Brown",6.20,6.80
+"Rice (all cooked), Krispies",5.40,5.73
+"Rice (all cooked), White",6.00,6.70
+"Rice (all cooked), Wild",6.00,6.50
+"Rolls, white",5.46,5.52
+Romaine,5.78,6.06
+"Salmon, fresh, boiled",5.85,6.50
+"Salmon, fresh, broiled",5.36,6.40
+"Salmon, Red Alaska, canned",6.07,6.16
+Sardines,5.70,6.60
+"Sardine, Portuguese, in olive oil",5.42,5.93
+Satay sauce,5.00,5.00
+"Sauce, Enchilada",5.50,5.50
+"Sauce, Fish",4.93,5.02
+"Sauce, Shrimp",7.01,7.27
+Sauerkraut,3.30,3.60
+Scallion,6.20,6.20
+Scallop,6.00,6.00
+Scotch Broth.,5.92,5.92
+Sea Snail (Top shell),6.00,6.00
+"Shad Roe, sauted",5.70,5.90
+"Shallots, cooked",5.30,5.70
+"Sherbet, raspberry",3.69,3.69
+Sherry-wine,3.37,3.37
+Shredded Ralston,5.32,5.60
+Shredded Wheat,6.05,6.49
+Shrimp,6.50,7.00
+Shrimp Paste,5.00,6.77
+"Smelts, Sauted",6.67,6.90
+Soda Crackers,5.65,7.32
+"Broccoli Cheese Suop, condensed",5.60,5.60
+"Chicken Broth, rts.",5.80,5.80
+"Corn Soup, condensed",6.80,6.80
+"Cream of celery Saoup, condensed",6.20,6.20
+"Cream of Mushroom, condensed",6.00,6.20
+"Cream style corn, condensed",5.70,5.80
+"Cream of Potato soup, condensed",5.80,5.80
+"Cream of shrimp soup, condensed",5.80,5.80
+"Minestrone, condensed",5.40,5.40
+"New England Clam Chowder,condensed",6.00,6.00
+"Oyster Stew, condensed",6.30,6.30
+"Tomato Rice Soup, condensed",5.50,5.50
+Soy infant formula,6.60,7.00
+Soy Sauce,4.40,5.40
+Soy bean curd (tofu),7.20,7.20
+Soybean milk,7.00,7.00
+"Spaghetti, cooked",5.97,6.40
+Spinach,5.50,6.80
+"Spinach, chopped",5.38,5.52
+"Spinach, cooked",6.60,7.18
+"Spinach, frozen, cooked",6.30,6.52
+"Spinach, pureed",5.50,6.22
+"Spinach, strained",5.63,5.79
+"Squash, acorn, cooked",5.18,6.49
+"Squash, Kubbard, cooked",6.00,6.20
+"Squash, white, cooked",5.52,5.80
+"Squash, yellow, cooked",5.79,6.00
+Squid,6.00,6.50
+Sturgeon,6.20,6.20
+Strawberries,3.00,3.90
+"Strawberries, California",3.32,3.50
+"Strawberries, frozen",3.21,3.32
+Strawberry Jam,3.00,3.40
+Straw mushroom,4.90,4.90
+Sweet Potatoes,5.30,5.60
+"Swiss Chard, cooked",6.17,6.78
+Tamarind,3.00,3.00
+Tangerine,3.32,4.48
+Taro syrup,4.50,4.50
+Tea,7.20,7.20
+Three-Bean Salad,5.40,5.40
+Tofu (soybean Curd),7.20,7.20
+Tomatillo (resembling Cherry tomatoes),3.83,3.83
+Tomatoes,4.30,4.90
+"Tomatoes, canned",3.50,4.70
+"Tomatoes, Juice",4.10,4.60
+"Tomatoes, Paste",3.50,4.70
+"Tomatoes, Puree",4.30,4.47
+"Tomatoes, Strained",4.32,4.58
+"Tomatoes, Wine ripened",4.42,4.65
+"Tomato Soup, Cream of, canned",4.62,4.62
+"Trout, Sea, sauted",6.20,6.33
+Truffle,5.30,6.50
+"Tuna Fish, canned",5.90,6.20
+Turnips,5.29,5.90
+"Turnip, greens, cooked",5.40,6.20
+"Turnip, white, cooked",5.76,5.85
+"Turnip, yellow, cooked",5.57,5.82
+Vegetable Juice,3.90,4.30
+"Vegetable soup, canned",5.16,5.16
+"Vegetable soup, chopped",4.98,5.02
+"Vegetable soup, strained",4.99,5.00
+"Vermicelli, cooked",5.80,6.50
+Vinegar,2.40,3.40
+"Vinegar, cider",3.10,3.10
+"Walnuts, English",5.42,5.42
+Wax gourd drink,7.20,7.20
+Water Chestnut,6.00,6.20
+Watercress,5.88,6.18
+Watermelon,5.18,5.60
+Wheat Krispice,4.99,5.62
+Wheatnena,5.85,6.08
+Wheaties,5.00,5.12
+Worcestershire sauce,3.63,4.00
+"Yams, cooked",5.50,6.81
+Yeast,5.65,5.65
+"Yangsberries, frozen",3.00,3.70
+"Zucchini, cooked",5.69,6.10
+Zwiebach,4.84,4.94
