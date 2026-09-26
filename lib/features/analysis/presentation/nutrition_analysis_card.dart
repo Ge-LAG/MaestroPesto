@@ -20,6 +20,7 @@ import 'package:maestropesto/features/analysis/data/recipe_analysis_service.dart
 import 'package:maestropesto/features/analysis/presentation/recipe_analysis_scope.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 class NutritionAnalysisCard extends StatelessWidget {
   const NutritionAnalysisCard({
@@ -301,7 +302,7 @@ class _Highlights extends StatelessWidget {
                       : Icons.error_outline,
                   size: 15,
                   color: h.positive
-                      ? const Color(0xFF357A5B)
+                      ? context.palette.success
                       : const Color(0xFFD97B41),
                 ),
                 const SizedBox(width: 6),

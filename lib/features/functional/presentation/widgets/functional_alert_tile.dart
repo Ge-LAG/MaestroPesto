@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/models/functional_alert.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 /// Couleur associée à une sévérité (exposée pour les tests).
 Color functionalSeverityColor(FunctionalSeverity severity) {
@@ -201,8 +202,8 @@ class _CheckRow extends StatelessWidget {
             color: met == null
                 ? theme.colorScheme.outline
                 : met
-                ? const Color(0xFF357A5B)
-                : const Color(0xFFB85C45),
+                ? context.palette.success
+                : context.palette.warn,
           ),
           const SizedBox(width: 6),
           Expanded(

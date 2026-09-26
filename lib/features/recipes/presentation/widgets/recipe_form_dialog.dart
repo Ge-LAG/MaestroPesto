@@ -21,6 +21,7 @@ import 'package:maestropesto/features/flavor/presentation/widgets/flavor_compati
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/ingredients/presentation/ingredients_picker_page.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 Future<Recipe?> showRecipeFormDialog({
   required BuildContext context,
@@ -806,7 +807,7 @@ List<Widget> _previewContent(BuildContext context, RecipeAnalysis analysis) {
       style: theme.textTheme.bodySmall?.copyWith(
         color: allergens.isEmpty
             ? theme.colorScheme.onSurfaceVariant
-            : const Color(0xFFB85C45),
+            : context.palette.warn,
         fontWeight: allergens.isEmpty ? null : FontWeight.w800,
       ),
     ),
@@ -1104,7 +1105,7 @@ class _IngredientsSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFFE6E2D8)),
+                  border: Border.all(color: context.palette.border),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 14, 6, 10),
@@ -1747,8 +1748,8 @@ class _PhotoPreview extends StatelessWidget {
         return ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: path.isEmpty
-              ? const ColoredBox(
-                  color: Color(0xFFE9ECE4),
+              ? ColoredBox(
+                  color: context.palette.placeholder,
                   child: Center(child: Icon(Icons.photo_outlined)),
                 )
               : buildRecipePhoto(path, fit: BoxFit.cover),

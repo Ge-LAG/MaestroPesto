@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 class RecipeTagLabel extends StatelessWidget {
   const RecipeTagLabel({
@@ -15,17 +16,19 @@ class RecipeTagLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final background = selected ? colorScheme.primary : _tagColor(label);
-    final foreground = selected
-        ? colorScheme.onPrimary
-        : const Color(0xFF2E332D);
+    final palette = context.palette;
+    final tone = label.hashCode.abs() % palette.tagBackgrounds.length;
+    final background = selected
+        ? colorScheme.primary
+        : palette.tagBackgrounds[tone];
+    final foreground = selected ? colorScheme.onPrimary : palette.tagText;
 
     final tag = DecoratedBox(
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
-          color: selected ? colorScheme.primary : _tagBorderColor(label),
+          color: selected ? colorScheme.primary : palette.tagBorders[tone],
         ),
       ),
       child: Padding(
@@ -50,28 +53,4 @@ class RecipeTagLabel extends StatelessWidget {
       child: tag,
     );
   }
-}
-
-Color _tagColor(String label) {
-  final colors = [
-    const Color(0xFFE5F0EA),
-    const Color(0xFFF3E8D1),
-    const Color(0xFFE4ECF4),
-    const Color(0xFFF1E2DF),
-    const Color(0xFFEAE6F3),
-    const Color(0xFFE7EED7),
-  ];
-  return colors[label.hashCode.abs() % colors.length];
-}
-
-Color _tagBorderColor(String label) {
-  final colors = [
-    const Color(0xFFC7DDD0),
-    const Color(0xFFE2CAA0),
-    const Color(0xFFC8D7E5),
-    const Color(0xFFE2C5BF),
-    const Color(0xFFD5CCE8),
-    const Color(0xFFD1DEB4),
-  ];
-  return colors[label.hashCode.abs() % colors.length];
 }

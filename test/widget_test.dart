@@ -41,10 +41,10 @@ void main() {
 
     expect(find.text('MaestroPesto'), findsOneWidget);
     expect(find.text('Pesto maison'), findsWidgets);
-    // Pas de barre supérieure : sources et bases métier sont dans
-    // l'en-tête du classeur.
+    // Pas de barre supérieure ; sources et bases métier sont dans les
+    // paramètres, ouverts depuis l'en-tête du classeur.
     expect(find.byType(AppBar), findsNothing);
-    expect(find.byTooltip('Sources des données'), findsOneWidget);
-    expect(find.byIcon(Icons.menu_book_outlined), findsWidgets);
+    expect(find.byTooltip('Sources des données'), findsNothing);
+    expect(find.byTooltip('Paramètres'), findsOneWidget);
   });
 }

@@ -111,7 +111,14 @@ void main() {
       final label = chip.label;
       expect(label, isA<Text>(), reason: 'label Text attendu');
       final style = (label as Text).style;
-      expect(style?.color, Colors.black87, reason: 'texte noir sur fond clair');
+      // Couleur explicite, qui suit le thème : foncée en thème clair.
+      final color = style?.color;
+      expect(color, isNotNull, reason: 'couleur de texte explicite');
+      expect(
+        color!.computeLuminance(),
+        lessThan(0.1),
+        reason: 'texte foncé sur fond clair',
+      );
     }
   });
 }

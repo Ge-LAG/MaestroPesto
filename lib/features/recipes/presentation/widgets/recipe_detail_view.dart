@@ -34,6 +34,7 @@ import 'package:maestropesto/features/recipes/presentation/widgets/recipe_metier
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 /// Onglets d'analyse de la fiche.
 enum RecipeAnalysisTab { nutrition, flavor, process }
@@ -325,7 +326,7 @@ class _ServingsStepper extends StatelessWidget {
             border: Border.all(
               color: changed
                   ? theme.colorScheme.primary
-                  : const Color(0xFFE0DED7),
+                  : context.palette.border,
             ),
             borderRadius: BorderRadius.circular(8),
           ),
@@ -536,7 +537,7 @@ class _MetricPill extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        border: Border.all(color: const Color(0xFFE0DED7)),
+        border: Border.all(color: context.palette.border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
@@ -760,7 +761,7 @@ class _SynthTile extends StatelessWidget {
         color: theme.colorScheme.surfaceContainerLowest,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(color: Color(0xFFE0DED7)),
+          side: BorderSide(color: context.palette.border),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
@@ -919,13 +920,13 @@ class _AllergenBanner extends StatelessWidget {
     final tags = allergens.keys.toList()
       ..sort((a, b) => allergenRank(a).compareTo(allergenRank(b)));
     final present = tags.isNotEmpty;
-    const warn = Color(0xFFB85C45);
+    final warn = context.palette.warn;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: present
-            ? const Color(0xFFFBEDE6)
+            ? context.palette.warnSurface
             : theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
         border: present ? Border.all(color: warn.withValues(alpha: 0.5)) : null,
@@ -1156,12 +1157,12 @@ class _IngredientRowState extends State<_IngredientRow> {
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: const Color(0xFFB85C45)),
+            border: Border.all(color: context.palette.warn),
           ),
           child: Text(
             allergenLabelFr(a),
             style: theme.textTheme.labelSmall?.copyWith(
-              color: const Color(0xFFB85C45),
+              color: context.palette.warn,
               fontWeight: FontWeight.w700,
             ),
           ),

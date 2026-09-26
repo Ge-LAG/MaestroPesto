@@ -16,6 +16,7 @@ import 'package:maestropesto/core/models/flavor_profile.dart';
 import 'package:maestropesto/features/analysis/presentation/recipe_analysis_scope.dart';
 import 'package:maestropesto/features/flavor/presentation/widgets/flavor_compatibility_heatmap.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 class FlavorAnalysisCard extends StatelessWidget {
   const FlavorAnalysisCard({
@@ -508,7 +509,7 @@ class _Suggestions extends StatelessWidget {
                         ? Icons.verified_outlined
                         : Icons.auto_awesome_outlined,
                     size: 16,
-                    color: const Color(0xFF357A5B),
+                    color: context.palette.success,
                   ),
                 ),
                 const SizedBox(width: 6),

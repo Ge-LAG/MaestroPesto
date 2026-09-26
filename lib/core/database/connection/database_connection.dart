@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Base locale (dossier Documents de l'utilisateur par défaut).
 ///
@@ -9,16 +10,23 @@ import 'package:drift_flutter/drift_flutter.dart';
 /// un autre dossier : essais de l'exécutable release sur une base
 /// isolée, sans toucher aux recettes de l'utilisateur.
 QueryExecutor openConnection() {
-  final override = Platform.environment['MAESTROPESTO_DB_DIR'];
   return driftDatabase(
     name: 'maestropesto',
     native: DriftNativeOptions(
-      databaseDirectory: override == null || override.isEmpty
-          ? null
-          : () async => Directory(override)..createSync(recursive: true),
+      databaseDirectory: resolveDataDirectory,
       setup: (db) {
         db.execute('PRAGMA journal_mode = WAL;');
       },
     ),
   );
+}
+
+/// Dossier des données locales (base et réglages) : Documents de
+/// l'utilisateur, ou `MAESTROPESTO_DB_DIR` s'il est défini.
+Future<Directory> resolveDataDirectory() async {
+  final override = Platform.environment['MAESTROPESTO_DB_DIR'];
+  if (override != null && override.isNotEmpty) {
+    return Directory(override)..createSync(recursive: true);
+  }
+  return getApplicationDocumentsDirectory();
 }

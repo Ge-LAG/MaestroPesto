@@ -6,6 +6,7 @@ import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/core/scoring/nutrition_feedback.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 /// Tags des micronutriments par groupe d'affichage.
 const Set<String> kMineralTags = {
@@ -542,7 +543,7 @@ class _MacroLine extends StatelessWidget {
               value: coverage == 0 ? 0 : ratio.clamp(0, 1).toDouble(),
               minHeight: 8,
               color: color,
-              backgroundColor: const Color(0xFFECE7DC),
+              backgroundColor: context.palette.track,
             ),
           ),
         ],

@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:maestropesto/app/settings/app_settings.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as p;
 
 import 'app_database.dart';
 import 'connection/database_connection.dart';
@@ -27,7 +31,8 @@ import 'importers/csv_toolkit.dart' show activeCsvReader;
 /// location; for assets, [rootBundleCsvReader] resolves each CSV at
 /// runtime.
 class AppServices {
-  AppServices._(this.db, this.metierRoot) : autoImportMetier = true;
+  AppServices._(this.db, this.metierRoot, this.settings, this.dataDirectory)
+    : autoImportMetier = true;
 
   /// Test-only constructor: wraps an already-built database (typically an
   /// in-memory `NativeDatabase.memory()`) without touching the filesystem.
@@ -36,9 +41,23 @@ class AppServices {
     this.db, {
     this.metierRoot = 'assets/database-metier',
     this.autoImportMetier = false,
-  });
+    AppSettings? settings,
+    this.dataDirectory,
+  }) : settings = settings ?? AppSettings(MemorySettingsStore());
 
   final AppDatabase db;
+
+  /// Réglages de l'application (thème, taille du texte).
+  final AppSettings settings;
+
+  /// Dossier de la base locale (affiché dans les paramètres) ; `null` en
+  /// test (base en mémoire).
+  final String? dataDirectory;
+
+  /// Chemin du fichier de la base locale, si elle est sur disque.
+  String? get databasePath => dataDirectory == null
+      ? null
+      : p.join(dataDirectory!, 'maestropesto.sqlite');
 
   /// Path prefix under which the 4 phase folders live. With bundled
   /// assets this is `assets/database-metier` (relative to the package);
@@ -65,7 +84,43 @@ class AppServices {
     // widget build cycle.
     await db.customSelect('SELECT 1').get();
     final root = metierRoot ?? 'assets/database-metier';
-    return AppServices._(db, root);
+    final dir = await resolveDataDirectory();
+    final settings = await AppSettings.load(
+      FileSettingsStore(File(p.join(dir.path, 'maestropesto_settings.json'))),
+    );
+    return AppServices._(db, root, settings, dir.path);
+  }
+
+  /// Résumé de la base locale pour les paramètres : volumes et date de la
+  /// dernière vérification des bases métier.
+  Future<DatabaseSummary> databaseSummary() async {
+    Future<int> count(String table) async {
+      final row = await db
+          .customSelect('SELECT COUNT(*) AS n FROM $table')
+          .getSingle();
+      return row.data['n'] as int? ?? 0;
+    }
+
+    DateTime? lastCheck;
+    final state = await db
+        .customSelect(
+          "SELECT name FROM sqlite_master WHERE type = 'table' "
+          "AND name = 'import_state'",
+        )
+        .get();
+    if (state.isNotEmpty) {
+      final row = await db
+          .customSelect('SELECT MAX(imported_at) AS at FROM import_state')
+          .getSingle();
+      final at = row.data['at'] as String?;
+      lastCheck = at == null ? null : DateTime.tryParse(at)?.toLocal();
+    }
+    return DatabaseSummary(
+      schemaVersion: db.schemaVersion,
+      ingredients: await count('ingredients'),
+      recipes: await count('recipes'),
+      lastCheck: lastCheck,
+    );
   }
 
   /// Checks whether the 4 metier databases have already been imported.
@@ -135,6 +190,23 @@ class AppServices {
   Future<void> close() async {
     await db.close();
   }
+}
+
+/// Volumes de la base locale affichés dans les paramètres.
+class DatabaseSummary {
+  const DatabaseSummary({
+    required this.schemaVersion,
+    required this.ingredients,
+    required this.recipes,
+    required this.lastCheck,
+  });
+
+  final int schemaVersion;
+  final int ingredients;
+  final int recipes;
+
+  /// Dernière vérification (ou mise à jour) des bases métier.
+  final DateTime? lastCheck;
 }
 
 /// Tiny indirection to keep the UI import surface narrow. The

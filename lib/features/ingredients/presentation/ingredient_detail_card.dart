@@ -20,6 +20,8 @@ import '../../../core/models/ingredient_detail.dart';
 import '../../../core/models/nutrition_profile.dart';
 import '../../nutrition/data/nutrition_repository.dart';
 
+import 'package:maestropesto/app/theme/app_theme.dart';
+
 /// Card de détail d'un ingrédient.
 class IngredientDetailCard extends StatelessWidget {
   const IngredientDetailCard({
@@ -213,18 +215,22 @@ class _MiniNutritionSection extends StatelessWidget {
           runSpacing: 4,
           children: [
             _nutritionChip(
+              context,
               strings.ingredientDetailEnergy,
               _value(n, MacroField.energy, n.energyKcal, 'kcal', 0, strings),
             ),
             _nutritionChip(
+              context,
               strings.ingredientDetailProteins,
               _value(n, MacroField.proteins, n.proteins, 'g', 1, strings),
             ),
             _nutritionChip(
+              context,
               strings.ingredientDetailFats,
               _value(n, MacroField.fats, n.fats, 'g', 1, strings),
             ),
             _nutritionChip(
+              context,
               strings.ingredientDetailCarbs,
               _value(n, MacroField.carbs, n.carbs, 'g', 1, strings),
             ),
@@ -246,11 +252,11 @@ class _MiniNutritionSection extends StatelessWidget {
       ? '${fmtNum(value, digits)} $unit'
       : strings.nutritionNotProvided;
 
-  Widget _nutritionChip(String label, String value) {
+  Widget _nutritionChip(BuildContext context, String label, String value) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: context.palette.placeholder,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text('$label: $value', style: const TextStyle(fontSize: 12)),

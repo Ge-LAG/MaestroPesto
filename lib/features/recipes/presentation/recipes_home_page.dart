@@ -8,7 +8,7 @@ import 'package:maestropesto/features/recipes/data/recipes_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_book_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_detail_view.dart';
-import 'package:maestropesto/features/sources/presentation/data_sources_page.dart';
+import 'package:maestropesto/features/settings/presentation/settings_page.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_form_dialog.dart';
 
 class RecipesHomePage extends StatefulWidget {
@@ -30,11 +30,14 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
   final Set<String> _selectedTags = {};
   String _selectedRecipeId = '';
 
-  bool _importing = false;
+  /// État de l'import des bases métier, partagé avec les paramètres.
+  final ValueNotifier<MetierImportStatus> _importStatus = ValueNotifier(
+    const MetierImportStatus(),
+  );
+  bool get _importing => _importStatus.value.importing;
+  int get _importStep => _importStatus.value.step;
+  bool get _metierLoaded => _importStatus.value.loaded;
 
-  /// Étape courante de l'import (index dans AppServices.importPhases).
-  int _importStep = 0;
-  bool _metierLoaded = false;
   bool _loadingRecipes = true;
 
   /// Version des données métier : incrémentée après un import pour
@@ -51,6 +54,15 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     _bootstrap();
   }
 
+  @override
+  void dispose() {
+    _importStatus.dispose();
+    super.dispose();
+  }
+
+  void _setImportStatus(MetierImportStatus status) =>
+      setState(() => _importStatus.value = status);
+
   /// Phase 10 (ac-125) : les recettes sont persistées. Au premier
   /// lancement, les recettes de démonstration sont semées ; les bases
   /// métier embarquées sont (ré)importées en arrière-plan — import
@@ -59,7 +71,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     await _reloadRecipes();
     final loaded = await widget.services.isMetierLoaded();
     if (!mounted) return;
-    setState(() => _metierLoaded = loaded);
+    _setImportStatus(_importStatus.value.copyWith(loaded: loaded));
     if (widget.services.autoImportMetier) {
       await _importMetier(context, silentWhenUpToDate: true);
     }
@@ -305,11 +317,10 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     );
   }
 
-  // Lot E / Phase 10 — import des bases métier (bouton de l'AppBar et
-  // démarrage automatique). L'icône reflète 3 états :
-  //   * _importing=true   → spinner
-  //   * _metierLoaded=true → check_circle (vert)
-  //   * sinon             → storage_outlined (neutre)
+  // Lot E / Phase 10 — import des bases métier (démarrage automatique et
+  // bouton « Mettre à jour » des paramètres). L'état est partagé par
+  // [_importStatus] : barre de progression de l'accueil, bloc « Bases
+  // métier » des paramètres, pastille du bouton Paramètres.
   Future<void> _importMetier(
     BuildContext context, {
     bool silentWhenUpToDate = false,
@@ -317,17 +328,14 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     if (_importing) {
       return;
     }
-    setState(() {
-      _importing = true;
-      _importStep = 0;
-    });
+    _setImportStatus(_importStatus.value.copyWith(importing: true, step: 0));
     final messenger = ScaffoldMessenger.of(context);
     try {
       final report = await widget.services.importMetier(
         onPhaseProgress: (phase, _) {
           final i = AppServices.importPhases.indexWhere((p) => p.$1 == phase);
           if (i >= 0 && i != _importStep && mounted) {
-            setState(() => _importStep = i);
+            _setImportStatus(_importStatus.value.copyWith(step: i));
           }
         },
       );
@@ -341,8 +349,10 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
         MetierReference.invalidate(widget.services.db);
       }
       setState(() {
-        _metierLoaded = loaded;
-        _importing = false;
+        _importStatus.value = _importStatus.value.copyWith(
+          loaded: loaded,
+          importing: false,
+        );
         if (!allSkipped) _dataVersion++;
       });
       if (!allSkipped) await _refreshComputedNutrition();
@@ -365,7 +375,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       if (!mounted) {
         return;
       }
-      setState(() => _importing = false);
+      _setImportStatus(_importStatus.value.copyWith(importing: false));
       messenger.showSnackBar(
         SnackBar(
           content: Text('Erreur import BDD métier : $e'),
@@ -377,22 +387,6 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Pas de barre supérieure : les actions globales (sources des
-    // données, bases métier) vivent dans l'en-tête du classeur.
-    final headerActions = <Widget>[
-      IconButton(
-        visualDensity: VisualDensity.compact,
-        iconSize: 20,
-        tooltip: context.strings.sourcesTitle,
-        icon: const Icon(Icons.menu_book_outlined),
-        onPressed: () => showDataSourcesPage(context),
-      ),
-      _MetierStatusAction(
-        importing: _importing,
-        metierLoaded: _metierLoaded,
-        onImport: () => _importMetier(context),
-      ),
-    ];
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -402,14 +396,24 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                 step: _importStep,
                 firstLaunch: !_metierLoaded,
               ),
-            Expanded(child: _body(context, headerActions)),
+            Expanded(child: _body(context)),
           ],
         ),
       ),
     );
   }
 
-  Widget _body(BuildContext context, List<Widget> headerActions) {
+  void _openSettings() => showSettingsPage(
+    context,
+    services: widget.services,
+    importStatus: _importStatus,
+    onUpdateMetier: () => _importMetier(context),
+  );
+
+  Widget _body(BuildContext context) {
+    // Pastille sur Paramètres : bases métier absentes et pas d'import en
+    // cours (l'import se relance depuis les paramètres).
+    final settingsBadge = !_metierLoaded && !_importing;
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -438,7 +442,8 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
             onDuplicateRecipe: _duplicateRecipe,
             onDeleteRecipe: _deleteRecipe,
             onAddIngredient: _addIngredient,
-            headerActions: headerActions,
+            onOpenSettings: _openSettings,
+            settingsBadge: settingsBadge,
           );
         }
 
@@ -458,7 +463,8 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                 onTagsChanged: _setSelectedTags,
                 onClearFilters: _clearFilters,
                 onCreateRecipe: _createRecipe,
-                headerActions: headerActions,
+                onOpenSettings: _openSettings,
+                settingsBadge: settingsBadge,
               ),
             ),
             const VerticalDivider(width: 1),
@@ -502,7 +508,8 @@ class _CompactLayout extends StatelessWidget {
     required this.onDuplicateRecipe,
     required this.onDeleteRecipe,
     required this.onAddIngredient,
-    required this.headerActions,
+    required this.onOpenSettings,
+    required this.settingsBadge,
   });
 
   final AppServices services;
@@ -522,7 +529,8 @@ class _CompactLayout extends StatelessWidget {
   final ValueChanged<Recipe> onDeleteRecipe;
   final void Function(Recipe recipe, RecipeIngredient ingredient)
   onAddIngredient;
-  final List<Widget> headerActions;
+  final VoidCallback onOpenSettings;
+  final bool settingsBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -543,7 +551,8 @@ class _CompactLayout extends StatelessWidget {
             onClearFilters: onClearFilters,
             onCreateRecipe: onCreateRecipe,
             compact: true,
-            headerActions: headerActions,
+            onOpenSettings: onOpenSettings,
+            settingsBadge: settingsBadge,
           ),
         ),
         SliverToBoxAdapter(
@@ -563,49 +572,6 @@ class _CompactLayout extends StatelessWidget {
                 ),
         ),
       ],
-    );
-  }
-}
-
-class _MetierStatusAction extends StatelessWidget {
-  const _MetierStatusAction({
-    required this.onImport,
-    required this.importing,
-    required this.metierLoaded,
-  });
-
-  final VoidCallback onImport;
-  final bool importing;
-  final bool metierLoaded;
-
-  @override
-  Widget build(BuildContext context) {
-    if (importing) {
-      return IconButton(
-        visualDensity: VisualDensity.compact,
-        tooltip: context.strings.importMetierRunning,
-        icon: const SizedBox(
-          width: 18,
-          height: 18,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-        onPressed: null,
-      );
-    }
-    final scheme = Theme.of(context).colorScheme;
-    final IconData icon = metierLoaded
-        ? Icons.check_circle_outline
-        : Icons.storage_outlined;
-    final Color color = metierLoaded ? const Color(0xFF357A5B) : scheme.primary;
-    final String tooltip = metierLoaded
-        ? context.strings.importMetierReady
-        : context.strings.importMetierPending;
-    return IconButton(
-      visualDensity: VisualDensity.compact,
-      iconSize: 20,
-      tooltip: tooltip,
-      icon: Icon(icon, color: color),
-      onPressed: onImport,
     );
   }
 }

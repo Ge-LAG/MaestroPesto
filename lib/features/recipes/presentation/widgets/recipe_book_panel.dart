@@ -3,6 +3,7 @@ import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 enum RecipeBookViewMode { card, list }
 
@@ -19,7 +20,8 @@ class RecipeBookPanel extends StatefulWidget {
     required this.onClearFilters,
     required this.onCreateRecipe,
     this.compact = false,
-    this.headerActions = const <Widget>[],
+    this.onOpenSettings,
+    this.settingsBadge = false,
     super.key,
   });
 
@@ -35,9 +37,11 @@ class RecipeBookPanel extends StatefulWidget {
   final VoidCallback onCreateRecipe;
   final bool compact;
 
-  /// Actions de l'en-tête (sources des données, bases métier), placées
-  /// avant les réglages : l'application n'a pas de barre supérieure.
-  final List<Widget> headerActions;
+  /// Ouvre les paramètres (thème, bases métier, sources des données).
+  final VoidCallback? onOpenSettings;
+
+  /// Pastille sur le bouton Paramètres (bases métier à importer).
+  final bool settingsBadge;
 
   @override
   State<RecipeBookPanel> createState() => _RecipeBookPanelState();
@@ -73,7 +77,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
     final viewMode = widget.compact ? RecipeBookViewMode.card : _viewMode;
 
     return ColoredBox(
-      color: const Color(0xFFF0F1EC),
+      color: context.palette.panel,
       child: Padding(
         padding: EdgeInsets.fromLTRB(20, widget.compact ? 16 : 20, 20, 18),
         child: Column(
@@ -82,7 +86,8 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
             _BookHeader(
               compact: widget.compact,
               onCreateRecipe: widget.onCreateRecipe,
-              actions: widget.headerActions,
+              onOpenSettings: widget.onOpenSettings,
+              settingsBadge: widget.settingsBadge,
             ),
             const SizedBox(height: 18),
             SearchBar(
@@ -119,7 +124,9 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
             const SizedBox(height: 18),
             if (widget.compact)
               SizedBox(
-                height: widget.recipes.isEmpty ? 92 : 176,
+                // Hauteur fixe du carrousel, agrandie avec le texte.
+                height: MediaQuery.textScalerOf(context)
+                    .scale(widget.recipes.isEmpty ? 92 : 176),
                 child: widget.recipes.isEmpty
                     ? const _EmptyBookMessage()
                     : ListView.separated(
@@ -353,35 +360,21 @@ class _BookHeader extends StatelessWidget {
   const _BookHeader({
     required this.compact,
     required this.onCreateRecipe,
-    this.actions = const <Widget>[],
+    this.onOpenSettings,
+    this.settingsBadge = false,
   });
 
   final bool compact;
   final VoidCallback onCreateRecipe;
-  final List<Widget> actions;
+  final VoidCallback? onOpenSettings;
+  final bool settingsBadge;
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => _row(
-        context,
-        // Panneau étroit (fenêtre moyenne) : le logo cède sa place au
-        // titre et aux actions, sans réduire le titre.
-        showLogo: constraints.maxWidth >= 300,
-      ),
-    );
-  }
-
-  Widget _row(BuildContext context, {required bool showLogo}) {
     return Row(
       children: [
-        if (showLogo) ...[
-          Icon(
-            Icons.local_dining,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          const SizedBox(width: 10),
-        ],
+        Icon(Icons.local_dining, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,17 +398,17 @@ class _BookHeader extends StatelessWidget {
             ],
           ),
         ),
-        ...actions,
         IconButton(
-          visualDensity: VisualDensity.compact,
-          iconSize: 20,
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(context.strings.settingsTodo)),
-            );
-          },
-          icon: const Icon(Icons.settings_outlined),
-          tooltip: context.strings.settingsAction,
+          onPressed: onOpenSettings,
+          icon: Badge(
+            isLabelVisible: settingsBadge,
+            smallSize: 8,
+            child: const Icon(Icons.settings_outlined),
+          ),
+          tooltip: settingsBadge
+              ? '${context.strings.settingsAction} — '
+                    '${context.strings.settingsMetierAttention}'
+              : context.strings.settingsAction,
         ),
         const SizedBox(width: 4),
         IconButton.filled(
@@ -442,9 +435,7 @@ class _RecipeCardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final borderColor = selected
-        ? colorScheme.primary
-        : const Color(0xFFE0DED7);
+    final borderColor = selected ? colorScheme.primary : context.palette.border;
 
     return Material(
       color: selected
@@ -526,9 +517,7 @@ class _RecipeLineTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final borderColor = selected
-        ? colorScheme.primary
-        : const Color(0xFFE0DED7);
+    final borderColor = selected ? colorScheme.primary : context.palette.border;
 
     return Material(
       color: selected
@@ -631,7 +620,7 @@ class _QuickFact extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: const Color(0xFF43473F),
+            color: context.palette.strongMuted,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -648,7 +637,7 @@ class _EmptyBookMessage extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        border: Border.all(color: const Color(0xFFE0DED7)),
+        border: Border.all(color: context.palette.border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(

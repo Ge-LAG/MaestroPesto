@@ -14,11 +14,29 @@ class MaestroPestoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appStrings.appName,
-      debugShowCheckedModeBanner: false,
-      theme: buildAppTheme(),
-      home: RecipesHomePage(services: services),
+    final settings = services.settings;
+    // Thème et taille du texte suivent les paramètres, sans redémarrage.
+    return ListenableBuilder(
+      listenable: settings,
+      builder: (context, _) => MaterialApp(
+        title: appStrings.appName,
+        debugShowCheckedModeBanner: false,
+        theme: buildAppTheme(),
+        darkTheme: buildAppTheme(brightness: Brightness.dark),
+        themeMode: settings.themeMode,
+        builder: (context, child) {
+          final media = MediaQuery.of(context);
+          final factor = settings.textSize.factor;
+          if (factor == 1.0) return child!;
+          return MediaQuery(
+            data: media.copyWith(
+              textScaler: TextScaler.linear(media.textScaler.scale(1) * factor),
+            ),
+            child: child!,
+          );
+        },
+        home: RecipesHomePage(services: services),
+      ),
     );
   }
 }

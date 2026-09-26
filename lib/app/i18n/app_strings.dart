@@ -408,6 +408,38 @@ class AppStrings {
   String get sourcesCopyLink => 'Copier le lien';
   String get ingredientCulinaryTitle => 'Données culinaires';
   String get sourcesLinkCopied => 'Lien copié.';
+  String get sourcesSubtitle =>
+      'Sources ouvertes utilisées, licences et usages.';
+
+  // Paramètres.
+  String get settingsTitle => 'Paramètres';
+  String get settingsAppearance => 'Apparence';
+  String get settingsTheme => 'Thème';
+  String get settingsThemeSystem => 'Système';
+  String get settingsThemeLight => 'Clair';
+  String get settingsThemeDark => 'Sombre';
+  String get settingsTextSize => 'Taille du texte';
+  String get settingsTextStandard => 'Standard';
+  String get settingsTextLarge => 'Grande';
+  String get settingsData => 'Données';
+  String get settingsMetier => 'Bases métier';
+  String get settingsMetierReady => 'Chargées';
+  String get settingsMetierMissing => 'Non importées';
+  String settingsMetierRunning(String phase, int step, int total) =>
+      'Mise à jour en cours — $phase ($step/$total)…';
+  String settingsLastCheck(String when) => 'Dernière vérification : $when';
+  String get settingsMetierHelp =>
+      'La mise à jour ne recharge que les fichiers modifiés depuis la '
+      'dernière vérification ; les recettes ne sont pas touchées.';
+  String get settingsMetierUpdate => 'Mettre à jour les bases métier';
+  String settingsVolumes(int ingredients, int recipes, int schema) =>
+      '$ingredients ingrédients · $recipes recette${recipes > 1 ? 's' : ''}'
+      ' · schéma v$schema';
+  String get settingsDbLocation => 'Emplacement de la base';
+  String get settingsDbInMemory => 'Base en mémoire (session de test).';
+  String get settingsCopyPath => 'Copier le chemin';
+  String get settingsPathCopied => 'Chemin copié.';
+  String get settingsMetierAttention => 'Bases métier à importer';
 }
 
 const appStrings = AppStrings();
