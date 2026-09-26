@@ -2165,11 +2165,11 @@
       ],
       "kind": "acceptance",
       "status": "ready",
-      "sha256": "db3895a8527a41d3963eb681c7390853593dd61adb1bf57d354fa4acd8a23dee",
-      "chars": 3551,
-      "size": 5199,
-      "mtime_ns": 1790429136861546900,
-      "revision": 4,
+      "sha256": "0d026c62c120b86ed8cbe08b8bc428ad9852cd3bce421331297b83bbcd4774d2",
+      "chars": 4003,
+      "size": 5682,
+      "mtime_ns": 1790433332005848900,
+      "revision": 5,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -2185,17 +2185,17 @@
       "applies_to": [],
       "paths": [],
       "watch": [],
-      "candidate": "d6d0544 (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "candidate": "2abde3b (branche Ge-LAG/db-connection-strategies, non poussée)",
       "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
       "evidence_digest": "",
       "criteria": [
         {
           "id": "A1",
-          "text": "Les 13 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
+          "text": "Les 14 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
         }
       ],
       "evidence": [],
-      "body_digest": "1a6f99cf909c31c3b01d5af5ee69eaa6a4b4a85dfe26f191515bce6ea448aacc",
+      "body_digest": "b46ae636d50fee3817e23a9719a9fe7d715fb2f1f6df67734a5dfe75b6646fb2",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
