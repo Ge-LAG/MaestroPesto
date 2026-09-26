@@ -30,6 +30,9 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
   String _selectedRecipeId = '';
 
   bool _importing = false;
+
+  /// Étape courante de l'import (index dans AppServices.importPhases).
+  int _importStep = 0;
   bool _metierLoaded = false;
   bool _loadingRecipes = true;
 
@@ -300,10 +303,20 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     if (_importing) {
       return;
     }
-    setState(() => _importing = true);
+    setState(() {
+      _importing = true;
+      _importStep = 0;
+    });
     final messenger = ScaffoldMessenger.of(context);
     try {
-      final report = await widget.services.importMetier();
+      final report = await widget.services.importMetier(
+        onPhaseProgress: (phase, _) {
+          final i = AppServices.importPhases.indexWhere((p) => p.$1 == phase);
+          if (i >= 0 && i != _importStep && mounted) {
+            setState(() => _importStep = i);
+          }
+        },
+      );
       final loaded = await widget.services.isMetierLoaded();
       if (!mounted) {
         return;
@@ -360,6 +373,9 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
             onImport: () => _importMetier(context),
           ),
         ],
+        bottom: _importing
+            ? _ImportProgressBar(step: _importStep, firstLaunch: !_metierLoaded)
+            : null,
       ),
       body: SafeArea(
         child: LayoutBuilder(
@@ -593,6 +609,51 @@ class EmptyRecipeState extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Progression de l'import des bases métier (premier lancement ou
+/// réimport) : barre et étape en cours, sous la barre d'application.
+class _ImportProgressBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  const _ImportProgressBar({required this.step, required this.firstLaunch});
+
+  final int step;
+  final bool firstLaunch;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(30);
+
+  @override
+  Widget build(BuildContext context) {
+    final phases = AppServices.importPhases;
+    final total = phases.length;
+    final current = step.clamp(0, total - 1);
+    final theme = Theme.of(context);
+    return SizedBox(
+      height: 30,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          LinearProgressIndicator(value: (current + 0.5) / total, minHeight: 3),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '${firstLaunch ? 'Préparation des bases métier (premier lancement)' : 'Mise à jour des bases métier'}'
+                  ' — ${phases[current].$2} (${current + 1}/$total)…',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
