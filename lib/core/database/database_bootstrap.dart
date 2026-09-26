@@ -27,12 +27,16 @@ import 'importers/csv_toolkit.dart' show activeCsvReader;
 /// location; for assets, [rootBundleCsvReader] resolves each CSV at
 /// runtime.
 class AppServices {
-  AppServices._(this.db, this.metierRoot);
+  AppServices._(this.db, this.metierRoot) : autoImportMetier = true;
 
   /// Test-only constructor: wraps an already-built database (typically an
   /// in-memory `NativeDatabase.memory()`) without touching the filesystem.
   @visibleForTesting
-  AppServices.forTesting(this.db, {this.metierRoot = 'assets/database-metier'});
+  AppServices.forTesting(
+    this.db, {
+    this.metierRoot = 'assets/database-metier',
+    this.autoImportMetier = false,
+  });
 
   final AppDatabase db;
 
@@ -40,6 +44,11 @@ class AppServices {
   /// assets this is `assets/database-metier` (relative to the package);
   /// the [CsvImportService] strips the `assets/` part when joining.
   final String metierRoot;
+
+  /// Phase 10 : import automatique des bases métier au démarrage (sauté
+  /// si les fichiers embarqués n'ont pas changé). Désactivé par défaut
+  /// dans les tests.
+  final bool autoImportMetier;
 
   late final CsvImportService importer = CsvImportService(
     db,

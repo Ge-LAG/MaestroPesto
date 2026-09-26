@@ -1,6 +1,11 @@
-import 'package:drift/drift.dart' show OrderingTerm, Value, innerJoin;
+import 'dart:convert';
+
+import 'package:drift/drift.dart'
+    show OrderingTerm, OrderingMode, Value, Variable, innerJoin;
 
 import '../../../core/database/app_database.dart' hide Recipe;
+import '../../../core/scoring/process_step_parser.dart';
+import '../../../core/scoring/quantity_converter.dart';
 import '../domain/recipe.dart';
 
 /// Stable id generator — uses timestamp + a short random suffix so that
@@ -19,22 +24,27 @@ class _IdGen {
 /// CRUD repository bridging the domain `Recipe` model and the Drift
 /// `AppDatabase` schema.
 ///
-/// Round-trip rules (Lot D, integration with the UI/UX pass):
+/// Round-trip rules (Lot D, étendues en Phase 10 — ac-125) :
 /// - `Recipe.images` ↔ `recipe_images` rows (1-N ordered by `position`).
-/// - `Recipe.steps` ↔ `recipe_steps` rows (ordered by `position`).
+/// - `Recipe.steps` ↔ `recipe_steps` rows (ordered by `position`), avec
+///   l'opération, la température et la durée analysées du texte.
 /// - `Recipe.tags` ↔ `tags` + `recipe_tags` join rows.
-/// - `Recipe.ingredients` ↔ `recipe_items` rows (ordered by `position`).
+/// - `Recipe.ingredients` ↔ `recipe_items` rows : la quantité saisie est
+///   conservée telle quelle (`quantity_text`, « 2 c. à soupe ») et
+///   convertie en grammes (`quantity_g`) ; le mode de cuisson de la
+///   ligne est persisté.
+/// - `Recipe.nutrition` ↔ `recipes.nutrition_json` avec son origine
+///   (`nutrition_mode` : calculée ou manuelle).
 /// - Cascade delete: removing a recipe drops its steps, items, tags and
 ///   photos automatically (PRAGMA foreign_keys = ON, set in AppDatabase).
-///
-/// The repository intentionally **does not** compute nutrition or score
-/// ingredients against the metier databases — those lookups live in
-/// [IngredientsRepository] and [NutritionRepository] (also Lot D) so
-/// the recipe detail view can resolve them lazily.
 class RecipesRepository {
   RecipesRepository(this.db);
 
   final AppDatabase db;
+
+  /// Marqueur de semis des recettes de démonstration (table
+  /// `import_state`, partagée avec l'import CSV).
+  static const String demoSeedMarker = 'app/demo_recipes_seed';
 
   /// Insert or replace a recipe along with all its children.
   Future<void> save(Recipe recipe) async {
@@ -48,8 +58,16 @@ class RecipesRepository {
     await (db.delete(db.recipes)..where((t) => t.id.equals(id))).go();
   }
 
+  /// Recettes, les plus récemment modifiées d'abord.
   Future<List<Recipe>> listAll() async {
-    final rows = await db.select(db.recipes).get();
+    final rows =
+        await (db.select(db.recipes)..orderBy([
+              (t) => OrderingTerm(
+                expression: t.updatedAt,
+                mode: OrderingMode.desc,
+              ),
+            ]))
+            .get();
     final result = <Recipe>[];
     for (final row in rows) {
       result.add(await _hydrate(row.id));
@@ -69,9 +87,47 @@ class RecipesRepository {
     return _hydrate(id);
   }
 
+  /// Sème [demos] une seule fois par installation (un classeur vidé par
+  /// l'utilisateur n'est pas re-semé). Renvoie vrai si le semis a eu
+  /// lieu.
+  Future<bool> seedDemoRecipesOnce(List<Recipe> demos) async {
+    await db.customStatement(
+      'CREATE TABLE IF NOT EXISTS import_state ('
+      'source_name TEXT PRIMARY KEY, hash TEXT NOT NULL, '
+      'imported_at TEXT NOT NULL)',
+    );
+    final seeded = await db
+        .customSelect(
+          'SELECT 1 FROM import_state WHERE source_name = ?',
+          variables: [Variable.withString(demoSeedMarker)],
+        )
+        .get();
+    if (seeded.isNotEmpty) return false;
+    final existing = await db.select(db.recipes).get();
+    if (existing.isEmpty) {
+      // Ordre d'affichage : la première démo est la plus récente.
+      for (final r in demos.reversed) {
+        await save(r);
+      }
+    }
+    await db.customStatement(
+      'INSERT OR REPLACE INTO import_state (source_name, hash, imported_at) '
+      'VALUES (?, ?, ?)',
+      [demoSeedMarker, 'v1', DateTime.now().toUtc().toIso8601String()],
+    );
+    return existing.isEmpty;
+  }
+
   // ---------- internals ----------
 
   Future<void> _upsertRecipeHeader(Recipe recipe) async {
+    final now = DateTime.now().toUtc().toIso8601String();
+    final existing =
+        await (db.select(db.recipes)
+              ..where((t) => t.id.equals(recipe.id))
+              ..limit(1))
+            .getSingleOrNull();
+    final n = recipe.nutrition;
     await db
         .into(db.recipes)
         .insertOnConflictUpdate(
@@ -82,9 +138,20 @@ class RecipesRepository {
             servings: Value(recipe.servings),
             prepTimeMin: Value(recipe.prepMinutes),
             cookTimeMin: Value(recipe.cookMinutes),
-            createdAt: '1970-01-01T00:00:00Z',
-            updatedAt: '1970-01-01T00:00:00Z',
-            deletedAt: Value(null),
+            createdAt: existing?.createdAt ?? now,
+            updatedAt: now,
+            deletedAt: const Value(null),
+            nutritionMode: Value(recipe.nutritionMode.name),
+            nutritionJson: Value(
+              jsonEncode({
+                'energyKcal': n.energyKcal,
+                'proteins': n.proteins,
+                'carbs': n.carbs,
+                'fats': n.fats,
+                'fiber': n.fiber,
+                'salt': n.salt,
+              }),
+            ),
           ),
         );
   }
@@ -103,7 +170,12 @@ class RecipesRepository {
       db.recipeTags,
     )..where((t) => t.recipeId.equals(recipe.id))).go();
 
+    final parsed = ProcessStepParser.parseAll(
+      recipe.steps,
+      ingredientLabels: [for (final i in recipe.ingredients) i.label],
+    );
     for (var i = 0; i < recipe.steps.length; i++) {
+      final step = parsed[i];
       await db
           .into(db.recipeSteps)
           .insert(
@@ -112,12 +184,33 @@ class RecipesRepository {
               recipeId: recipe.id,
               position: i,
               body: recipe.steps[i],
+              opId: Value(step.primary?.opId),
+              temperatureC: Value(step.temperatureC),
+              durationMin: Value(step.durationMin),
             ),
           );
     }
 
+    // Un identifiant absent du référentiel (base non importée, recette
+    // importée d'ailleurs) ne doit pas faire échouer l'enregistrement :
+    // la ligne est conservée sans lien (clé étrangère respectée).
+    final wanted = {
+      for (final i in recipe.ingredients)
+        if (i.ingredientId != null && i.ingredientId!.isNotEmpty)
+          i.ingredientId!,
+    };
+    final known = wanted.isEmpty
+        ? const <String>{}
+        : (await (db.select(
+                db.ingredients,
+              )..where((t) => t.ingredientId.isIn(wanted))).get())
+              .map((r) => r.ingredientId)
+              .toSet();
     for (var i = 0; i < recipe.ingredients.length; i++) {
       final ing = recipe.ingredients[i];
+      final linkedId = known.contains(ing.ingredientId)
+          ? ing.ingredientId
+          : null;
       await db
           .into(db.recipeItems)
           .insert(
@@ -127,8 +220,12 @@ class RecipesRepository {
               position: i,
               kind: ing.source.name,
               label: ing.label,
-              quantityG: 0.0,
-              ingredientId: Value(ing.ingredientId),
+              // ac-125 : la conversion n'est plus perdue (« 60 g » était
+              // relu « 0 g ») ; le texte saisi reste la référence.
+              quantityG: QuantityConverter.toGrams(ing.quantity) ?? 0.0,
+              quantityText: Value(ing.quantity),
+              cookingMethod: Value(ing.cookingMethod),
+              ingredientId: Value(linkedId),
             ),
           );
     }
@@ -150,8 +247,6 @@ class RecipesRepository {
 
     // Tags: the join row references `tags.id`, so we upsert each tag
     // using its label as the natural key (label is UNIQUE in the schema).
-    // If the label already exists in `tags`, we look up its id; otherwise
-    // we insert a new tag row.
     for (final label in recipe.tags) {
       final existing =
           await (db.select(db.tags)
@@ -200,9 +295,10 @@ class RecipesRepository {
         .map(
           (row) => RecipeIngredient(
             label: row.label,
-            quantity: '${row.quantityG.toStringAsFixed(0)} g',
+            quantity: row.quantityText ?? '${_trimNumber(row.quantityG)} g',
             source: _parseSource(row.kind),
             ingredientId: row.ingredientId,
+            cookingMethod: row.cookingMethod,
           ),
         )
         .toList();
@@ -222,16 +318,41 @@ class RecipesRepository {
       cookMinutes: header.cookTimeMin,
       ingredients: ingredients,
       steps: steps,
-      nutrition: const NutritionSummary(
-        energyKcal: 0,
-        proteins: 0,
-        carbs: 0,
-        fats: 0,
-        fiber: 0,
-        salt: 0,
-      ),
+      nutrition: _parseNutrition(header.nutritionJson),
+      nutritionMode: header.nutritionMode == RecipeNutritionMode.manual.name
+          ? RecipeNutritionMode.manual
+          : RecipeNutritionMode.computed,
       images: images,
     );
+  }
+
+  static String _trimNumber(double v) =>
+      v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toString();
+
+  static NutritionSummary _parseNutrition(String? json) {
+    const zero = NutritionSummary(
+      energyKcal: 0,
+      proteins: 0,
+      carbs: 0,
+      fats: 0,
+      fiber: 0,
+      salt: 0,
+    );
+    if (json == null || json.isEmpty) return zero;
+    try {
+      final m = jsonDecode(json) as Map<String, dynamic>;
+      double v(String k) => (m[k] as num?)?.toDouble() ?? 0;
+      return NutritionSummary(
+        energyKcal: v('energyKcal'),
+        proteins: v('proteins'),
+        carbs: v('carbs'),
+        fats: v('fats'),
+        fiber: v('fiber'),
+        salt: v('salt'),
+      );
+    } on FormatException {
+      return zero;
+    }
   }
 
   IngredientSource _parseSource(String raw) {

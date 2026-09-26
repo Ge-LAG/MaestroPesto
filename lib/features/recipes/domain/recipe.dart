@@ -11,6 +11,7 @@ class Recipe {
     required this.steps,
     required this.nutrition,
     required this.images,
+    this.nutritionMode = RecipeNutritionMode.computed,
   });
 
   final String id;
@@ -24,6 +25,10 @@ class Recipe {
   final List<String> steps;
   final NutritionSummary nutrition;
   final List<RecipeImage> images;
+
+  /// Phase 10 (ac-125) — origine de la nutrition affichée : calculée
+  /// depuis les ingrédients (défaut) ou saisie manuelle forcée.
+  final RecipeNutritionMode nutritionMode;
 
   int get totalMinutes => prepMinutes + cookMinutes;
 
@@ -39,6 +44,7 @@ class Recipe {
     List<String>? steps,
     NutritionSummary? nutrition,
     List<RecipeImage>? images,
+    RecipeNutritionMode? nutritionMode,
   }) {
     return Recipe(
       id: id ?? this.id,
@@ -52,9 +58,13 @@ class Recipe {
       steps: steps ?? this.steps,
       nutrition: nutrition ?? this.nutrition,
       images: images ?? this.images,
+      nutritionMode: nutritionMode ?? this.nutritionMode,
     );
   }
 }
+
+/// Origine de la nutrition d'une recette.
+enum RecipeNutritionMode { computed, manual }
 
 class RecipeImage {
   const RecipeImage({required this.path, required this.label});
