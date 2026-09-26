@@ -228,17 +228,10 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
         ingredients: ingredients,
         steps: steps,
       );
-      if (aggregation != null && aggregation.hasData) {
-        final p = aggregation.profilePerServing;
-        nutrition = NutritionSummary(
-          energyKcal: p.energyKcal,
-          proteins: p.proteins,
-          carbs: p.carbs,
-          fats: p.fats,
-          fiber: p.fiber,
-          salt: p.salt,
-        );
-      }
+      final summary = aggregation == null
+          ? null
+          : RecipeAnalysisService.summaryOf(aggregation);
+      if (summary != null) nutrition = summary;
     }
     if (!mounted) return;
 

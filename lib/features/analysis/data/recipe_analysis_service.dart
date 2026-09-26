@@ -80,6 +80,49 @@ class RecipeAnalysisService {
   final AppDatabase db;
   final FlavorRepository _flavor;
 
+  /// Résumé par portion stocké avec la recette (liste, export) ; null
+  /// si aucune ligne n'alimente le calcul.
+  static NutritionSummary? summaryOf(NutritionAggregation aggregation) {
+    if (!aggregation.hasData) return null;
+    final p = aggregation.profilePerServing;
+    return NutritionSummary(
+      energyKcal: p.energyKcal,
+      proteins: p.proteins,
+      carbs: p.carbs,
+      fats: p.fats,
+      fiber: p.fiber,
+      salt: p.salt,
+    );
+  }
+
+  /// Recalcule la nutrition stockée d'une recette en mode calculé
+  /// (démos semées, référentiel réimporté). Retourne la recette mise à
+  /// jour, ou null si elle est en saisie manuelle, sans donnée ou
+  /// inchangée.
+  Future<Recipe?> refreshStoredNutrition(Recipe recipe) async {
+    if (recipe.nutritionMode != RecipeNutritionMode.computed) return null;
+    if (!recipe.ingredients.any((i) => i.ingredientId != null)) return null;
+    final analysis = await analyze(
+      ingredients: recipe.ingredients,
+      steps: recipe.steps,
+      servings: recipe.servings,
+      withSuggestions: false,
+    );
+    final summary = summaryOf(analysis.nutrition);
+    if (summary == null) return null;
+    final old = recipe.nutrition;
+    bool same(double a, double b) => (a - b).abs() < 0.05;
+    if (same(old.energyKcal, summary.energyKcal) &&
+        same(old.proteins, summary.proteins) &&
+        same(old.carbs, summary.carbs) &&
+        same(old.fats, summary.fats) &&
+        same(old.fiber, summary.fiber) &&
+        same(old.salt, summary.salt)) {
+      return null;
+    }
+    return recipe.copyWith(nutrition: summary);
+  }
+
   Future<RecipeAnalysis> analyze({
     required List<RecipeIngredient> ingredients,
     required List<String> steps,

@@ -47,9 +47,12 @@ class RecipesRepository {
   static const String demoSeedMarker = 'app/demo_recipes_seed';
 
   /// Insert or replace a recipe along with all its children.
-  Future<void> save(Recipe recipe) async {
+  /// [touch] = false conserve la date de modification (recalcul
+  /// automatique de la nutrition stockée : l'ordre du classeur ne
+  /// bouge pas).
+  Future<void> save(Recipe recipe, {bool touch = true}) async {
     await db.transaction(() async {
-      await _upsertRecipeHeader(recipe);
+      await _upsertRecipeHeader(recipe, touch: touch);
       await _replaceChildren(recipe);
     });
   }
@@ -120,7 +123,7 @@ class RecipesRepository {
 
   // ---------- internals ----------
 
-  Future<void> _upsertRecipeHeader(Recipe recipe) async {
+  Future<void> _upsertRecipeHeader(Recipe recipe, {required bool touch}) async {
     final now = DateTime.now().toUtc().toIso8601String();
     final existing =
         await (db.select(db.recipes)
@@ -139,7 +142,7 @@ class RecipesRepository {
             prepTimeMin: Value(recipe.prepMinutes),
             cookTimeMin: Value(recipe.cookMinutes),
             createdAt: existing?.createdAt ?? now,
-            updatedAt: now,
+            updatedAt: touch ? now : existing?.updatedAt ?? now,
             deletedAt: const Value(null),
             nutritionMode: Value(recipe.nutritionMode.name),
             nutritionJson: Value(

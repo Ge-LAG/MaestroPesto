@@ -18,6 +18,8 @@ import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recommendations/data/recommender.dart';
+import 'package:maestropesto/features/analysis/data/recipe_analysis_service.dart';
+import 'package:maestropesto/features/recipes/data/demo_recipes.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/ingredients/data/ingredients_repository.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
@@ -410,5 +412,37 @@ void main() {
         );
       },
     );
+  });
+
+  group('Retour test visuel — nutrition stockée et bilan de masse', () {
+    test('démos : nutrition stockée recalculée (kcal > 0)', () async {
+      final service = RecipeAnalysisService(db);
+      for (final demo in demoRecipes) {
+        final updated = await service.refreshStoredNutrition(demo);
+        expect(updated, isNotNull, reason: demo.title);
+        expect(updated!.nutrition.energyKcal, greaterThan(0));
+        // Idempotent : une seconde passe ne change rien.
+        expect(await service.refreshStoredNutrition(updated), isNull);
+      }
+    });
+
+    test('saisie manuelle : jamais écrasée', () async {
+      final manual = demoRecipes.first.copyWith(
+        nutritionMode: RecipeNutritionMode.manual,
+      );
+      expect(
+        await RecipeAnalysisService(db).refreshStoredNutrition(manual),
+        isNull,
+      );
+    });
+
+    test('sucre blanc : lipides et AGS à 0 par bilan de masse', () async {
+      final p = (await NutritionRepository(db)
+          .forIngredient('ING-TECH-SUCREBLANC-000001'))!;
+      expect(p.isKnown(MacroField.fats), isTrue);
+      expect(p.isKnown(MacroField.saturatedFats), isTrue);
+      expect(p.derivedFields, contains(MacroField.fats));
+      expect(p.fats, 0);
+    });
   });
 }

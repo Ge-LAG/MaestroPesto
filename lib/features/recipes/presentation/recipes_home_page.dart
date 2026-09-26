@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/database_bootstrap.dart';
 import 'package:maestropesto/features/analysis/data/metier_reference.dart';
+import 'package:maestropesto/features/analysis/data/recipe_analysis_service.dart';
 import 'package:maestropesto/features/recipes/data/demo_recipes.dart';
 import 'package:maestropesto/features/recipes/data/recipes_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
@@ -62,8 +63,28 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     // seulement une fois celui-ci importé.
     if (await widget.services.isMetierLoaded()) {
       final seeded = await _repository.seedDemoRecipesOnce(demoRecipes);
-      if (seeded) await _reloadRecipes();
+      if (seeded) {
+        // Affichage immédiat, puis nutrition stockée calculée.
+        await _reloadRecipes();
+        await _refreshComputedNutrition();
+      }
     }
+  }
+
+  /// Nutrition stockée (liste, export) des recettes en mode calculé :
+  /// recalculée après le semis des démos et après chaque import qui a
+  /// modifié le référentiel.
+  Future<void> _refreshComputedNutrition() async {
+    final service = RecipeAnalysisService(widget.services.db);
+    try {
+      for (final recipe in await _repository.listAll()) {
+        final updated = await service.refreshStoredNutrition(recipe);
+        if (updated != null) await _repository.save(updated, touch: false);
+      }
+    } catch (e, st) {
+      debugPrint('Recalcul nutritionnel impossible : $e\n$st');
+    }
+    await _reloadRecipes();
   }
 
   Future<void> _reloadRecipes() async {
@@ -297,6 +318,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
         _importing = false;
         if (!allSkipped) _dataVersion++;
       });
+      if (!allSkipped) await _refreshComputedNutrition();
       if (allSkipped && silentWhenUpToDate) return;
       final totalImported = report.rowsImported.values.fold<int>(
         0,
@@ -371,6 +393,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
             }
 
             return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
                   width: isWide ? 360 : 320,
