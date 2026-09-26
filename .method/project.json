@@ -3,18 +3,19 @@
   "method_version": "6.1.0",
   "template": false,
   "name": "MaestroPesto",
-  "revision": 4,
-  "updated_at": "2026-09-16",
+  "revision": 5,
+  "updated_at": "2026-09-26",
   "mode": "direct",
   "po": "Guillaume",
   "cto": "Robertson Andersen",
   "focus_id": "phase10-coherence-procede",
-  "next_action": "Reprise : PO arbitre l'ordre des lots phase 10 (recommandé A puis C), autorise la branche dédiée Ge-LAG/ et tranche les décisions listées dans phase10-coherence-procede ; en parallèle, smoke test phase 09 (acceptance-phase09) puis PR vers main (delivery-gate).",
+  "next_action": "Acceptance PO de la phase 10 (phase10-coherence-procede, en revue) : lancer l'application réelle (la base locale migre v3 → v4 et les 8 recettes de démonstration sont semées), valider les arbitrages phase10-mandat-arbitrages, puis autoriser la livraison groupée Phase 09 + 10 (push, PR vers main) sous delivery-gate.",
   "profile_id": "profile",
   "roadmap_id": "roadmap",
   "blocked_on": [],
   "pending_acceptance": [
-    "acceptance-phase09"
+    "acceptance-phase09",
+    "acceptance-phase10"
   ],
   "external_authorizations": []
 }

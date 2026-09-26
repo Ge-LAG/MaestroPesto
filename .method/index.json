@@ -624,7 +624,7 @@
       "id": "roadmap",
       "path": "docs/roadmap.html",
       "title": "Feuille de route MaestroPesto",
-      "summary": "Jalons : Phase 10 prioritaire (cohérence métier et procédé) consignée le 2026-09-16, livraison Phase 09 en attente parallèle, puis lot qualité et backlog.",
+      "summary": "Jalons : Phase 10 (cohérence métier et procédé) livrée le 2026-09-26 et en revue PO, livraisons Phase 09 et 10 en attente, puis lot qualité et backlog.",
       "tags": [
         "roadmap",
         "jalons",
@@ -635,11 +635,11 @@
       ],
       "kind": "project",
       "status": "active",
-      "sha256": "873583979694bc36fe7088dde2ce0a6c7b783e8c71efd91468c5b9cd90436d3b",
-      "chars": 2612,
-      "size": 3822,
-      "mtime_ns": 1789589453169568200,
-      "revision": 3,
+      "sha256": "a89e00f45ce07d282588bab89de5b2970ac5a994658635a185f10ee3e63e261c",
+      "chars": 2356,
+      "size": 3443,
+      "mtime_ns": 1790410338164349900,
+      "revision": 4,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -656,23 +656,14 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "e3defd626f58c928f51824a5df2cbd400c17931c6b7cb87b3fc010cb41db30ee",
+      "body_digest": "7bc04492c778a89a6aae0a62b6752b6b12660f7345e3ab1431fbf26f9ca15eab",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
-        "../records/ac-120.html#ac-120",
-        "../records/ac-128.html#ac-128",
-        "../records/acceptance-phase09.html#acceptance-phase09",
-        "../work/phase09-closeout.html#phase09-closeout",
-        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
-        "../records/ac-119.html#ac-119",
-        "../records/ac-115.html#ac-115",
-        "../records/ac-123.html#ac-123",
-        "../records/ac-114.html#ac-114",
-        "../records/ac-116.html#ac-116",
-        "../records/ac-H-001.html#ac-H-001",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../work/idea-ocr-recettes.html#idea-ocr-recettes",
         "../work/phase08-foundations.html#phase08-foundations"
       ],
@@ -1287,12 +1278,12 @@
         "bloquant"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "137092c061f6a8cc529b02c3877a62b2b4cc04c8f5fbf5387769df04951995ae",
-      "chars": 1771,
-      "size": 3034,
-      "mtime_ns": 1789589452996021600,
-      "revision": 1,
+      "status": "review",
+      "sha256": "0f9b238c58f5cc0cc4bb14bd225e412013f5265278941fcf027f242cad8424ea",
+      "chars": 2408,
+      "size": 3713,
+      "mtime_ns": 1790410282358827100,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1311,11 +1302,12 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "dabff38f7b760d4ea36bfcefba29e9a8eec87cbe0bfc19bfee8bf4b6648a8aa0",
+      "body_digest": "cb45d076c3e05089ab8ce3b4e082a22c932d0cc00bb6ba7c1350cc6a1e04e3ac",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
@@ -1338,12 +1330,12 @@
         "bloquant"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "32fd6631bced769700c9eeafd3a53187b0253b5dc2ad5a30ed2647818bc76967",
-      "chars": 1302,
-      "size": 2509,
-      "mtime_ns": 1789589453004986500,
-      "revision": 1,
+      "status": "review",
+      "sha256": "7c027b2ac99daa3b4e5080fe80a8031fd833481523d3c03a7a712343648c79f0",
+      "chars": 1709,
+      "size": 2952,
+      "mtime_ns": 1790410283033243700,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1360,11 +1352,12 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "e480d69ec4b90634a661fb1e63707372b0403b58e532854cc4d173d7965e3d90",
+      "body_digest": "2c011d324a8a3e153a94dc429b5db16f04c50a8b34d938d316ea3471c16f6592",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
@@ -1387,12 +1380,12 @@
         "phase-10"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "d4f8cf4ad9123c37a27117d5336ed01b7a5a2a807b5a44ef935f3ff904f238ed",
-      "chars": 2079,
-      "size": 3316,
-      "mtime_ns": 1789589453021202300,
-      "revision": 1,
+      "status": "review",
+      "sha256": "6ec8180e1a4098f27d099cc528723fc4f39943fc302013bcccd30482c652bccf",
+      "chars": 2595,
+      "size": 3871,
+      "mtime_ns": 1790410283700460200,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1409,11 +1402,12 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "4f147b28fa0c3b1426eca36cb429fe2e5d35de59e30493211639717521fd495f",
+      "body_digest": "d12c6290a112a7f5c9af78498ed27a2d3667d544cb84b374a2ad8510a7573faf",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
@@ -1435,12 +1429,12 @@
         "couverture"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "678ad1b8317f74c7cecc88bb73061c5bd454dddc65899a0265b3140c373219b3",
-      "chars": 1795,
-      "size": 3143,
-      "mtime_ns": 1789589453030957300,
-      "revision": 1,
+      "status": "review",
+      "sha256": "0ec2a16d2fdd2b939ec0d70cccd3d5bcdffb52d850c64f806131a3367103e937",
+      "chars": 2258,
+      "size": 3649,
+      "mtime_ns": 1790410284373517800,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1459,7 +1453,7 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "24bdaa46c27e14821f6ee84ce635a717ba9062a9e2812381ebe883d3d406a1d1",
+      "body_digest": "1fa5751946781825362b212d14699be404e79236e9fbb82dcb2e27b00e72a347",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -1467,7 +1461,8 @@
         "ac-115.html#ac-115",
         "honest-data-display.html#honest-data-display",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
-        "ac-115.html#ac-115"
+        "ac-115.html#ac-115",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
         "ac-123"
@@ -1488,12 +1483,12 @@
         "retention"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "ca547dc8b7552e5d906de0d8eb6fa8c3bcbbecf6ae3a56fc03ed3a660c8e6914",
-      "chars": 1653,
-      "size": 2847,
-      "mtime_ns": 1789589453041051100,
-      "revision": 1,
+      "status": "review",
+      "sha256": "a6c483a8887dbbe7bca765551a2693674802c8e98614c1210edcb99bc6fc0c5d",
+      "chars": 2098,
+      "size": 3336,
+      "mtime_ns": 1790410285036660100,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1510,11 +1505,12 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "2379053ce582141c1e2a79793666877862681d2998579c9891f416f04152753b",
+      "body_digest": "34456d3934eda8798b47defc8aec82b9542e3f639293fdf8c0cb4cace94ea1ca",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
@@ -1535,12 +1531,12 @@
         "nutrition"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "18d2d8b040f0ac282345bc9ae8bde475b42de8274470f4cec6f634c4e6691982",
-      "chars": 1032,
-      "size": 2177,
-      "mtime_ns": 1789589453049667100,
-      "revision": 1,
+      "status": "review",
+      "sha256": "9066527ab2ff10ba93c51e507ee19474ff7641e43d125104997c33da2f87de97",
+      "chars": 1516,
+      "size": 2702,
+      "mtime_ns": 1790410285699782500,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1557,11 +1553,12 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "e6db1c7d1d99b5b1e6673489c026cb0ac6cda459818e3b45112f325ea10a12c2",
+      "body_digest": "e90b861a891848dae7f5b9e1bd4541dca8fc3e87083c7795022878552cf4322a",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
@@ -1582,12 +1579,12 @@
         "perimees"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "e1da4c71ace3432ef6be6110e0cdf839a58be38462543f3257f2d62a27f74bb7",
-      "chars": 1068,
-      "size": 2193,
-      "mtime_ns": 1789589453057662900,
-      "revision": 1,
+      "status": "review",
+      "sha256": "37f81ca91d9c77e500fc6c83b0593124e58e42c85dbe5234612e4adbdc364978",
+      "chars": 1487,
+      "size": 2646,
+      "mtime_ns": 1790410286365380800,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1604,7 +1601,7 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "4f82700ff4b4352d3cfd2d5bd11c1ec2942d9571ea77d456d80c156fbd4f5666",
+      "body_digest": "bc85e09dbe7b918e1ae2b97e3b9c3c5dc4f5c8d96cbfff9314209a0c7d4a49c2",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -1612,6 +1609,7 @@
         "ac-128.html#ac-128",
         "ac-120.html#ac-120",
         "ac-119.html#ac-119",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
@@ -1632,12 +1630,12 @@
         "warnings"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "f202cd5e39c4038679982cca065d382f7c01241086f1106dfc4121598b5d640e",
-      "chars": 1279,
-      "size": 2470,
-      "mtime_ns": 1789589453064660900,
-      "revision": 1,
+      "status": "review",
+      "sha256": "1da5e10750a1c7890aede68358dd08c66bdabb84fefdda7c91b3310f4f9b61dc",
+      "chars": 1722,
+      "size": 2952,
+      "mtime_ns": 1790410287037563900,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1656,12 +1654,13 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "b99718c99f6461f30f0945c7576f8e890959c9731344f486a02ea615b67f1e0f",
+      "body_digest": "be20a61fa3e0ad9ed8a455f54131778fc3932bc7c30ccb094ffddce15537664b",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
         "honest-data-display.html#honest-data-display",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
@@ -1682,12 +1681,12 @@
         "standins"
       ],
       "kind": "finding",
-      "status": "active",
-      "sha256": "d4eab9c9a3df70ba11eac45217659593255ee904244a0a82d97f176022ecdabf",
-      "chars": 1345,
-      "size": 2520,
-      "mtime_ns": 1789589453069660700,
-      "revision": 1,
+      "status": "review",
+      "sha256": "0a5dd83547a21bdadc3abf688c08b541bc0c6f998ef6af3e5408846427eef3dc",
+      "chars": 1827,
+      "size": 3041,
+      "mtime_ns": 1790410287726470400,
+      "revision": 2,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -1704,13 +1703,14 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "8081d4d764b87ad507720df60e2cfae8b884d7c86847488bfa8ea4375f29823b",
+      "body_digest": "a487ab2940561f20d7424a66e269c5f636faa19ef196038e210f7cfed09d1470",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
-        "ac-126.html#ac-126"
+        "ac-126.html#ac-126",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
       ],
       "anchors": [
         "ac-128"
@@ -2050,6 +2050,64 @@
       ],
       "anchors": [
         "acceptance-phase09"
+      ]
+    },
+    {
+      "id": "acceptance-phase10",
+      "path": "records/acceptance-phase10.html",
+      "title": "Recette PO : smoke test Phase 10 (cohérence métier et procédé)",
+      "summary": "Feuille de test manuelle du PO sur Windows : migration v3 → v4, recettes de démonstration, nutrition avec procédé, Nutri-Score, heatmap, analyse physico-chimique, persistance. Décision de livraison ensuite.",
+      "tags": [
+        "acceptance",
+        "recette",
+        "smoke",
+        "po",
+        "phase-10",
+        "validation"
+      ],
+      "kind": "acceptance",
+      "status": "ready",
+      "sha256": "9a2f1da4f106671c44becb18808c1ba118ea017e4c046baf0090501b7e865f5c",
+      "chars": 2287,
+      "size": 3794,
+      "mtime_ns": 1790410396588863000,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-coherence-procede"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "99f73bc (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "Les 7 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "bc3811a443467dcd3132de5e11bcc3d3a0c901b432d273a59d3167571d850bd1",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "delivery-gate.html#delivery-gate",
+        "acceptance-phase09.html#acceptance-phase09"
+      ],
+      "anchors": [
+        "acceptance-phase10"
       ]
     },
     {
@@ -2975,12 +3033,12 @@
         "priorite"
       ],
       "kind": "work",
-      "status": "active",
-      "sha256": "f5a2488534f43ddb13106f6481ec7a091e0781625b3f0e601c6b3b373448b603",
-      "chars": 6874,
-      "size": 9113,
-      "mtime_ns": 1790376364122674900,
-      "revision": 4,
+      "status": "review",
+      "sha256": "bc5f8647a6ed870147ca7312f2a92015149e90dfc4e375f1c2dfd089e0f0e98b",
+      "chars": 9254,
+      "size": 13977,
+      "mtime_ns": 1790410249112620500,
+      "revision": 5,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -2998,10 +3056,23 @@
       ],
       "applies_to": [],
       "paths": [],
-      "watch": [],
-      "candidate": "",
-      "environment": "",
-      "evidence_digest": "",
+      "watch": [
+        "lib/core/scoring/nutrition_aggregator.dart",
+        "lib/core/scoring/nutrition_feedback.dart",
+        "lib/core/scoring/flavor_pairing_engine.dart",
+        "lib/core/scoring/physchem_estimator.dart",
+        "lib/core/scoring/functional_constraint_solver.dart",
+        "lib/features/nutrition/data/nutrition_repository.dart",
+        "lib/features/recipes/data/recipes_repository.dart",
+        "lib/features/analysis/data/recipe_analysis_service.dart",
+        "test/core/database/metier_smoke_test.dart",
+        "test/features/analysis/experimental_cases_golden_test.dart",
+        "test/features/recipes/recipes_persistence_test.dart",
+        "test/core/database/migration_v4_test.dart"
+      ],
+      "candidate": "99f73bc (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "347d33132cb826cd9f2166a2f7777010accab72786d7eb37c1e4ced04e65f314",
       "criteria": [
         {
           "id": "A1",
@@ -3036,8 +3107,89 @@
           "text": "flutter test, flutter analyze et dart format --set-exit-if-changed . verts sur le lot livré."
         }
       ],
-      "evidence": [],
-      "body_digest": "6241406aaf28bc066dc45c1b5ea491895a95da78b9e836309c23260bcf9a3edf",
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A1",
+          "text": "Camembert : protéines, glucides et fibres > 0 cohérents avec l'énergie ; aucun ingrédient enrichi à protéines 0 et énergie > 200 kcal (518/603 ingrédients avec nutrition)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A2",
+          "text": "Vitamine A = RAE (231 µg pour le Camembert) ; folates = FOLFD + FOLAC."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/analysis/experimental_cases_golden_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A3",
+          "text": "EXP-GEL-PEC-001 rejoué sur de vrais ING-* : RULE-PEC-HM-001 déclenchée ; pH et aw estimés proches des mesures des 10 cas (ex. pain 5,6 vs 5,5 ; vinaigrette 2,9 vs 3,0). Visible dans la carte « Analyse physico-chimique » (capture de la Confiture de fraises)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart test/core/scoring/flavor_pairing_engine_test.dart + revue des captures",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A4",
+          "text": "Une prédiction basse reste hachurée et n'est jamais « À éviter » ; les ingrédients sans arôme propre (sel, sucre, farine) reçoivent une prédiction neutre au lieu de « Discutable »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A6",
+          "text": "603/603 profils sensoriels avec niveau de preuve et confiance ; toute paire est scorée ; benchmarks classiques ≥ 0,70 et contrastes négatifs < 0,40 ; 404 accords culinaires curatés."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/scoring test/core/database/metier_smoke_test.dart + revue des captures",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A7",
+          "text": "Rendements et rétentions USDA/Bognár (ou profils cuits mesurés Ciqual) appliqués ; Nutri-Score estimé, %AR/VNR, allégations indicatives, répartition énergétique et poids cuit estimé affichés avec leurs hypothèses ; la nutrition stockée des recettes calculées est recalculée après semis ou import."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/recipes/recipes_persistence_test.dart test/core/database/migration_v4_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A8",
+          "text": "60 g relu 60 g, « 2 c. à soupe » conservé (30 g stockés), cuisson par ligne, étapes typées (PROC_CUIRE, 90 °C, 20 min), nutrition et mode relus ; migration v3 → v4 testée. Limite : relance réelle de l'application non effectuée sur la base du PO."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test ; flutter analyze ; dart format --set-exit-if-changed .",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A5",
+          "text": "298/298 tests verts, analyze sans problème, format propre au 99f73bc ; flutter build windows --release réussi."
+        }
+      ],
+      "body_digest": "1ec32cb2b525637190bb7ba37c0bf740416537f884763303903bd5b01074eac6",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -3063,7 +3215,9 @@
         "../records/ac-116.html#ac-116",
         "../records/ac-114.html#ac-114",
         "../records/delivery-gate.html#delivery-gate",
-        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages"
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/delivery-gate.html#delivery-gate"
       ],
       "anchors": [
         "phase10-coherence-procede"
