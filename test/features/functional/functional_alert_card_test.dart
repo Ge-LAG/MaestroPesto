@@ -74,18 +74,19 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Alertes physico-chimiques'), findsOneWidget);
-      expect(
-        find.text('Force du gel proportionnelle à concentration.'),
-        findsOneWidget,
-      );
-      // Conditions masquées avant expansion.
-      expect(find.text('• gelatine_present'), findsNothing);
+      // Titre = comportement attendu (Phase 10).
+      expect(find.textContaining('Gel thermoréversible'), findsOneWidget);
+      // Conditions vérifiées masquées avant expansion.
+      expect(find.textContaining('Dosage 0,5–3 %'), findsNothing);
 
       await tester.tap(find.byType(ExpansionTile));
       await tester.pumpAndSettle();
 
-      expect(find.text('• gelatine_present'), findsOneWidget);
-      expect(find.text('thermoreversible_gel'), findsOneWidget);
+      expect(find.textContaining('Dosage 0,5–3 %'), findsOneWidget);
+      expect(
+        find.textContaining('Force du gel proportionnelle'),
+        findsOneWidget,
+      );
     });
   });
 }

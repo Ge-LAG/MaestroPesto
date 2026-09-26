@@ -12,35 +12,11 @@ import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
+import 'package:maestropesto/features/functional/presentation/widgets/functional_alert_tile.dart';
+
+export 'functional_alert_tile.dart';
+
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
-
-/// Couleur associée à une sévérité (exposée pour les tests).
-Color functionalSeverityColor(FunctionalSeverity severity) {
-  switch (severity) {
-    case FunctionalSeverity.info:
-      return const Color(0xFF4A7BA6); // bleu
-    case FunctionalSeverity.warning:
-      return const Color(0xFFD9A441); // jaune
-    case FunctionalSeverity.danger:
-      return const Color(0xFFB85C45); // rouge
-    case FunctionalSeverity.outOfDomain:
-      return const Color(0xFF8A8A8A); // gris
-  }
-}
-
-/// Icône associée à une sévérité (exposée pour les tests).
-IconData functionalSeverityIcon(FunctionalSeverity severity) {
-  switch (severity) {
-    case FunctionalSeverity.info:
-      return Icons.info_outline;
-    case FunctionalSeverity.warning:
-      return Icons.warning_amber_outlined;
-    case FunctionalSeverity.danger:
-      return Icons.error_outline;
-    case FunctionalSeverity.outOfDomain:
-      return Icons.help_outline;
-  }
-}
 
 class FunctionalAlertCard extends StatelessWidget {
   const FunctionalAlertCard({
@@ -147,125 +123,8 @@ class _AlertsCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             for (final alert in alerts)
-              _AlertTile(alert: alert, labels: labels),
+              FunctionalAlertTile(alert: alert, labels: labels),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Une alerte : icône + couleur par sévérité, expansion au tap
-/// (conditions + effet prédit). Pas dismissable (plan §8.3).
-class _AlertTile extends StatelessWidget {
-  const _AlertTile({required this.alert, required this.labels});
-
-  final FunctionalAlert alert;
-
-  /// Labels d'affichage par id (noms vus par l'utilisateur).
-  final Map<String, String> labels;
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = context.strings;
-    final color = functionalSeverityColor(alert.severity);
-    final share = alert.mixShare;
-    final subtitle = StringBuffer(
-      '${alert.alertId} — ${strings.functionalConfidence(alert.confidence)}',
-    );
-    if (share != null) {
-      subtitle.write(' — ${strings.functionalMixShare(share)}');
-    }
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
-        child: Theme(
-          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            tilePadding: const EdgeInsets.symmetric(horizontal: 12),
-            childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-            leading: Icon(functionalSeverityIcon(alert.severity), color: color),
-            title: Text(
-              alert.title,
-              style: Theme.of(context).textTheme.bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.w700),
-            ),
-            subtitle: Text(
-              subtitle.toString(),
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (alert.triggerIngredientIds.isNotEmpty) ...[
-                      Text(
-                        strings.functionalTriggersLabel,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: 4),
-                      for (final id in alert.triggerIngredientIds)
-                        Text(
-                          '• ${labels[id] ?? id}',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      if (share != null && share < 0.05) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          strings.functionalLowShareNote,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                      const SizedBox(height: 8),
-                    ],
-                    if (alert.conditions.isNotEmpty) ...[
-                      Text(
-                        strings.functionalConditions,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: 4),
-                      for (final condition in alert.conditions)
-                        Text(
-                          '• $condition',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      const SizedBox(height: 8),
-                    ],
-                    if (alert.predictedEffect.isNotEmpty) ...[
-                      Text(
-                        strings.functionalPredictedEffect,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        alert.predictedEffect,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 8),
-                    ],
-                    if (alert.sourceRefs.isNotEmpty) ...[
-                      Text(
-                        strings.nutritionSources,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: 4),
-                      for (final ref in alert.sourceRefs)
-                        Text(
-                          '• $ref',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(fontStyle: FontStyle.italic),
-                        ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

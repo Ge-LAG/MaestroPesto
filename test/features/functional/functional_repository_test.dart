@@ -3,7 +3,6 @@ import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maestropesto/core/database/app_database.dart';
-import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
 
 const ruleGel = InteractionRule(
@@ -29,14 +28,14 @@ void main() {
     test(
       'alertsFor évalue les règles injectées, triées par sévérité',
       () async {
+        // Phase 10 : sans acidité connue, l'effet indésirable « gélatine
+        // en milieu acide » n'est pas signalé ; la gélification l'est,
+        // avec ses conditions (dissolution, prise) à vérifier.
         final repo = FunctionalRepository.fromRules(const [ruleGel, ruleAcid]);
         final alerts = await repo.alertsFor(const ['PROT_GEL']);
-        expect(alerts.map((a) => a.alertId).toList(), [
-          'RULE-GELATIN-ACID',
-          'RULE-GEL-GELATINE',
-        ]);
-        expect(alerts.first.severity, FunctionalSeverity.warning);
-        expect(alerts.first.confidence, closeTo(0.425, 1e-9));
+        expect(alerts.map((a) => a.alertId).toList(), ['RULE-GEL-GELATINE']);
+        expect(alerts.first.checks, isNotEmpty);
+        expect(alerts.first.confidence, greaterThan(0.4));
       },
     );
 

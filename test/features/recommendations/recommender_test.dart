@@ -61,10 +61,11 @@ Recommender buildRecommender({
   Map<String, IngredientSummary>? ingredients,
   List<FlavorMatch> matches = const [],
   List<InteractionRule> rules = const [],
+  Map<String, Map<String, double>> components = const {},
 }) => Recommender(
   ingredients: FakeIngredients(ingredients ?? {}),
   flavor: FlavorRepository.fromMatches(matches),
-  functional: FunctionalRepository.fromRules(rules),
+  functional: FunctionalRepository.fromRules(rules, components: components),
 );
 
 void main() {
@@ -191,10 +192,14 @@ void main() {
     test(
       'candidat déclenchant une nouvelle alerte fonctionnelle → malus',
       () async {
+        // Le candidat apporte de la pectine HM sans cuisson ni sucre :
+        // la règle gel pectine est compromise (warning) → malus.
         const rule = InteractionRule(
-          ruleId: 'RULE-GEL-GELATINE',
+          ruleId: 'RULE-PEC-HM-001',
           ruleFamily: 'gelling',
-          reactantOrComponentIds: agneau,
+          reactantOrComponentIds: 'POLY_PEC_HM|SM_SUCROSE',
+          phMin: 2.5,
+          phMax: 4.0,
           predictedEffect: 'gel',
           effectDirection: 'increase',
           confidence: 0.9,
@@ -206,6 +211,9 @@ void main() {
           },
           matches: [pair(agneau, thym, 0.80)],
           rules: const [rule],
+          components: const {
+            agneau: {'POLY_PEC_HM': 2},
+          },
         );
         final result = await r.suggestSubstitutes(
           targetIngredientId: boeuf,

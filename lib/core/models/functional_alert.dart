@@ -14,6 +14,46 @@ import 'package:meta/meta.dart';
 /// Sévérité d'une alerte fonctionnelle (plan Phase 09 §5.5).
 enum FunctionalSeverity { info, warning, danger, outOfDomain }
 
+/// Phase 10 Lot F — état des conditions d'une règle pour une recette.
+enum RuleStatus {
+  /// Toutes les conditions évaluables sont réunies.
+  conditionsMet,
+
+  /// Une partie seulement des conditions est réunie (ou à la marge).
+  partiallyMet,
+
+  /// Au moins une condition déterminante n'est pas réunie.
+  notMet,
+
+  /// Conditions non évaluables (données ou procédé manquants).
+  unknown,
+}
+
+/// Vérification d'une condition de règle (pH, T, dosage…).
+@immutable
+class RuleCheck {
+  const RuleCheck({required this.label, required this.met, this.detail});
+
+  /// Libellé court (« pH 2,5–4,0 »).
+  final String label;
+
+  /// true réunie, false non réunie, null non évaluable.
+  final bool? met;
+
+  /// Valeur estimée pour la recette (« pH estimé 3,1 »).
+  final String? detail;
+
+  @override
+  bool operator ==(Object other) =>
+      other is RuleCheck &&
+      other.label == label &&
+      other.met == met &&
+      other.detail == detail;
+
+  @override
+  int get hashCode => Object.hash(label, met, detail);
+}
+
 /// Alerte physico-chimique applicable à une recette.
 @immutable
 class FunctionalAlert {
@@ -28,6 +68,11 @@ class FunctionalAlert {
     this.sourceRefs = const <String>[],
     this.triggerIngredientIds = const <String>[],
     this.mixShare,
+    this.status = RuleStatus.unknown,
+    this.checks = const <RuleCheck>[],
+    this.advice,
+    this.family,
+    this.expectedOutcome,
   });
 
   /// Identifiant de la règle source (ex. `RULE-PEC-HM-001`).
@@ -63,6 +108,21 @@ class FunctionalAlert {
   /// Null quand les quantités ne sont pas exploitables.
   final double? mixShare;
 
+  /// Phase 10 — état des conditions de la règle pour cette recette.
+  final RuleStatus status;
+
+  /// Détail des conditions vérifiées.
+  final List<RuleCheck> checks;
+
+  /// Conseil de formulation (null si rien à corriger).
+  final String? advice;
+
+  /// Famille de la règle (gelling, emulsion, browning…).
+  final String? family;
+
+  /// Comportement attendu du mélange, en clair (« gel ferme attendu »).
+  final String? expectedOutcome;
+
   FunctionalAlert copyWith({
     String? alertId,
     FunctionalSeverity? severity,
@@ -74,6 +134,8 @@ class FunctionalAlert {
     List<String>? sourceRefs,
     List<String>? triggerIngredientIds,
     Object? mixShare = _shareSentinel,
+    RuleStatus? status,
+    List<RuleCheck>? checks,
   }) {
     return FunctionalAlert(
       alertId: alertId ?? this.alertId,
@@ -88,6 +150,11 @@ class FunctionalAlert {
       mixShare: identical(mixShare, _shareSentinel)
           ? this.mixShare
           : mixShare as double?,
+      status: status ?? this.status,
+      checks: checks ?? this.checks,
+      advice: advice,
+      family: family,
+      expectedOutcome: expectedOutcome,
     );
   }
 
@@ -104,7 +171,10 @@ class FunctionalAlert {
         other.evidenceType == evidenceType &&
         _listEq(other.sourceRefs, sourceRefs) &&
         _listEq(other.triggerIngredientIds, triggerIngredientIds) &&
-        other.mixShare == mixShare;
+        other.mixShare == mixShare &&
+        other.status == status &&
+        _listEq(other.checks, checks) &&
+        other.advice == advice;
   }
 
   @override
@@ -119,6 +189,9 @@ class FunctionalAlert {
     Object.hashAll(sourceRefs),
     Object.hashAll(triggerIngredientIds),
     mixShare,
+    status,
+    Object.hashAll(checks),
+    advice,
   );
 
   @override

@@ -17,8 +17,8 @@
 //   bonus       = +0.15 si le target avait ≥ 1 paire incompatible et que
 //                 le candidat n'en a aucune (« résout incompatibilité »)
 //   malus       = −0.20 si le candidat déclenche une nouvelle alerte
-//                 fonctionnelle (info/warning/danger) absente de la recette
-//                 sans le target
+//                 fonctionnelle de type warning/danger absente de la
+//                 recette sans le target (Phase 10)
 //   score       = clamp(base + bonus + malus, 0, 1)
 //
 // Un candidat avec une paire < 0.40 dans remaining est écarté (il
@@ -131,9 +131,13 @@ class Recommender {
         ...remaining,
         candidate.ingredientId,
       ]);
+      // Phase 10 : seul un NOUVEAU problème de formulation (warning ou
+      // danger) pénalise le candidat — un comportement attendu (info)
+      // ou « à vérifier » n'est pas un défaut.
       final hasNewAlert = alertsAfter.any(
         (a) =>
-            a.severity != FunctionalSeverity.outOfDomain &&
+            (a.severity == FunctionalSeverity.warning ||
+                a.severity == FunctionalSeverity.danger) &&
             !alertIdsBefore.contains(a.alertId),
       );
       final malus = hasNewAlert ? kNewAlertMalus : 0.0;
