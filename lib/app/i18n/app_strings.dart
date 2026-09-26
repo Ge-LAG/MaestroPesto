@@ -281,6 +281,119 @@ class AppStrings {
       'Nutrition non calculée : liez les ingrédients au référentiel '
       '(bouton loupe du formulaire) ou saisissez les valeurs à la main. '
       'Aucune valeur n’est inventée.';
+
+  // --- Refonte UX (2026-09-26) -------------------------------------
+  // Aides en langage courant.
+  String get nutritionPerServingAr => 'Valeurs par portion · % AR';
+  String get nutritionArHint =>
+      '% AR : part des apports de référence journaliers d’un adulte '
+      '(2 000 kcal, 50 g de protéines, 70 g de lipides, 260 g de '
+      'glucides, 90 g de sucres, 6 g de sel), règlement UE 1169/2011. '
+      'Exemple : 20 % AR en sel = un cinquième du maximum conseillé sur '
+      'la journée.';
+  String get nutriScoreHint =>
+      'Nutri-Score estimé à partir de la composition calculée de la '
+      'recette (algorithme 2023, aliments généraux). Indicatif : ce '
+      'n’est pas un Nutri-Score officiel, qui exige l’analyse du produit '
+      'fini.';
+  String get phHint =>
+      'pH : acidité du mélange, de 0 (très acide) à 14 ; 7 = neutre. '
+      'Sous 4,6, la plupart des bactéries dangereuses ne se développent '
+      'pas (conserves acides, confitures, vinaigrettes).';
+  String get awHint =>
+      'Activité de l’eau (aw, de 0 à 1) : part de l’eau réellement '
+      'disponible pour les microbes. Au-dessus de 0,86 le produit est '
+      'périssable et se garde au froid ; entre 0,6 et 0,86 il se '
+      'conserve mieux (confiture, fromage affiné) ; sous 0,6 il est sec '
+      'et stable (biscuit, farine).';
+  String get brixHint =>
+      'Brix : pourcentage de sucres dissous dans la partie liquide du '
+      'mélange. Repères : fruit frais 8–15 %, sirop 50–65 %, confiture '
+      '60–65 % (il faut au moins 55 % pour que la pectine gélifie).';
+  String get oilPhaseHint =>
+      'Part de matière grasse liquide dans le mélange. Une vinaigrette '
+      'en contient 60–75 %, une mayonnaise plus de 70 % : au-delà, '
+      'l’émulsion a besoin d’un émulsifiant (jaune d’œuf, moutarde).';
+  String get dryMatterHint =>
+      'Matière sèche : tout ce qui n’est pas de l’eau (sucres, protéines, '
+      'graisses, fibres, sels), estimée après évaporation à la cuisson.';
+  String phPlain(double ph) => ph < 4.6
+      ? 'acide : frein aux bactéries pathogènes'
+      : ph < 6.5
+      ? 'peu acide'
+      : ph <= 7.5
+      ? 'proche de la neutralité'
+      : 'basique';
+  String awPlain(double aw) => aw > 0.86
+      ? 'humide : à conserver au frais'
+      : aw >= 0.6
+      ? 'semi-humide : se conserve mieux'
+      : 'sec : stable à température ambiante';
+  String brixPlain(double brix) => brix >= 60
+      ? 'niveau confiture'
+      : brix >= 50
+      ? 'sirop léger'
+      : brix >= 20
+      ? 'bien sucré'
+      : 'peu sucré';
+
+  // Harmonie aromatique et heatmap.
+  String get harmonyHowTo => 'Comment lire ce score ?';
+  String get flavorSortLabel => 'Trier';
+  String get flavorSortRecipe => 'Ordre de la recette';
+  String get flavorSortStrength => 'Force d’accord';
+  String get flavorSortAlpha => 'Alphabétique';
+  String get flavorDocumentedOnly => 'Accords documentés seulement';
+  String get flavorDocumentedOnlyNote =>
+      'Prédictions masquées : seules les paires observées ou reconnues en '
+      'cuisine sont affichées.';
+  String get flavorAddSuggestion => 'Ajouter à la recette';
+  String get flavorNeedsTwo =>
+      'Reliez au moins deux ingrédients au référentiel pour analyser les '
+      'accords aromatiques.';
+  String flavorSuggestionAdded(String name) =>
+      '« $name » ajouté : indiquez sa quantité puis enregistrez.';
+
+  // Fiche recette.
+  String get servingsLabel => 'Portions';
+  String servingsScaledNote(int n, int original) =>
+      'Quantités recalculées pour $n portion${n > 1 ? 's' : ''} '
+      '(recette : $original).';
+  String get servingsReset => 'Revenir à la recette';
+  String get servingsDecrease => 'Une portion de moins';
+  String get servingsIncrease => 'Une portion de plus';
+  String get synthesisTitle => 'Synthèse';
+  String get synthesisPerServing => 'par portion';
+  String synthesisTotal(String kcal, int n) =>
+      '≈ $kcal kcal pour $n portion${n > 1 ? 's' : ''}';
+  String get synthesisNoNutrition => 'Nutrition non calculée';
+  String get synthesisAttention => 'Points d’attention';
+  String get synthesisNothing => 'Aucun point de vigilance détecté.';
+  String get synthesisExpected => 'À savoir';
+  String get allergensContains => 'Contient';
+  String get allergensNone =>
+      'Aucun allergène déclaré pour les ingrédients liés';
+  String allergensUnlinked(int n) =>
+      '$n ingrédient${n > 1 ? 's' : ''} non relié${n > 1 ? 's' : ''} au '
+      'référentiel : vérifier ${n > 1 ? 'leurs' : 'ses'} allergènes.';
+  String get allergensHint =>
+      'Allergènes à déclaration obligatoire (règlement UE 1169/2011, '
+      'annexe II) d’après le référentiel des ingrédients liés. Vérifiez '
+      'toujours l’étiquette des produits réellement utilisés.';
+  String get tabNutrition => 'Nutrition';
+  String get tabFlavor => 'Arômes';
+  String get tabProcess => 'Procédé';
+  String get ingredientUnlinkedHint =>
+      'Non relié au référentiel : exclu des analyses (nutrition, arômes, '
+      'procédé). Modifier la recette pour le relier.';
+  String get ingredientDetailShow => 'Fiche de l’ingrédient';
+
+  // Éditeur.
+  String get editorPreviewTitle => 'Aperçu en direct';
+  String get editorPreviewEmpty =>
+      'Reliez au moins un ingrédient au référentiel (loupe) pour voir '
+      'l’analyse se mettre à jour pendant la saisie.';
+  String get editorPreviewUpdating => 'Mise à jour…';
 }
 
 const appStrings = AppStrings();

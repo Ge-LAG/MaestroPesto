@@ -1,6 +1,6 @@
 // Phase 09 Lot G / Phase 10 Lots E-H — FlavorCompatibilityHeatmap.
 //
-// Matrice N×N des ingrédients liés de la recette (jusqu'à 12), cellules
+// Matrice N×N des ingrédients liés de la recette (jusqu'à 30), cellules
 // colorées selon la catégorie d'accord. Phase 10 (ac-123, décision
 // honest-data-display) :
 // - une PRÉDICTION (profils sensoriels, sans accord documenté) est
@@ -9,18 +9,32 @@
 // - un accord étayé (observé Phase 3 ou curaté) porte un repère ✓ ;
 // - le détail au tap donne l'origine, la confiance, les arômes partagés
 //   et les sous-scores (similarité, équilibre, contexte, dominance).
+// Refonte UX : défilement vertical et horizontal avec en-têtes figés
+// quand la matrice dépasse la place disponible, tri (ordre de la
+// recette, force d'accord, alphabétique) et filtre « accords
+// documentés seulement ».
+
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/flavor_match.dart';
 import 'package:maestropesto/core/models/flavor_profile.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
-/// Nombre max d'ingrédients affichés dans la matrice.
-const int kHeatmapMaxIngredients = 12;
+/// Nombre max d'ingrédients affichés dans la matrice (au-delà de la
+/// place disponible, la matrice défile).
+const int kHeatmapMaxIngredients = 30;
+
+/// Ordre des lignes et colonnes de la matrice.
+enum HeatmapSort { recipe, strength, alphabetical }
+
+/// Cellule de la matrice : meilleur accord connu et taille de la
+/// combinaison source (2 = paire).
+typedef HeatmapCellData = ({FlavorMatch match, int size});
 
 /// Couleur associée à une catégorie de compatibilité.
 Color flavorCategoryColor(FlavorMatchCategory category) {
@@ -68,13 +82,14 @@ String flavorEvidenceLabel(AppStrings strings, FlavorMatch match) =>
       FlavorMatchEvidence.predicted => strings.flavorEvidencePredicted,
     };
 
-class FlavorCompatibilityHeatmap extends StatelessWidget {
+class FlavorCompatibilityHeatmap extends StatefulWidget {
   const FlavorCompatibilityHeatmap({
     required this.ingredients,
     this.db,
     this.repository,
     this.maxIngredients = kHeatmapMaxIngredients,
     this.embedded = false,
+    this.maxGridHeight = 440,
     super.key,
   });
 
@@ -93,6 +108,9 @@ class FlavorCompatibilityHeatmap extends StatelessWidget {
   /// Vrai quand la matrice est intégrée dans une carte parente (pas de
   /// carte ni de titre propres).
   final bool embedded;
+
+  /// Hauteur max de la grille avant défilement vertical.
+  final double maxGridHeight;
 
   /// Ingrédients liés retenus pour la matrice (dédupliqués, plafonnés).
   static List<RecipeIngredient> linkedIngredients(
@@ -115,33 +133,178 @@ class FlavorCompatibilityHeatmap extends StatelessWidget {
       if (i.ingredientId != null && i.ingredientId!.isNotEmpty) i.ingredientId,
   }.length;
 
+  /// Clé d'une cellule (paire orientée d'identifiants).
+  static String cellKey(String a, String b) => '$a|$b';
+
+  /// Ordre des ingrédients selon [sort]. La force d'accord d'un
+  /// ingrédient est la moyenne de ses cellules visibles ; sans cellule,
+  /// il passe en dernier.
+  static List<RecipeIngredient> ordered(
+    List<RecipeIngredient> linked,
+    Map<String, HeatmapCellData> cells,
+    HeatmapSort sort, {
+    bool documentedOnly = false,
+  }) {
+    final list = [...linked];
+    switch (sort) {
+      case HeatmapSort.recipe:
+        return list;
+      case HeatmapSort.alphabetical:
+        list.sort((a, b) => _fold(a.label).compareTo(_fold(b.label)));
+        return list;
+      case HeatmapSort.strength:
+        double? strength(RecipeIngredient r) {
+          var sum = 0.0;
+          var n = 0;
+          for (final other in linked) {
+            if (other.ingredientId == r.ingredientId) continue;
+            final c = cells[cellKey(r.ingredientId!, other.ingredientId!)];
+            if (c == null) continue;
+            if (documentedOnly && c.match.isPrediction) continue;
+            sum += c.match.overallScore;
+            n++;
+          }
+          return n == 0 ? null : sum / n;
+        }
+
+        final s = {for (final r in list) r.ingredientId!: strength(r)};
+        list.sort((a, b) {
+          final sa = s[a.ingredientId!];
+          final sb = s[b.ingredientId!];
+          if (sa == null && sb == null) return 0;
+          if (sa == null) return 1;
+          if (sb == null) return -1;
+          return sb.compareTo(sa);
+        });
+        return list;
+    }
+  }
+
+  static String _fold(String s) => s
+      .toLowerCase()
+      .replaceAll('œ', 'oe')
+      .replaceAll(RegExp('[éèêë]'), 'e')
+      .replaceAll(RegExp('[àâä]'), 'a')
+      .replaceAll(RegExp('[îï]'), 'i')
+      .replaceAll(RegExp('[ôö]'), 'o')
+      .replaceAll(RegExp('[ùûü]'), 'u')
+      .replaceAll('ç', 'c');
+
+  @override
+  State<FlavorCompatibilityHeatmap> createState() =>
+      _FlavorCompatibilityHeatmapState();
+}
+
+class _FlavorCompatibilityHeatmapState
+    extends State<FlavorCompatibilityHeatmap> {
+  Future<Map<String, HeatmapCellData>>? _future;
+  String? _signature;
+  HeatmapSort _sort = HeatmapSort.recipe;
+  bool _documentedOnly = false;
+
+  List<RecipeIngredient> get _linked =>
+      FlavorCompatibilityHeatmap.linkedIngredients(
+        widget.ingredients,
+        maxIngredients: widget.maxIngredients,
+      );
+
+  FlavorRepository? get _repo =>
+      widget.repository ??
+      (widget.db != null ? FlavorRepository(widget.db!) : null);
+
+  void _load() {
+    final ids = [for (final i in _linked) i.ingredientId!];
+    _signature = ids.join(',');
+    final repo = _repo;
+    _future = repo == null || ids.length < 2 ? null : _loadCells(repo, ids);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant FlavorCompatibilityHeatmap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final ids = [for (final i in _linked) i.ingredientId!].join(',');
+    if (ids != _signature ||
+        oldWidget.db != widget.db ||
+        oldWidget.repository != widget.repository) {
+      _load();
+    }
+  }
+
+  static Future<Map<String, HeatmapCellData>> _loadCells(
+    FlavorRepository repo,
+    List<String> ids,
+  ) async {
+    final cells = <String, HeatmapCellData>{};
+    for (var i = 0; i < ids.length; i++) {
+      for (var j = i + 1; j < ids.length; j++) {
+        final match = await repo.bestKnownMatchFor(ids[i], ids[j]);
+        if (match != null) {
+          cells[FlavorCompatibilityHeatmap.cellKey(ids[i], ids[j])] = match;
+          cells[FlavorCompatibilityHeatmap.cellKey(ids[j], ids[i])] = match;
+        }
+      }
+    }
+    return cells;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final linked = linkedIngredients(
-      ingredients,
-      maxIngredients: maxIngredients,
-    );
-    if (linked.length < 2) return const SizedBox.shrink();
-
-    final repo = repository ?? (db != null ? FlavorRepository(db!) : null);
-    if (repo == null) return const SizedBox.shrink();
-
-    final ids = [for (final i in linked) i.ingredientId!];
-    final hidden = linkedCount(ingredients) - linked.length;
-    return FutureBuilder<Map<String, ({FlavorMatch match, int size})>>(
-      future: _loadCells(repo, ids),
+    final future = _future;
+    if (future == null) return const SizedBox.shrink();
+    final linked = _linked;
+    final hidden =
+        FlavorCompatibilityHeatmap.linkedCount(widget.ingredients) -
+        linked.length;
+    return FutureBuilder<Map<String, HeatmapCellData>>(
+      future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox.shrink();
         }
         final cells = snapshot.data ?? const {};
         if (cells.isEmpty) return const SizedBox.shrink();
-        final body = _HeatmapBody(
-          linked: linked,
-          cells: cells,
-          hiddenCount: hidden,
+        final note = Theme.of(context).textTheme.labelSmall
+            ?.copyWith(fontStyle: FontStyle.italic);
+        final body = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _Controls(
+              sort: _sort,
+              documentedOnly: _documentedOnly,
+              onSort: (s) => setState(() => _sort = s),
+              onDocumentedOnly: (v) => setState(() => _documentedOnly = v),
+            ),
+            const SizedBox(height: 10),
+            _HeatmapGrid(
+              order: FlavorCompatibilityHeatmap.ordered(
+                linked,
+                cells,
+                _sort,
+                documentedOnly: _documentedOnly,
+              ),
+              cells: cells,
+              documentedOnly: _documentedOnly,
+              maxGridHeight: widget.maxGridHeight,
+            ),
+            if (hidden > 0) ...[
+              const SizedBox(height: 6),
+              Text(context.strings.flavorMore(hidden), style: note),
+            ],
+            if (_documentedOnly) ...[
+              const SizedBox(height: 6),
+              Text(context.strings.flavorDocumentedOnlyNote, style: note),
+            ],
+            const SizedBox(height: 10),
+            const _Legend(),
+          ],
         );
-        if (embedded) return body;
+        if (widget.embedded) return body;
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 12),
           child: Padding(
@@ -171,138 +334,280 @@ class FlavorCompatibilityHeatmap extends StatelessWidget {
       },
     );
   }
-
-  static Future<Map<String, ({FlavorMatch match, int size})>> _loadCells(
-    FlavorRepository repo,
-    List<String> ids,
-  ) async {
-    final cells = <String, ({FlavorMatch match, int size})>{};
-    for (var i = 0; i < ids.length; i++) {
-      for (var j = i + 1; j < ids.length; j++) {
-        final match = await repo.bestKnownMatchFor(ids[i], ids[j]);
-        if (match != null) {
-          cells['$i-$j'] = match;
-          cells['$j-$i'] = match;
-        }
-      }
-    }
-    return cells;
-  }
 }
 
-class _HeatmapBody extends StatelessWidget {
-  const _HeatmapBody({
-    required this.linked,
-    required this.cells,
-    required this.hiddenCount,
+/// Tri et filtre de la matrice.
+class _Controls extends StatelessWidget {
+  const _Controls({
+    required this.sort,
+    required this.documentedOnly,
+    required this.onSort,
+    required this.onDocumentedOnly,
   });
 
-  final List<RecipeIngredient> linked;
-  final Map<String, ({FlavorMatch match, int size})> cells;
-  final int hiddenCount;
+  final HeatmapSort sort;
+  final bool documentedOnly;
+  final ValueChanged<HeatmapSort> onSort;
+  final ValueChanged<bool> onDocumentedOnly;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    final strings = context.strings;
+    return Wrap(
+      spacing: 10,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _HeaderRow(linked: linked),
-              for (var row = 0; row < linked.length; row++)
-                _MatrixRow(rowIndex: row, linked: linked, cells: cells),
-            ],
-          ),
+        Text(
+          strings.flavorSortLabel,
+          style: Theme.of(context).textTheme.labelMedium,
         ),
-        if (hiddenCount > 0) ...[
-          const SizedBox(height: 6),
-          Text(
-            context.strings.flavorMore(hiddenCount),
-            style: Theme.of(context).textTheme.labelSmall
-                ?.copyWith(fontStyle: FontStyle.italic),
+        SegmentedButton<HeatmapSort>(
+          showSelectedIcon: false,
+          style: const ButtonStyle(
+            visualDensity: VisualDensity.compact,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-        ],
-        const SizedBox(height: 10),
-        const _Legend(),
-      ],
-    );
-  }
-}
-
-class _HeaderRow extends StatelessWidget {
-  const _HeaderRow({required this.linked});
-
-  final List<RecipeIngredient> linked;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: _kLabelWidth),
-        for (final ingredient in linked)
-          SizedBox(
-            width: _kCellSize,
-            height: _kLabelWidth,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: RotatedBox(
-                quarterTurns: 3,
-                child: Text(
-                  ingredient.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
+          segments: [
+            ButtonSegment(
+              value: HeatmapSort.recipe,
+              label: Text(strings.flavorSortRecipe),
             ),
-          ),
-      ],
-    );
-  }
-}
-
-class _MatrixRow extends StatelessWidget {
-  const _MatrixRow({
-    required this.rowIndex,
-    required this.linked,
-    required this.cells,
-  });
-
-  final int rowIndex;
-  final List<RecipeIngredient> linked;
-  final Map<String, ({FlavorMatch match, int size})> cells;
-
-  @override
-  Widget build(BuildContext context) {
-    final rowIngredient = linked[rowIndex];
-    return Row(
-      children: [
-        SizedBox(
-          width: _kLabelWidth,
-          child: Text(
-            rowIngredient.label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
+            ButtonSegment(
+              value: HeatmapSort.strength,
+              label: Text(strings.flavorSortStrength),
+            ),
+            ButtonSegment(
+              value: HeatmapSort.alphabetical,
+              label: Text(strings.flavorSortAlpha),
+            ),
+          ],
+          selected: {sort},
+          onSelectionChanged: (s) => onSort(s.first),
         ),
-        for (var col = 0; col < linked.length; col++)
-          _HeatmapCell(
-            rowIngredient: rowIngredient,
-            colIngredient: linked[col],
-            isDiagonal: rowIndex == col,
-            match: cells['$rowIndex-$col'],
-          ),
+        FilterChip(
+          label: Text(strings.flavorDocumentedOnly),
+          selected: documentedOnly,
+          onSelected: onDocumentedOnly,
+          avatar: documentedOnly
+              ? null
+              : const Icon(Icons.verified_outlined, size: 16),
+        ),
       ],
     );
   }
 }
 
 const double _kCellSize = 44;
-const double _kLabelWidth = 96;
+const double _kLabelWidth = 116;
+const double _kHeaderHeight = 110;
+const double _kScrollbarGutter = 12;
+
+/// Grille avec en-têtes figés : les libellés de colonnes suivent le
+/// défilement horizontal, ceux des lignes le défilement vertical.
+class _HeatmapGrid extends StatefulWidget {
+  const _HeatmapGrid({
+    required this.order,
+    required this.cells,
+    required this.documentedOnly,
+    required this.maxGridHeight,
+  });
+
+  final List<RecipeIngredient> order;
+  final Map<String, HeatmapCellData> cells;
+  final bool documentedOnly;
+  final double maxGridHeight;
+
+  @override
+  State<_HeatmapGrid> createState() => _HeatmapGridState();
+}
+
+class _HeatmapGridState extends State<_HeatmapGrid> {
+  final _hBody = ScrollController();
+  final _vBody = ScrollController();
+  final _hHeader = ScrollController();
+  final _vLabels = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _hBody.addListener(() => _follow(_hBody, _hHeader));
+    _vBody.addListener(() => _follow(_vBody, _vLabels));
+  }
+
+  static void _follow(ScrollController from, ScrollController to) {
+    if (!to.hasClients || !from.hasClients) return;
+    final target = from.offset.clamp(
+      to.position.minScrollExtent,
+      to.position.maxScrollExtent,
+    );
+    if (to.offset != target) to.jumpTo(target);
+  }
+
+  @override
+  void dispose() {
+    _hBody.dispose();
+    _vBody.dispose();
+    _hHeader.dispose();
+    _vLabels.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final order = widget.order;
+    final n = order.length;
+    final gridSize = n * _kCellSize;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final available = math.max(
+          _kCellSize * 2,
+          constraints.maxWidth - _kLabelWidth,
+        );
+        final overflowY = gridSize > widget.maxGridHeight + 0.5;
+        final gutterX = overflowY ? _kScrollbarGutter : 0.0;
+        final overflowX = gridSize + gutterX > available + 0.5;
+        final gutterY = overflowX ? _kScrollbarGutter : 0.0;
+        final viewW = math.min(gridSize + gutterX, available);
+        final viewH = math.min(gridSize, widget.maxGridHeight) + gutterY;
+        final labelStyle = Theme.of(context).textTheme.labelSmall;
+
+        final header = Padding(
+          padding: EdgeInsets.only(right: gutterX),
+          child: Row(
+            children: [
+              for (final ingredient in order)
+                SizedBox(
+                  width: _kCellSize,
+                  height: _kHeaderHeight,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Tooltip(
+                      message: ingredient.label,
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(
+                          ingredient.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: labelStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+        final rowLabels = Padding(
+          padding: EdgeInsets.only(bottom: gutterY),
+          child: Column(
+            children: [
+              for (final ingredient in order)
+                SizedBox(
+                  height: _kCellSize,
+                  width: _kLabelWidth,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Tooltip(
+                      message: ingredient.label,
+                      child: Text(
+                        ingredient.label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: labelStyle,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+        final grid = Padding(
+          padding: EdgeInsets.only(right: gutterX, bottom: gutterY),
+          child: Column(
+            children: [
+              for (var row = 0; row < n; row++)
+                Row(
+                  children: [
+                    for (var col = 0; col < n; col++)
+                      _HeatmapCell(
+                        rowIngredient: order[row],
+                        colIngredient: order[col],
+                        isDiagonal: row == col,
+                        match: row == col
+                            ? null
+                            : widget.cells[FlavorCompatibilityHeatmap.cellKey(
+                                order[row].ingredientId!,
+                                order[col].ingredientId!,
+                              )],
+                        documentedOnly: widget.documentedOnly,
+                      ),
+                  ],
+                ),
+            ],
+          ),
+        );
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const SizedBox(width: _kLabelWidth, height: _kHeaderHeight),
+                SizedBox(
+                  width: viewW,
+                  height: _kHeaderHeight,
+                  child: SingleChildScrollView(
+                    controller: _hHeader,
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: header,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: _kLabelWidth,
+                  height: viewH,
+                  child: SingleChildScrollView(
+                    controller: _vLabels,
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: rowLabels,
+                  ),
+                ),
+                SizedBox(
+                  width: viewW,
+                  height: viewH,
+                  child: Scrollbar(
+                    controller: _hBody,
+                    thumbVisibility: overflowX,
+                    notificationPredicate: (n) => n.depth == 1,
+                    child: Scrollbar(
+                      controller: _vBody,
+                      thumbVisibility: overflowY,
+                      child: SingleChildScrollView(
+                        controller: _vBody,
+                        child: SingleChildScrollView(
+                          controller: _hBody,
+                          scrollDirection: Axis.horizontal,
+                          child: grid,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
 
 class _HeatmapCell extends StatelessWidget {
   const _HeatmapCell({
@@ -310,20 +615,22 @@ class _HeatmapCell extends StatelessWidget {
     required this.colIngredient,
     required this.isDiagonal,
     required this.match,
+    this.documentedOnly = false,
   });
 
   final RecipeIngredient rowIngredient;
   final RecipeIngredient colIngredient;
   final bool isDiagonal;
-  final ({FlavorMatch match, int size})? match;
+  final HeatmapCellData? match;
+  final bool documentedOnly;
 
   @override
   Widget build(BuildContext context) {
     final neutral = Theme.of(context).colorScheme.surfaceContainerHighest;
     if (isDiagonal) {
       return Container(
-        width: _kCellSize,
-        height: _kCellSize,
+        width: _kCellSize - 4,
+        height: _kCellSize - 4,
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: neutral,
@@ -332,7 +639,9 @@ class _HeatmapCell extends StatelessWidget {
       );
     }
 
-    final m = match;
+    final hiddenPrediction =
+        documentedOnly && (match?.match.isPrediction ?? false);
+    final m = hiddenPrediction ? null : match;
     final predicted = m?.match.isPrediction ?? false;
     final base = m == null ? neutral : flavorMatchColor(m.match);
     final color = predicted ? base.withValues(alpha: 0.55) : base;
@@ -341,8 +650,11 @@ class _HeatmapCell extends StatelessWidget {
       padding: const EdgeInsets.all(2),
       child: Tooltip(
         message: m == null
-            ? context.strings.flavorPairUnknown
-            : '${flavorMatchLabel(context.strings, m.match)} — '
+            ? (hiddenPrediction
+                  ? context.strings.flavorEvidencePredicted
+                  : context.strings.flavorPairUnknown)
+            : '${rowIngredient.label} × ${colIngredient.label} : '
+                  '${flavorMatchLabel(context.strings, m.match)} — '
                   '${flavorEvidenceLabel(context.strings, m.match)}',
         child: Material(
           color: color,
@@ -389,7 +701,7 @@ class _HeatmapCell extends StatelessWidget {
 
   void _showDetail(
     BuildContext context,
-    ({FlavorMatch match, int size}) m,
+    HeatmapCellData m,
     RecipeIngredient a,
     RecipeIngredient b,
   ) {
