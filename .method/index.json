@@ -635,11 +635,11 @@
       ],
       "kind": "project",
       "status": "active",
-      "sha256": "a89e00f45ce07d282588bab89de5b2970ac5a994658635a185f10ee3e63e261c",
-      "chars": 2356,
-      "size": 3443,
-      "mtime_ns": 1790410338164349900,
-      "revision": 4,
+      "sha256": "a33fe58256aa9722c3c453a4c76c6a81c371dc8c2cacc323d41e2eb9311a289d",
+      "chars": 2600,
+      "size": 3715,
+      "mtime_ns": 1790421803695605800,
+      "revision": 5,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -656,12 +656,14 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "7bc04492c778a89a6aae0a62b6752b6b12660f7345e3ab1431fbf26f9ca15eab",
+      "body_digest": "92ea9701fbaa94ee6369cd32f304757a410b6b44af435ef1df8fe8d8b1e3335d",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-ux-refonte.html#phase10-ux-refonte",
+        "../records/ac-129.html#ac-129",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../work/idea-ocr-recettes.html#idea-ocr-recettes",
@@ -1717,6 +1719,53 @@
       ]
     },
     {
+      "id": "ac-129",
+      "path": "records/ac-129.html",
+      "title": "Critique : bases métier absentes du build release",
+      "summary": "Les CSV métier n'étaient pas embarqués (dossiers d'assets non récursifs) et le lecteur d'assets était retiré avant la fin de l'import : l'exécutable release lancé hors du dossier du projet ne pouvait rien importer.",
+      "tags": [
+        "ac",
+        "finding",
+        "release",
+        "assets",
+        "import",
+        "critique"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "93e73f8d4a9c6cfda31e040b9f170fa489aa67e5e63c6b2d5d427ea9aa1d9c3f",
+      "chars": 1764,
+      "size": 3000,
+      "mtime_ns": 1790421771574045800,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "66f88a380d655b67b77855b2de607c7a63e333d83d26e01de2070e71b82ce013",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-ux-refonte.html#phase10-ux-refonte"
+      ],
+      "anchors": [
+        "ac-129"
+      ]
+    },
+    {
       "id": "ac-F-004",
       "path": "records/ac-F-004.html",
       "title": "Dette : cache global IngredientAliasIndex",
@@ -2067,40 +2116,42 @@
       ],
       "kind": "acceptance",
       "status": "ready",
-      "sha256": "9a2f1da4f106671c44becb18808c1ba118ea017e4c046baf0090501b7e865f5c",
-      "chars": 2287,
-      "size": 3794,
-      "mtime_ns": 1790410396588863000,
-      "revision": 2,
+      "sha256": "0b7c5d51fa4a46ee4e7a6a611d7beb46228b75116fd684b0cc52665416006253",
+      "chars": 3123,
+      "size": 4714,
+      "mtime_ns": 1790421802353012100,
+      "revision": 3,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
       "review_trigger": "",
       "review_digest": "",
       "requires": [
-        "phase10-coherence-procede"
+        "phase10-coherence-procede",
+        "phase10-ux-refonte"
       ],
       "supersedes": [],
       "components": [],
       "applies_to": [],
       "paths": [],
       "watch": [],
-      "candidate": "99f73bc (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "candidate": "7e30d40 (branche Ge-LAG/db-connection-strategies, non poussée)",
       "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
       "evidence_digest": "",
       "criteria": [
         {
           "id": "A1",
-          "text": "Les 7 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
+          "text": "Les 12 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
         }
       ],
       "evidence": [],
-      "body_digest": "bc3811a443467dcd3132de5e11bcc3d3a0c901b432d273a59d3167571d850bd1",
+      "body_digest": "c952ff6ee5d2f3a19a3a638cbe45f6c12b37bafdf00654fee10e53430af79ec1",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-ux-refonte.html#phase10-ux-refonte",
         "../work/phase10-coherence-procede.html#phase10-coherence-procede",
         "phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "delivery-gate.html#delivery-gate",
@@ -3221,6 +3272,176 @@
       ],
       "anchors": [
         "phase10-coherence-procede"
+      ]
+    },
+    {
+      "id": "phase10-ux-refonte",
+      "path": "work/phase10-ux-refonte.html",
+      "title": "Refonte UX/UI de la fiche recette et de l'éditeur",
+      "summary": "Douze améliorations validées par le PO le 2026-09-26 : virgule décimale, allergènes, aides en langage courant, note d'harmonie, heatmap défilante triable, fiche en synthèse et onglets, portions ajustables, éditeur pleine page avec aperçu en direct, typographie, progression d'import.",
+      "tags": [
+        "phase-10",
+        "ux",
+        "ui",
+        "fiche",
+        "heatmap",
+        "allergenes",
+        "editeur",
+        "review"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "e6130c39c562331d052b165f309313cd241c0f95351864da3f82726e35fa7abb",
+      "chars": 4693,
+      "size": 8646,
+      "mtime_ns": 1790421774381687600,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-coherence-procede"
+      ],
+      "supersedes": [],
+      "components": [
+        "recipes",
+        "analysis",
+        "flavor",
+        "ingredients",
+        "i18n",
+        "data-pipeline"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [
+        "lib/features/recipes/presentation/widgets/recipe_detail_view.dart",
+        "lib/features/recipes/presentation/widgets/recipe_form_dialog.dart",
+        "lib/features/flavor/presentation/widgets/flavor_compatibility_heatmap.dart",
+        "lib/core/scoring/quantity_scaler.dart",
+        "lib/core/database/database_bootstrap.dart",
+        "pubspec.yaml",
+        "assets/database-enrichment/ingredient_allergens.csv",
+        "test/core/database/import_assets_cwd_test.dart",
+        "test/features/flavor/flavor_compatibility_heatmap_test.dart",
+        "test/core/scoring/quantity_scaler_test.dart"
+      ],
+      "candidate": "7e30d40 (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "21d7ad3fb02cdc8110030fd5a2b548271361db31316b40cb1c784bcf6ce2a055",
+      "criteria": [
+        {
+          "id": "U1",
+          "text": "Aucun nombre décimal de l'interface n'utilise le point ; aucun texte d'interface sous 12 px."
+        },
+        {
+          "id": "U2",
+          "text": "La recette affiche les allergènes à déclaration obligatoire de ses ingrédients reliés, y compris ceux que le référentiel ne déclare pas (lait, poisson…), sans étiquette erronée."
+        },
+        {
+          "id": "U3",
+          "text": "La heatmap reste utilisable au-delà de la place disponible (ascenseurs vertical et horizontal, en-têtes figés) et se trie par force d'accord ; le filtre « documentés seulement » masque les prédictions."
+        },
+        {
+          "id": "U4",
+          "text": "Changer le nombre de portions recalcule les quantités affichées (masses métriques arrondies, pièces au quart ou au demi, pluriel accordé) sans modifier la recette enregistrée."
+        },
+        {
+          "id": "U5",
+          "text": "L'éditeur s'ouvre en pleine page et son aperçu (énergie, Nutri-Score, harmonie, allergènes, points d'attention) suit la saisie."
+        },
+        {
+          "id": "U6",
+          "text": "L'exécutable release importe les bases métier quel que soit le dossier de lancement."
+        },
+        {
+          "id": "U7",
+          "text": "flutter test, flutter analyze et dart format --set-exit-if-changed . verts."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test (tests heatmap, formulaire, convertisseur mis à jour) + revue des captures 1600 et 420 px",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U1",
+          "text": "Tous les affichages passent par fmtNum ; labelSmall du thème porté à 12 px et tailles 10–11 px explicites supprimées."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (groupe « Allergènes enrichis ») + capture crème pâtissière",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U2",
+          "text": "Lait entier et beurre → lait, saumon → poisson (déduits), jus d'orange sans arachide, lait de coco sans allergène, laitue ≠ lait ; crème pâtissière : lait, œufs, gluten."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/flavor/flavor_compatibility_heatmap_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U3",
+          "text": "20 ingrédients dans 600 px : deux ascenseurs visibles, aucun débordement ; ordre force d'accord B, A, C ; prédiction 0,61 masquée par le filtre."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/scoring/quantity_scaler_test.dart + capture crème pâtissière 6 → 4 portions",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U4",
+          "text": "250 g ×2 → 500 g ; 1/2 c. à café ×2 → 1 c. à café ; 2-3 gousses ×2 → 4-6 gousses ; 50 cl → 33 cl pour 4 portions ; « Revenir à la recette (6) »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/recipes + captures éditeur 1600 et 1000 px",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U5",
+          "text": "Colonne « Aperçu en direct » à 1600 px, bandeau compact à 1000 px ; tests du formulaire (sauvegarde, unités, nutrition calculée, avertissements) verts."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/import_assets_cwd_test.dart ; flutter build windows --release puis maestropesto.exe lancé depuis %TEMP% avec MAESTROPESTO_DB_DIR",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U6",
+          "text": "Schéma v5, 603 ingrédients, 28 986 valeurs nutritionnelles, 214 fiches allergènes, 8 recettes avec nutrition calculée ; le test échoue sur l'ancien code (PathNotFoundException)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test ; flutter analyze ; dart format --set-exit-if-changed .",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U7",
+          "text": "310/310 tests, aucun problème d'analyse, format propre au 7e30d40."
+        }
+      ],
+      "body_digest": "f817c05a3394fe969f5dc6940c358934f2db0e2ddcb661cbbf243c0f6bffae5f",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/ac-129.html#ac-129",
+        "../records/acceptance-phase10.html#acceptance-phase10"
+      ],
+      "anchors": [
+        "phase10-ux-refonte"
       ]
     }
   ]
