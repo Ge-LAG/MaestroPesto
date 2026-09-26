@@ -75,7 +75,12 @@ ThemeData buildAppTheme() {
       side: const BorderSide(color: Color(0xFFDADDD3)),
       selectedColor: const Color(0xFFE5F0EA),
       backgroundColor: Colors.transparent,
-      labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+      labelStyle: const TextStyle(
+        fontFamily: 'Segoe UI',
+        color: text,
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+      ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

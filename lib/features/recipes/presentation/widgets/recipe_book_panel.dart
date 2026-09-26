@@ -558,10 +558,11 @@ class _RecipeQuickFacts extends StatelessWidget {
           icon: Icons.format_list_bulleted,
           label: '${recipe.ingredients.length}',
         ),
-        _QuickFact(
-          icon: Icons.bolt_outlined,
-          label: '${recipe.nutrition.energyKcal.toStringAsFixed(0)} kcal',
-        ),
+        if (recipe.nutrition.energyKcal > 0)
+          _QuickFact(
+            icon: Icons.bolt_outlined,
+            label: '${recipe.nutrition.energyKcal.toStringAsFixed(0)} kcal',
+          ),
       ],
     );
   }

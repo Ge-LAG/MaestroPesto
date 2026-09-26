@@ -169,7 +169,7 @@ class _MiniNutritionSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = context.strings;
-    if (nutrition == null) {
+    if (nutrition == null || nutrition!.knownFields.isEmpty) {
       return Text(
         strings.ingredientDetailNutritionUnavailable,
         style: Theme.of(context).textTheme.bodySmall,
@@ -191,25 +191,37 @@ class _MiniNutritionSection extends StatelessWidget {
           children: [
             _nutritionChip(
               strings.ingredientDetailEnergy,
-              '${n.energyKcal.toStringAsFixed(0)} kcal',
+              _value(n, MacroField.energy, n.energyKcal, 'kcal', 0, strings),
             ),
             _nutritionChip(
               strings.ingredientDetailProteins,
-              '${n.proteins.toStringAsFixed(1)} g',
+              _value(n, MacroField.proteins, n.proteins, 'g', 1, strings),
             ),
             _nutritionChip(
               strings.ingredientDetailFats,
-              '${n.fats.toStringAsFixed(1)} g',
+              _value(n, MacroField.fats, n.fats, 'g', 1, strings),
             ),
             _nutritionChip(
               strings.ingredientDetailCarbs,
-              '${n.carbs.toStringAsFixed(1)} g',
+              _value(n, MacroField.carbs, n.carbs, 'g', 1, strings),
             ),
           ],
         ),
       ],
     );
   }
+
+  /// Valeur honnête : « non renseigné » quand la source ne la donne pas.
+  static String _value(
+    NutritionProfile n,
+    MacroField field,
+    double value,
+    String unit,
+    int digits,
+    AppStrings strings,
+  ) => n.isKnown(field)
+      ? '${value.toStringAsFixed(digits)} $unit'
+      : strings.nutritionNotProvided;
 
   Widget _nutritionChip(String label, String value) {
     return Container(

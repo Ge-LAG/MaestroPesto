@@ -127,7 +127,7 @@ class RecipeAnalysisBuilder extends StatelessWidget {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                   const SizedBox(width: 12),
-                  Text(context.strings.analysisLoading),
+                  Flexible(child: Text(context.strings.analysisLoading)),
                 ],
               ),
             ),

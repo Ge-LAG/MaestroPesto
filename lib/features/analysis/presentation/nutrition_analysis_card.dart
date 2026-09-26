@@ -159,64 +159,14 @@ class _ComputedPanel extends StatelessWidget {
       nutriScore: fb.nutriScore,
       nutriScoreNote: fb.nutriScoreNote,
       subtitle: subtitle,
+      sugars: p.sugars,
+      saturatedFats: p.saturatedFats,
       footer: [
-        _SugarSatLines(profile: p, coverage: agg.nutrientCoverage, fb: fb),
         if (fb.energySplit != null) _EnergySplitBar(split: fb.energySplit!),
         if (fb.highlights.isNotEmpty) _Highlights(items: fb.highlights),
         if (fb.claims.isNotEmpty) _Claims(claims: fb.claims),
         _Contributions(aggregation: agg, analysis: analysis),
         _Limits(aggregation: agg),
-      ],
-    );
-  }
-}
-
-/// Sucres et AGS (sous-lignes des glucides et lipides).
-class _SugarSatLines extends StatelessWidget {
-  const _SugarSatLines({
-    required this.profile,
-    required this.coverage,
-    required this.fb,
-  });
-
-  final NutritionProfile profile;
-  final Map<MacroField, double> coverage;
-  final NutritionFeedback fb;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    Widget row(String label, double v, MacroField f, String key) {
-      final cov = coverage[f] ?? 0;
-      final pct = fb.intakes.where((l) => l.key == key).firstOrNull?.percent;
-      return Padding(
-        padding: const EdgeInsets.only(left: 12, top: 4),
-        child: Row(
-          children: [
-            Expanded(child: Text(label, style: theme.textTheme.bodySmall)),
-            Text(
-              cov == 0
-                  ? context.strings.nutritionNotProvided
-                  : '${v.toStringAsFixed(1)} g'
-                        '${pct == null ? '' : '  (${pct.toStringAsFixed(0)} % AR)'}',
-              style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Column(
-      children: [
-        row('dont sucres', profile.sugars, MacroField.sugars, 'sugars'),
-        row(
-          'dont acides gras saturés',
-          profile.saturatedFats,
-          MacroField.saturatedFats,
-          'saturatedFats',
-        ),
       ],
     );
   }
@@ -234,10 +184,12 @@ class _SectionTitle extends StatelessWidget {
     child: Row(
       children: [
         if (icon != null) ...[Icon(icon, size: 16), const SizedBox(width: 6)],
-        Text(
-          text,
-          style: Theme.of(context).textTheme.labelLarge
-              ?.copyWith(fontWeight: FontWeight.w800),
+        Flexible(
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.labelLarge
+                ?.copyWith(fontWeight: FontWeight.w800),
+          ),
         ),
       ],
     ),
@@ -488,6 +440,12 @@ class _Contributions extends StatelessWidget {
     if (c.alreadyCooked) parts.add(strings.nutritionAlreadyCooked);
     if (c.quantityAssumption != null) parts.add(c.quantityAssumption!);
     if (c.approximationNote != null) parts.add(c.approximationNote!);
+    if (c.derivedFields.isNotEmpty) {
+      parts.add(
+        '0 par bilan de masse : '
+        '${c.derivedFields.map((f) => f.labelFr).join(', ')}',
+      );
+    }
     if (c.sourceFoodName != null && c.approximationNote == null) {
       parts.add('Ciqual : ${c.sourceFoodName}');
     }

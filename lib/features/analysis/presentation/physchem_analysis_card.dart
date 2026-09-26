@@ -181,7 +181,8 @@ class _Composition extends StatelessWidget {
             ),
           ),
         Text(
-          '${strings.physchemDryMatter} : ${_n(state.dryMatterPct, 0)} %',
+          '${strings.physchemDryMatter} : ${_n(state.dryMatterPct, 0)} %'
+          '${state.evaporatedG >= 1 ? ' · ≈ ${_n(state.evaporatedG, 0)} g d’eau évaporée à la cuisson' : ''}',
           style: theme.textTheme.labelSmall,
         ),
       ],
@@ -317,7 +318,11 @@ class _Process extends StatelessWidget {
                       children: [
                         Text(
                           [
-                            s.operations.map((o) => o.labelFr).join(' + '),
+                            [
+                              s.primary!.labelFr,
+                              for (final o in s.operations.skip(1))
+                                if (o.shear || o.cooling) o.labelFr,
+                            ].join(' + '),
                             if (s.temperatureC != null)
                               '${_n(s.temperatureC!, 0)} °C',
                             if (s.durationMin != null)

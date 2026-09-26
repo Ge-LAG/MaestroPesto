@@ -51,6 +51,8 @@ class RecipeNutritionPanel extends StatelessWidget {
     this.nutriScoreNote,
     this.subtitle,
     this.footer = const <Widget>[],
+    this.sugars,
+    this.saturatedFats,
     super.key,
   });
 
@@ -93,6 +95,10 @@ class RecipeNutritionPanel extends StatelessWidget {
 
   /// Sections additionnelles (feedback, détail, limites).
   final List<Widget> footer;
+
+  /// Sous-lignes « dont sucres » et « dont AGS » (null = masquées).
+  final double? sugars;
+  final double? saturatedFats;
 
   double? _coverage(MacroField field) => coverage?[field];
 
@@ -149,11 +155,11 @@ class RecipeNutritionPanel extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall
                         ?.copyWith(fontStyle: FontStyle.italic),
                   ),
-                  for (final source in sources)
+                  for (final (i, source) in sources.indexed)
                     Tooltip(
                       message: source.citation ?? source.displayLabel,
                       child: Text(
-                        source.displayLabel,
+                        '${source.displayLabel}${i < sources.length - 1 ? ' ·' : ''}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontStyle: FontStyle.italic,
                           decoration: TextDecoration.underline,
@@ -199,6 +205,13 @@ class RecipeNutritionPanel extends StatelessWidget {
                   coverage: _coverage(MacroField.carbs),
                   percent: intakePercents['carbs'],
                 ),
+                if (sugars != null)
+                  _SubLine(
+                    label: 'dont sucres',
+                    value: sugars!,
+                    coverage: _coverage(MacroField.sugars),
+                    percent: intakePercents['sugars'],
+                  ),
                 _MacroLine(
                   label: context.strings.fats,
                   value: nutrition.fats,
@@ -208,6 +221,13 @@ class RecipeNutritionPanel extends StatelessWidget {
                   coverage: _coverage(MacroField.fats),
                   percent: intakePercents['fats'],
                 ),
+                if (saturatedFats != null)
+                  _SubLine(
+                    label: 'dont acides gras saturés',
+                    value: saturatedFats!,
+                    coverage: _coverage(MacroField.saturatedFats),
+                    percent: intakePercents['saturatedFats'],
+                  ),
                 const Divider(height: 22),
                 _NutrientLine(
                   label: context.strings.fiber,
@@ -436,17 +456,24 @@ class _MacroLine extends StatelessWidget {
           Row(
             children: [
               Expanded(
+                flex: 3,
                 child: Text(
                   label,
                   style: Theme.of(context).textTheme.bodyMedium
                       ?.copyWith(fontWeight: FontWeight.w800),
                 ),
               ),
-              _ValueText(
-                value: value,
-                unit: unit,
-                coverage: coverage,
-                percent: percent,
+              Flexible(
+                flex: 2,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: _ValueText(
+                    value: value,
+                    unit: unit,
+                    coverage: coverage,
+                    percent: percent,
+                  ),
+                ),
               ),
             ],
           ),
@@ -488,22 +515,69 @@ class _NutrientLine extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
+            flex: 3,
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium
                   ?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
-          _ValueText(
-            value: value,
-            unit: unit,
-            coverage: coverage,
-            percent: percent,
+          Flexible(
+            flex: 2,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: _ValueText(
+                value: value,
+                unit: unit,
+                coverage: coverage,
+                percent: percent,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+/// Sous-ligne indentée (sucres, AGS).
+class _SubLine extends StatelessWidget {
+  const _SubLine({
+    required this.label,
+    required this.value,
+    this.coverage,
+    this.percent,
+  });
+
+  final String label;
+  final double value;
+  final double? coverage;
+  final double? percent;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(left: 14, bottom: 6),
+    child: Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ),
+        Flexible(
+          flex: 2,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: _ValueText(
+              value: value,
+              unit: 'g',
+              coverage: coverage,
+              percent: percent,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 /// Valeur honnête : « non renseigné » sans donnée, couverture partielle
@@ -527,6 +601,7 @@ class _ValueText extends StatelessWidget {
     if (coverage == 0) {
       return Text(
         context.strings.nutritionNotProvided,
+        textAlign: TextAlign.end,
         style: theme.textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
       );
     }
@@ -548,6 +623,7 @@ class _ValueText extends StatelessWidget {
         if (coverage != null && coverage! > 0 && coverage! < 0.95)
           Text(
             context.strings.nutritionPartialCoverage((coverage! * 100).round()),
+            textAlign: TextAlign.end,
             style: theme.textTheme.labelSmall?.copyWith(
               fontStyle: FontStyle.italic,
             ),
@@ -581,10 +657,12 @@ class NutriScoreBadge extends StatelessWidget {
       message: note ?? '',
       child: Row(
         children: [
-          Text(
-            context.strings.nutriScoreTitle,
-            style: theme.textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.w800,
+          Flexible(
+            child: Text(
+              context.strings.nutriScoreTitle,
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
           const SizedBox(width: 10),
