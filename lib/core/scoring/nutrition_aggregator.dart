@@ -62,6 +62,7 @@ class NutritionProcessContext {
     this.groupFor,
     this.factorFor,
     this.methodForLine,
+    this.measuredCookedFor,
   });
 
   /// Densité et masses unitaires d'un ingrédient (conversion d'unités).
@@ -72,6 +73,11 @@ class NutritionProcessContext {
 
   /// Facteurs moyens (groupe, mode).
   final CookingFactorLookup? factorFor;
+
+  /// Profil cuit mesuré (variante Ciqual) pour un ingrédient et un mode
+  /// de cuisson — null si la table n'en contient pas.
+  final NutritionProfile? Function(String ingredientId, CookingMethod method)?
+  measuredCookedFor;
 
   /// Mode de cuisson résolu d'une ligne (explicite puis inféré depuis
   /// les étapes) avec l'indicateur « inféré ».
@@ -96,6 +102,7 @@ class IngredientContribution {
     this.method,
     this.methodInferred = false,
     this.factorApplied = false,
+    this.measuredCooked = false,
     this.alreadyCooked = false,
     this.quantityAssumption,
     this.sourceFoodName,
@@ -120,6 +127,10 @@ class IngredientContribution {
 
   /// Vrai si des facteurs de rendement/rétention ont été appliqués.
   final bool factorApplied;
+
+  /// Vrai si la composition cuite est MESURÉE (variante Ciqual) plutôt
+  /// qu'estimée par facteurs de rétention.
+  final bool measuredCooked;
 
   /// Vrai si le profil source décrit déjà un aliment cuit (aucun
   /// facteur appliqué pour éviter le double comptage).
@@ -349,23 +360,46 @@ abstract final class NutritionAggregator {
         warnings.add('already_cooked:$id');
       }
 
-      final f = grams / 100.0;
-      final fatRetention = factor?.fatRetention ?? 1;
-      final uptake = (factor?.fatUptakeG ?? 0) * f;
-      final fatsBefore = profile.fats * f;
-      final fatsAfter = fatsBefore * fatRetention + uptake;
-      final energy = profile.energyKcal * f + (fatsAfter - fatsBefore) * 9;
-
-      // Masse après procédé, bornée par la matière sèche.
-      var lineCooked = grams * (factor?.yieldFactor ?? 1) + uptake;
-      final waterRaw = profile.waterContent == null
-          ? null
-          : profile.waterContent! * f;
+      // Profil cuit MESURÉ (variante Ciqual « bouilli », « rôti »…) :
+      // préféré aux facteurs de rétention génériques ; seul le
+      // rendement massique reste une estimation.
+      NutritionProfile? measured;
+      if (method != null && method.isHeated && !alreadyCooked) {
+        final m = process?.measuredCookedFor?.call(id, method);
+        if (m != null && m.recordCount > 0) measured = m;
+      }
+      final src = measured ?? profile;
+      final double lineCooked;
+      final double f; // facteur appliqué au profil source (÷ 100)
+      final double fatsAfter;
+      final double energy;
       double? lineWater;
-      if (waterRaw != null) {
-        final dry = grams - waterRaw + (fatsAfter - fatsBefore);
-        if (lineCooked < dry) lineCooked = dry;
-        lineWater = lineCooked - dry;
+      var fatRetention = 1.0;
+      if (measured != null) {
+        lineCooked = grams * (factor?.yieldFactor ?? 1);
+        f = lineCooked / 100.0;
+        fatsAfter = src.fats * f;
+        energy = src.energyKcal * f;
+        final w = src.waterContent;
+        if (w != null) lineWater = w * f;
+      } else {
+        f = grams / 100.0;
+        fatRetention = factor?.fatRetention ?? 1;
+        final uptake = (factor?.fatUptakeG ?? 0) * f;
+        final fatsBefore = profile.fats * f;
+        fatsAfter = fatsBefore * fatRetention + uptake;
+        energy = profile.energyKcal * f + (fatsAfter - fatsBefore) * 9;
+        // Masse après procédé, bornée par la matière sèche.
+        var cooked = grams * (factor?.yieldFactor ?? 1) + uptake;
+        final waterRaw = profile.waterContent == null
+            ? null
+            : profile.waterContent! * f;
+        if (waterRaw != null) {
+          final dry = grams - waterRaw + (fatsAfter - fatsBefore);
+          if (cooked < dry) cooked = dry;
+          lineWater = cooked - dry;
+        }
+        lineCooked = cooked;
       }
       rawMass += grams;
       cookedMass += lineCooked;
@@ -373,37 +407,46 @@ abstract final class NutritionAggregator {
       if (hasData) {
         withData++;
         totals.energy += energy;
-        totals.proteins += profile.proteins * f;
-        totals.carbs += profile.carbs * f;
-        totals.sugars += profile.sugars * f;
+        totals.proteins += src.proteins * f;
+        totals.carbs += src.carbs * f;
+        totals.sugars += src.sugars * f;
         totals.fats += fatsAfter;
-        totals.saturatedFats += profile.saturatedFats * f * fatRetention;
-        totals.fiber += profile.fiber * f;
-        totals.salt += profile.salt * f;
+        totals.saturatedFats += src.saturatedFats * f * fatRetention;
+        totals.fiber += src.fiber * f;
+        totals.salt += src.salt * f;
+        // Alcool : ≈ 40 % retenu après cuisson (ordre de grandeur USDA
+        // pour mijotage/cuisson au four de 15–30 min).
         totals.alcohol +=
-            profile.alcohol *
+            src.alcohol *
             f *
-            (method != null && method.isHeated && !alreadyCooked ? 0.4 : 1);
+            (measured == null &&
+                    method != null &&
+                    method.isHeated &&
+                    !alreadyCooked
+                ? 0.4
+                : 1);
         if (lineWater != null) {
           waterCooked += lineWater;
           waterKnownMass += lineCooked;
         }
-        for (final micro in profile.micronutrients.values) {
-          final r = factor?.retentionFor(micro.tag) ?? 1;
+        for (final micro in src.micronutrients.values) {
+          final r = measured != null
+              ? 1.0
+              : factor?.retentionFor(micro.tag) ?? 1;
           totals.micros[micro.tag] =
               (totals.micros[micro.tag] ?? 0) + micro.value * f * r;
           totals.microNames.putIfAbsent(micro.tag, () => micro.name);
           totals.microUnits.putIfAbsent(micro.tag, () => micro.unit);
         }
-        for (final field in profile.knownFields) {
+        for (final field in src.knownFields) {
           knownMass[field] = (knownMass[field] ?? 0) + grams;
         }
-        confidenceWeighted += profile.confidence * grams;
+        confidenceWeighted += src.confidence * grams;
         confidenceMass += grams;
-        recordCountSum += profile.recordCount;
-        if (profile.energyEstimated) anyEnergyEstimated = true;
+        recordCountSum += src.recordCount;
+        if (src.energyEstimated) anyEnergyEstimated = true;
       }
-      if (factor != null) processApplied = true;
+      if (factor != null || measured != null) processApplied = true;
 
       contributions.add(
         IngredientContribution(
@@ -416,7 +459,8 @@ abstract final class NutritionAggregator {
           hasData: hasData,
           method: method,
           methodInferred: resolvedMethod?.inferred ?? false,
-          factorApplied: factor != null,
+          factorApplied: factor != null || measured != null,
+          measuredCooked: measured != null,
           alreadyCooked: alreadyCooked,
           quantityAssumption: quantity.assumption,
           sourceFoodName: profile.sourceFoodName,

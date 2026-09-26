@@ -19,6 +19,7 @@ name_regex,category2_regex,ph,components,confidence,note
 ^raisin,,3.8,SM_CIT=0.5,0.5,raisin (acide tartrique assimilé)
 ^ananas,,3.5,SM_CIT=0.8,0.5,ananas
 ^mangue,,4.0,,0.5,mangue
+^fruit de la passion,,3.0,SM_CIT=3.0,0.5,fruit de la passion : très acide
 ^banane,,4.8,POLY_INULIN=0.5,0.5,banane
 ^kiwi,,3.3,SM_CIT=1.0,0.5,kiwi
 ^rhubarbe,,3.2,,0.5,rhubarbe (acide oxalique)
@@ -77,7 +78,8 @@ name_regex,category2_regex,ph,components,confidence,note
 ^vinaigre de riz,,3.0,SM_ACET=4.5,0.6,vinaigre de riz ≈ 4,5 % d'acide acétique
 ^vinaigre( |$)|^vinaigre (blanc|de vin|de cidre|balsamique),,2.8,SM_ACET=6,0.6,vinaigre ≈ 6 % d'acide acétique
 ^acide citrique,,2.2,SM_CIT=99.5,0.8,acide citrique (pH d'une solution à 1 %)
-^acide tartrique|^creme de tartre,,2.3,,0.6,acide tartrique
+^acide tartrique,,2.3,,0.6,acide tartrique
+^creme de tartre,,3.6,,0.6,bitartrate de potassium (acide faible)
 ^acide ascorbique,,2.8,,0.6,acide ascorbique
 ^sucre inverti,,4.5,SM_GLU_MONO=37|SM_FRUCTOSE=37,0.6,sucre inverti
 ^sirop de glucose|^sirop de ble|^sirop de riz|^sirop de mais$,,5.0,SM_GLU_MONO=40,0.5,sirop de glucose (DE moyen)

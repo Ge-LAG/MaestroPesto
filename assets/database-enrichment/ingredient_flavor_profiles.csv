@@ -36,7 +36,7 @@ ING-PLANT-OLIVE-000001,salty:1.00|fatty:0.50|fermented:0.50|bitter:0.50|sour:0.3
 ING-PLANT-MANGUE-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-BANANE-000001,fruity:0.80|tropical:0.72|sweet:0.70|dairy:0.30,sweet,0.5,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,banane : acétate d'isoamyle ; composés mesurés Phase 3
 ING-PLANT-ANANAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|floral:0.68|sour:0.46,sweet,0.7,measured,0.75,MAESTRO_INTERNAL|CULINARY_EXPERT|FLAVORDB2|PUBCHEM|CIQUAL,fruit tropical ; composés mesurés Phase 3
-ING-PLANT-FRUITDELAPAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
+ING-PLANT-FRUITDELAPAS-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.67|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-PAPAYE-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-GOYAVE-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
 ING-PLANT-LITCHI-000001,tropical:0.90|fruity:0.80|sweet:0.70|sour:0.40|floral:0.40,sweet,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,fruit tropical
@@ -434,7 +434,7 @@ ING-FERMENT-LEVAINPTE-000001,yeasty:0.90|fermented:0.60|sour:0.40|malty:0.20,sav
 ING-TECH-ACIDECITRIQU-000001,sour:1.00,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
 ING-TECH-ACIDEASCORBI-000001,sour:0.90,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
 ING-TECH-ACIDETARTRIQ-000001,sour:0.96,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
-ING-TECH-CRMEDETARTRE-000001,sour:0.96,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
+ING-TECH-CRMEDETARTRE-000001,sour:0.90,both,0.3,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT,acidulant
 ING-TECH-VINAIGREBLAN-000001,sour:0.95|pungent:0.40|fermented:0.30|fruity:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigre : acide acétique
 ING-TECH-VINAIGREDEVI-000001,sour:0.95|pungent:0.40|fermented:0.30|fruity:0.20,both,0.7,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,vinaigre : acide acétique
 ING-TECH-VINAIGREBALS-000001,sour:0.75|sweet:0.60|caramel:0.50|fruity:0.40|woody:0.30,both,0.8,curated,0.6,MAESTRO_INTERNAL|CULINARY_EXPERT|CIQUAL,balsamique

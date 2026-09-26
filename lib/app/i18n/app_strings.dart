@@ -183,6 +183,96 @@ class AppStrings {
   String get ingredientBadCombinationWarning =>
       'Cet ingrédient crée une mauvaise combinaison avec la recette.';
   String get flavorIncompatibilitiesLabel => 'Incompatibilités aromatiques';
+
+  // Phase 10 — analyse métier (nutrition, arômes, physico-chimie).
+  String get ruleStatusMet => 'Conditions réunies';
+  String get ruleStatusPartial => 'Conditions partiellement réunies';
+  String get ruleStatusNotMet => 'Conditions non réunies';
+  String get ruleStatusUnknown => 'À vérifier (données insuffisantes)';
+  String get functionalExpectedOutcome => 'Comportement attendu';
+  String get functionalAdvice => 'Conseil de formulation';
+  String get analysisTitle => 'Analyse métier';
+  String get analysisLoading => 'Analyse de la recette…';
+  String get physchemTitle => 'Analyse physico-chimique';
+  String get physchemComposition => 'Composition estimée du mélange';
+  String get physchemWater => 'Eau';
+  String get physchemFat => 'Lipides';
+  String get physchemProtein => 'Protéines';
+  String get physchemSugars => 'Sucres';
+  String get physchemStarch => 'Amidon';
+  String get physchemSalt => 'Sel';
+  String get physchemAlcohol => 'Alcool';
+  String get physchemDryMatter => 'Matière sèche';
+  String get physchemIndicators => 'Indicateurs';
+  String get physchemPh => 'pH estimé';
+  String get physchemAw => 'Activité de l’eau (aw)';
+  String get physchemBrix => 'Brix (phase aqueuse)';
+  String get physchemOilPhase => 'Phase grasse (émulsion)';
+  String get physchemEstimateNote =>
+      'Estimations d’ordre de grandeur (sans pouvoir tampon ni '
+      'évaporation) — pour évaluer les conditions des règles, pas des '
+      'mesures.';
+  String get physchemProcess => 'Procédé détecté';
+  String get physchemNoStep =>
+      'Aucune opération reconnue dans les étapes : décrivez les cuissons '
+      '(ex. « Cuire 20 min à 180 °C ») pour une analyse du procédé.';
+  String get physchemRulesWarnings => 'Points de vigilance';
+  String get physchemRulesExpected => 'Comportements attendus';
+  String get physchemRulesToCheck => 'À vérifier';
+  String get physchemInsights => 'Notes expertes';
+  String get physchemNoRule =>
+      'Aucune règle physico-chimique ne s’applique à ce mélange.';
+  String physchemCoverage(int pct) =>
+      'Composition connue pour $pct % de la masse';
+  String get physchemAffected => 'Ingrédients concernés';
+  String get flavorHarmony => 'Harmonie aromatique';
+  String get flavorBridges => 'Ponts aromatiques';
+  String get flavorDominant => 'Arômes dominants';
+  String get flavorTasteBalance => 'Équilibre des saveurs';
+  String get flavorSuggestions => 'Accords suggérés';
+  String get flavorSuggestionsHint =>
+      'Ingrédients du référentiel qui s’accordent le mieux avec la recette.';
+  String get flavorEvidenceObserved => 'Accord observé (données Phase 3)';
+  String get flavorEvidenceCurated => 'Accord culinaire reconnu';
+  String get flavorEvidencePredicted =>
+      'Prédiction par profils sensoriels (sans accord documenté)';
+  String get flavorPredictedLegend => 'Hachuré : prédiction';
+  String flavorConfidence(double c) => 'Confiance ${(c * 100).round()} %';
+  String flavorMore(int n) => '+ $n autres ingrédients liés non affichés';
+  String get flavorUnlikely => 'Peu probable (prédiction)';
+  String get nutriScoreTitle => 'Nutri-Score estimé';
+  String get nutritionReferenceIntakes => '% des apports de référence';
+  String get nutritionClaims => 'Allégations possibles (indicatif)';
+  String get nutritionHighlights => 'Points clés';
+  String get nutritionEnergySplit => 'Répartition de l’énergie';
+  String get nutritionPerContribution => 'Détail par ingrédient';
+  String get nutritionNotProvided => 'non renseigné';
+  String nutritionPartialCoverage(int pct) => 'données pour $pct % de la masse';
+  String nutritionServingMass(int g) => 'Portion ≈ $g g (plat cuit)';
+  String nutritionDishMass(int raw, int cooked) =>
+      'Masse crue $raw g → plat estimé $cooked g';
+  String get nutritionProcessApplied =>
+      'Cuisson prise en compte (rendement et rétention des vitamines)';
+  String get nutritionMeasuredCooked => 'valeurs cuites mesurées (Ciqual)';
+  String get nutritionEstimatedCooked => 'rétention estimée par groupe';
+  String get nutritionAlreadyCooked => 'ingrédient déjà cuit';
+  String get nutritionNoData => 'aucune donnée';
+  String get nutritionUnlinked => 'non lié au référentiel';
+  String get nutritionWarningsTitle => 'Limites du calcul';
+  String nutritionWarningUnparsed(String label) =>
+      '« $label » : quantité non interprétable, ignorée du calcul.';
+  String nutritionWarningUnlinked(int n) => n > 1
+      ? '$n ingrédients non liés au référentiel : comptés dans la masse, '
+            'pas dans les nutriments.'
+      : '1 ingrédient non lié au référentiel : compté dans la masse, pas '
+            'dans les nutriments.';
+  String get nutritionWarningSubrecipe =>
+      'Sous-recette non développée : non comptée.';
+  String nutritionWarningAssumed(String label, String assumption) =>
+      '« $label » : $assumption.';
+  String get cookingMethodField => 'Cuisson';
+  String get cookingMethodAuto => 'Auto (étapes)';
+  String get unitField => 'Unité';
 }
 
 const appStrings = AppStrings();

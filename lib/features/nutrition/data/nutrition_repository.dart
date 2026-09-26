@@ -31,6 +31,7 @@ import 'package:meta/meta.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/models/nutrient_catalog.dart';
 import '../../../core/models/nutrition_profile.dart';
+import '../../../core/models/process_models.dart';
 import '../../../core/scoring/nutrition_aggregator.dart';
 import '../../recipes/domain/recipe.dart';
 
@@ -91,14 +92,23 @@ class NutritionRepository {
     NutritionProcessContext? process,
   }) async {
     final cache = <String, NutritionProfile?>{};
+    final byState = <String, Map<String, List<NutritionRecord>>>{};
     final sources = <String, NutritionSource>{};
     for (final ingredient in ingredients) {
       final id = ingredient.ingredientId;
       if (id == null || id.isEmpty || cache.containsKey(id)) continue;
-      final records = await _loadRecords(id, stateId: stateId);
+      final all = await (_db.select(
+        _db.nutritionRecords,
+      )..where((t) => t.ingredientId.equals(id))).get();
+      final records = selectState(all, stateId);
       for (final s in _sourcesOf(records)) {
         sources.putIfAbsent(s.id, () => s);
       }
+      final states = <String, List<NutritionRecord>>{};
+      for (final r in all) {
+        states.putIfAbsent(r.ingredientStateId ?? 'raw', () => []).add(r);
+      }
+      byState[id] = states;
       if (records.isEmpty) {
         cache[id] = (await _ingredientExists(id))
             ? NutritionProfile.empty
@@ -107,17 +117,68 @@ class NutritionRepository {
         cache[id] = _aggregate(records);
       }
     }
+    // Profils cuits mesurés (variantes Ciqual) fournis au procédé.
+    final measuredCache = <String, NutritionProfile?>{};
+    NutritionProfile? measured(String id, CookingMethod method) {
+      return measuredCache.putIfAbsent('$id@${method.id}', () {
+        final states = byState[id];
+        if (states == null) return null;
+        for (final s in preferredStates(method)) {
+          final recs = states[s];
+          if (recs != null && recs.isNotEmpty) {
+            for (final r in recs) {
+              final sid = r.sourceId;
+              if (sid != null && sid.isNotEmpty) {
+                sources.putIfAbsent(
+                  sid,
+                  () => NutritionSource(
+                    id: sid,
+                    label: sourceLabel(sid),
+                    citation: r.notes,
+                  ),
+                );
+              }
+            }
+            return _aggregate(recs);
+          }
+        }
+        return null;
+      });
+    }
+
+    final context = process == null
+        ? null
+        : NutritionProcessContext(
+            unitDataFor: process.unitDataFor,
+            groupFor: process.groupFor,
+            factorFor: process.factorFor,
+            methodForLine: process.methodForLine,
+            measuredCookedFor: process.measuredCookedFor ?? measured,
+          );
     final aggregation = NutritionAggregator.aggregate(
       ingredients: ingredients,
       lookup: (id) => cache[id],
       servings: servings,
-      process: process,
+      process: context,
     );
     if (sources.isEmpty) return aggregation;
     final sorted = sources.values.toList()
       ..sort((a, b) => a.id.compareTo(b.id));
     return aggregation.withSources(sorted);
   }
+
+  /// États Ciqual acceptés pour un mode de cuisson, par préférence.
+  static List<String> preferredStates(CookingMethod method) => switch (method) {
+    CookingMethod.raw => const [],
+    CookingMethod.boiled => const ['boiled', 'cooked'],
+    CookingMethod.steamed => const ['steamed', 'boiled', 'cooked'],
+    CookingMethod.sauteed => const ['sauteed', 'grilled', 'cooked'],
+    CookingMethod.roasted => const ['roasted', 'cooked'],
+    CookingMethod.grilled => const ['grilled', 'sauteed', 'roasted', 'cooked'],
+    CookingMethod.fried => const ['fried'],
+    CookingMethod.stewed => const ['stewed', 'boiled', 'cooked'],
+    CookingMethod.baked => const ['roasted', 'cooked'],
+  };
 
   /// Libellé lisible d'un `source_id` (null → id brut affiché).
   @visibleForTesting
@@ -219,9 +280,26 @@ class NutritionRepository {
       [_Term('carbs')],
       [_Term('carbohydrates')],
     ],
+    // Sucres totaux : valeur déclarée, sinon somme des sucres
+    // individuels (le sucre blanc Phase 2 ne porte que SUCROSE).
     MacroField.sugars: [
       [_Term('sugar')],
       [_Term('sugars')],
+      [
+        _Term('sucrose'),
+        _Term('glucose'),
+        _Term('fructose'),
+        _Term('lactose'),
+        _Term('maltose'),
+      ],
+      [
+        _Term('sucs'),
+        _Term('glus'),
+        _Term('frus'),
+        _Term('lacs'),
+        _Term('mals'),
+        _Term('gals'),
+      ],
     ],
     MacroField.fats: [
       [_Term('fat')],
