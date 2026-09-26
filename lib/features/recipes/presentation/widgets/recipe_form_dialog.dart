@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
+import 'package:maestropesto/core/models/allergens.dart';
+import 'package:maestropesto/core/models/flavor_match.dart';
 import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/core/models/ingredient_summary.dart';
 import 'package:maestropesto/core/models/process_models.dart';
@@ -13,6 +17,8 @@ import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
 import 'package:maestropesto/features/ingredients/data/ingredients_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
+import 'package:maestropesto/features/flavor/presentation/widgets/flavor_compatibility_heatmap.dart';
+import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/ingredients/presentation/ingredients_picker_page.dart';
 
@@ -22,14 +28,18 @@ Future<Recipe?> showRecipeFormDialog({
   required String title,
   AppDatabase? db,
 }) {
-  return showDialog<Recipe>(
-    context: context,
-    builder: (context) => RecipeFormDialog(
-      recipe: recipe,
-      title: title,
-      db: db,
-      flavorRepository: db == null ? null : FlavorRepository(db),
-      functionalRepository: db == null ? null : FunctionalRepository(db),
+  // Refonte UX : éditeur pleine page (plus de dialogue exigu), avec
+  // aperçu d'analyse en direct.
+  return Navigator.of(context).push<Recipe>(
+    MaterialPageRoute<Recipe>(
+      fullscreenDialog: true,
+      builder: (context) => RecipeFormDialog(
+        recipe: recipe,
+        title: title,
+        db: db,
+        flavorRepository: db == null ? null : FlavorRepository(db),
+        functionalRepository: db == null ? null : FunctionalRepository(db),
+      ),
     ),
   );
 }
@@ -96,6 +106,13 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
   /// picker, chargées une seule fois par dialogue.
   List<IngredientSummary>? _pickerSummaries;
 
+  /// Aperçu d'analyse en direct (null sans base ou sans ingrédient lié)
+  /// et sa nutrition, recalculés 600 ms après la dernière frappe.
+  Future<RecipeAnalysis?>? _preview;
+  Future<NutritionAggregation?>? _previewNutrition;
+  Timer? _previewTimer;
+  final Set<Object> _watched = Set<Object>.identity();
+
   @override
   void initState() {
     super.initState();
@@ -159,12 +176,68 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     // Recette déjà liée à des ingrédients en conflit : montrer le
     // warning dès l'ouverture (pas seulement au prochain pick).
     _refreshCombinationWarning();
+    _servingsController.addListener(_schedulePreview);
+    _watchDrafts();
+    _setPreview();
+  }
+
+  /// Écoute les champs texte des lignes et des étapes (nouvelles lignes
+  /// comprises) pour rafraîchir l'aperçu.
+  void _watchDrafts() {
+    for (final d in _ingredients) {
+      if (_watched.add(d)) {
+        d.quantityController.addListener(_schedulePreview);
+        d.labelController.addListener(_schedulePreview);
+      }
+    }
+    for (final c in _stepControllers) {
+      if (_watched.add(c)) c.addListener(_schedulePreview);
+    }
+  }
+
+  void _schedulePreview() {
+    _previewTimer?.cancel();
+    _previewTimer = Timer(const Duration(milliseconds: 600), () {
+      if (mounted) setState(_setPreview);
+    });
+  }
+
+  /// Recalcul immédiat (ajout, suppression ou liaison d'une ligne).
+  void _refreshPreviewNow() {
+    _previewTimer?.cancel();
+    setState(_setPreview);
+  }
+
+  void _setPreview() {
+    final preview = _computePreview();
+    _preview = preview;
+    _previewNutrition = preview?.then((a) => a?.nutrition);
+  }
+
+  Future<RecipeAnalysis?>? _computePreview() {
+    final db = widget.db;
+    if (db == null) return null;
+    final list = _ingredients
+        .map((d) => d.toIngredient())
+        .where((i) => i.label.trim().isNotEmpty)
+        .toList();
+    if (!list.any((i) => i.ingredientId != null)) return null;
+    return RecipeAnalysisService(db).analyze(
+      ingredients: list,
+      steps: _stepControllers
+          .map((c) => c.text.trim())
+          .where((s) => s.isNotEmpty)
+          .toList(),
+      servings: _intValue(_servingsController, fallback: 1),
+      withSuggestions: false,
+    );
   }
 
   void _markManualNutritionEdited() => _manualNutritionEdited = true;
 
   @override
   void dispose() {
+    _previewTimer?.cancel();
     _titleController.dispose();
     _descriptionController.dispose();
     _tagsController.dispose();
@@ -255,11 +328,6 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
     );
   }
 
-  /// Vrai si au moins un draft est lié au référentiel Phase 1.
-  bool get _anyIngredientLinked => _ingredients.any(
-    (d) => d.ingredientId != null && d.ingredientId!.isNotEmpty,
-  );
-
   /// Agrégation nutritionnelle live des drafts (null sans DB ou sans
   /// ingrédient lié). [ingredients] permet de réutiliser la liste
   /// filtrée au moment de la sauvegarde.
@@ -341,6 +409,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
           draft.labelController.text = picked.canonicalNameFr;
           draft.ingredientId = picked.ingredientId;
         });
+        _refreshPreviewNow();
         await _refreshCombinationWarning();
         return;
       }
@@ -356,13 +425,15 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
       draft.labelController.text = picked.label;
       draft.ingredientId = picked.ingredientId;
     });
+    _refreshPreviewNow();
     await _refreshCombinationWarning();
   }
 
   /// Phase 09 (H4) — recalcul du warning après ajout/suppression d'un
   /// slot ingrédient (fire-and-forget, jamais bloquant).
   void _onIngredientsChanged() {
-    setState(() {});
+    _watchDrafts();
+    _refreshPreviewNow();
     _refreshCombinationWarning();
   }
 
@@ -445,104 +516,425 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      insetPadding: const EdgeInsets.all(18),
+    final strings = context.strings;
+    final db = widget.db;
+    return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 920, maxHeight: 780),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 16, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.title,
-                      style: Theme.of(context).textTheme.titleLarge
-                          ?.copyWith(fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
-                    tooltip: context.strings.close,
-                  ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.close),
+          tooltip: strings.close,
+        ),
+        title: Text(
+          widget.title,
+          style: Theme.of(context).textTheme.titleLarge
+              ?.copyWith(fontWeight: FontWeight.w800),
+        ),
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final wide = db != null && constraints.maxWidth >= 1100;
+          final form = Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(24),
+              children: [
+                if (db != null && !wide) ...[
+                  _LivePreviewStrip(future: _preview),
+                  const SizedBox(height: 18),
                 ],
-              ),
+                _BasicsSection(
+                  titleController: _titleController,
+                  descriptionController: _descriptionController,
+                  tagsController: _tagsController,
+                  servingsController: _servingsController,
+                  prepController: _prepController,
+                  cookController: _cookController,
+                ),
+                const SizedBox(height: 22),
+                _IngredientsSection(
+                  ingredients: _ingredients,
+                  onPickIngredient: _pickIngredient,
+                  onChanged: _onIngredientsChanged,
+                  onEdited: _schedulePreview,
+                ),
+                if (_combinationWarning != null) ...[
+                  const SizedBox(height: 8),
+                  _CombinationWarningBanner(message: _combinationWarning!),
+                ],
+                const SizedBox(height: 22),
+                _ImagesSection(
+                  images: _images,
+                  onAddImage: _pickPhoto,
+                  onChanged: () => setState(() {}),
+                ),
+                const SizedBox(height: 22),
+                _StepsSection(
+                  controllers: _stepControllers,
+                  onChanged: () {
+                    _watchDrafts();
+                    _refreshPreviewNow();
+                  },
+                ),
+                const SizedBox(height: 22),
+                _NutritionSection(
+                  energyController: _energyController,
+                  proteinsController: _proteinsController,
+                  carbsController: _carbsController,
+                  fatsController: _fatsController,
+                  fiberController: _fiberController,
+                  saltController: _saltController,
+                  autoFuture: _previewNutrition,
+                ),
+              ],
             ),
-            const Divider(height: 1),
-            Expanded(
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  padding: const EdgeInsets.all(24),
+          );
+          final formArea = Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 920),
+              child: form,
+            ),
+          );
+          return Column(
+            children: [
+              Expanded(
+                child: wide
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(child: formArea),
+                          const VerticalDivider(width: 1),
+                          SizedBox(
+                            width: 380,
+                            child: _LivePreviewPanel(future: _preview),
+                          ),
+                        ],
+                      )
+                    : formArea,
+              ),
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.all(18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    _BasicsSection(
-                      titleController: _titleController,
-                      descriptionController: _descriptionController,
-                      tagsController: _tagsController,
-                      servingsController: _servingsController,
-                      prepController: _prepController,
-                      cookController: _cookController,
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(strings.cancel),
                     ),
-                    const SizedBox(height: 22),
-                    _IngredientsSection(
-                      ingredients: _ingredients,
-                      onPickIngredient: _pickIngredient,
-                      onChanged: _onIngredientsChanged,
-                    ),
-                    if (_combinationWarning != null) ...[
-                      const SizedBox(height: 8),
-                      _CombinationWarningBanner(message: _combinationWarning!),
-                    ],
-                    const SizedBox(height: 22),
-                    _ImagesSection(
-                      images: _images,
-                      onAddImage: _pickPhoto,
-                      onChanged: () => setState(() {}),
-                    ),
-                    const SizedBox(height: 22),
-                    _StepsSection(
-                      controllers: _stepControllers,
-                      onChanged: () => setState(() {}),
-                    ),
-                    const SizedBox(height: 22),
-                    _NutritionSection(
-                      energyController: _energyController,
-                      proteinsController: _proteinsController,
-                      carbsController: _carbsController,
-                      fatsController: _fatsController,
-                      fiberController: _fiberController,
-                      saltController: _saltController,
-                      autoFuture: widget.db != null && _anyIngredientLinked
-                          ? _autoNutrition()
-                          : null,
+                    const SizedBox(width: 10),
+                    FilledButton.icon(
+                      onPressed: _save,
+                      icon: const Icon(Icons.save_outlined),
+                      label: Text(strings.save),
                     ),
                   ],
                 ),
               ),
-            ),
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Aperçu en direct (colonne droite de l'éditeur) : énergie, macros,
+/// Nutri-Score, harmonie, allergènes et points d'attention.
+class _LivePreviewPanel extends StatelessWidget {
+  const _LivePreviewPanel({required this.future});
+
+  final Future<RecipeAnalysis?>? future;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    final theme = Theme.of(context);
+    return ColoredBox(
+      color: theme.colorScheme.surface,
+      child: FutureBuilder<RecipeAnalysis?>(
+        future: future,
+        builder: (context, snapshot) {
+          final waiting = snapshot.connectionState == ConnectionState.waiting;
+          final analysis = snapshot.data;
+          return ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              Row(
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.strings.cancel),
+                  const Icon(Icons.insights_outlined, size: 19),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      strings.editorPreviewTitle,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 10),
-                  FilledButton.icon(
-                    onPressed: _save,
-                    icon: const Icon(Icons.save_outlined),
-                    label: Text(context.strings.save),
-                  ),
+                  if (waiting && future != null)
+                    const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
                 ],
               ),
+              const SizedBox(height: 12),
+              if (future == null || (analysis == null && !waiting))
+                Text(
+                  strings.editorPreviewEmpty,
+                  style: theme.textTheme.bodySmall,
+                )
+              else if (analysis == null)
+                Text(
+                  strings.editorPreviewUpdating,
+                  style: theme.textTheme.bodySmall,
+                )
+              else
+                ..._previewContent(context, analysis),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+List<Widget> _previewContent(BuildContext context, RecipeAnalysis analysis) {
+  final strings = context.strings;
+  final theme = Theme.of(context);
+  final agg = analysis.nutrition;
+  final p = agg.profilePerServing;
+  final flavor = analysis.flavor;
+  final warnings = [
+    for (final a in analysis.alerts)
+      if (a.severity == FunctionalSeverity.warning ||
+          a.severity == FunctionalSeverity.danger)
+        a,
+  ];
+  final infos = [
+    for (final a in analysis.alerts)
+      if (a.severity == FunctionalSeverity.info) a,
+  ];
+  String short(FunctionalAlert a) {
+    final text = (a.expectedOutcome ?? a.title).trim();
+    final colon = text.indexOf(' : ');
+    return colon > 8 ? text.substring(0, colon) : text;
+  }
+
+  Widget section(String title) => Padding(
+    padding: const EdgeInsets.only(top: 16, bottom: 6),
+    child: Text(
+      title,
+      style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+    ),
+  );
+  final allergens = analysis.allergens.keys.toList()
+    ..sort((a, b) => allergenRank(a).compareTo(allergenRank(b)));
+
+  return [
+    if (agg.hasData) ...[
+      Text(
+        '${fmtNum(p.energyKcal, 0)} kcal',
+        style: theme.textTheme.headlineMedium?.copyWith(
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      Text(strings.synthesisPerServing, style: theme.textTheme.labelSmall),
+      const SizedBox(height: 8),
+      Text(
+        '${strings.proteins} ${fmtAuto(p.proteins)} g · '
+        '${strings.carbs} ${fmtAuto(p.carbs)} g · '
+        '${strings.fats} ${fmtAuto(p.fats)} g',
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
+      const SizedBox(height: 12),
+      NutriScoreBadge(
+        result: analysis.feedback.nutriScore,
+        note: analysis.feedback.nutriScoreNote,
+      ),
+    ] else
+      Text(strings.synthesisNoNutrition, style: theme.textTheme.bodySmall),
+    if (flavor != null) ...[
+      section(strings.flavorHarmony),
+      Builder(
+        builder: (context) {
+          final match = FlavorMatch(
+            ingredientAId: '',
+            combinationSize: 2,
+            overallScore: flavor.harmony,
+          );
+          return Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: flavorMatchColor(match),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  fmtNum(flavor.harmony, 2),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                flavorMatchLabel(strings, match),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    ],
+    section(strings.allergensContains),
+    Text(
+      allergens.isEmpty
+          ? strings.allergensNone
+          : allergens.map(allergenLabelFr).join(', '),
+      style: theme.textTheme.bodySmall?.copyWith(
+        color: allergens.isEmpty
+            ? theme.colorScheme.onSurfaceVariant
+            : const Color(0xFFB85C45),
+        fontWeight: allergens.isEmpty ? null : FontWeight.w800,
+      ),
+    ),
+    if (warnings.isNotEmpty || infos.isNotEmpty) ...[
+      section(strings.synthesisAttention),
+      for (final a in warnings)
+        _PreviewLine(
+          icon: Icons.warning_amber_rounded,
+          warn: true,
+          text: short(a),
+        ),
+      for (final a in infos.take(3))
+        _PreviewLine(icon: Icons.info_outline, text: short(a)),
+    ],
+  ];
+}
+
+class _PreviewLine extends StatelessWidget {
+  const _PreviewLine({
+    required this.icon,
+    required this.text,
+    this.warn = false,
+  });
+
+  final IconData icon;
+  final String text;
+  final bool warn;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            size: 15,
+            color: warn ? const Color(0xFFD97B41) : theme.colorScheme.primary,
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Aperçu compact (écrans étroits) en tête du formulaire.
+class _LivePreviewStrip extends StatelessWidget {
+  const _LivePreviewStrip({required this.future});
+
+  final Future<RecipeAnalysis?>? future;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    final theme = Theme.of(context);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: FutureBuilder<RecipeAnalysis?>(
+          future: future,
+          builder: (context, snapshot) {
+            final analysis = snapshot.data;
+            if (future == null || analysis == null) {
+              return Row(
+                children: [
+                  const Icon(Icons.insights_outlined, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      future == null
+                          ? strings.editorPreviewEmpty
+                          : strings.editorPreviewUpdating,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              );
+            }
+            final agg = analysis.nutrition;
+            final grade = analysis.feedback.nutriScore?.grade;
+            final warnings = analysis.alerts
+                .where(
+                  (a) =>
+                      a.severity == FunctionalSeverity.warning ||
+                      a.severity == FunctionalSeverity.danger,
+                )
+                .length;
+            final allergens = analysis.allergens.keys.toList()
+              ..sort((a, b) => allergenRank(a).compareTo(allergenRank(b)));
+            final parts = [
+              if (agg.hasData)
+                '${fmtNum(agg.profilePerServing.energyKcal, 0)} kcal / '
+                    '${strings.synthesisPerServing.replaceFirst('par ', '')}',
+              if (grade != null) 'Nutri-Score $grade',
+              if (analysis.flavor != null)
+                '${strings.flavorHarmony} ${fmtNum(analysis.flavor!.harmony, 2)}',
+              if (warnings > 0)
+                '$warnings point${warnings > 1 ? 's' : ''} de vigilance',
+              if (allergens.isNotEmpty)
+                '${strings.allergensContains} : '
+                    '${allergens.map(allergenLabelFr).join(', ')}',
+            ];
+            return Row(
+              children: [
+                const Icon(Icons.insights_outlined, size: 18),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    parts.join(' · '),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -676,10 +1068,14 @@ class _IngredientsSection extends StatelessWidget {
     required this.ingredients,
     required this.onChanged,
     required this.onPickIngredient,
+    this.onEdited,
   });
 
   final List<_IngredientDraft> ingredients;
   final VoidCallback onChanged;
+
+  /// Modification d'une liste déroulante (unité, cuisson, source).
+  final VoidCallback? onEdited;
   final Future<void> Function(int index) onPickIngredient;
 
   @override
@@ -702,15 +1098,28 @@ class _IngredientsSection extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: index == ingredients.length - 1 ? 0 : 10,
               ),
-              child: _IngredientEditorRow(
-                draft: ingredients[index],
-                onPickIngredient: (ctx) => onPickIngredient(index),
-                onRemove: ingredients.length == 1
-                    ? null
-                    : () {
-                        ingredients.removeAt(index).dispose();
-                        onChanged();
-                      },
+              // Chaque ligne dans son cadre : on voit où commence et où
+              // finit un ingrédient (quantité, nom, cuisson, source).
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFE6E2D8)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 14, 6, 10),
+                  child: _IngredientEditorRow(
+                    draft: ingredients[index],
+                    onEdited: onEdited,
+                    onPickIngredient: (ctx) => onPickIngredient(index),
+                    onRemove: ingredients.length == 1
+                        ? null
+                        : () {
+                            ingredients.removeAt(index).dispose();
+                            onChanged();
+                          },
+                  ),
+                ),
               ),
             ),
         ],
@@ -1058,9 +1467,11 @@ class _IngredientEditorRow extends StatelessWidget {
     required this.draft,
     required this.onRemove,
     required this.onPickIngredient,
+    this.onEdited,
   });
 
   final _IngredientDraft draft;
+  final VoidCallback? onEdited;
   final VoidCallback? onRemove;
 
   /// Callback Lot F — ouvre le picker ingrédients (cf. §6.3 du cahier Phase 09).
@@ -1093,7 +1504,7 @@ class _IngredientEditorRow extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               SizedBox(
-                width: 118,
+                width: 150,
                 child: DropdownButtonFormField<String>(
                   initialValue: draft.unit,
                   isExpanded: true,
@@ -1107,6 +1518,7 @@ class _IngredientEditorRow extends StatelessWidget {
                   onChanged: (value) {
                     if (value != null) {
                       draft.unit = value;
+                      onEdited?.call();
                     }
                   },
                 ),
@@ -1155,6 +1567,7 @@ class _IngredientEditorRow extends StatelessWidget {
               draft.cookingMethod = (value == null || value.isEmpty)
                   ? null
                   : value;
+              onEdited?.call();
             },
           ),
           DropdownButtonFormField<IngredientSource>(
@@ -1178,6 +1591,7 @@ class _IngredientEditorRow extends StatelessWidget {
             onChanged: (value) {
               if (value != null) {
                 draft.source = value;
+                onEdited?.call();
               }
             },
           ),
@@ -1212,7 +1626,7 @@ class _IngredientEditorRow extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(width: 214, child: fields[0]),
+                  SizedBox(width: 250, child: fields[0]),
                   const SizedBox(width: 10),
                   Expanded(child: fields[1]),
                 ],
@@ -1235,7 +1649,7 @@ class _IngredientEditorRow extends StatelessWidget {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: 214, child: fields[0]),
+            SizedBox(width: 250, child: fields[0]),
             const SizedBox(width: 10),
             Expanded(child: fields[1]),
             const SizedBox(width: 10),
