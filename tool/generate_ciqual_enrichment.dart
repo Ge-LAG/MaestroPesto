@@ -289,6 +289,7 @@ void main(List<String> args) {
   final matchType = <String, String>{};
   final matchNote = <String, String>{};
   final aliasedAlim = <String, String>{};
+  final excludedAlim = <String>{};
   final aliasRows = _readCsv(aliasPath);
   final aliasHeader = aliasRows.first;
   final aName = aliasHeader.indexOf('canonical_name_fr');
@@ -307,6 +308,13 @@ void main(List<String> args) {
       stderr.writeln('Alias : ingrédient inconnu du registre « $name »');
       exitCode = 1;
       return;
+    }
+    // « none » : aucun aliment Ciqual ne correspond (rapprochement par
+    // nom interdit, ex. « Graine de moutarde » ≠ moutarde condiment) ;
+    // l'ingrédient peut être couvert par une autre source ouverte.
+    if (row[aType].trim() == 'none') {
+      excludedAlim.add(id);
+      continue;
     }
     if (!alimNames.containsKey(code)) {
       stderr.writeln('Alias : code Ciqual inconnu $code pour « $name »');
@@ -648,6 +656,7 @@ void main(List<String> args) {
   // grillé, frit…) sont exportées avec leur état — l'agrégateur les
   // préfère aux facteurs de rétention génériques.
   final finalAlim = <String, String>{...resolvedAlim, ...aliasedAlim};
+  finalAlim.removeWhere((id, _) => excludedAlim.contains(id));
   final alimCore = <String, Set<String>>{
     for (final e in alimNames.entries) e.key: _coreTokens(e.value),
   };

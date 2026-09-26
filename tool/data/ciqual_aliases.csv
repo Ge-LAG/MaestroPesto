@@ -177,3 +177,27 @@ Moutarde de Dijon,11013,equivalent,moutarde
 Bière blonde (lager),5001,equivalent,bière cœur de marché 4-5°
 Maïs grain,20233,proxy,maïs doux cru (grain frais)
 Crème liquide entière,19417,equivalent,crème 30 % MG fluide UHT
+Bière sans alcool,5030,equivalent,bière sans alcool sans sucres ajoutés (et non bière forte)
+Fromage frais,12068,equivalent,fromage frais nature non allégé (et non fromage de tête)
+Noix crue,15005,proxy,noix cerneau séchée (pas d'entrée crue Ciqual ; et non noix de muscade)
+Cerise crue,13008,equivalent,cerise crue (et non cerise acérola)
+Pomme cuite,13175,equivalent,pomme rôtie/cuite au four
+Graine de moutarde,,none,aucune graine de moutarde dans Ciqual (le condiment moutarde ne convient pas) : source USDA
+Agar-agar,11085,equivalent,agar séché (forme poudre utilisée en cuisine)
+Yaourt nature,19593,equivalent,yaourt nature (et non yaourt à la grecque)
+Lait concentré non sucré,19026,equivalent,lait concentré sans sucres ajoutés entier
+Tomate fraîche,20276,equivalent,tomate ronde crue (et non tomate verte)
+Graine de courge,15064,equivalent,graine de courge séchée (et non chair de courge)
+Saumon,26036,equivalent,saumon d'élevage cru (et non saumon fumé)
+Chèvre frais,12805,equivalent,fromage de chèvre frais
+Confiture de fraise,31024,equivalent,confiture de fraise extra ou classique (non allégée)
+Confiture d'abricot,31037,equivalent,confiture d'abricot extra ou classique (non allégée)
+Marmelade d'orange,30888,proxy,marmelade d'agrumes non allégée (l'entrée orange de Ciqual est allégée en sucres)
+Chocolat noir 85%,,none,Ciqual n'a pas d'entrée au-delà de 70 % : source USDA (70-85 %)
+Fève sec,20518,equivalent,fève sèche
+Fève cuit,,none,pas de fève cuite dans Ciqual : source USDA
+Pois sec,20515,proxy,pois cassé sec (pois secs)
+Flageolet sec,20539,equivalent,haricot flageolet vert sec
+Spiruline,11086,equivalent,spiruline séchée (forme poudre)
+Shiitake,,none,Ciqual n'a que le shiitaké séché ou cuit : source USDA (cru)
+Gingembre,11006,equivalent,gingembre en poudre (forme sèche au référentiel)
