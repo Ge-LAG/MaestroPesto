@@ -98,9 +98,9 @@ void main() {
       expect(find.text('Explication ING-A × ING-B'), findsOneWidget);
     });
 
-    testWidgets('caps the matrix at 5 ingredients', (tester) async {
-      final many = [for (var i = 0; i < 7; i++) ing('ING-$i')];
-      expect(FlavorCompatibilityHeatmap.linkedIngredients(many).length, 5);
+    testWidgets('caps the matrix at 12 ingredients (Phase 10)', (tester) async {
+      final many = [for (var i = 0; i < 15; i++) ing('ING-$i')];
+      expect(FlavorCompatibilityHeatmap.linkedIngredients(many).length, 12);
     });
   });
 }

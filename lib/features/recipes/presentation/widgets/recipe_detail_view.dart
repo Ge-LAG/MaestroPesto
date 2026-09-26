@@ -3,14 +3,16 @@ import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/ingredient_detail.dart';
 import 'package:maestropesto/core/models/nutrition_profile.dart';
-import 'package:maestropesto/features/functional/presentation/widgets/functional_alert_card.dart';
+import 'package:maestropesto/features/analysis/presentation/flavor_analysis_card.dart';
+import 'package:maestropesto/features/analysis/presentation/nutrition_analysis_card.dart';
+import 'package:maestropesto/features/analysis/presentation/physchem_analysis_card.dart';
+import 'package:maestropesto/features/analysis/presentation/recipe_analysis_scope.dart';
 import 'package:maestropesto/features/ingredients/data/ingredient_mapping.dart';
 import 'package:maestropesto/features/ingredients/data/ingredients_repository.dart';
 import 'package:maestropesto/features/ingredients/presentation/ingredient_detail_card.dart';
 import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_metier_advisory_panel.dart';
-import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
 
@@ -40,6 +42,7 @@ class RecipeDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final db = this.db;
     final content = _RecipeContent(
       recipe: recipe,
       db: db,
@@ -48,102 +51,69 @@ class RecipeDetailView extends StatelessWidget {
       onDelete: onDelete,
     );
 
+    // Phase 10 : une seule analyse métier partagée par les cartes
+    // (nutrition avec procédé, accords aromatiques, physico-chimie).
+    final nutrition = NutritionAnalysisCard(recipe: recipe);
+    final analysisCards = db == null
+        ? const <Widget>[]
+        : <Widget>[
+            RecipeMetierAdvisoryPanel(recipe: recipe, db: db),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final flavor = FlavorAnalysisCard(recipe: recipe, db: db);
+                final physchem = PhysChemAnalysisCard(recipe: recipe);
+                if (constraints.maxWidth < 900) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [flavor, physchem],
+                  );
+                }
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: flavor),
+                    const SizedBox(width: 18),
+                    Expanded(child: physchem),
+                  ],
+                );
+              },
+            ),
+          ];
+
     final body = Padding(
       padding: EdgeInsets.all(isWide ? 32 : 20),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1180),
-        child: isWide
-            ? Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (isWide)
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(child: content),
                   const SizedBox(width: 22),
-                  SizedBox(
-                    width: 330,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (db != null)
-                          FunctionalAlertCard(
-                            ingredients: recipe.ingredients,
-                            db: db,
-                          ),
-                        _NutritionPanel(recipe: recipe, db: db),
-                        if (db != null)
-                          RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
-                      ],
-                    ),
-                  ),
+                  SizedBox(width: 360, child: nutrition),
                 ],
               )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  content,
-                  const SizedBox(height: 18),
-                  if (db != null)
-                    FunctionalAlertCard(
-                      ingredients: recipe.ingredients,
-                      db: db,
-                    ),
-                  _NutritionPanel(recipe: recipe, db: db),
-                  if (db != null)
-                    RecipeMetierAdvisoryPanel(recipe: recipe, db: db!),
-                ],
-              ),
+            else ...[
+              content,
+              const SizedBox(height: 18),
+              nutrition,
+            ],
+            ...analysisCards,
+          ],
+        ),
       ),
     );
 
-    return ColoredBox(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: scrollable ? SingleChildScrollView(child: body) : body,
-    );
-  }
-}
-
-/// Lot G (G2) — panneau nutrition : calcule depuis la DB métier quand
-/// [db] est fournie et que des ingrédients sont liés (badge « Calculé
-/// depuis N ingrédients sur M »), sinon affiche la valeur saisie
-/// manuellement (badge « Valeur saisie manuellement »).
-class _NutritionPanel extends StatelessWidget {
-  const _NutritionPanel({required this.recipe, required this.db});
-
-  final Recipe recipe;
-  final AppDatabase? db;
-
-  @override
-  Widget build(BuildContext context) {
-    final db = this.db;
-    if (db == null) {
-      return RecipeNutritionPanel(nutrition: recipe.nutrition);
-    }
-    return FutureBuilder(
-      future: NutritionRepository(db).aggregateForRecipe(
-        ingredients: recipe.ingredients,
-        servings: recipe.servings,
+    return RecipeAnalysisScope(
+      recipe: recipe,
+      db: db,
+      child: ColoredBox(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: scrollable ? SingleChildScrollView(child: body) : body,
       ),
-      builder: (context, snapshot) {
-        final aggregation = snapshot.data;
-        if (aggregation == null || !aggregation.hasData) {
-          return RecipeNutritionPanel(nutrition: recipe.nutrition);
-        }
-        final profile = aggregation.profilePerServing;
-        return RecipeNutritionPanel(
-          nutrition: NutritionSummary(
-            energyKcal: profile.energyKcal,
-            proteins: profile.proteins,
-            carbs: profile.carbs,
-            fats: profile.fats,
-            fiber: profile.fiber,
-            salt: profile.salt,
-          ),
-          computedFromIngredients: aggregation.withDataCount,
-          totalIngredients: aggregation.totalCount,
-          sources: aggregation.sources,
-          alcoholPerServing: profile.alcohol,
-          micronutrientsPerServing: profile.micronutrients,
-        );
-      },
     );
   }
 }

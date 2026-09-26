@@ -4,11 +4,13 @@ import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/core/models/ingredient_summary.dart';
+import 'package:maestropesto/core/models/process_models.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
+import 'package:maestropesto/core/scoring/quantity_converter.dart';
+import 'package:maestropesto/features/analysis/data/recipe_analysis_service.dart';
 import 'package:maestropesto/features/flavor/data/flavor_repository.dart';
 import 'package:maestropesto/features/functional/data/functional_repository.dart';
 import 'package:maestropesto/features/ingredients/data/ingredients_repository.dart';
-import 'package:maestropesto/features/nutrition/data/nutrition_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_photo.dart';
 import 'package:maestropesto/features/ingredients/presentation/ingredients_picker_page.dart';
@@ -86,7 +88,8 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
 
   /// Retour PO n°3 : vrai dès que l'utilisateur modifie un champ de la
   /// nutrition manuelle — sa saisie prime alors sur le calcul auto.
-  bool _manualNutritionEdited = false;
+  late bool _manualNutritionEdited =
+      widget.recipe.nutritionMode == RecipeNutritionMode.manual;
 
   /// Phase 09 (câblage ac-F-002) — cache des summaries Phase 1 pour le
   /// picker, chargées une seule fois par dialogue.
@@ -221,7 +224,10 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
       salt: _doubleValue(_saltController),
     );
     if (!_manualNutritionEdited && widget.db != null) {
-      final aggregation = await _autoNutrition(ingredients: ingredients);
+      final aggregation = await _autoNutrition(
+        ingredients: ingredients,
+        steps: steps,
+      );
       if (aggregation != null && aggregation.hasData) {
         final p = aggregation.profilePerServing;
         nutrition = NutritionSummary(
@@ -248,6 +254,9 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
         steps: steps,
         images: images,
         nutrition: nutrition,
+        nutritionMode: _manualNutritionEdited
+            ? RecipeNutritionMode.manual
+            : RecipeNutritionMode.computed,
       ),
     );
   }
@@ -262,6 +271,7 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
   /// filtrée au moment de la sauvegarde.
   Future<NutritionAggregation?> _autoNutrition({
     List<RecipeIngredient>? ingredients,
+    List<String>? steps,
   }) async {
     final db = widget.db;
     if (db == null) return null;
@@ -272,10 +282,20 @@ class _RecipeFormDialogState extends State<RecipeFormDialog> {
             .where((i) => i.label.trim().isNotEmpty)
             .toList();
     if (!list.any((i) => i.ingredientId != null)) return null;
-    return NutritionRepository(db).aggregateForRecipe(
+    // Phase 10 : même calcul que la fiche (cuissons, rendements,
+    // unités culinaires), sans les suggestions aromatiques.
+    final analysis = await RecipeAnalysisService(db).analyze(
       ingredients: list,
+      steps:
+          steps ??
+          _stepControllers
+              .map((c) => c.text.trim())
+              .where((s) => s.isNotEmpty)
+              .toList(),
       servings: _intValue(_servingsController, fallback: 1),
+      withSuggestions: false,
     );
+    return analysis.nutrition;
   }
 
   int _intValue(TextEditingController controller, {int fallback = 0}) {
@@ -1079,12 +1099,16 @@ class _IngredientEditorRow extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               SizedBox(
-                width: 84,
+                width: 118,
                 child: DropdownButtonFormField<String>(
                   initialValue: draft.unit,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: context.strings.unitField,
+                  ),
                   items: [
-                    DropdownMenuItem(value: 'g', child: Text('g')),
-                    DropdownMenuItem(value: 'ml', child: Text('ml')),
+                    for (final u in QuantityConverter.formUnits)
+                      DropdownMenuItem(value: u.id, child: Text(u.labelFr)),
                   ],
                   onChanged: (value) {
                     if (value != null) {
@@ -1119,8 +1143,29 @@ class _IngredientEditorRow extends StatelessWidget {
               ),
             ],
           ),
+          DropdownButtonFormField<String>(
+            initialValue: draft.cookingMethod ?? '',
+            isExpanded: true,
+            decoration: InputDecoration(
+              labelText: context.strings.cookingMethodField,
+            ),
+            items: [
+              DropdownMenuItem(
+                value: '',
+                child: Text(context.strings.cookingMethodAuto),
+              ),
+              for (final m in CookingMethod.values)
+                DropdownMenuItem(value: m.id, child: Text(m.labelFr)),
+            ],
+            onChanged: (value) {
+              draft.cookingMethod = (value == null || value.isEmpty)
+                  ? null
+                  : value;
+            },
+          ),
           DropdownButtonFormField<IngredientSource>(
             initialValue: draft.source,
+            isExpanded: true,
             decoration: InputDecoration(labelText: context.strings.sourceField),
             items: [
               DropdownMenuItem(
@@ -1160,20 +1205,51 @@ class _IngredientEditorRow extends StatelessWidget {
           );
         }
 
+        final remove = IconButton(
+          onPressed: onRemove,
+          icon: const Icon(Icons.delete_outline),
+          tooltip: context.strings.deleteAction,
+        );
+        // Largeur moyenne (dialogue standard) : quantité + ingrédient
+        // sur une ligne, cuisson + source + suppression sur la suivante.
+        if (constraints.maxWidth < 1000) {
+          return Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(width: 214, child: fields[0]),
+                  const SizedBox(width: 10),
+                  Expanded(child: fields[1]),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: fields[2]),
+                  const SizedBox(width: 10),
+                  Expanded(child: fields[3]),
+                  const SizedBox(width: 8),
+                  remove,
+                ],
+              ),
+            ],
+          );
+        }
+
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: 190, child: fields[0]),
+            SizedBox(width: 214, child: fields[0]),
             const SizedBox(width: 10),
             Expanded(child: fields[1]),
             const SizedBox(width: 10),
-            SizedBox(width: 150, child: fields[2]),
+            SizedBox(width: 170, child: fields[2]),
+            const SizedBox(width: 10),
+            SizedBox(width: 130, child: fields[3]),
             const SizedBox(width: 8),
-            IconButton(
-              onPressed: onRemove,
-              icon: const Icon(Icons.delete_outline),
-              tooltip: context.strings.deleteAction,
-            ),
+            remove,
           ],
         );
       },
@@ -1359,24 +1435,26 @@ class _IngredientDraft {
     required this.source,
     this.unit = 'g',
     this.ingredientId,
+    this.cookingMethod,
   });
 
   factory _IngredientDraft.fromIngredient(RecipeIngredient ingredient) {
-    // Retour PO 2026-08-26 : quantité « nombre + unité g/ml » — on
-    // sépare le suffixe connu, le reste (texte libre « 2 branches »)
+    // Phase 10 (ac-128) : quantité « nombre + unité culinaire ». Une
+    // unité reconnue est séparée du nombre ; un texte libre (« au goût »)
     // reste tel quel dans le champ.
     final quantity = ingredient.quantity.trim();
-    final match = RegExp(
-      r'^(\d+(?:[.,]\d+)?)\s*(g|ml)$',
-      caseSensitive: false,
-    ).firstMatch(quantity);
-    if (match != null) {
+    final parsed = QuantityConverter.parse(quantity);
+    final unitIds = {for (final u in QuantityConverter.formUnits) u.id};
+    if (parsed != null && unitIds.contains(parsed.$2.id)) {
       return _IngredientDraft(
         labelController: TextEditingController(text: ingredient.label),
-        quantityController: TextEditingController(text: match.group(1)),
+        quantityController: TextEditingController(
+          text: _formatNumber(parsed.$1),
+        ),
         source: ingredient.source,
-        unit: match.group(2)!.toLowerCase(),
+        unit: parsed.$2.id,
         ingredientId: ingredient.ingredientId,
+        cookingMethod: ingredient.cookingMethod,
       );
     }
     return _IngredientDraft(
@@ -1384,6 +1462,7 @@ class _IngredientDraft {
       quantityController: TextEditingController(text: ingredient.quantity),
       source: ingredient.source,
       ingredientId: ingredient.ingredientId,
+      cookingMethod: ingredient.cookingMethod,
     );
   }
 
@@ -1399,22 +1478,29 @@ class _IngredientDraft {
   final TextEditingController quantityController;
   IngredientSource source;
 
-  /// Unité de quantité saisie ('g' ou 'ml') — appliquée quand le champ
-  /// contient un nombre pur ; 'ml' est converti en grammes avec une
-  /// densité de 1 par l'agrégateur (approximation v1 documentée).
+  /// Unité culinaire (`CulinaryUnit.id`) appliquée quand le champ
+  /// contient un nombre pur (« 2 » + « c. à soupe »).
   String unit;
 
   /// Phase 09 Lot F : identifiant Phase 1 si lié à la DB.
   String? ingredientId;
 
+  /// Phase 10 Lot D : mode de cuisson explicite (null = déduit des
+  /// étapes).
+  String? cookingMethod;
+
   RecipeIngredient toIngredient() {
     final raw = quantityController.text.trim();
     final isPlainNumber = RegExp(r'^\d+(?:[.,]\d+)?$').hasMatch(raw);
+    final unitLabel = QuantityConverter.formUnits
+        .firstWhere((u) => u.id == unit, orElse: () => QuantityConverter.grams)
+        .labelFr;
     return RecipeIngredient(
       label: labelController.text.trim(),
-      quantity: isPlainNumber ? '$raw $unit' : raw,
+      quantity: isPlainNumber ? '$raw $unitLabel' : raw,
       source: source,
       ingredientId: ingredientId,
+      cookingMethod: cookingMethod,
     );
   }
 
@@ -1422,6 +1508,10 @@ class _IngredientDraft {
     labelController.dispose();
     quantityController.dispose();
   }
+
+  static String _formatNumber(double v) => v == v.roundToDouble()
+      ? v.toStringAsFixed(0)
+      : v.toString().replaceAll('.', ',');
 }
 
 class _ImageDraft {

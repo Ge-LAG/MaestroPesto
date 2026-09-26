@@ -273,6 +273,13 @@ class AppStrings {
   String get cookingMethodField => 'Cuisson';
   String get cookingMethodAuto => 'Auto (étapes)';
   String get unitField => 'Unité';
+  String get nutritionManualForced =>
+      'Valeurs saisies manuellement : le calcul automatique est désactivé '
+      'pour cette recette (modifier la recette pour le réactiver).';
+  String get nutritionNotComputed =>
+      'Nutrition non calculée : liez les ingrédients au référentiel '
+      '(bouton loupe du formulaire) ou saisissez les valeurs à la main. '
+      'Aucune valeur n’est inventée.';
 }
 
 const appStrings = AppStrings();

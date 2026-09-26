@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
+import 'package:maestropesto/core/scoring/nutrition_feedback.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 /// Tags des micronutriments par groupe d'affichage.
@@ -44,6 +45,12 @@ class RecipeNutritionPanel extends StatelessWidget {
     this.sources = const <NutritionSource>[],
     this.alcoholPerServing = 0,
     this.micronutrientsPerServing = const <String, Micronutrient>{},
+    this.coverage,
+    this.intakePercents = const <String, double>{},
+    this.nutriScore,
+    this.nutriScoreNote,
+    this.subtitle,
+    this.footer = const <Widget>[],
     super.key,
   });
 
@@ -68,6 +75,26 @@ class RecipeNutritionPanel extends StatelessWidget {
   /// Minéraux / vitamines / autres constituants par portion (retour PO
   /// n°3 : exhaustivité), clé = tag canonique.
   final Map<String, Micronutrient> micronutrientsPerServing;
+
+  /// Phase 10 — couverture massique par nutriment (null = saisie
+  /// manuelle). 0 → « non renseigné » (jamais un zéro fabriqué).
+  final Map<MacroField, double>? coverage;
+
+  /// % des apports de référence par clé (energy, proteins, carbs, fats,
+  /// fiber, salt, ou tag de micronutriment).
+  final Map<String, double> intakePercents;
+
+  /// Nutri-Score estimé (null = non calculé, voir [nutriScoreNote]).
+  final NutriScoreResult? nutriScore;
+  final String? nutriScoreNote;
+
+  /// Ligne d'information sous le titre (masse de portion, procédé…).
+  final String? subtitle;
+
+  /// Sections additionnelles (feedback, détail, limites).
+  final List<Widget> footer;
+
+  double? _coverage(MacroField field) => coverage?[field];
 
   @override
   Widget build(BuildContext context) {
@@ -137,8 +164,20 @@ class RecipeNutritionPanel extends StatelessWidget {
                 ],
               ),
             ],
+            if (subtitle != null) ...[
+              const SizedBox(height: 2),
+              Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
+            ],
+            if (nutriScore != null || nutriScoreNote != null) ...[
+              const SizedBox(height: 12),
+              NutriScoreBadge(result: nutriScore, note: nutriScoreNote),
+            ],
             const SizedBox(height: 18),
-            _EnergyBlock(value: nutrition.energyKcal),
+            _EnergyBlock(
+              value: nutrition.energyKcal,
+              coverage: _coverage(MacroField.energy),
+              percent: intakePercents['energy'],
+            ),
             const SizedBox(height: 16),
             Column(
               children: [
@@ -148,6 +187,8 @@ class RecipeNutritionPanel extends StatelessWidget {
                   unit: 'g',
                   ratio: nutrition.proteins / maxMacro,
                   color: const Color(0xFF357A5B),
+                  coverage: _coverage(MacroField.proteins),
+                  percent: intakePercents['proteins'],
                 ),
                 _MacroLine(
                   label: context.strings.carbs,
@@ -155,6 +196,8 @@ class RecipeNutritionPanel extends StatelessWidget {
                   unit: 'g',
                   ratio: nutrition.carbs / maxMacro,
                   color: const Color(0xFFD9A441),
+                  coverage: _coverage(MacroField.carbs),
+                  percent: intakePercents['carbs'],
                 ),
                 _MacroLine(
                   label: context.strings.fats,
@@ -162,17 +205,23 @@ class RecipeNutritionPanel extends StatelessWidget {
                   unit: 'g',
                   ratio: nutrition.fats / maxMacro,
                   color: const Color(0xFFB85C45),
+                  coverage: _coverage(MacroField.fats),
+                  percent: intakePercents['fats'],
                 ),
                 const Divider(height: 22),
                 _NutrientLine(
                   label: context.strings.fiber,
                   value: nutrition.fiber,
                   unit: 'g',
+                  coverage: _coverage(MacroField.fiber),
+                  percent: intakePercents['fiber'],
                 ),
                 _NutrientLine(
                   label: context.strings.salt,
                   value: nutrition.salt,
                   unit: 'g',
+                  coverage: _coverage(MacroField.salt),
+                  percent: intakePercents['salt'],
                 ),
                 if (alcoholPerServing > 0)
                   _NutrientLine(
@@ -189,6 +238,7 @@ class RecipeNutritionPanel extends StatelessWidget {
                   micronutrientsPerServing,
                   where: (tag) => kMineralTags.contains(tag),
                 ),
+                percents: intakePercents,
               ),
               _MicroSection(
                 title: context.strings.vitaminsTitle,
@@ -196,6 +246,7 @@ class RecipeNutritionPanel extends StatelessWidget {
                   micronutrientsPerServing,
                   where: (tag) => kVitaminTags.contains(tag),
                 ),
+                percents: intakePercents,
               ),
               _MicroSection(
                 title: context.strings.otherConstituentsTitle,
@@ -205,8 +256,10 @@ class RecipeNutritionPanel extends StatelessWidget {
                       !kMineralTags.contains(tag) &&
                       !kVitaminTags.contains(tag),
                 ),
+                percents: intakePercents,
               ),
             ],
+            ...footer,
           ],
         ),
       ),
@@ -225,10 +278,15 @@ class RecipeNutritionPanel extends StatelessWidget {
 
 /// Section repliable de micronutriments (valeurs par portion).
 class _MicroSection extends StatelessWidget {
-  const _MicroSection({required this.title, required this.entries});
+  const _MicroSection({
+    required this.title,
+    required this.entries,
+    this.percents = const <String, double>{},
+  });
 
   final String title;
   final List<Micronutrient> entries;
+  final Map<String, double> percents;
 
   @override
   Widget build(BuildContext context) {
@@ -254,6 +312,7 @@ class _MicroSection extends StatelessWidget {
                   label: micro.name,
                   value: micro.value,
                   unit: micro.unit,
+                  percent: percents[micro.tag],
                 ),
             ],
           ),
@@ -290,9 +349,11 @@ class _SourceBadge extends StatelessWidget {
 }
 
 class _EnergyBlock extends StatelessWidget {
-  const _EnergyBlock({required this.value});
+  const _EnergyBlock({required this.value, this.coverage, this.percent});
 
   final double value;
+  final double? coverage;
+  final double? percent;
 
   @override
   Widget build(BuildContext context) {
@@ -315,10 +376,30 @@ class _EnergyBlock extends StatelessWidget {
                     ?.copyWith(fontWeight: FontWeight.w800),
               ),
             ),
-            Text(
-              '${value.toStringAsFixed(0)} kcal',
-              style: Theme.of(context).textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w900),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  coverage == 0
+                      ? context.strings.nutritionNotProvided
+                      : '${value.toStringAsFixed(0)} kcal',
+                  style: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(fontWeight: FontWeight.w900),
+                ),
+                if (percent != null && coverage != 0)
+                  Text(
+                    '${percent!.toStringAsFixed(0)} % AR',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                if (coverage != null && coverage! > 0 && coverage! < 0.95)
+                  Text(
+                    context.strings.nutritionPartialCoverage(
+                      (coverage! * 100).round(),
+                    ),
+                    style: Theme.of(context).textTheme.labelSmall
+                        ?.copyWith(fontStyle: FontStyle.italic),
+                  ),
+              ],
             ),
           ],
         ),
@@ -334,6 +415,8 @@ class _MacroLine extends StatelessWidget {
     required this.unit,
     required this.ratio,
     required this.color,
+    this.coverage,
+    this.percent,
   });
 
   final String label;
@@ -341,6 +424,8 @@ class _MacroLine extends StatelessWidget {
   final String unit;
   final double ratio;
   final Color color;
+  final double? coverage;
+  final double? percent;
 
   @override
   Widget build(BuildContext context) {
@@ -357,10 +442,11 @@ class _MacroLine extends StatelessWidget {
                       ?.copyWith(fontWeight: FontWeight.w800),
                 ),
               ),
-              Text(
-                '${value.toStringAsFixed(value < 10 ? 1 : 0)} $unit',
-                style: Theme.of(context).textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w900),
+              _ValueText(
+                value: value,
+                unit: unit,
+                coverage: coverage,
+                percent: percent,
               ),
             ],
           ),
@@ -368,7 +454,7 @@ class _MacroLine extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
             child: LinearProgressIndicator(
-              value: ratio.clamp(0, 1).toDouble(),
+              value: coverage == 0 ? 0 : ratio.clamp(0, 1).toDouble(),
               minHeight: 8,
               color: color,
               backgroundColor: const Color(0xFFECE7DC),
@@ -385,11 +471,15 @@ class _NutrientLine extends StatelessWidget {
     required this.label,
     required this.value,
     required this.unit,
+    this.coverage,
+    this.percent,
   });
 
   final String label;
   final double value;
   final String unit;
+  final double? coverage;
+  final double? percent;
 
   @override
   Widget build(BuildContext context) {
@@ -404,11 +494,138 @@ class _NutrientLine extends StatelessWidget {
                   ?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
-          Text(
-            '${value.toStringAsFixed(value < 10 ? 1 : 0)} $unit',
-            style: Theme.of(context).textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.w900),
+          _ValueText(
+            value: value,
+            unit: unit,
+            coverage: coverage,
+            percent: percent,
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Valeur honnête : « non renseigné » sans donnée, couverture partielle
+/// signalée, % des apports de référence en exposant.
+class _ValueText extends StatelessWidget {
+  const _ValueText({
+    required this.value,
+    required this.unit,
+    this.coverage,
+    this.percent,
+  });
+
+  final double value;
+  final String unit;
+  final double? coverage;
+  final double? percent;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    if (coverage == 0) {
+      return Text(
+        context.strings.nutritionNotProvided,
+        style: theme.textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+      );
+    }
+    final digits = value < 1 ? 2 : (value < 10 ? 1 : 0);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          '${value.toStringAsFixed(digits)} $unit',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        if (percent != null)
+          Text(
+            '${percent!.toStringAsFixed(0)} % AR',
+            style: theme.textTheme.labelSmall,
+          ),
+        if (coverage != null && coverage! > 0 && coverage! < 0.95)
+          Text(
+            context.strings.nutritionPartialCoverage((coverage! * 100).round()),
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Badge Nutri-Score estimé (A vert foncé … E rouge), avec la note
+/// méthodologique en info-bulle.
+class NutriScoreBadge extends StatelessWidget {
+  const NutriScoreBadge({required this.result, this.note, super.key});
+
+  final NutriScoreResult? result;
+  final String? note;
+
+  static const Map<String, Color> colors = {
+    'A': Color(0xFF038141),
+    'B': Color(0xFF85BB2F),
+    'C': Color(0xFFFECB02),
+    'D': Color(0xFFEE8100),
+    'E': Color(0xFFE63E11),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final r = result;
+    return Tooltip(
+      message: note ?? '',
+      child: Row(
+        children: [
+          Text(
+            context.strings.nutriScoreTitle,
+            style: theme.textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(width: 10),
+          if (r == null)
+            Expanded(
+              child: Text(
+                note ?? '',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            )
+          else ...[
+            for (final g in const ['A', 'B', 'C', 'D', 'E'])
+              Container(
+                width: g == r.grade ? 30 : 22,
+                height: g == r.grade ? 30 : 22,
+                margin: const EdgeInsets.only(right: 2),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: g == r.grade
+                      ? colors[g]
+                      : colors[g]!.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  g,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    fontSize: g == r.grade ? 16 : 11,
+                  ),
+                ),
+              ),
+            const SizedBox(width: 6),
+            Icon(
+              Icons.info_outline,
+              size: 14,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ],
         ],
       ),
     );
