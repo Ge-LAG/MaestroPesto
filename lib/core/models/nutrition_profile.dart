@@ -27,6 +27,22 @@ enum MacroField {
   water,
 }
 
+/// Libellés français courts des champs macro.
+extension MacroFieldLabel on MacroField {
+  String get labelFr => switch (this) {
+    MacroField.energy => 'énergie',
+    MacroField.proteins => 'protéines',
+    MacroField.carbs => 'glucides',
+    MacroField.sugars => 'sucres',
+    MacroField.fats => 'lipides',
+    MacroField.saturatedFats => 'AGS',
+    MacroField.fiber => 'fibres',
+    MacroField.salt => 'sel',
+    MacroField.alcohol => 'alcool',
+    MacroField.water => 'eau',
+  };
+}
+
 /// Tous les champs macro (valeur par défaut : profil complet).
 const Set<MacroField> kAllMacroFields = {
   MacroField.energy,
@@ -108,6 +124,7 @@ class NutritionProfile {
     this.energyEstimated = false,
     this.sourceFoodName,
     this.approximationNote,
+    this.derivedFields = const <MacroField>{},
   });
 
   /// Énergie en kcal pour 100 g.
@@ -171,6 +188,11 @@ class NutritionProfile {
   /// Ciqual ») — null pour une correspondance directe.
   final String? approximationNote;
 
+  /// Champs absents de la source mais déduits par bilan de masse
+  /// (constituants connus ≥ 97 g/100 g : le reste ne peut pas en
+  /// contenir). Inclus dans [knownFields].
+  final Set<MacroField> derivedFields;
+
   /// Vrai si le champ est renseigné par la source.
   bool isKnown(MacroField field) => knownFields.contains(field);
 
@@ -210,6 +232,7 @@ class NutritionProfile {
     bool? energyEstimated,
     Object? sourceFoodName = _sentinel,
     Object? approximationNote = _sentinel,
+    Set<MacroField>? derivedFields,
   }) {
     return NutritionProfile(
       energyKcal: energyKcal ?? this.energyKcal,
@@ -236,6 +259,7 @@ class NutritionProfile {
       approximationNote: identical(approximationNote, _sentinel)
           ? this.approximationNote
           : approximationNote as String?,
+      derivedFields: derivedFields ?? this.derivedFields,
     );
   }
 
@@ -260,7 +284,8 @@ class NutritionProfile {
         _setEq(other.knownFields, knownFields) &&
         other.energyEstimated == energyEstimated &&
         other.sourceFoodName == sourceFoodName &&
-        other.approximationNote == approximationNote;
+        other.approximationNote == approximationNote &&
+        _setEq(other.derivedFields, derivedFields);
   }
 
   @override

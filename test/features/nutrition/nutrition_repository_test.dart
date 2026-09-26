@@ -269,4 +269,47 @@ void main() {
     );
     expect(await repo.forIngredient('ING-UNKNOWN'), isNull);
   });
+
+  group('bilan de masse (deriveByMassBalance)', () {
+    test('sucre blanc : lipides, fibres, sel, AGS déduits à 0', () {
+      final m = <MacroField, double>{
+        MacroField.energy: 400,
+        MacroField.carbs: 99.8,
+        MacroField.sugars: 99.8,
+      };
+      final d = NutritionRepository.deriveByMassBalance(m);
+      expect(
+        d,
+        containsAll([
+          MacroField.fats,
+          MacroField.saturatedFats,
+          MacroField.fiber,
+          MacroField.salt,
+          MacroField.proteins,
+          MacroField.alcohol,
+        ]),
+      );
+      expect(d, isNot(contains(MacroField.water)));
+      expect(m[MacroField.fats], 0);
+      expect(m[MacroField.carbs], 99.8, reason: 'valeur source intacte');
+    });
+
+    test('fraise (constituants connus < 97 g) : rien n’est inventé', () {
+      final m = <MacroField, double>{
+        MacroField.water: 90,
+        MacroField.carbs: 5,
+        MacroField.proteins: 0.7,
+      };
+      expect(NutritionRepository.deriveByMassBalance(m), isEmpty);
+      expect(m.containsKey(MacroField.fats), isFalse);
+    });
+
+    test('sous-ensembles : lipides < 0,5 g ⇒ AGS 0', () {
+      final m = <MacroField, double>{MacroField.fats: 0.2};
+      expect(NutritionRepository.deriveByMassBalance(m), {
+        MacroField.saturatedFats,
+      });
+      expect(m[MacroField.saturatedFats], 0);
+    });
+  });
 }

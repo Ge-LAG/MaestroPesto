@@ -107,6 +107,7 @@ class IngredientContribution {
     this.quantityAssumption,
     this.sourceFoodName,
     this.approximationNote,
+    this.derivedFields = const <MacroField>{},
   });
 
   final int index;
@@ -138,6 +139,10 @@ class IngredientContribution {
   final String? quantityAssumption;
   final String? sourceFoodName;
   final String? approximationNote;
+
+  /// Champs valant 0 par bilan de masse (voir
+  /// `NutritionProfile.derivedFields`).
+  final Set<MacroField> derivedFields;
 }
 
 /// Résultat de l'agrégation : profil **par portion** + métadonnées
@@ -465,6 +470,7 @@ abstract final class NutritionAggregator {
           quantityAssumption: quantity.assumption,
           sourceFoodName: profile.sourceFoodName,
           approximationNote: profile.approximationNote,
+          derivedFields: profile.derivedFields,
         ),
       );
     }

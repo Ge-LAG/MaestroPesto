@@ -435,6 +435,7 @@ class NutritionRepository {
       final v = resolve(alts);
       if (v != null) macros[field] = v;
     });
+    final derived = deriveByMassBalance(macros);
     var energyEstimated = false;
     if (!macros.containsKey(MacroField.energy)) {
       final estimate = atwaterEnergyKcal(
@@ -517,7 +518,51 @@ class NutritionRepository {
       energyEstimated: energyEstimated,
       sourceFoodName: first.sourceFoodName,
       approximationNote: _approximationOf(records),
+      derivedFields: derived,
     );
+  }
+
+  /// Bilan de masse (convention des tables de composition) : quand les
+  /// constituants connus (eau, protéines, glucides, lipides, fibres,
+  /// alcool, sel) totalisent au moins 97 g/100 g, un constituant absent
+  /// de la source ne peut dépasser le reste (≤ 3 g) et vaut 0 — ex. le
+  /// sucre blanc (99,8 g de glucides) ne contient pas de lipides. Les
+  /// sous-ensembles suivent leur total : glucides < 0,5 g ⇒ sucres 0,
+  /// lipides < 0,5 g ⇒ AGS 0. Complète [macros] et retourne les champs
+  /// déduits (jamais un champ renseigné par la source).
+  @visibleForTesting
+  static Set<MacroField> deriveByMassBalance(Map<MacroField, double> macros) {
+    const massFields = [
+      MacroField.water,
+      MacroField.proteins,
+      MacroField.carbs,
+      MacroField.fats,
+      MacroField.fiber,
+      MacroField.alcohol,
+      MacroField.salt,
+    ];
+    final derived = <MacroField>{};
+    final known = massFields
+        .where(macros.containsKey)
+        .fold<double>(0, (s, f) => s + macros[f]!);
+    if (known >= 97) {
+      for (final f in massFields) {
+        if (f == MacroField.water || macros.containsKey(f)) continue;
+        macros[f] = 0;
+        derived.add(f);
+      }
+    }
+    void subset(MacroField total, MacroField part) {
+      final t = macros[total];
+      if (t != null && t < 0.5 && !macros.containsKey(part)) {
+        macros[part] = 0;
+        derived.add(part);
+      }
+    }
+
+    subset(MacroField.carbs, MacroField.sugars);
+    subset(MacroField.fats, MacroField.saturatedFats);
+    return derived;
   }
 
   /// Énergie (kcal/100 g) par les coefficients du règlement (UE)
