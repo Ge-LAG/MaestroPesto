@@ -1,0 +1,288 @@
+// Phase 09 Lot F — IngredientDetailCard (§6.4 du cahier Phase 09).
+//
+// Card Material 3 affichant le détail d'un ingrédient Phase 1 dans la
+// vue détail recette. Affichée sous le `_IngredientRow` existant quand
+// `ingredientId` est lié à la DB.
+//
+// Contenu :
+// - Nom canonique + nom scientifique (italique)
+// - Catégorie breadcrumb
+// - Allergènes (chips rouges)
+// - Mini nutrition (top 4 : énergie, protéines, lipides, glucides)
+// - Badges alcoolisé / fermenté
+
+import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
+import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/core/models/allergens.dart';
+
+import '../../../core/models/ingredient_detail.dart';
+import '../../../core/models/nutrition_profile.dart';
+import '../../nutrition/data/nutrition_repository.dart';
+
+import 'package:maestropesto/app/theme/app_theme.dart';
+
+/// Card de détail d'un ingrédient.
+class IngredientDetailCard extends StatelessWidget {
+  const IngredientDetailCard({
+    super.key,
+    required this.detail,
+    this.nutrition,
+    this.culinaryLines = const <String>[],
+  });
+
+  final IngredientDetail detail;
+
+  /// Optionnel : nutrition pour 100 g (déjà chargée).
+  final NutritionProfile? nutrition;
+
+  /// Données culinaires sourcées (pH, densité, masses unitaires), une
+  /// ligne par grandeur avec sa source.
+  final List<String> culinaryLines;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final strings = context.strings;
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        detail.canonicalNameFr,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      if (detail.scientificName != null)
+                        Text(
+                          detail.scientificName!,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Wrap(
+                  spacing: 4,
+                  children: [
+                    if (detail.isAlcoholic)
+                      _Badge(
+                        icon: Icons.local_bar_outlined,
+                        label: strings.ingredientDetailAlcoholBadge,
+                      ),
+                    if (detail.isFermented)
+                      _Badge(
+                        icon: Icons.eco_outlined,
+                        label: strings.ingredientDetailFermentedBadge,
+                      ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(detail.categoryBreadcrumb, style: theme.textTheme.bodySmall),
+            if (detail.hasAllergens) ...[
+              const SizedBox(height: 10),
+              Text(
+                strings.ingredientDetailAllergensTitle,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: [
+                  for (final a in detail.allergenTags)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.red.shade200),
+                      ),
+                      child: Text(
+                        allergenLabelFr(a),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.red.shade900,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ] else ...[
+              const SizedBox(height: 6),
+              Text(
+                strings.ingredientDetailNoAllergens,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            _MiniNutritionSection(nutrition: nutrition),
+            if (culinaryLines.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Text(
+                strings.ingredientCulinaryTitle,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 2),
+              for (final line in culinaryLines)
+                Text(line, style: theme.textTheme.labelSmall),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: Colors.amber.shade50,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.amber.shade200),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: Colors.amber.shade900),
+          const SizedBox(width: 2),
+          Text(
+            label,
+            style: TextStyle(fontSize: 12, color: Colors.amber.shade900),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MiniNutritionSection extends StatelessWidget {
+  const _MiniNutritionSection({required this.nutrition});
+
+  final NutritionProfile? nutrition;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    if (nutrition == null || nutrition!.knownFields.isEmpty) {
+      return Text(
+        strings.ingredientDetailNutritionUnavailable,
+        style: Theme.of(context).textTheme.bodySmall,
+      );
+    }
+    final n = nutrition!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          strings.ingredientDetailNutritionTitle,
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 4),
+        Wrap(
+          spacing: 12,
+          runSpacing: 4,
+          children: [
+            _nutritionChip(
+              context,
+              strings.ingredientDetailEnergy,
+              _value(n, MacroField.energy, n.energyKcal, 'kcal', 0, strings),
+            ),
+            _nutritionChip(
+              context,
+              strings.ingredientDetailProteins,
+              _value(n, MacroField.proteins, n.proteins, 'g', 1, strings),
+            ),
+            _nutritionChip(
+              context,
+              strings.ingredientDetailFats,
+              _value(n, MacroField.fats, n.fats, 'g', 1, strings),
+            ),
+            _nutritionChip(
+              context,
+              strings.ingredientDetailCarbs,
+              _value(n, MacroField.carbs, n.carbs, 'g', 1, strings),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// Valeur honnête : « non renseigné » quand la source ne la donne pas.
+  static String _value(
+    NutritionProfile n,
+    MacroField field,
+    double value,
+    String unit,
+    int digits,
+    AppStrings strings,
+  ) => n.isKnown(field)
+      ? '${fmtNum(value, digits)} $unit'
+      : strings.nutritionNotProvided;
+
+  Widget _nutritionChip(BuildContext context, String label, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: context.palette.placeholder,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text('$label: $value', style: const TextStyle(fontSize: 12)),
+    );
+  }
+}
+
+/// Helper public pour FutureBuilder d'un NutritionProfile depuis un
+/// NutritionRepository. Réduit le boilerplate dans les widgets parents.
+class NutritionFutureBuilder extends StatelessWidget {
+  const NutritionFutureBuilder({
+    super.key,
+    required this.repository,
+    required this.ingredientId,
+    required this.builder,
+  });
+
+  final NutritionRepository repository;
+  final String ingredientId;
+  final Widget Function(BuildContext, AsyncSnapshot<NutritionProfile?>) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<NutritionProfile?>(
+      future: repository.forIngredient(ingredientId),
+      builder: builder,
+    );
+  }
+}

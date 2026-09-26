@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Décision PO : couverture flavour 97/603 · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>finding · ac-115</span></header><main>
+<article data-method data-revision="1" data-owner="Guillaume" id="ac-115" data-title="Décision PO : couverture flavour 97/603" data-summary="La base d'arômes Phase 3 ne couvre que 97/603 ingrédients (Basilic 99 paires, Tomate séchée 95, mais Pignon/Zeste/Huile essentielle 0) : lancer un chantier données sourcé ?" data-tags="ac finding flavor couverture donnees decision-po heatmap" data-kind="finding" data-status="active" data-requires="honest-data-display">
+<p class="eyebrow">finding / ac-115</p><h1>Décision PO : couverture flavour 97/603</h1>
+<dl><dt>Origine</dt><dd>Diagnostic du retour PO n°3 (2026-08-26) : le gris de la heatmap est un manque de données, pas un bug d'affichage ; les composés d'arômes ne couvrent que 9 ingrédients.</dd>
+<dt>Impact</dt><dd>High sur la promesse « documenter toutes les interactions » — l'app l'affiche honnêtement (décision <a href="honest-data-display.html#honest-data-display">honest-data-display</a>), mais la plupart des paires n'ont pas de score connu.</dd>
+<dt>Localisation</dt><dd>assets/database-metier/phase3-flavour ; lib/features/flavor/ (FlavorRepository.bestKnownMatchFor).</dd>
+<dt>Décision attendue du PO</dt><dd>Lancer un chantier données dédié sourcé (FlavourDB, littérature food-pairing) — ou assumer la couverture partielle et le documenter produit.</dd></dl>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 Widget buildRecipePhoto(String path, {required BoxFit fit}) {
   final uri = Uri.tryParse(path);
@@ -24,7 +25,7 @@ Widget _errorBuilder(
   StackTrace? stackTrace,
 ) {
   return ColoredBox(
-    color: const Color(0xFFE9ECE4),
+    color: context.palette.placeholder,
     child: Center(
       child: Icon(
         Icons.broken_image_outlined,

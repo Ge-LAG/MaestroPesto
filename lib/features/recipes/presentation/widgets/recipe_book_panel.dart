@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_tag_label.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 enum RecipeBookViewMode { card, list }
 
@@ -18,6 +20,8 @@ class RecipeBookPanel extends StatefulWidget {
     required this.onClearFilters,
     required this.onCreateRecipe,
     this.compact = false,
+    this.onOpenSettings,
+    this.settingsBadge = false,
     super.key,
   });
 
@@ -32,6 +36,12 @@ class RecipeBookPanel extends StatefulWidget {
   final VoidCallback onClearFilters;
   final VoidCallback onCreateRecipe;
   final bool compact;
+
+  /// Ouvre les paramètres (thème, bases métier, sources des données).
+  final VoidCallback? onOpenSettings;
+
+  /// Pastille sur le bouton Paramètres (bases métier à importer).
+  final bool settingsBadge;
 
   @override
   State<RecipeBookPanel> createState() => _RecipeBookPanelState();
@@ -67,7 +77,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
     final viewMode = widget.compact ? RecipeBookViewMode.card : _viewMode;
 
     return ColoredBox(
-      color: const Color(0xFFF0F1EC),
+      color: context.palette.panel,
       child: Padding(
         padding: EdgeInsets.fromLTRB(20, widget.compact ? 16 : 20, 20, 18),
         child: Column(
@@ -76,6 +86,8 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
             _BookHeader(
               compact: widget.compact,
               onCreateRecipe: widget.onCreateRecipe,
+              onOpenSettings: widget.onOpenSettings,
+              settingsBadge: widget.settingsBadge,
             ),
             const SizedBox(height: 18),
             SearchBar(
@@ -112,7 +124,9 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
             const SizedBox(height: 18),
             if (widget.compact)
               SizedBox(
-                height: widget.recipes.isEmpty ? 92 : 176,
+                // Hauteur fixe du carrousel, agrandie avec le texte.
+                height: MediaQuery.textScalerOf(context)
+                    .scale(widget.recipes.isEmpty ? 92 : 176),
                 child: widget.recipes.isEmpty
                     ? const _EmptyBookMessage()
                     : ListView.separated(
@@ -343,10 +357,17 @@ class _TagFilterMenu extends StatelessWidget {
 }
 
 class _BookHeader extends StatelessWidget {
-  const _BookHeader({required this.compact, required this.onCreateRecipe});
+  const _BookHeader({
+    required this.compact,
+    required this.onCreateRecipe,
+    this.onOpenSettings,
+    this.settingsBadge = false,
+  });
 
   final bool compact;
   final VoidCallback onCreateRecipe;
+  final VoidCallback? onOpenSettings;
+  final bool settingsBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -358,29 +379,38 @@ class _BookHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'MaestroPesto',
-                style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w900),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'MaestroPesto',
+                  style: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(fontWeight: FontWeight.w900),
+                ),
               ),
               if (!compact)
                 Text(
                   context.strings.recipeBookSubtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
             ],
           ),
         ),
-        IconButton.outlined(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(context.strings.settingsTodo)),
-            );
-          },
-          icon: const Icon(Icons.settings_outlined),
-          tooltip: context.strings.settingsAction,
+        IconButton(
+          onPressed: onOpenSettings,
+          icon: Badge(
+            isLabelVisible: settingsBadge,
+            smallSize: 8,
+            child: const Icon(Icons.settings_outlined),
+          ),
+          tooltip: settingsBadge
+              ? '${context.strings.settingsAction} — '
+                    '${context.strings.settingsMetierAttention}'
+              : context.strings.settingsAction,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         IconButton.filled(
           onPressed: onCreateRecipe,
           icon: const Icon(Icons.add),
@@ -405,9 +435,7 @@ class _RecipeCardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final borderColor = selected
-        ? colorScheme.primary
-        : const Color(0xFFE0DED7);
+    final borderColor = selected ? colorScheme.primary : context.palette.border;
 
     return Material(
       color: selected
@@ -449,13 +477,23 @@ class _RecipeCardTile extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               _RecipeQuickFacts(recipe: recipe),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 6,
-                children: recipe.tags
-                    .take(3)
-                    .map((tag) => RecipeTagLabel(label: tag))
-                    .toList(),
+              const SizedBox(height: 8),
+              // Une seule ligne d'étiquettes : la carte a une hauteur
+              // fixe dans le carrousel compact.
+              ClipRect(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Row(
+                    children: [
+                      for (final tag in recipe.tags.take(3))
+                        Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: RecipeTagLabel(label: tag),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -479,9 +517,7 @@ class _RecipeLineTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final borderColor = selected
-        ? colorScheme.primary
-        : const Color(0xFFE0DED7);
+    final borderColor = selected ? colorScheme.primary : context.palette.border;
 
     return Material(
       color: selected
@@ -558,10 +594,11 @@ class _RecipeQuickFacts extends StatelessWidget {
           icon: Icons.format_list_bulleted,
           label: '${recipe.ingredients.length}',
         ),
-        _QuickFact(
-          icon: Icons.bolt_outlined,
-          label: '${recipe.nutrition.energyKcal.toStringAsFixed(0)} kcal',
-        ),
+        if (recipe.nutrition.energyKcal > 0)
+          _QuickFact(
+            icon: Icons.bolt_outlined,
+            label: '${fmtNum(recipe.nutrition.energyKcal, 0)} kcal',
+          ),
       ],
     );
   }
@@ -583,7 +620,7 @@ class _QuickFact extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: const Color(0xFF43473F),
+            color: context.palette.strongMuted,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -600,7 +637,7 @@ class _EmptyBookMessage extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        border: Border.all(color: const Color(0xFFE0DED7)),
+        border: Border.all(color: context.palette.border),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(

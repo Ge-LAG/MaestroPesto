@@ -1,0 +1,4044 @@
+{
+  "schema_version": 2,
+  "generated": true,
+  "entries": [
+    {
+      "id": "adoption",
+      "path": "docs/adoption.html",
+      "title": "Adopt V6 in a project",
+      "summary": "Install once, configure real constraints and choose HTML discovery or an existing adapter.",
+      "tags": [
+        "adoption",
+        "setup",
+        "install",
+        "bootstrap",
+        "agents",
+        "html",
+        "fallback",
+        "configure",
+        "adaptation"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "92e48c4ba0ccc19ce6f25c2ccbd6679fac16a4996749df10b24fc1d7eb2823c8",
+      "chars": 3561,
+      "size": 4673,
+      "mtime_ns": 1789570495015009400,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "ed982b11096f495bba9b362a6d351982b634084a08fd24b820167b70b2386fba",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "migration.html#migration",
+        "profile.html#profile",
+        "roadmap.html#roadmap",
+        "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
+        "durability.html#durability",
+        "evidence.html#evidence"
+      ],
+      "anchors": [
+        "adoption"
+      ]
+    },
+    {
+      "id": "core",
+      "path": "docs/core.html",
+      "title": "Operating contract",
+      "summary": "Always-loaded kernel: scope, evidence, state and language.",
+      "tags": [
+        "core",
+        "kernel",
+        "workflow",
+        "scope",
+        "languages",
+        "français",
+        "english"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "742bb64e17d8f95755fcb7723cb922c97d6eacd3ea49aa6440eb123e62d3c801",
+      "chars": 1654,
+      "size": 2554,
+      "mtime_ns": 1789570495001009800,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "7bc5193e6beceaae1ca53cdcf9812a442acd04b3f07ced8f221281497af93bfa",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "governance.html#governance",
+        "handoff.html#handoff",
+        "quality.html#quality",
+        "release.html#release",
+        "shared-edits.html#shared-edits",
+        "durability.html#durability",
+        "language.html#language"
+      ],
+      "anchors": [
+        "core"
+      ]
+    },
+    {
+      "id": "durability",
+      "path": "docs/durability.html",
+      "title": "Keep the method healthy",
+      "summary": "Exception-based maintenance, ownership, scoped constraints and immutable history.",
+      "tags": [
+        "maintenance",
+        "durability",
+        "lifecycle",
+        "review",
+        "supersedes",
+        "history",
+        "archive",
+        "scale",
+        "pérennité"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "7b5f514d8e50aac23d27122147faf62cb640a46935592f52752f7d99c3806bca",
+      "chars": 4524,
+      "size": 5465,
+      "mtime_ns": 1789570495052543000,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "631663e10971d8e2aa418ce75959f077510f2f7635c2ae20a828cc4ef685b54d",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "evidence.html#evidence",
+        "shared-edits.html#shared-edits"
+      ],
+      "anchors": [
+        "durability"
+      ]
+    },
+    {
+      "id": "evidence",
+      "path": "docs/evidence.html",
+      "title": "Bind acceptance to current evidence",
+      "summary": "Machine-checkable closure fields and invalidation when criteria, code or dependencies change.",
+      "tags": [
+        "evidence",
+        "proof",
+        "acceptance",
+        "gates",
+        "validation",
+        "fingerprint",
+        "candidate",
+        "audit"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "f719ed4cbd96823dbb1f1ec2dd472bd9ad16a2597802f40db91f94f48e1cfc74",
+      "chars": 2670,
+      "size": 3589,
+      "mtime_ns": 1789570495087544100,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "b7b3dd214f27c80f772f66f5a722a489c50dcf7b93261ba30e492dd4e0d48208",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "evidence"
+      ]
+    },
+    {
+      "id": "governance",
+      "path": "docs/governance.html",
+      "title": "Authority and decisions",
+      "summary": "PO authority, CTO mandate, durable authorization and targeted escalation.",
+      "tags": [
+        "authority",
+        "governance",
+        "mandat",
+        "permissions",
+        "consent",
+        "push",
+        "merge",
+        "deploy",
+        "po",
+        "cto"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "33040b98808b3c6121067b4ea61cec4ae63a5be26d90f3c2eaabb1a38bdcbc5e",
+      "chars": 2286,
+      "size": 3325,
+      "mtime_ns": 1789570495031008900,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "384b4f5b03de45cb70af0e048577d396bf244f46d94ee133d80cc33964ee8243",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../templates/authorization.html#tpl-authorization",
+        "../templates/decision.html#tpl-decision"
+      ],
+      "anchors": [
+        "governance"
+      ]
+    },
+    {
+      "id": "handoff",
+      "path": "docs/handoff.html",
+      "title": "CTO ↔ Codex handoff",
+      "summary": "Compact English delegation and verified computer-use delivery, with French PO reports.",
+      "tags": [
+        "cto",
+        "robertson",
+        "andersen",
+        "chatgpt",
+        "work",
+        "computer",
+        "use",
+        "handoff",
+        "mission",
+        "passation"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "658d03b4c4f1e0ab024e4e91fc225112c6e34d686047716649443868903c3f82",
+      "chars": 2258,
+      "size": 3190,
+      "mtime_ns": 1789570495036018200,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "f484042da9575daa654c46a9caf22c382dc09b751daa05a406ada6426c830cb0",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "language.html#language"
+      ],
+      "anchors": [
+        "handoff"
+      ]
+    },
+    {
+      "id": "language",
+      "path": "docs/language.html",
+      "title": "Language and localization",
+      "summary": "French and English software, French default; audience-specific reporting.",
+      "tags": [
+        "language",
+        "languages",
+        "localization",
+        "i18n",
+        "l10n",
+        "français",
+        "french",
+        "anglais",
+        "english",
+        "traduction"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "7619f9054cfff1cd74b38635bd87e14a362739e2ad529d17719bd8c495ce703d",
+      "chars": 2059,
+      "size": 3134,
+      "mtime_ns": 1789570495006010900,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "5438bc9979bfe48666dac43598563204f064b631a5ee87da9f69f61dfee0705a",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "language"
+      ]
+    },
+    {
+      "id": "migration",
+      "path": "docs/migration.html",
+      "title": "V5 → V6 decisions",
+      "summary": "What was retained, replaced or removed, and how to preserve project history.",
+      "tags": [
+        "migration",
+        "v5",
+        "v6",
+        "audit",
+        "removed",
+        "json",
+        "markdown",
+        "mistral",
+        "changement"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "0955c31ff8e7cd4b718beab6ed73726300660f348b3022eb34ef01008758f204",
+      "chars": 2975,
+      "size": 4166,
+      "mtime_ns": 1789570495025009200,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "b5f952d1f2967d9343898dce9df235a8441fc434df3d5110d28cf81ff6fb7d35",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "migration"
+      ]
+    },
+    {
+      "id": "profile",
+      "path": "docs/profile.html",
+      "title": "Profil projet MaestroPesto",
+      "summary": "Faits stables : stack Flutter/Drift, commandes de vérification, contraintes de données et de livraison.",
+      "tags": [
+        "profile",
+        "architecture",
+        "stack",
+        "commandes",
+        "contraintes",
+        "flutter",
+        "drift",
+        "ciqual",
+        "livraison"
+      ],
+      "kind": "project",
+      "status": "active",
+      "sha256": "a8089e5d38c3cd68761a78dd5df60add63bd5cb4096a2446b4b7b4ba0eba5f7a",
+      "chars": 2374,
+      "size": 3481,
+      "mtime_ns": 1789571096331884100,
+      "revision": 2,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "d96b748408bdf886e67716f3360890c9d39658e0eeddc03d78908b859edde29d",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/delivery-gate.html#delivery-gate",
+        "../../ARCHITECTURE.md",
+        "../../README.md",
+        "../../IDEA.md"
+      ],
+      "anchors": [
+        "profile"
+      ]
+    },
+    {
+      "id": "quality",
+      "path": "docs/quality.html",
+      "title": "Verification proportional to risk",
+      "summary": "Behavioral checks, risk triggers and strict evidence without ritual test loops.",
+      "tags": [
+        "quality",
+        "test",
+        "tests",
+        "verification",
+        "risk",
+        "production",
+        "regression",
+        "build",
+        "ci",
+        "lint"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "8c0896b664d29a3882966eed73b6e2a533687028dc907a9af7bc5ed8426cc61e",
+      "chars": 2557,
+      "size": 3639,
+      "mtime_ns": 1789570494994012900,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "f71ea2786bf73787746a0923c9f2e956ea991206d74cefee3fbfb76a12642e64",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "release.html#release",
+        "language.html#language",
+        "evidence.html#evidence"
+      ],
+      "anchors": [
+        "quality"
+      ]
+    },
+    {
+      "id": "release",
+      "path": "docs/release.html",
+      "title": "Release and operate",
+      "summary": "Promote a tested candidate with explicit authority, recovery and operational checks.",
+      "tags": [
+        "release",
+        "deploy",
+        "deployment",
+        "livraison",
+        "production",
+        "rollback",
+        "monitoring",
+        "incident"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "75958982ebf6b5883110a84c55952950be6f03f1570b9cccae021373793438cf",
+      "chars": 1872,
+      "size": 2892,
+      "mtime_ns": 1789570494985010600,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "bae3cc8cf561cc0a84ba0003863444c4fa6326705750a200eb6ed40fb723e5d1",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../templates/release.html#tpl-release",
+        "profile.html#profile",
+        "../templates/incident.html#tpl-incident"
+      ],
+      "anchors": [
+        "release"
+      ]
+    },
+    {
+      "id": "retrieval",
+      "path": "docs/retrieval.html",
+      "title": "Selective context, not full reloads",
+      "summary": "Search metadata, extract selected HTML and detect stale references.",
+      "tags": [
+        "retrieval",
+        "tokens",
+        "index",
+        "search",
+        "read",
+        "context",
+        "html",
+        "efficiency",
+        "efficience",
+        "recherche"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "9cb3eb95e5923fb0832ccf9dd0d0410c9ab89732708647785218a8b3f13b962d",
+      "chars": 2940,
+      "size": 3877,
+      "mtime_ns": 1789570495111542900,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "30fc45bf538da58c75ac013c6adeba7ce312bfc64c6eb7240894061f791523a8",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "durability.html#durability"
+      ],
+      "anchors": [
+        "retrieval"
+      ]
+    },
+    {
+      "id": "roadmap",
+      "path": "docs/roadmap.html",
+      "title": "Feuille de route MaestroPesto",
+      "summary": "Jalons : Phase 10 (cohérence métier et procédé) livrée le 2026-09-26 et en revue PO, livraisons Phase 09 et 10 en attente, puis lot qualité et backlog.",
+      "tags": [
+        "roadmap",
+        "jalons",
+        "phases",
+        "plan",
+        "produit",
+        "dependances"
+      ],
+      "kind": "project",
+      "status": "active",
+      "sha256": "92f721fab2bd3c1fb09494d253e38a5b99a6847c9d5450b22307a4ef019b8a72",
+      "chars": 3617,
+      "size": 4824,
+      "mtime_ns": 1790435721674451700,
+      "revision": 9,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "3c49bea54757d132a5fe8c76fce30a4c7537a382b0ef4204676fdd48c138b101",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-ux-refonte.html#phase10-ux-refonte",
+        "../records/ac-129.html#ac-129",
+        "../work/phase10-sources-ouvertes.html#phase10-sources-ouvertes",
+        "../records/ac-130.html#ac-130",
+        "../work/phase10-parametres.html#phase10-parametres",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/livraison-phase09-10.html#livraison-phase09-10",
+        "../work/phase11-recette-inversee.html#phase11-recette-inversee",
+        "../records/phase11-cadrage.html#phase11-cadrage",
+        "../work/idea-ocr-recettes.html#idea-ocr-recettes",
+        "../work/phase08-foundations.html#phase08-foundations"
+      ],
+      "anchors": [
+        "roadmap"
+      ]
+    },
+    {
+      "id": "security",
+      "path": "docs/security.html",
+      "title": "Security and data changes",
+      "summary": "Load for trust boundaries, secrets, sensitive data or recovery.",
+      "tags": [
+        "security",
+        "sécurité",
+        "auth",
+        "permissions",
+        "data",
+        "secrets",
+        "backup",
+        "encryption",
+        "migration"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "e8be615232d300a0058935718cbda4f38a987a5f014c0edba594eb1f141af47f",
+      "chars": 1617,
+      "size": 2489,
+      "mtime_ns": 1789570495041028100,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "3b91ad08d28919e9f48f9f310ec925d8ff781cdef5fb4972fe933b08d3b23c30",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "profile.html#profile"
+      ],
+      "anchors": [
+        "security"
+      ]
+    },
+    {
+      "id": "shared-edits",
+      "path": "docs/shared-edits.html",
+      "title": "Protect shared edits",
+      "summary": "Atomic replacement with expected hash, revision checks and interrupted-publication recovery.",
+      "tags": [
+        "concurrency",
+        "lock",
+        "revision",
+        "conflict",
+        "cas",
+        "atomic",
+        "replace",
+        "shared",
+        "collaboration"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "3a6e838b1a1ae2f836cbc784bf58f87a33e016b47215a1a8c3dbb8ff59bf421e",
+      "chars": 2095,
+      "size": 2950,
+      "mtime_ns": 1789570495011008500,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "c152a00e025204c988c5cb2eb78cbf973c5242bd7e4e2a3f3f8faecb4ddca744",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "shared-edits"
+      ]
+    },
+    {
+      "id": "sources",
+      "path": "docs/sources.html",
+      "title": "Design basis and measurement",
+      "summary": "Official guidance and a reproducible, qualified efficiency comparison.",
+      "tags": [
+        "sources",
+        "references",
+        "gpt6",
+        "astra",
+        "model",
+        "measurement",
+        "benchmark",
+        "tokens",
+        "metrics"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "f6d37bafbea2e3b4e1e842efe65f4238de5c0e72d3d704d35c7feed03cb72e51",
+      "chars": 2507,
+      "size": 3457,
+      "mtime_ns": 1789570495102549700,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "55b0dea6e914f406e1a7305770fb508ac52fd94294acd52eca37cbbdcbd85f00",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "https://developers.openai.com/api/docs/guides/latest-model",
+        "https://learn.chatgpt.com/docs/agent-configuration/agents-md"
+      ],
+      "anchors": [
+        "sources"
+      ]
+    },
+    {
+      "id": "tracking",
+      "path": "docs/tracking.html",
+      "title": "Track a large project",
+      "summary": "Roadmap, independent work, typed findings and compact active state.",
+      "tags": [
+        "tracking",
+        "roadmap",
+        "portfolio",
+        "plan",
+        "backlog",
+        "audit",
+        "test",
+        "dev",
+        "feedback",
+        "acceptance",
+        "suivi",
+        "projet"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "c73f24eb7f8e24208e75008ecae84c1331e530b11800fbb907cf9949414e0fa5",
+      "chars": 2191,
+      "size": 3109,
+      "mtime_ns": 1789570495097543400,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "0c29c6167e3c95606f42b81e17990077f3226e9cbe26f2a193551ca261026908",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../templates/acceptance.html#tpl-acceptance",
+        "durability.html#durability"
+      ],
+      "anchors": [
+        "tracking"
+      ]
+    },
+    {
+      "id": "workflow",
+      "path": "docs/workflow.html",
+      "title": "Work in verifiable increments",
+      "summary": "Minimal task loop, evidenced completion and resumption after interruptions.",
+      "tags": [
+        "workflow",
+        "task",
+        "lot",
+        "work",
+        "package",
+        "checkpoint",
+        "resume",
+        "compaction",
+        "scope"
+      ],
+      "kind": "guide",
+      "status": "active",
+      "sha256": "9820541bdd1a5fa4d5b473ff2a7faf7696921b4e386cab5c80b446074a92ade8",
+      "chars": 2064,
+      "size": 3104,
+      "mtime_ns": 1789570495047016600,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "5db323b76e1cd0f970c98f9887600df777efe190fd2cb6471bd0c560bf84a34a",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../templates/work.html#tpl-work",
+        "quality.html#quality",
+        "evidence.html#evidence"
+      ],
+      "anchors": [
+        "workflow"
+      ]
+    },
+    {
+      "id": "ac-111",
+      "path": "records/ac-111.html",
+      "title": "Dette : catégories affichées brutes",
+      "summary": "Les category_level_1 accentués (végétal, ingrédient technique…) s'affichent bruts dans le picker ; la traduction culinaire prévue par r-103 reste à faire.",
+      "tags": [
+        "ac",
+        "finding",
+        "ui",
+        "i18n",
+        "categories",
+        "picker",
+        "r-103"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "23db120acad7780cfc9926466c18133e5bc4f3dd5835761579e48921a26bc0d9",
+      "chars": 441,
+      "size": 1458,
+      "mtime_ns": 1789570818307518400,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "5210d88f2180fd767166e85a2daea16f7d22d97aaf826763ff72c05576c00f2b",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-111"
+      ]
+    },
+    {
+      "id": "ac-112",
+      "path": "records/ac-112.html",
+      "title": "Dette : copyWith sans remise à null",
+      "summary": "IngredientSummary.copyWith et IngredientDetail.copyWith suivent le pattern « ?? this.x » : impossible de remettre un champ nullable à null.",
+      "tags": [
+        "ac",
+        "finding",
+        "models",
+        "copywith",
+        "nullable"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "fefed36896c2ac7045338575a66fb94e7645debaa56513da0d512b4674ddfdeb",
+      "chars": 453,
+      "size": 1429,
+      "mtime_ns": 1789570819071912900,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "4a8e1610a76532184fc40ef8232c6d0485a4956410500531bdab68e8013cf1fe",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-112"
+      ]
+    },
+    {
+      "id": "ac-113",
+      "path": "records/ac-113.html",
+      "title": "Dette : confiance nutrition agrégée en dur",
+      "summary": "NutritionRepository._aggregate fixe confidence = 0.8 en dur au lieu de moyenner les confiances réelles des records agrégés.",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "confiance",
+        "agrégation"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "7a58e124529dfca6f2a80c270b70f7e13b4455d80972c0a50379440add1d4b81",
+      "chars": 416,
+      "size": 1404,
+      "mtime_ns": 1789570819766580100,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "cd0e520b88b4e5515bfb9615ec928ffa21aa9a8180d0b4ca58c55e6adf649e09",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-113"
+      ]
+    },
+    {
+      "id": "ac-114",
+      "path": "records/ac-114.html",
+      "title": "Décision PO : ciqual_ids sources incohérents",
+      "summary": "Les ciqual_ids du référentiel Phase 1 pointent vers une ancienne numérotation Ciqual : corriger la source un jour, ou maintenir la résolution par nom ?",
+      "tags": [
+        "ac",
+        "finding",
+        "ciqual",
+        "ids",
+        "referentiel",
+        "decision-po"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "cf123b25452e463f5d1ab8e74a1c1364ee16dcc917c8341d97e35bdc3a691dfe",
+      "chars": 690,
+      "size": 1764,
+      "mtime_ns": 1789570850276628800,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "ciqual-name-resolution"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "78246552f2cf41a83d038322822e308df2f0003726761abce0035190981a95c1",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "ciqual-name-resolution.html#ciqual-name-resolution"
+      ],
+      "anchors": [
+        "ac-114"
+      ]
+    },
+    {
+      "id": "ac-115",
+      "path": "records/ac-115.html",
+      "title": "Décision PO : couverture flavour 97/603",
+      "summary": "La base d'arômes Phase 3 ne couvre que 97/603 ingrédients (Basilic 99 paires, Tomate séchée 95, mais Pignon/Zeste/Huile essentielle 0) : lancer un chantier données sourcé ?",
+      "tags": [
+        "ac",
+        "finding",
+        "flavor",
+        "couverture",
+        "donnees",
+        "decision-po",
+        "heatmap"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "c3143bf69334addef07e9ecb1269de99f4165aca986d23c227e9917de876b589",
+      "chars": 751,
+      "size": 1845,
+      "mtime_ns": 1789570851177133900,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "honest-data-display"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "193144825626ab7de7692f30ee0755dc783e7f520b770ca4745b2e0b8cba6f82",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "honest-data-display.html#honest-data-display"
+      ],
+      "anchors": [
+        "ac-115"
+      ]
+    },
+    {
+      "id": "ac-116",
+      "path": "records/ac-116.html",
+      "title": "Décision PO : approximations de résolution Ciqual",
+      "summary": "La résolution par nom introduit des approximations (Banane vers plantain, Tomate vers verte, standins type Bœuf vers steak cru) : acceptables, ou table d'alias manuelle ?",
+      "tags": [
+        "ac",
+        "finding",
+        "ciqual",
+        "approximations",
+        "alias",
+        "decision-po",
+        "dp-124"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "7be61f77fbfb90a964f10fd28d8ba9b7b75a1aa0c2a8d545e3b80d308be7088d",
+      "chars": 622,
+      "size": 1734,
+      "mtime_ns": 1789570851911791400,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "ciqual-name-resolution"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "97ef6b4ca33f4b2d5471cdd261b24eff21083567375437b2b46a5b7379600103",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "ciqual-name-resolution.html#ciqual-name-resolution"
+      ],
+      "anchors": [
+        "ac-116"
+      ]
+    },
+    {
+      "id": "ac-119",
+      "path": "records/ac-119.html",
+      "title": "Décision PO : 221 ingrédients sans nutrition",
+      "summary": "Après l'extension aux 603, 221 ingrédients restent sans donnée car absents de Ciqual 2025-11-03 (algues, zestes, beurres de noix, épices exotiques…) : deuxième source sourcée ?",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "couverture",
+        "usda",
+        "decision-po",
+        "retour-4"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "78e9a763d2cb1b58ca5e26b4be9b9cc769c89dffae5c497170268878b81e739c",
+      "chars": 685,
+      "size": 1793,
+      "mtime_ns": 1789570852689523400,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "ciqual-name-resolution"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "e15e5e4ea5f615ea1fc050c07321df21c7ca8629cdd726c915f2aa9c5711f638",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-119"
+      ]
+    },
+    {
+      "id": "ac-120",
+      "path": "records/ac-120.html",
+      "title": "Bloquant : macros à zéro pour les ingrédients enrichis Ciqual",
+      "summary": "Les tags INFOODS de l'enrichissement (PROCNT, CHOAVL, FASAT, FIB-, SUCS) ne sont pas reconnus par les listes d'alias du repository : protéines, glucides, AGS et fibres affichent 0 pour les ~309 ingrédients enrichis (ex. Camembert 275 kcal mais protéines 0,0 g).",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "ciqual",
+        "enrichment",
+        "macros",
+        "infoods",
+        "bloquant"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "0f9b238c58f5cc0cc4bb14bd225e412013f5265278941fcf027f242cad8424ea",
+      "chars": 2408,
+      "size": 3713,
+      "mtime_ns": 1790410282358827100,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "ciqual-name-resolution"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "cb45d076c3e05089ab8ce3b4e082a22c932d0cc00bb6ba7c1350cc6a1e04e3ac",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-120"
+      ]
+    },
+    {
+      "id": "ac-121",
+      "path": "records/ac-121.html",
+      "title": "Bloquant : vitamines et folates faussés par moyenne d'expressions incompatibles",
+      "summary": "RAE et RETOL sont moyennés vers VITA (Camembert ≈127 µg au lieu de 231), FOLFD+FOLAC+FOLDFE vers FOLATES, idem VITD/VITE/VITK : la moyenne de mesures total vs sous-ensemble est systématiquement fausse.",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "micronutriments",
+        "vitamines",
+        "folates",
+        "infoods",
+        "bloquant"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "7c027b2ac99daa3b4e5080fe80a8031fd833481523d3c03a7a712343648c79f0",
+      "chars": 1709,
+      "size": 2952,
+      "mtime_ns": 1790410283033243700,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "2c011d324a8a3e153a94dc429b5db16f04c50a8b34d938d316ea3471c16f6592",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-121"
+      ]
+    },
+    {
+      "id": "ac-122",
+      "path": "records/ac-122.html",
+      "title": "Bloquant : le moteur fonctionnel ne peut jamais se déclencher",
+      "summary": "Les 16 règles phase 4 référencent des composants (POLY_PEC_HM, PROT_GEL…) que la chaîne applicative compare à des ingredient_ids ING-* : aucun match possible, alertes toujours vides, toute l'UI dépendante s'auto-masque ; tests verts uniquement via fixtures composants.",
+      "tags": [
+        "ac",
+        "finding",
+        "functional",
+        "interactions",
+        "composants",
+        "moteur",
+        "bloquant",
+        "phase-10"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "6ec8180e1a4098f27d099cc528723fc4f39943fc302013bcccd30482c652bccf",
+      "chars": 2595,
+      "size": 3871,
+      "mtime_ns": 1790410283700460200,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "d12c6290a112a7f5c9af78498ed27a2d3667d544cb84b374a2ad8510a7573faf",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-122"
+      ]
+    },
+    {
+      "id": "ac-123",
+      "path": "records/ac-123.html",
+      "title": "Majeur : heatmap aromatique trompeuse — rouge « À éviter » pour manque de données",
+      "summary": "4 555/4 560 paires prédites ont un score < 0,40 (moyenne 0,045) faute de composés : elles s'affichent « À éviter » alors que cela signifie « pas de données » ; couverture réelle 98/603 ; formule du script tronquée vs méthode documentée.",
+      "tags": [
+        "ac",
+        "finding",
+        "flavor",
+        "heatmap",
+        "scoring",
+        "trompeur",
+        "couverture"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "0ec2a16d2fdd2b939ec0d70cccd3d5bcdffb52d850c64f806131a3367103e937",
+      "chars": 2258,
+      "size": 3649,
+      "mtime_ns": 1790410284373517800,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "honest-data-display"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "1fa5751946781825362b212d14699be404e79236e9fbb82dcb2e27b00e72a347",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "ac-115.html#ac-115",
+        "honest-data-display.html#honest-data-display",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "ac-115.html#ac-115",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-123"
+      ]
+    },
+    {
+      "id": "ac-124",
+      "path": "records/ac-124.html",
+      "title": "Majeur : nutrition insensible au procédé (états falsifiés, zéro rendement)",
+      "summary": "L'enrichissement marque raw 237 entrées cuites Ciqual ; le repository ne filtre pas par état ; l'agrégateur hardcode raw ; aucun facteur de rendement ni de rétention n'existe dans lib/ ou tool/.",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "process",
+        "etats",
+        "rendement",
+        "retention"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "a6c483a8887dbbe7bca765551a2693674802c8e98614c1210edcb99bc6fc0c5d",
+      "chars": 2098,
+      "size": 3336,
+      "mtime_ns": 1790410285036660100,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "34456d3934eda8798b47defc8aec82b9542e3f639293fdf8c0cb4cace94ea1ca",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-124"
+      ]
+    },
+    {
+      "id": "ac-125",
+      "path": "records/ac-125.html",
+      "title": "Majeur latent : la persistance détruit quantités et nutrition",
+      "summary": "recipes_repository écrit toujours quantityG 0.0 et relit « 0 g » ; la table recipes n'a aucune colonne nutrition et la saisie manuelle n'est jamais persistée — bloquant dès le branchement de la persistance.",
+      "tags": [
+        "ac",
+        "finding",
+        "recipes",
+        "persistance",
+        "quantites",
+        "nutrition"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "9066527ab2ff10ba93c51e507ee19474ff7641e43d125104997c33da2f87de97",
+      "chars": 1516,
+      "size": 2702,
+      "mtime_ns": 1790410285699782500,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "e90b861a891848dae7f5b9e1bd4541dca8fc3e87083c7795022878552cf4322a",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-125"
+      ]
+    },
+    {
+      "id": "ac-126",
+      "path": "records/ac-126.html",
+      "title": "Majeur : re-import sans upsert, données périmées silencieuses",
+      "summary": "Les loaders nutrition utilisent INSERT OR IGNORE sur ids déterministes : un CSV régénéré avec valeurs corrigées rejoue l'import mais n'actualise aucune ligne existante.",
+      "tags": [
+        "ac",
+        "finding",
+        "import",
+        "upsert",
+        "donnees",
+        "perimees"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "37f81ca91d9c77e500fc6c83b0593124e58e42c85dbe5234612e4adbdc364978",
+      "chars": 1487,
+      "size": 2646,
+      "mtime_ns": 1790410286365380800,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "bc85e09dbe7b918e1ae2b97e3b9c3c5dc4f5c8d96cbfff9314209a0c7d4a49c2",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "ac-128.html#ac-128",
+        "ac-120.html#ac-120",
+        "ac-119.html#ac-119",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-126"
+      ]
+    },
+    {
+      "id": "ac-127",
+      "path": "records/ac-127.html",
+      "title": "Majeur : honnêteté incomplète en fiche détail, warnings jamais affichés",
+      "summary": "Le repli Valeur saisie manuellement affiche des zéros pour des ingrédients liés non couverts ; le cas mixte reste muet ; les warnings de l'agrégateur ne sont rendus nulle part.",
+      "tags": [
+        "ac",
+        "finding",
+        "ux",
+        "nutrition",
+        "honest-display",
+        "warnings"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "1da5e10750a1c7890aede68358dd08c66bdabb84fefdda7c91b3310f4f9b61dc",
+      "chars": 1722,
+      "size": 2952,
+      "mtime_ns": 1790410287037563900,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "honest-data-display"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "be20a61fa3e0ad9ed8a455f54131778fc3932bc7c30ccb094ffddce15537664b",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "honest-data-display.html#honest-data-display",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-127"
+      ]
+    },
+    {
+      "id": "ac-128",
+      "path": "records/ac-128.html",
+      "title": "Majeur : conversions trompeuses (unités culinaires, standins Ciqual)",
+      "summary": "« 2 œufs » et « 1 c. à soupe » deviennent 2 g et 1 g ; le standin Cajou crue pointe l'entrée grillée-salée (632 kcal, sel) et Café espresso le café moulu (≈×50 kcal).",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "quantites",
+        "unites",
+        "standins"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "0a5dd83547a21bdadc3abf688c08b541bc0c6f998ef6af3e5408846427eef3dc",
+      "chars": 1827,
+      "size": 3041,
+      "mtime_ns": 1790410287726470400,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "a487ab2940561f20d7424a66e269c5f636faa19ef196038e210f7cfed09d1470",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "ac-126.html#ac-126",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede"
+      ],
+      "anchors": [
+        "ac-128"
+      ]
+    },
+    {
+      "id": "ac-129",
+      "path": "records/ac-129.html",
+      "title": "Critique : bases métier absentes du build release",
+      "summary": "Les CSV métier n'étaient pas embarqués (dossiers d'assets non récursifs) et le lecteur d'assets était retiré avant la fin de l'import : l'exécutable release lancé hors du dossier du projet ne pouvait rien importer.",
+      "tags": [
+        "ac",
+        "finding",
+        "release",
+        "assets",
+        "import",
+        "critique"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "93e73f8d4a9c6cfda31e040b9f170fa489aa67e5e63c6b2d5d427ea9aa1d9c3f",
+      "chars": 1764,
+      "size": 3000,
+      "mtime_ns": 1790421771574045800,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "66f88a380d655b67b77855b2de607c7a63e333d83d26e01de2070e71b82ce013",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-ux-refonte.html#phase10-ux-refonte"
+      ],
+      "anchors": [
+        "ac-129"
+      ]
+    },
+    {
+      "id": "ac-130",
+      "path": "records/ac-130.html",
+      "title": "Majeur : rapprochements Ciqual par nom erronés",
+      "summary": "Environ 25 ingrédients rattachés par nom à un mauvais aliment Ciqual (bière sans alcool → bière forte, fromage frais → fromage de tête, noix → muscade, yaourt → yaourt à la grecque…).",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "ciqual",
+        "rapprochement",
+        "fiabilite"
+      ],
+      "kind": "finding",
+      "status": "review",
+      "sha256": "9245fa7214bb416bfc10f3dc399770bd6fb79ecde353a40a19942378f4b1bf73",
+      "chars": 1498,
+      "size": 2645,
+      "mtime_ns": 1790429112293564800,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "71805cd96e12c1b789ecbdf7f575725a83783464fd9eb2051bb742cf161fd9f5",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-sources-ouvertes.html#phase10-sources-ouvertes"
+      ],
+      "anchors": [
+        "ac-130"
+      ]
+    },
+    {
+      "id": "ac-F-004",
+      "path": "records/ac-F-004.html",
+      "title": "Dette : cache global IngredientAliasIndex",
+      "summary": "L'index de recherche floue est reconstruit à chaque ouverture du picker au lieu d'un cache global construit au boot (cahier §11.2).",
+      "tags": [
+        "ac",
+        "finding",
+        "dette",
+        "perf",
+        "cache",
+        "picker",
+        "ingredients",
+        "phase-09"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "53af8a1b10edf612fe103b9f6f1e54d659d9ee012e7f61fbb9052be046f53b88",
+      "chars": 579,
+      "size": 1582,
+      "mtime_ns": 1789570770612728500,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "1f2c6d62ca71952f4a01be135dd9c6ee663f69fd0d796ee1cc8659082020bf66",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-F-004"
+      ]
+    },
+    {
+      "id": "ac-F-006",
+      "path": "records/ac-F-006.html",
+      "title": "Infra : dispatch GLM sans bloc de code formel",
+      "summary": "Quand GLM 5.3 produit tout le code en reasoning_content (max_tokens atteint), le wrapper ne récupère pas de bloc v4a_patch formel.",
+      "tags": [
+        "ac",
+        "finding",
+        "infra",
+        "dispatch",
+        "glm",
+        "tokens",
+        "wrapper"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "25760f9f5fd0e35301a23eb21048614270144931e97bc9dfc9edb14fc93889f2",
+      "chars": 684,
+      "size": 1670,
+      "mtime_ns": 1789570771347063100,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "e98da46415af669139b4c16358c0a500af44d0466bbf9694317b88a997f5e710",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-F-006"
+      ]
+    },
+    {
+      "id": "ac-F-007",
+      "path": "records/ac-F-007.html",
+      "title": "Infra : opencode CLI KO côté backend Z.AI",
+      "summary": "opencode run --model zai/glm-5.3 renvoie UnknownError de façon persistante ; le curl direct vers l'API Z.AI fonctionne avec la même clé.",
+      "tags": [
+        "ac",
+        "finding",
+        "infra",
+        "opencode",
+        "glm",
+        "critical"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "8a52077b9198dba6888b543da30fc4a9e245beedd3d242589af3db5a485040f1",
+      "chars": 695,
+      "size": 1680,
+      "mtime_ns": 1789570772052734900,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "e925b6942ffeadd1bf50bffb1dd16f2d08b8519fb0f45c975b7188e93d4a37c7",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-F-007"
+      ]
+    },
+    {
+      "id": "ac-G-003",
+      "path": "records/ac-G-003.html",
+      "title": "Dette : waterContent agrégé en somme",
+      "summary": "NutritionAggregator somme la teneur en eau comme les autres nutriments ; sémantiquement discutable, à revoir au lot qualité.",
+      "tags": [
+        "ac",
+        "finding",
+        "nutrition",
+        "waterContent",
+        "agregation"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "10598646b793e4a5424607aadfd13f4d2052e4af7cda7336775aaa027f3bd354",
+      "chars": 443,
+      "size": 1427,
+      "mtime_ns": 1789570794236104000,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "1c887b231bcfd133dc2d115a158355a92cf78024ad097cf46574b7bbaccf49f9",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-G-003"
+      ]
+    },
+    {
+      "id": "ac-H-001",
+      "path": "records/ac-H-001.html",
+      "title": "Validation métier : sévérité Phase 4 heuristique",
+      "summary": "interaction_rules.csv n'a pas de colonne severity : le solver mappe famille safety vers danger, decrease vers warning, sinon info — mapping non validé métier.",
+      "tags": [
+        "ac",
+        "finding",
+        "functional",
+        "sevérite",
+        "phase-4",
+        "validation",
+        "metier",
+        "dp-110"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "8910ff9c713434555066e2ae3a93cda51a9963f928cc947e42612869fdc7893c",
+      "chars": 601,
+      "size": 1665,
+      "mtime_ns": 1789570794964878000,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "f72f7c8a1b630b3da145e6c70da9d6c5e15b40ea59dee5bde1e5a3253c73e32e",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-H-001"
+      ]
+    },
+    {
+      "id": "ac-H-004",
+      "path": "records/ac-H-004.html",
+      "title": "Dette : dismiss recommandation non persistant",
+      "summary": "Le bouton Ignorer du RecommendationSheet vit dans un Set statique en mémoire : le dismiss ne survit pas à un redémarrage de l'application.",
+      "tags": [
+        "ac",
+        "finding",
+        "recommandations",
+        "ux",
+        "persistance"
+      ],
+      "kind": "finding",
+      "status": "active",
+      "sha256": "1da17b8e1799278fbb0add3b4a9add74c9b80839de2172ec95f433ecdf603233",
+      "chars": 440,
+      "size": 1451,
+      "mtime_ns": 1789570795684479300,
+      "revision": 1,
+      "owner": "Robertson Andersen",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "a3d488cd9f00361861345f76d0c3b249821540e86f06f89e702cdeed3b1d6f34",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "ac-H-004"
+      ]
+    },
+    {
+      "id": "acceptance-phase09",
+      "path": "records/acceptance-phase09.html",
+      "title": "Recette PO : smoke test Phase 09 (retour n°4)",
+      "summary": "Feuille de test manuelle du PO sur machine Windows : import 5 phases, enrichissement 371/603, message honnête, tri du picker, heatmap, parts du mix. Décision de livraison ensuite.",
+      "tags": [
+        "acceptance",
+        "recette",
+        "smoke",
+        "po",
+        "phase-09",
+        "retour-4",
+        "validation"
+      ],
+      "kind": "acceptance",
+      "status": "ready",
+      "sha256": "82f5eca6faa8b0b0c0ecd5b7a396030f194a28e6a29d8e35924b5e775cd767ac",
+      "chars": 1787,
+      "size": 3190,
+      "mtime_ns": 1789570697862991500,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase09-metier-ux"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "9d476f3 (branche Ge-LAG/db-connection-strategies)",
+      "environment": "Windows, SDK Flutter 3.47.1, machine PO (build local)",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "Les 7 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "d561375ffba4cc09feb113e9a626a39480813403167a0bb71965ff09bf35e0fe",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase09-metier-ux.html#phase09-metier-ux",
+        "../work/phase09-metier-ux.html#phase09-metier-ux",
+        "../work/phase09-closeout.html#phase09-closeout"
+      ],
+      "anchors": [
+        "acceptance-phase09"
+      ]
+    },
+    {
+      "id": "acceptance-phase10",
+      "path": "records/acceptance-phase10.html",
+      "title": "Recette PO : smoke test Phase 10 (cohérence métier et procédé)",
+      "summary": "Feuille de test manuelle du PO sur Windows : migration v3 → v4, recettes de démonstration, nutrition avec procédé, Nutri-Score, heatmap, analyse physico-chimique, persistance. Décision de livraison ensuite.",
+      "tags": [
+        "acceptance",
+        "recette",
+        "smoke",
+        "po",
+        "phase-10",
+        "validation"
+      ],
+      "kind": "acceptance",
+      "status": "ready",
+      "sha256": "2fd0f90359567bbdd17e021030ac5428b08ea5e4e13c6701baa10461cc17116e",
+      "chars": 4003,
+      "size": 5701,
+      "mtime_ns": 1790434589438983200,
+      "revision": 6,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-coherence-procede",
+        "phase10-ux-refonte",
+        "phase10-sources-ouvertes",
+        "phase10-parametres"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "2abde3b (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "Les 14 étapes du smoke test sont passées et consignées avec leurs résultats réels par le PO."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "b46ae636d50fee3817e23a9719a9fe7d715fb2f1f6df67734a5dfe75b6646fb2",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "../work/phase10-ux-refonte.html#phase10-ux-refonte",
+        "../work/phase10-sources-ouvertes.html#phase10-sources-ouvertes",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "delivery-gate.html#delivery-gate",
+        "acceptance-phase09.html#acceptance-phase09"
+      ],
+      "anchors": [
+        "acceptance-phase10"
+      ]
+    },
+    {
+      "id": "ciqual-name-resolution",
+      "path": "records/ciqual-name-resolution.html",
+      "title": "Décision : résolution Ciqual par nom",
+      "summary": "Les ciqual_ids sources pointent vers une ancienne numérotation : l'enrichement nutrition résout tous les ingrédients par nom avec garde-fous durcis et standins curatés (dp-124).",
+      "tags": [
+        "decision",
+        "ciqual",
+        "nutrition",
+        "enrichment",
+        "resolution",
+        "nom",
+        "dp-124"
+      ],
+      "kind": "decision",
+      "status": "active",
+      "sha256": "af66ca7c1b4ff6c9cb5346b7d0ca8071eb92d5f93c1e0f9f38ffc19120ba872c",
+      "chars": 1423,
+      "size": 2825,
+      "mtime_ns": 1789571032052081000,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "2026-09-16",
+      "review_by": "2027-03-16",
+      "review_trigger": "Nouvelle édition Ciqual, adoption d'une seconde source nutrition (USDA FDC), ou dérive des approximations",
+      "review_digest": "3cdcaf8ded0ea415fca71664d7c04b7499f2bb7cacfc05b0dbca97d408c80705",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "836c7d05d35da22791da72f75bb0d9586514e3fd4be56cf77ee4f230e52dac99",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "ac-114.html#ac-114",
+        "ac-116.html#ac-116",
+        "ac-119.html#ac-119"
+      ],
+      "anchors": [
+        "ciqual-name-resolution"
+      ]
+    },
+    {
+      "id": "delivery-gate",
+      "path": "records/delivery-gate.html",
+      "title": "Contrainte : porte de livraison PO",
+      "summary": "Aucun push, PR, merge, tag ni mutation Git destructrice sans validation explicite du PO dans la session courante ; commits atomiques et branches dédiées.",
+      "tags": [
+        "contrainte",
+        "git",
+        "push",
+        "pr",
+        "merge",
+        "livraison",
+        "commit",
+        "branche",
+        "r-01",
+        "r-02",
+        "bp-21",
+        "bp-22"
+      ],
+      "kind": "constraint",
+      "status": "active",
+      "sha256": "f25c51f4ef79c7f9138166dd22e9213ee4638ee880f61831793d95846670a570",
+      "chars": 1121,
+      "size": 2442,
+      "mtime_ns": 1789571031270432600,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "2026-09-16",
+      "review_by": "2027-03-16",
+      "review_trigger": "Changement de politique de livraison ou d'hébergement, ou demande explicite du PO",
+      "review_digest": "a8621688aee78ffc84b0f06749da59e93c0a78c2746ef17d42c9a830f390cde9",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [
+        "delivery"
+      ],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "1eec25591b14f0ea8edb43cab3743467970aefb6ebb2b48b837225a24e97495f",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "delivery-gate"
+      ]
+    },
+    {
+      "id": "honest-data-display",
+      "path": "records/honest-data-display.html",
+      "title": "Décision : affichage honnête des données manquantes",
+      "summary": "Jamais de donnée fabriquée : compteurs liés/avec-données distincts, messages explicites sur les absences, approximations signalées (dp-125, retours PO n°3/n°4).",
+      "tags": [
+        "decision",
+        "honnetete",
+        "donnees",
+        "nutrition",
+        "flavor",
+        "compteur",
+        "message",
+        "dp-125"
+      ],
+      "kind": "decision",
+      "status": "active",
+      "sha256": "ae4d379c6d5a57f8fce0d3a726a2ef185315a3d8b1c616881bebee4417b755a6",
+      "chars": 1117,
+      "size": 2499,
+      "mtime_ns": 1789571032781739100,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "2026-09-16",
+      "review_by": "2027-03-16",
+      "review_trigger": "Changement de couverture des bases (chantier données) ou demande produit sur l'affichage des manques",
+      "review_digest": "ee594fd98d5c9bc8676cdfdc2e3df9b18f5bc5d1bdc3c54742c8b57315ca05c6",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "d572273a68b408922fbc3e271e107a14be063a5630589a7a710b53bcec0439e3",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "ciqual-name-resolution.html#ciqual-name-resolution"
+      ],
+      "anchors": [
+        "honest-data-display"
+      ]
+    },
+    {
+      "id": "livraison-phase09-10",
+      "path": "records/livraison-phase09-10.html",
+      "title": "Autorisation : livraison des phases 09 à 11 (plan) vers main",
+      "summary": "Push de Ge-LAG/db-connection-strategies vers origin puis fusion sans squash dans main, autorisés par le PO le 2026-09-26.",
+      "tags": [
+        "authorization",
+        "livraison",
+        "push",
+        "merge",
+        "main",
+        "phase-09",
+        "phase-10",
+        "phase-11"
+      ],
+      "kind": "authorization",
+      "status": "accepted",
+      "sha256": "41a9c5ca5309543946e1e9c90fb3782d5a237a9527d92a02907565c84e907b0c",
+      "chars": 1432,
+      "size": 3257,
+      "mtime_ns": 1790435760920749700,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "delivery-gate"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "Branche Ge-LAG/db-connection-strategies (phases 09 et 10, plan de la phase 11), en avance sur origin/main ca351d9",
+      "environment": "Dépôt github.com/Ge-LAG/MaestroPesto, poste Windows 11 du PO",
+      "evidence_digest": "4ee3dc267cf808b307550cb4f3e52de6a75682546013453fe0215bbcd2ec7235",
+      "criteria": [
+        {
+          "id": "L1",
+          "text": "Le PO autorise explicitement, dans la session courante, le push de la branche et sa fusion dans main sur origin."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "livraison-phase09-10.html#source-po",
+          "check": "validation explicite du PO dans la session",
+          "by": "Guillaume (PO), consigné par Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "L1",
+          "text": "Autorisation observée dans la session."
+        }
+      ],
+      "body_digest": "c78c368390c83b519307772a9a61b326e84d6061d54bd65d3d2b20ddf99cbbe0",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "delivery-gate.html#delivery-gate",
+        "acceptance-phase09.html#acceptance-phase09",
+        "acceptance-phase10.html#acceptance-phase10",
+        "livraison-phase09-10.html#source-po"
+      ],
+      "anchors": [
+        "livraison-phase09-10",
+        "source-po"
+      ]
+    },
+    {
+      "id": "phase10-mandat-arbitrages",
+      "path": "records/phase10-mandat-arbitrages.html",
+      "title": "Décision : arbitrages phase 10 sous mandat PO du 2026-09-26",
+      "summary": "Arbitrages techniques pris en autonomie sous le mandat PO du 2026-09-26 (sources arômes internes, alias Ciqual signalés, lot F complet, persistance recettes) — à relire par le PO.",
+      "tags": [
+        "decision",
+        "phase-10",
+        "mandat",
+        "licence",
+        "flavor",
+        "nutrition",
+        "alias",
+        "procede",
+        "persistance"
+      ],
+      "kind": "decision",
+      "status": "review",
+      "sha256": "9a7ee76d65b54efcccd040bd9f0dea3899f5499c29f468e3f17629ba5c1a73e1",
+      "chars": 3398,
+      "size": 4774,
+      "mtime_ns": 1790376339885801900,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "f67aec49aa64c2a9a89935535636078b17284e75e847b02cff9a8122d74efcf3",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/phase10-coherence-procede.html#phase10-coherence-procede",
+        "honest-data-display.html#honest-data-display"
+      ],
+      "anchors": [
+        "phase10-mandat-arbitrages"
+      ]
+    },
+    {
+      "id": "phase11-cadrage",
+      "path": "records/phase11-cadrage.html",
+      "title": "Décision : cadrage de la phase 11 (recette à l'envers)",
+      "summary": "Deux modes de conception (Cuisine cohérente par défaut, Pure Innovation), point de départ, priorités, variantes, étapes et contraintes de la conception par objectifs.",
+      "tags": [
+        "decision",
+        "phase-11",
+        "conception-inverse",
+        "modes",
+        "pure-innovation",
+        "garde-fous"
+      ],
+      "kind": "decision",
+      "status": "accepted",
+      "sha256": "2ca06a93d68828b8fad058448c615e088abdc5f075c9baca12d342fe35feb0b8",
+      "chars": 3484,
+      "size": 5623,
+      "mtime_ns": 1790435754642733800,
+      "revision": 5,
+      "owner": "Guillaume",
+      "reviewed": "2026-09-26",
+      "review_by": "2026-10-31",
+      "review_trigger": "Réponse du PO sur D2 à D7, démarrage du lot C (texte de l'avertissement Pure Innovation) ou changement du concept",
+      "review_digest": "2cd3f7eff3a3edc2d009f321d04361e95e6acee97f631ab008c13c6754878de3",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "8ac0740 (plan documentaire, aucun code)",
+      "environment": "Session Claude Code du 2026-09-26, machine PO",
+      "evidence_digest": "91fde948769a1aedcac69faca26b0c49d7e3d1b6c30ebaae65731d55aff442b5",
+      "criteria": [
+        {
+          "id": "C1",
+          "text": "Le PO valide explicitement les décisions D1 à D7."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "phase11-cadrage.html#validation-po",
+          "check": "validation explicite du PO dans la session",
+          "by": "Guillaume (PO), consigné par Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "C1",
+          "text": "D1 à D7 validés, texte de l'avertissement compris."
+        }
+      ],
+      "body_digest": "0ce507969b1813189d14501d85231d5fa86013738dada35fd17359662b166617",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/idea-recette-inversee.html#idea-recette-inversee",
+        "../work/phase11-recette-inversee.html#phase11-recette-inversee",
+        "honest-data-display.html#honest-data-display",
+        "phase11-cadrage.html#validation-po"
+      ],
+      "anchors": [
+        "phase11-cadrage",
+        "validation-po"
+      ]
+    },
+    {
+      "id": "start",
+      "path": "START.html",
+      "title": "Start here",
+      "summary": "Minimal Codex entry point; selective context and language defaults.",
+      "tags": [
+        "bootstrap",
+        "start",
+        "codex",
+        "instructions",
+        "language",
+        "langue",
+        "démarrage"
+      ],
+      "kind": "entry",
+      "status": "active",
+      "sha256": "f819810589746cf0b53dc79682ee96b315665496116d05c67360482e92a9a2fc",
+      "chars": 893,
+      "size": 1784,
+      "mtime_ns": 1789570494978010500,
+      "revision": 1,
+      "owner": "CTO",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "e538e1cb400b61e47b32f22305ae1bcacac605aa492ae412a6db3a44a0ff477a",
+      "has_placeholder": false,
+      "links": [
+        "assets/method.css",
+        "index.html",
+        "docs/core.html#core",
+        "project.json",
+        "docs/profile.html#profile",
+        "docs/adoption.html#adoption"
+      ],
+      "anchors": [
+        "start"
+      ]
+    },
+    {
+      "id": "tpl-acceptance",
+      "path": "templates/acceptance.html",
+      "title": "Manual acceptance template",
+      "summary": "User checks with actual tester and observed result.",
+      "tags": [
+        "template",
+        "acceptance",
+        "recette",
+        "test",
+        "dev",
+        "validation",
+        "po",
+        "french"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "e31351065b2d2824ef919a582f2cde04434d9bac60fdbb95df3ff6456d72da24",
+      "chars": 1080,
+      "size": 2072,
+      "mtime_ns": 1789570494952025200,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "TO_CONFIGURE: observable acceptance criterion."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "b49f31e7921ee5c7d4941817d25dc2920dd43b7ea10ea1efed52a47575b47299",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../docs/evidence.html#evidence"
+      ],
+      "anchors": [
+        "tpl-acceptance"
+      ]
+    },
+    {
+      "id": "tpl-authorization",
+      "path": "templates/authorization.html",
+      "title": "Scoped authorization template",
+      "summary": "Real user authority, limits and revocation.",
+      "tags": [
+        "template",
+        "authorization",
+        "authority",
+        "permission",
+        "mandat",
+        "consent"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "2dfbc86089058954537f4b9ed98194a6189a96299f24db5cc22db2210274b4c0",
+      "chars": 1158,
+      "size": 2145,
+      "mtime_ns": 1789570494968011500,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "TO_CONFIGURE: observable acceptance criterion."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "fb543bc585284d1d1b8ab8e07a7b10548f2f2ac0e450e5775ae7e1515d90296e",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../docs/evidence.html#evidence"
+      ],
+      "anchors": [
+        "tpl-authorization"
+      ]
+    },
+    {
+      "id": "tpl-constraint",
+      "path": "templates/constraint.html",
+      "title": "Scoped constraint template",
+      "summary": "Mandatory rule linked to components, paths and an applicability review.",
+      "tags": [
+        "template",
+        "constraint",
+        "component",
+        "invariant",
+        "dependency",
+        "scope"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "8af9372bbd916e0ef6b2103a7caf3e9c9882245b7e91117aea0daf481368e3b9",
+      "chars": 580,
+      "size": 1388,
+      "mtime_ns": 1789570494957011400,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "62a9f02d7f39635e6a2d72b006dfada60fd1c2d1e22a771cb031d16bcfc4e84d",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "tpl-constraint"
+      ]
+    },
+    {
+      "id": "tpl-decision",
+      "path": "templates/decision.html",
+      "title": "Decision template",
+      "summary": "Enduring tradeoffs and scope without a session transcript.",
+      "tags": [
+        "template",
+        "adr",
+        "decision",
+        "architecture",
+        "tradeoff"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "dfe6467915f63142efc979da2b7954a087baeaf025288976a56ed6d99eb07eb8",
+      "chars": 948,
+      "size": 1911,
+      "mtime_ns": 1789570494940741100,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "TO_CONFIGURE: observable acceptance criterion."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "f96e622f4d518bef3bc9c69d955b55e9a9b128a39c7ae07e9d4526a72534b151",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../docs/evidence.html#evidence"
+      ],
+      "anchors": [
+        "tpl-decision"
+      ]
+    },
+    {
+      "id": "tpl-finding",
+      "path": "templates/finding.html",
+      "title": "Feedback or audit finding",
+      "summary": "Distinct manual-feedback and code-audit provenance.",
+      "tags": [
+        "template",
+        "finding",
+        "td",
+        "ac",
+        "feedback",
+        "audit",
+        "test",
+        "dev",
+        "defect",
+        "bug"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "5dbdbe37eeb7e26b82d01a135c7beecdb503777ff81f446177a99ce3d73b153a",
+      "chars": 1009,
+      "size": 1993,
+      "mtime_ns": 1789570494929698700,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "TO_CONFIGURE: observable acceptance criterion."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "376892a8aa34028ca7f0e7a7ec12fc5759eb59f45aa4a60e760b7dcbd93e08e9",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../docs/evidence.html#evidence"
+      ],
+      "anchors": [
+        "tpl-finding"
+      ]
+    },
+    {
+      "id": "tpl-incident",
+      "path": "templates/incident.html",
+      "title": "Incident record template",
+      "summary": "Impact, stabilization, recovery evidence and prevention.",
+      "tags": [
+        "template",
+        "incident",
+        "outage",
+        "production",
+        "recovery",
+        "postmortem"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "60e7ea5c23291c2f9a90e3fd4eea25f181034edba9a2ab6386bf4bc1b383f012",
+      "chars": 980,
+      "size": 1967,
+      "mtime_ns": 1789570494934722800,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "TO_CONFIGURE: observable acceptance criterion."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "fe1cbb00c3cfbaed657e9d746bae3084064af9045facfdbfae5e0767e2ef9ae4",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../docs/evidence.html#evidence"
+      ],
+      "anchors": [
+        "tpl-incident"
+      ]
+    },
+    {
+      "id": "tpl-release",
+      "path": "templates/release.html",
+      "title": "Release record template",
+      "summary": "Candidate, gates, authority, recovery and deployment outcome.",
+      "tags": [
+        "template",
+        "release",
+        "deployment",
+        "artifact",
+        "rollback",
+        "smoke",
+        "production"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "e9cdd8d0f6407fe15b3f20ca2c726ddacab2c21531f8f644c66a8141dc81c05d",
+      "chars": 1141,
+      "size": 2136,
+      "mtime_ns": 1789570494962010100,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "TO_CONFIGURE: observable acceptance criterion."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "8b2f1ad5f5f69e092dc937f1d2be7aadbbc4f4ab31a01d40d5dbc2462ddedf08",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../docs/evidence.html#evidence"
+      ],
+      "anchors": [
+        "tpl-release"
+      ]
+    },
+    {
+      "id": "tpl-work",
+      "path": "templates/work.html",
+      "title": "Work package template",
+      "summary": "One outcome, acceptance criteria, scope and concise evidence.",
+      "tags": [
+        "template",
+        "work",
+        "w",
+        "task",
+        "lot",
+        "feature",
+        "bug"
+      ],
+      "kind": "template",
+      "status": "draft",
+      "sha256": "7c63a1de795c323942f75ae1a4714ded30639eb48c09a792bd59d13b3e4d64fd",
+      "chars": 1615,
+      "size": 2652,
+      "mtime_ns": 1789570494946724700,
+      "revision": 1,
+      "owner": "Codex",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "TO_CONFIGURE: observable acceptance criterion."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "e25c4bf042ce81935995b48eb345d6489c68a77f22a5390695ad1da38fe2430d",
+      "has_placeholder": true,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "decision.html#tpl-decision",
+        "acceptance.html#tpl-acceptance",
+        "release.html#tpl-release",
+        "../docs/evidence.html#evidence"
+      ],
+      "anchors": [
+        "tpl-work"
+      ]
+    },
+    {
+      "id": "idea-ocr-recettes",
+      "path": "work/idea-ocr-recettes.html",
+      "title": "Idée backlog : OCR local de recettes",
+      "summary": "Prendre en photo une recette (livre, magazine, manuscrit) et la formaliser automatiquement au format MaestroPesto, en OCR 100 % local.",
+      "tags": [
+        "backlog",
+        "idee",
+        "ocr",
+        "recettes",
+        "offline",
+        "produit"
+      ],
+      "kind": "work",
+      "status": "draft",
+      "sha256": "bcaf176ce54b8a736a0548c43aeda3823a855ce0e44d2a9e27fe8851097dca48",
+      "chars": 1028,
+      "size": 2041,
+      "mtime_ns": 1789570679989486600,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "b7aad41e2c495e85034164320356f9368124d976092c25181af31ad243d39c8f",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html"
+      ],
+      "anchors": [
+        "idea-ocr-recettes"
+      ]
+    },
+    {
+      "id": "phase09-closeout",
+      "path": "work/phase09-closeout.html",
+      "title": "Phase 09 : validation PO et livraison",
+      "summary": "Focus courant : smoke test manuel du retour n°4 par le PO, puis décision et exécution du push de la branche et de la PR vers main.",
+      "tags": [
+        "phase-09",
+        "validation",
+        "smoke",
+        "push",
+        "pr",
+        "livraison",
+        "focus"
+      ],
+      "kind": "work",
+      "status": "active",
+      "sha256": "ce1e115ff0abc23082839f2751e3863ab53b70cb04d66ad4ccd7a8de01ef2228",
+      "chars": 1726,
+      "size": 2928,
+      "mtime_ns": 1789589674803368700,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "acceptance-phase09"
+      ],
+      "supersedes": [],
+      "components": [
+        "delivery"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "Smoke test PO du retour n°4 passé et consigné dans acceptance-phase09."
+        },
+        {
+          "id": "A2",
+          "text": "Push et PR exécutés selon delivery-gate, ou report explicite consigné avec motif et prochaine action."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "a0aff5641ed4e89877f69f5cf6ede786dd8a9fd2e8c89a5c26e2ffa4361feed9",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/acceptance-phase09.html#acceptance-phase09",
+        "../records/delivery-gate.html#delivery-gate",
+        "phase09-metier-ux.html#phase09-metier-ux",
+        "phase10-coherence-procede.html#phase10-coherence-procede",
+        "../records/acceptance-phase09.html#acceptance-phase09",
+        "../records/delivery-gate.html#delivery-gate"
+      ],
+      "anchors": [
+        "phase09-closeout"
+      ]
+    },
+    {
+      "id": "phase09-metier-ux",
+      "path": "work/phase09-metier-ux.html",
+      "title": "Phase 09 : UX pilotée par le métier (Lots F+G+H)",
+      "summary": "Exposition des 4 bases métier dans l'UX : picker 603 ingrédients, nutrition auto agrégée, heatmap aromatique, alertes proportionnées, recommandations. Livré, auto-vérifié 244/244, en attente d'acceptance PO.",
+      "tags": [
+        "phase-09",
+        "lots",
+        "metier",
+        "nutrition",
+        "flavor",
+        "functional",
+        "picker",
+        "recommandations",
+        "ux",
+        "review"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "652cbae2c0efe89332da4a69542a305d26394ab6093cbdb28db197ddece1361f",
+      "chars": 2132,
+      "size": 4197,
+      "mtime_ns": 1789570942641216000,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [
+        "recipes",
+        "ingredients",
+        "picker",
+        "nutrition",
+        "flavor",
+        "functional",
+        "recommendations",
+        "i18n"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "9d476f3 (branche Ge-LAG/db-connection-strategies)",
+      "environment": "Windows, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "Suite de tests complète verte (244/244), incluant tri FR, compteur honnête, couverture 371."
+        },
+        {
+          "id": "A2",
+          "text": "Analyse statique sans issue."
+        },
+        {
+          "id": "A3",
+          "text": "Formatage stable."
+        },
+        {
+          "id": "A4",
+          "text": "Build Windows réussi."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test",
+          "by": "GLM 5.3 (ZCode)",
+          "date": "2026-08-26",
+          "waiver": "",
+          "for": "A1",
+          "text": "244/244 tests verts, +7 au retour n°4 (tri FR, withDataCount, chips, message honnête, couverture 371, tri Œuf)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter analyze",
+          "by": "GLM 5.3 (ZCode)",
+          "date": "2026-08-26",
+          "waiver": "",
+          "for": "A2",
+          "text": "0 issue."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "dart format --set-exit-if-changed .",
+          "by": "GLM 5.3 (ZCode)",
+          "date": "2026-08-26",
+          "waiver": "",
+          "for": "A3",
+          "text": "Exit 0."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter build windows",
+          "by": "GLM 5.3 (ZCode)",
+          "date": "2026-08-26",
+          "waiver": "",
+          "for": "A4",
+          "text": "Build OK, exécutable maestropesto.exe produit."
+        }
+      ],
+      "body_digest": "c1ba5fd8c27a7017f14acba96367c9578e0a9fd0566393ff024b04a24f9b60eb",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/ciqual-name-resolution.html#ciqual-name-resolution",
+        "../records/acceptance-phase09.html#acceptance-phase09",
+        "phase09-closeout.html#phase09-closeout",
+        "../records/ac-119.html#ac-119"
+      ],
+      "anchors": [
+        "phase09-metier-ux"
+      ]
+    },
+    {
+      "id": "phase10-coherence-procede",
+      "path": "work/phase10-coherence-procede.html",
+      "title": "Phase 10 : cohérence métier et procédé (nutrition, arômes, interactions)",
+      "summary": "Phase prioritaire issue du test dev poussé du 2026-09-16 : macros et vitamines réellement non nulles, moteur d'interactions branché via mapping composants, nutrition sensible au procédé (états, rendements, rétention), heatmap recalibrée puis complétée.",
+      "tags": [
+        "phase-10",
+        "nutrition",
+        "flavor",
+        "functional",
+        "process",
+        "coherence",
+        "priorite"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "bc5f8647a6ed870147ca7312f2a92015149e90dfc4e375f1c2dfd089e0f0e98b",
+      "chars": 9254,
+      "size": 13977,
+      "mtime_ns": 1790410249112620500,
+      "revision": 5,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [
+        "nutrition",
+        "flavor",
+        "functional",
+        "recipes",
+        "ingredients",
+        "data-pipeline"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [
+        "lib/core/scoring/nutrition_aggregator.dart",
+        "lib/core/scoring/nutrition_feedback.dart",
+        "lib/core/scoring/flavor_pairing_engine.dart",
+        "lib/core/scoring/physchem_estimator.dart",
+        "lib/core/scoring/functional_constraint_solver.dart",
+        "lib/features/nutrition/data/nutrition_repository.dart",
+        "lib/features/recipes/data/recipes_repository.dart",
+        "lib/features/analysis/data/recipe_analysis_service.dart",
+        "test/core/database/metier_smoke_test.dart",
+        "test/features/analysis/experimental_cases_golden_test.dart",
+        "test/features/recipes/recipes_persistence_test.dart",
+        "test/core/database/migration_v4_test.dart"
+      ],
+      "candidate": "99f73bc (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "347d33132cb826cd9f2166a2f7777010accab72786d7eb37c1e4ced04e65f314",
+      "criteria": [
+        {
+          "id": "A1",
+          "text": "Un ingrédient enrichi Ciqual réel (ex. Camembert) expose protéines/glucides/fibres > 0 cohérentes avec son énergie (test d'intégration metier_smoke)."
+        },
+        {
+          "id": "A2",
+          "text": "VITA = RAE lorsque RAE est présent (test : Camembert 231 µg, pas ≈127)."
+        },
+        {
+          "id": "A3",
+          "text": "Une recette réelle avec de vrais ING-* (cas EXP-GEL-PEC-001) déclenche RULE-PEC-HM-001 visible dans l'UI."
+        },
+        {
+          "id": "A4",
+          "text": "Une paire prédite sans support de données ne s'affiche plus « À éviter » (teinte pas-de-donnée ou confiance signalée)."
+        },
+        {
+          "id": "A6",
+          "text": "Chaque ingrédient du référentiel (603/603) dispose d'un profil sensoriel avec niveau de preuve et confiance ; la heatmap d'une recette réelle affiche un score pour toutes ses paires liées et les benchmarks classiques phase 3 obtiennent un score ≥ 0,70 (contrastes négatifs < 0,40)."
+        },
+        {
+          "id": "A7",
+          "text": "La nutrition d'une recette tient compte du procédé (rendement, rétention) et affiche Nutri-Score estimé, %VNR et poids cuit estimé, avec leurs hypothèses."
+        },
+        {
+          "id": "A8",
+          "text": "Une recette créée puis l'application relancée : la recette, ses quantités (60 g reste 60 g) et ses étapes sont relues depuis la base."
+        },
+        {
+          "id": "A5",
+          "text": "flutter test, flutter analyze et dart format --set-exit-if-changed . verts sur le lot livré."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A1",
+          "text": "Camembert : protéines, glucides et fibres > 0 cohérents avec l'énergie ; aucun ingrédient enrichi à protéines 0 et énergie > 200 kcal (518/603 ingrédients avec nutrition)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A2",
+          "text": "Vitamine A = RAE (231 µg pour le Camembert) ; folates = FOLFD + FOLAC."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/analysis/experimental_cases_golden_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A3",
+          "text": "EXP-GEL-PEC-001 rejoué sur de vrais ING-* : RULE-PEC-HM-001 déclenchée ; pH et aw estimés proches des mesures des 10 cas (ex. pain 5,6 vs 5,5 ; vinaigrette 2,9 vs 3,0). Visible dans la carte « Analyse physico-chimique » (capture de la Confiture de fraises)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart test/core/scoring/flavor_pairing_engine_test.dart + revue des captures",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A4",
+          "text": "Une prédiction basse reste hachurée et n'est jamais « À éviter » ; les ingrédients sans arôme propre (sel, sucre, farine) reçoivent une prédiction neutre au lieu de « Discutable »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A6",
+          "text": "603/603 profils sensoriels avec niveau de preuve et confiance ; toute paire est scorée ; benchmarks classiques ≥ 0,70 et contrastes négatifs < 0,40 ; 404 accords culinaires curatés."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/scoring test/core/database/metier_smoke_test.dart + revue des captures",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A7",
+          "text": "Rendements et rétentions USDA/Bognár (ou profils cuits mesurés Ciqual) appliqués ; Nutri-Score estimé, %AR/VNR, allégations indicatives, répartition énergétique et poids cuit estimé affichés avec leurs hypothèses ; la nutrition stockée des recettes calculées est recalculée après semis ou import."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/recipes/recipes_persistence_test.dart test/core/database/migration_v4_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A8",
+          "text": "60 g relu 60 g, « 2 c. à soupe » conservé (30 g stockés), cuisson par ligne, étapes typées (PROC_CUIRE, 90 °C, 20 min), nutrition et mode relus ; migration v3 → v4 testée. Limite : relance réelle de l'application non effectuée sur la base du PO."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test ; flutter analyze ; dart format --set-exit-if-changed .",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "A5",
+          "text": "298/298 tests verts, analyze sans problème, format propre au 99f73bc ; flutter build windows --release réussi."
+        }
+      ],
+      "body_digest": "1ec32cb2b525637190bb7ba37c0bf740416537f884763303903bd5b01074eac6",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/ac-120.html#ac-120",
+        "../records/ac-128.html#ac-128",
+        "../records/ac-114.html#ac-114",
+        "../records/ac-115.html#ac-115",
+        "../records/ac-116.html#ac-116",
+        "../records/ac-119.html#ac-119",
+        "../records/ac-120.html#ac-120",
+        "../records/ac-121.html#ac-121",
+        "../records/ac-127.html#ac-127",
+        "../records/ac-126.html#ac-126",
+        "../records/ac-125.html#ac-125",
+        "../records/ac-128.html#ac-128",
+        "../records/ac-122.html#ac-122",
+        "../records/ac-124.html#ac-124",
+        "../records/ac-123.html#ac-123",
+        "../records/ac-115.html#ac-115",
+        "../records/ac-119.html#ac-119",
+        "../records/ac-114.html#ac-114",
+        "../records/ac-116.html#ac-116",
+        "../records/ac-114.html#ac-114",
+        "../records/delivery-gate.html#delivery-gate",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/delivery-gate.html#delivery-gate"
+      ],
+      "anchors": [
+        "phase10-coherence-procede"
+      ]
+    },
+    {
+      "id": "phase10-parametres",
+      "path": "work/phase10-parametres.html",
+      "title": "En-tête libéré, paramètres et thème sombre",
+      "summary": "Suppression de la barre supérieure ; page Paramètres (thème Système/Clair/Sombre, taille du texte, bases métier, emplacement de la base, sources des données) ; thème sombre complet.",
+      "tags": [
+        "phase-10",
+        "ux",
+        "ui",
+        "parametres",
+        "theme",
+        "sombre",
+        "accessibilite",
+        "review"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "f0674c51710dd8bd3ecb7d9c5da37ba947c6b1f44ae1818af638837667563782",
+      "chars": 3530,
+      "size": 6666,
+      "mtime_ns": 1790434537453508500,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-ux-refonte",
+        "phase10-sources-ouvertes"
+      ],
+      "supersedes": [],
+      "components": [
+        "app-shell",
+        "settings",
+        "theme",
+        "recipes",
+        "sources",
+        "data-pipeline"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [
+        "lib/app/maestro_pesto_app.dart",
+        "lib/app/theme/app_theme.dart",
+        "lib/app/settings/app_settings.dart",
+        "lib/features/settings/presentation/settings_page.dart",
+        "lib/features/recipes/presentation/recipes_home_page.dart",
+        "lib/features/recipes/presentation/widgets/recipe_book_panel.dart",
+        "lib/core/database/database_bootstrap.dart",
+        "lib/core/database/connection/database_connection.dart",
+        "test/features/settings/settings_test.dart",
+        "test/features/recipes/home_shell_layout_test.dart",
+        "test/widget_test.dart"
+      ],
+      "candidate": "2abde3b (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "29960a87083c80e7fda748217534ff73df95cc7d48b294a6d4429966dda274f1",
+      "criteria": [
+        {
+          "id": "P1",
+          "text": "L'accueil n'a pas de barre supérieure ; sources et mise à jour des bases métier sont accessibles depuis les Paramètres."
+        },
+        {
+          "id": "P2",
+          "text": "Le thème (Système, Clair, Sombre) et la taille du texte s'appliquent sans redémarrage et sont conservés."
+        },
+        {
+          "id": "P3",
+          "text": "L'interface reste sans débordement de 360 à 1400 px, en clair avec texte standard et en sombre avec grand texte."
+        },
+        {
+          "id": "P4",
+          "text": "Les Paramètres affichent l'état réel des bases métier et permettent leur mise à jour."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/widget_test.dart test/features/recipes/home_shell_layout_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P1",
+          "text": "Aucun AppBar ; tooltip « Paramètres » présent, « Sources des données » absent de l'accueil."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/settings/settings_test.dart ; exécutable release, clic « Clair » puis lecture de maestropesto_settings.json",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P2",
+          "text": "MaterialApp en ThemeMode.dark après le choix « Sombre » ; texte ×1,15 en « Grande » ; aller-retour du fichier JSON ; fichier corrompu → valeurs par défaut ; fichier réel passé à « light »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/recipes/home_shell_layout_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P3",
+          "text": "8 variantes vertes (360, 760, 800, 1400 px × 2 thèmes) ; titre lisible et non recouvert."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/settings/settings_test.dart ; exécutable release sur base isolée",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "P4",
+          "text": "États « Non importées », « Mise à jour en cours — nutrition (2/6) » (bouton désactivé) et « Chargées » ; schéma v5, 603 ingrédients, 8 recettes ; accès à la page des sources."
+        }
+      ],
+      "body_digest": "8374f8cd8dfa96a62c364827fbb899af88174cfc83a8ede503a224b3e62c4142",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/acceptance-phase10.html#acceptance-phase10"
+      ],
+      "anchors": [
+        "phase10-parametres"
+      ]
+    },
+    {
+      "id": "phase10-sources-ouvertes",
+      "path": "work/phase10-sources-ouvertes.html",
+      "title": "Enrichissement et fiabilisation par sources ouvertes",
+      "summary": "Nutrition, pH, portions, rétentions, allergènes, activité de l'eau et accords aromatiques enrichis ou vérifiés avec des sources en libre accès (domaine public, CC0, Etalab), citées dans l'application.",
+      "tags": [
+        "phase-10",
+        "donnees",
+        "sources-ouvertes",
+        "usda",
+        "fda",
+        "escoffier",
+        "nutrition",
+        "flavor",
+        "physchem",
+        "review"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "5e47e71e7aa62dc6db7aaf10daf6c8df5fd4a26ee73a53ae49e2ce656ebbf810",
+      "chars": 4212,
+      "size": 8216,
+      "mtime_ns": 1790429113413336200,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-coherence-procede"
+      ],
+      "supersedes": [],
+      "components": [
+        "data-pipeline",
+        "nutrition",
+        "flavor",
+        "functional",
+        "ingredients",
+        "analysis"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [
+        "tool/generate_usda_enrichment.dart",
+        "tool/generate_corpus_pairings.dart",
+        "tool/generate_metier_enrichment.dart",
+        "tool/data/ciqual_aliases.csv",
+        "tool/data/fda_ph_map.csv",
+        "tool/data/usda_portions_map.csv",
+        "tool/data/rf6_map.csv",
+        "assets/database-enrichment/usda_nutrition.csv",
+        "assets/database-enrichment/computed_nutrition.csv",
+        "assets/database-enrichment/ingredient_culinary.csv",
+        "assets/database-enrichment/culinary_pairings.csv",
+        "assets/database-enrichment/process_factors.csv",
+        "lib/core/models/data_sources.dart",
+        "lib/core/scoring/physchem_estimator.dart",
+        "test/core/database/metier_smoke_test.dart",
+        "test/features/analysis/experimental_cases_golden_test.dart"
+      ],
+      "candidate": "d6d0544 (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "fee7328f4a2e08f1f036eae6b66b71e7d9ce6a2d6c2cd24e165764d70768ac43",
+      "criteria": [
+        {
+          "id": "S1",
+          "text": "Les ingrédients sans entrée Ciqual sont couverts par une source ouverte ou un calcul documenté ; aucun zéro n'est inventé."
+        },
+        {
+          "id": "S2",
+          "text": "Les rapprochements Ciqual erronés sont corrigés et contrôlés."
+        },
+        {
+          "id": "S3",
+          "text": "Un pH n'est attribué à la FDA que s'il vient de la liste FDA ; les autres sont signalés comme estimations."
+        },
+        {
+          "id": "S4",
+          "text": "Les conversions d'unités s'appuient sur des poids mesurés et citent leur source."
+        },
+        {
+          "id": "S5",
+          "text": "Les accords documentés s'enrichissent d'un corpus du domaine public, cité."
+        },
+        {
+          "id": "S6",
+          "text": "L'activité de l'eau des mélanges salés suit les valeurs de référence."
+        },
+        {
+          "id": "S7",
+          "text": "L'application présente ses sources ; flutter test, flutter analyze et dart format verts ; le build release importe tout."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S1",
+          "text": "Couverture > 580/603 ; shiitake cru USDA ; roux 42 g de lipides ; érythritol 0 kcal ; restent volontairement « non renseigné » les ingrédients sans source fiable (anis étoilé, sumac, pâtes de curry…)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (rapprochements corrigés)",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S2",
+          "text": "Bière sans alcool < 1,5 g d'alcool, fromage frais ≠ fromage de tête, noix > 55 g de lipides, yaourt nature < 4,5 g, confiture > 45 g de sucres, saumon cru peu salé."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (pH FDA)",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S3",
+          "text": "155 pH FDA ; tomate 4,3–4,9 citée ; toute autre note commence par « Estimation par catégorie »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/scoring/quantity_converter_test.dart test/core/database/metier_smoke_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S4",
+          "text": "Gousse d'ail 3 g (USDA FDC), cannelle 0,53 g/ml (USDA FDC) ; hypothèse affichée « 1 pièce ≈ 110 g (USDA FDC) »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (Escoffier)",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S5",
+          "text": "1 194 accords dont > 700 issus du corpus ; cerfeuil × estragon documenté, explication citant Escoffier ; calibration A6 inchangée (benchmarks ≥ 0,70)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/analysis/experimental_cases_golden_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S6",
+          "text": "Saumure 10 % : 0,935 ± 0,01 ; sauce soja dans la tolérance (Ciqual moins salée que la sauce mesurée par la FDA)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test ; flutter analyze ; dart format --set-exit-if-changed ; flutter build windows --release puis exécutable sur base isolée",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "S7",
+          "text": "322/322, analyse propre, page « Sources des données » testée ; release : schéma v5, 20 sources importées, 8 recettes."
+        }
+      ],
+      "body_digest": "ff82cdf664e351c10c7a8767a1b9980ae6f87c54436515316a382cbe71da6666",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/ac-130.html#ac-130",
+        "../records/acceptance-phase10.html#acceptance-phase10"
+      ],
+      "anchors": [
+        "phase10-sources-ouvertes"
+      ]
+    },
+    {
+      "id": "phase10-ux-refonte",
+      "path": "work/phase10-ux-refonte.html",
+      "title": "Refonte UX/UI de la fiche recette et de l'éditeur",
+      "summary": "Douze améliorations validées par le PO le 2026-09-26 : virgule décimale, allergènes, aides en langage courant, note d'harmonie, heatmap défilante triable, fiche en synthèse et onglets, portions ajustables, éditeur pleine page avec aperçu en direct, typographie, progression d'import.",
+      "tags": [
+        "phase-10",
+        "ux",
+        "ui",
+        "fiche",
+        "heatmap",
+        "allergenes",
+        "editeur",
+        "review"
+      ],
+      "kind": "work",
+      "status": "review",
+      "sha256": "e6130c39c562331d052b165f309313cd241c0f95351864da3f82726e35fa7abb",
+      "chars": 4693,
+      "size": 8646,
+      "mtime_ns": 1790421774381687600,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase10-coherence-procede"
+      ],
+      "supersedes": [],
+      "components": [
+        "recipes",
+        "analysis",
+        "flavor",
+        "ingredients",
+        "i18n",
+        "data-pipeline"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [
+        "lib/features/recipes/presentation/widgets/recipe_detail_view.dart",
+        "lib/features/recipes/presentation/widgets/recipe_form_dialog.dart",
+        "lib/features/flavor/presentation/widgets/flavor_compatibility_heatmap.dart",
+        "lib/core/scoring/quantity_scaler.dart",
+        "lib/core/database/database_bootstrap.dart",
+        "pubspec.yaml",
+        "assets/database-enrichment/ingredient_allergens.csv",
+        "test/core/database/import_assets_cwd_test.dart",
+        "test/features/flavor/flavor_compatibility_heatmap_test.dart",
+        "test/core/scoring/quantity_scaler_test.dart"
+      ],
+      "candidate": "7e30d40 (branche Ge-LAG/db-connection-strategies, non poussée)",
+      "environment": "Windows 11, SDK Flutter 3.47.1, machine PO",
+      "evidence_digest": "21d7ad3fb02cdc8110030fd5a2b548271361db31316b40cb1c784bcf6ce2a055",
+      "criteria": [
+        {
+          "id": "U1",
+          "text": "Aucun nombre décimal de l'interface n'utilise le point ; aucun texte d'interface sous 12 px."
+        },
+        {
+          "id": "U2",
+          "text": "La recette affiche les allergènes à déclaration obligatoire de ses ingrédients reliés, y compris ceux que le référentiel ne déclare pas (lait, poisson…), sans étiquette erronée."
+        },
+        {
+          "id": "U3",
+          "text": "La heatmap reste utilisable au-delà de la place disponible (ascenseurs vertical et horizontal, en-têtes figés) et se trie par force d'accord ; le filtre « documentés seulement » masque les prédictions."
+        },
+        {
+          "id": "U4",
+          "text": "Changer le nombre de portions recalcule les quantités affichées (masses métriques arrondies, pièces au quart ou au demi, pluriel accordé) sans modifier la recette enregistrée."
+        },
+        {
+          "id": "U5",
+          "text": "L'éditeur s'ouvre en pleine page et son aperçu (énergie, Nutri-Score, harmonie, allergènes, points d'attention) suit la saisie."
+        },
+        {
+          "id": "U6",
+          "text": "L'exécutable release importe les bases métier quel que soit le dossier de lancement."
+        },
+        {
+          "id": "U7",
+          "text": "flutter test, flutter analyze et dart format --set-exit-if-changed . verts."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test (tests heatmap, formulaire, convertisseur mis à jour) + revue des captures 1600 et 420 px",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U1",
+          "text": "Tous les affichages passent par fmtNum ; labelSmall du thème porté à 12 px et tailles 10–11 px explicites supprimées."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/metier_smoke_test.dart (groupe « Allergènes enrichis ») + capture crème pâtissière",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U2",
+          "text": "Lait entier et beurre → lait, saumon → poisson (déduits), jus d'orange sans arachide, lait de coco sans allergène, laitue ≠ lait ; crème pâtissière : lait, œufs, gluten."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/flavor/flavor_compatibility_heatmap_test.dart",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U3",
+          "text": "20 ingrédients dans 600 px : deux ascenseurs visibles, aucun débordement ; ordre force d'accord B, A, C ; prédiction 0,61 masquée par le filtre."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/scoring/quantity_scaler_test.dart + capture crème pâtissière 6 → 4 portions",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U4",
+          "text": "250 g ×2 → 500 g ; 1/2 c. à café ×2 → 1 c. à café ; 2-3 gousses ×2 → 4-6 gousses ; 50 cl → 33 cl pour 4 portions ; « Revenir à la recette (6) »."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/features/recipes + captures éditeur 1600 et 1000 px",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U5",
+          "text": "Colonne « Aperçu en direct » à 1600 px, bandeau compact à 1000 px ; tests du formulaire (sauvegarde, unités, nutrition calculée, avertissements) verts."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test test/core/database/import_assets_cwd_test.dart ; flutter build windows --release puis maestropesto.exe lancé depuis %TEMP% avec MAESTROPESTO_DB_DIR",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U6",
+          "text": "Schéma v5, 603 ingrédients, 28 986 valeurs nutritionnelles, 214 fiches allergènes, 8 recettes avec nutrition calculée ; le test échoue sur l'ancien code (PathNotFoundException)."
+        },
+        {
+          "result": "pass",
+          "ref": "",
+          "check": "flutter test ; flutter analyze ; dart format --set-exit-if-changed .",
+          "by": "Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "U7",
+          "text": "310/310 tests, aucun problème d'analyse, format propre au 7e30d40."
+        }
+      ],
+      "body_digest": "f817c05a3394fe969f5dc6940c358934f2db0e2ddcb661cbbf243c0f6bffae5f",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/ac-129.html#ac-129",
+        "../records/acceptance-phase10.html#acceptance-phase10"
+      ],
+      "anchors": [
+        "phase10-ux-refonte"
+      ]
+    },
+    {
+      "id": "phase11-recette-inversee",
+      "path": "work/phase11-recette-inversee.html",
+      "title": "Phase 11 : recette à l'envers (conception par objectifs)",
+      "summary": "Composer automatiquement une recette à partir d'objectifs procédé/physico-chimie, arômes et nutrition à priorité réglable, en mode Cuisine cohérente ou Pure Innovation.",
+      "tags": [
+        "phase-11",
+        "conception-inverse",
+        "optimisation",
+        "nutrition",
+        "flavor",
+        "physchem",
+        "pure-innovation",
+        "ready"
+      ],
+      "kind": "work",
+      "status": "ready",
+      "sha256": "a0a38bc6811b9c18d0dd6be6a217f4aefece9eaba77a95975b0191dcbe8151c6",
+      "chars": 8476,
+      "size": 10586,
+      "mtime_ns": 1790435718516602200,
+      "revision": 3,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase11-cadrage"
+      ],
+      "supersedes": [],
+      "components": [
+        "design-engine",
+        "scoring",
+        "recipes",
+        "analysis",
+        "ui"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "R1",
+          "text": "Aller-retour (mode cohérent) : pour chacune des six recettes de démonstration couvertes, en prenant ses propriétés mesurées comme objectifs, au moins une variante atteint chaque objectif vérifiable à ± 10 %, avec une harmonie au moins égale à celle de la recette d'origine."
+        },
+        {
+          "id": "R2",
+          "text": "Pure Innovation : sur une même demande, l'écart pondéré aux objectifs de la meilleure variante est inférieur ou égal à celui du mode cohérent."
+        },
+        {
+          "id": "R3",
+          "text": "Contraintes dures respectées dans les deux modes : aucun ingrédient exclu, aucun allergène exclu, ingrédients imposés présents, 12 ingrédients au plus, masses positives."
+        },
+        {
+          "id": "R4",
+          "text": "Honnêteté : aucune valeur n'est inventée ; un critère dont la couverture est insuffisante est marqué « non vérifiable » ; les accords prédits sont distingués des accords documentés ; les alertes de sécurité alimentaire sont affichées dans les deux modes."
+        },
+        {
+          "id": "R5",
+          "text": "Déterminisme et diversité : une même demande donne les mêmes trois variantes ; deux variantes partagent au plus 60 % de leurs ingrédients."
+        },
+        {
+          "id": "R6",
+          "text": "Performance : une demande se résout en moins de 2 s sur la machine PO (build release), sans bloquer l'interface."
+        },
+        {
+          "id": "R7",
+          "text": "Interface : l'activation de Pure Innovation affiche l'avertissement à confirmer, puis le bandeau et l'étiquette des variantes ; l'assistant et les résultats fonctionnent de 360 à 1400 px, en clair et en sombre ; « Ouvrir dans l'éditeur » crée un brouillon non enregistré."
+        },
+        {
+          "id": "R8",
+          "text": "Qualité : flutter analyze 0, dart format propre, flutter test vert, build release lancé de bout en bout ; acceptance PO via un record dédié."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "411d33aaa16b5ac26e6506a92205de99ffeb38cfbbb7893905bb7856f40b0324",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "idea-recette-inversee.html#idea-recette-inversee",
+        "../records/phase11-cadrage.html#phase11-cadrage",
+        "../records/phase11-cadrage.html#phase11-cadrage",
+        "../records/delivery-gate.html#delivery-gate",
+        "../records/delivery-gate.html#delivery-gate",
+        "../records/livraison-phase09-10.html#livraison-phase09-10"
+      ],
+      "anchors": [
+        "phase11-recette-inversee"
+      ]
+    }
+  ]
+}

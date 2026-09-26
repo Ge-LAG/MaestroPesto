@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Infra : dispatch GLM sans bloc de code formel · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>finding · ac-F-006</span></header><main>
+<article data-method data-revision="1" data-owner="Robertson Andersen" id="ac-F-006" data-title="Infra : dispatch GLM sans bloc de code formel" data-summary="Quand GLM 5.3 produit tout le code en reasoning_content (max_tokens atteint), le wrapper ne récupère pas de bloc v4a_patch formel." data-tags="ac finding infra dispatch glm tokens wrapper" data-kind="finding" data-status="active">
+<p class="eyebrow">finding / ac-F-006</p><h1>Infra : dispatch GLM sans bloc de code formel</h1>
+<dl><dt>Origine</dt><dd>Constat d'infrastructure Lot F (2026-08-26) : wrapper dispatch_glm.py (hors repo, /workspace), session Hermes/MiniMax-M3.</dd>
+<dt>Impact</dt><dd>Low pour le produit — touche le outillage de dispatch : quand le raisonnement consomme le budget, le content final est vide et le patch formel n'est jamais produit ; le fallback sur reasoning_content donne de la prose avec extraits de code.</dd>
+<dt>Pistes</dt><dd>(a) porter max_tokens à 50000+ ; (b) exiger « PRODUIS LE BLOC v4a_patch EN PREMIER » dans le prompt système ; (c) réduire le périmètre du brief. Alternative retenue depuis : travailler directement via ZCode sur la machine PO.</dd></dl>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>

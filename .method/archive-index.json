@@ -1,0 +1,107 @@
+{
+  "schema_version": 2,
+  "generated": true,
+  "entries": [
+    {
+      "id": "idea-recette-inversee",
+      "path": "work/idea-recette-inversee.html",
+      "title": "Idée : recette à l'envers (conception par objectifs)",
+      "summary": "L'utilisateur fixe d'abord des objectifs physico-chimiques/procédé, aromatiques et nutritionnels, avec un ordre de priorité réglable ; l'application compose ensuite les ingrédients, quantités et procédé.",
+      "tags": [
+        "backlog",
+        "idee",
+        "produit",
+        "phase-11",
+        "conception-inverse",
+        "optimisation",
+        "nutrition",
+        "flavor",
+        "physchem"
+      ],
+      "kind": "work",
+      "status": "archived",
+      "sha256": "9d7aba493a7d12de49d3f861fdba2263f892009a234bff4f2ba95f7da1a615db",
+      "chars": 5688,
+      "size": 7320,
+      "mtime_ns": 1790435229628676000,
+      "revision": 3,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "410cdf5a42fbbcc225d82aec1eeeed5ac19ca3b0c60a32688dc1ab237c53a712",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../records/honest-data-display.html#honest-data-display",
+        "phase11-recette-inversee.html#phase11-recette-inversee",
+        "../records/phase11-cadrage.html#phase11-cadrage",
+        "../records/delivery-gate.html#delivery-gate"
+      ],
+      "anchors": [
+        "idea-recette-inversee"
+      ]
+    },
+    {
+      "id": "phase08-foundations",
+      "path": "work/phase08-foundations.html",
+      "title": "Socle applicatif et import métier (Lots A-E)",
+      "summary": "Fondations livrées et subsumées : app Flutter responsive, base Drift, CRUD recettes, import CSV des 4 bases métier, panneau conseil. Historique clos.",
+      "tags": [
+        "phase-08",
+        "lots",
+        "fondations",
+        "drift",
+        "import",
+        "historique",
+        "archive"
+      ],
+      "kind": "work",
+      "status": "archived",
+      "sha256": "bf291e41232d16c9f5536b0a7ef15253de729c22b02bf3cd095f12132f064dfc",
+      "chars": 1011,
+      "size": 2067,
+      "mtime_ns": 1789570623412874000,
+      "revision": 1,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "c0d4bc06e1d410f49ab2d38de3d3dcf40f3250380f3dc1f2c069502d9d20478b",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "phase09-metier-ux.html#phase09-metier-ux"
+      ],
+      "anchors": [
+        "phase08-foundations"
+      ]
+    }
+  ]
+}

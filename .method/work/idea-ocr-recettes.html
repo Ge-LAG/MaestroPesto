@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Idée backlog : OCR local de recettes · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>work · idea-ocr-recettes</span></header><main>
+<article data-method data-revision="1" data-owner="Guillaume" id="idea-ocr-recettes" data-title="Idée backlog : OCR local de recettes" data-summary="Prendre en photo une recette (livre, magazine, manuscrit) et la formaliser automatiquement au format MaestroPesto, en OCR 100 % local." data-tags="backlog idee ocr recettes offline produit" data-kind="work" data-status="draft">
+<p class="eyebrow">work / idea-ocr-recettes</p><h1>Idée backlog : OCR local de recettes</h1>
+<dl><dt>Pitch</dt><dd>Intégrer un modèle d'OCR local pour prendre en photo une recette (livre, magazine, manuscrit) et faire formaliser l'app automatiquement au format interne (sections ingrédients / étapes / quantités / temps). Raison du local : pas d'appel cloud — données personnelles, offline-first, latence.</dd>
+<dt>Candidats</dt><dd>Tesseract 5 (baseline multilingue FR/EN/IT/ES), PaddleOCR (texte imprimé structuré), EasyOCR (intégration rapide), Florence-2 / TrOCR (robustesse manuscrits).</dd>
+<dt>Pipeline pressenti</dt><dd>capture photo, pré-traitement (deskew, denoise, détection de zones), OCR brut, parsing structurant (petit LLM local type Phi-3 mini ou regex + modèles), validation UI, sauvegarde au format MaestroPesto.</dd>
+<dt>Dépendances</dt><dd>Format de recette interne (lib/core/models), choix du modèle OCR (perf/RAM), choix du parseur structurant. Origine : Gui, session du 2026-08-22.</dd>
+<dt>Prochain pas</dt><dd>Cadrer un work package dédié (critères, périmètre, décision de lancement PO) avant tout code.</dd></dl>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>

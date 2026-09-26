@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:maestropesto/app/i18n/formatters.dart';
 
 class AppStrings {
   const AppStrings();
@@ -82,6 +83,363 @@ class AppStrings {
   String get saltGField => 'Sel g';
   String get numberRequired => 'Nombre requis';
   String minimumValue(num min) => 'Minimum $min';
+
+  // Lot D — added when wiring the CsvImportService into the UI shell.
+  String get importMetierAction => 'Importer BDD métier';
+  String get importMetierReady => 'BDD métier prêtes';
+  String get importMetierPending => 'BDD à importer';
+  String get importMetierRunning => 'Import en cours…';
+  String get importMetierSnackbar =>
+      'Import des 4 bases métier déclenché. Voir le dossier Test-Dev/ pour le détail.';
+
+  // Phase 09 Lot F — UX pilotée par les BDD métier.
+  String get pickIngredientTitle => 'Choisir un ingrédient';
+  String get pickIngredientSearchHint => 'Rechercher (tomate, basilic…)';
+  String get pickIngredientNoResult => 'Aucun ingrédient ne correspond.';
+  String get pickIngredientCategoryAll => 'Toutes';
+  String get pickIngredientTooltip => 'Choisir depuis le référentiel Phase 1';
+  String get pickIngredientFallbackTitle => 'Saisir un ingrédient';
+  String get pickIngredientFallbackLabel => "Nom de l'ingrédient";
+  String get pickIngredientFallbackHint => 'Tomate, Basilic, …';
+  String get pickIngredientFallbackOk => 'OK';
+  String get ingredientPhase1Helper => 'Phase 1';
+  String get ingredientDetailAlcoholBadge => 'Alcoolisé';
+  String get ingredientDetailFermentedBadge => 'Fermenté';
+  String get ingredientDetailAllergensTitle => 'Allergènes';
+  String get ingredientDetailNoAllergens => 'Aucun allergène déclaré';
+  String get ingredientDetailNutritionTitle => 'Nutrition · pour 100 g';
+  String get ingredientDetailNutritionUnavailable => 'Nutrition non disponible';
+  String get ingredientDetailEnergy => 'Énergie';
+  String get ingredientDetailProteins => 'Protéines';
+  String get ingredientDetailFats => 'Lipides';
+  String get ingredientDetailCarbs => 'Glucides';
+
+  // Phase 09 Lot G — nutrition calculée + heatmap flavour.
+  String nutritionComputedFrom(int resolved, int total) =>
+      'Calculé depuis $resolved ingrédient${resolved > 1 ? 's' : ''} '
+      'sur $total';
+  String get nutritionManualEntry => 'Valeur saisie manuellement';
+  String nutritionNoDataForLinked(int count) => count > 1
+      ? 'Aucune donnée nutritionnelle en base pour les $count '
+            'ingrédients liés — la table Ciqual ne couvre pas encore '
+            'ces aliments. Saisie manuelle ci-dessous.'
+      : 'Aucune donnée nutritionnelle en base pour cet ingrédient '
+            'lié — la table Ciqual ne le couvre pas encore. '
+            'Saisie manuelle ci-dessous.';
+  String get nutritionSources => 'Sources';
+  String get mineralsTitle => 'Minéraux';
+  String get vitaminsTitle => 'Vitamines';
+  String get otherConstituentsTitle => 'Autres constituants';
+  String get alcoholLabel => 'Alcool';
+  String get nutritionAutoComputed =>
+      'Calculée automatiquement depuis les ingrédients liés';
+  String get nutritionManualOverride => 'Forcer la saisie manuelle';
+  String get flavorHeatmapTitle => 'Compatibilités aromatiques';
+  String get flavorPairUnknown => 'Pas de donnée';
+  String get flavorSourceDirectPair =>
+      'Score d\'accord direct (paire documentée en base Phase 3).';
+  String flavorSourceCombination(int size) =>
+      'Score approximé : accord connu pour une combinaison de $size '
+      'ingrédients contenant cette paire (pas de donnée directe pour la '
+      'paire seule).';
+  String get flavorOverallScore => 'Score global';
+  String get flavorCategoryExcellent => 'Excellente';
+  String get flavorCategoryGood => 'Bonne';
+  String get flavorCategoryAverage => 'Moyenne';
+  String get flavorCategoryQuestionable => 'Discutable';
+  String get flavorCategoryAvoid => 'À éviter';
+
+  // Phase 09 Lot H — Phase 4 functional.
+  String get functionalAlertsTitle => 'Alertes physico-chimiques';
+  String get functionalSeverityInfo => 'Info';
+  String get functionalSeverityWarning => 'Attention';
+  String get functionalSeverityDanger => 'Danger';
+  String get functionalSeverityOutOfDomain => 'Hors domaine';
+  String get functionalConditions => 'Conditions';
+  String get functionalPredictedEffect => 'Effet prédit';
+  String functionalConfidence(double confidence) =>
+      'Confiance ${(confidence * 100).round()} %';
+  String functionalMixShare(double share) =>
+      'Part du mix : ${(share * 100).round()} %';
+  String get functionalTriggersLabel => 'Ingrédients concernés';
+  String get functionalLowShareNote =>
+      'Influence probablement faible : moins de 5 % du mix.';
+
+  // Phase 09 Lot H — recommandations.
+  String get recommendationSheetTitle => 'Mauvaise combinaison détectée';
+  String get recommendationSheetBody =>
+      'Certains ingrédients de cette recette s’opposent aromatiquement '
+      'ou déclenchent une alerte physico-chimique.';
+  String recommendationProblemPair(String a, String b, double score) =>
+      '$a × $b : score ${fmtNum(score, 2)}';
+  String recommendationSubstitutesFor(String name) =>
+      'Substituts proposés pour $name';
+  String get recommendationReasonBetterAffinity =>
+      'Meilleure affinité aromatique';
+  String get recommendationReasonResolvesConflict =>
+      'Résout une incompatibilité existante';
+  String get recommendationIgnore => 'Ignorer';
+  String get recommendationShowSubstitutes => 'Voir les substituts';
+  String get recommendationNoSubstitute => 'Aucun substitut trouvé.';
+  String get ingredientBadCombinationWarning =>
+      'Cet ingrédient crée une mauvaise combinaison avec la recette.';
+  String get flavorIncompatibilitiesLabel => 'Incompatibilités aromatiques';
+
+  // Phase 10 — analyse métier (nutrition, arômes, physico-chimie).
+  String get ruleStatusMet => 'Conditions réunies';
+  String get ruleStatusPartial => 'Conditions partiellement réunies';
+  String get ruleStatusNotMet => 'Conditions non réunies';
+  String get ruleStatusUnknown => 'À vérifier (données insuffisantes)';
+  String get functionalExpectedOutcome => 'Comportement attendu';
+  String get functionalAdvice => 'Conseil de formulation';
+  String get analysisTitle => 'Analyse métier';
+  String get analysisLoading => 'Analyse de la recette…';
+  String get physchemTitle => 'Analyse physico-chimique';
+  String get physchemComposition => 'Composition estimée du mélange';
+  String get physchemWater => 'Eau';
+  String get physchemFat => 'Lipides';
+  String get physchemProtein => 'Protéines';
+  String get physchemSugars => 'Sucres';
+  String get physchemStarch => 'Amidon';
+  String get physchemSalt => 'Sel';
+  String get physchemAlcohol => 'Alcool';
+  String get physchemDryMatter => 'Matière sèche';
+  String get physchemIndicators => 'Indicateurs';
+  String get physchemPh => 'pH estimé';
+  String get physchemAw => 'Activité de l’eau (aw)';
+  String get physchemBrix => 'Brix (phase aqueuse)';
+  String get physchemOilPhase => 'Phase grasse (émulsion)';
+  String get physchemEstimateNote =>
+      'Estimations d’ordre de grandeur (sans pouvoir tampon ni '
+      'évaporation) — pour évaluer les conditions des règles, pas des '
+      'mesures.';
+  String get physchemProcess => 'Procédé détecté';
+  String get physchemNoStep =>
+      'Aucune opération reconnue dans les étapes : décrivez les cuissons '
+      '(ex. « Cuire 20 min à 180 °C ») pour une analyse du procédé.';
+  String get physchemRulesWarnings => 'Points de vigilance';
+  String get physchemRulesExpected => 'Comportements attendus';
+  String get physchemRulesToCheck => 'À vérifier';
+  String get physchemInsights => 'Notes expertes';
+  String get physchemNoRule =>
+      'Aucune règle physico-chimique ne s’applique à ce mélange.';
+  String physchemCoverage(int pct) =>
+      'Composition connue pour $pct % de la masse';
+  String get physchemAffected => 'Ingrédients concernés';
+  String get flavorHarmony => 'Harmonie aromatique';
+  String get flavorBridges => 'Ponts aromatiques';
+  String get flavorDominant => 'Arômes dominants';
+  String get flavorTasteBalance => 'Équilibre des saveurs';
+  String get flavorSuggestions => 'Accords suggérés';
+  String get flavorSuggestionsHint =>
+      'Ingrédients du référentiel qui s’accordent le mieux avec la recette.';
+  String get flavorEvidenceObserved => 'Accord observé (données Phase 3)';
+  String get flavorEvidenceCurated => 'Accord culinaire reconnu';
+  String get flavorEvidencePredicted =>
+      'Prédiction par profils sensoriels (sans accord documenté)';
+  String get flavorPredictedLegend => 'Hachuré : prédiction';
+  String flavorConfidence(double c) => 'Confiance ${(c * 100).round()} %';
+  String flavorMore(int n) => '+ $n autres ingrédients liés non affichés';
+  String get flavorUnlikely => 'Peu probable (prédiction)';
+  String get nutriScoreTitle => 'Nutri-Score estimé';
+  String get nutritionReferenceIntakes => '% des apports de référence';
+  String get nutritionClaims => 'Allégations possibles (indicatif)';
+  String get nutritionHighlights => 'Points clés';
+  String get nutritionEnergySplit => 'Répartition de l’énergie';
+  String get nutritionPerContribution => 'Détail par ingrédient';
+  String get nutritionNotProvided => 'non renseigné';
+  String nutritionPartialCoverage(int pct) => 'données pour $pct % de la masse';
+  String nutritionServingMass(int g) => 'Portion ≈ $g g (plat cuit)';
+  String nutritionDishMass(int raw, int cooked) =>
+      'Masse crue $raw g → plat estimé $cooked g';
+  String get nutritionProcessApplied =>
+      'Cuisson prise en compte (rendement et rétention des vitamines)';
+  String get nutritionMeasuredCooked => 'valeurs cuites mesurées (Ciqual)';
+  String get nutritionEstimatedCooked => 'rétention estimée par groupe';
+  String get nutritionAlreadyCooked => 'ingrédient déjà cuit';
+  String get nutritionNoData => 'aucune donnée';
+  String get nutritionUnlinked => 'non lié au référentiel';
+  String get nutritionWarningsTitle => 'Limites du calcul';
+  String nutritionWarningUnparsed(String label) =>
+      '« $label » : quantité non interprétable, ignorée du calcul.';
+  String nutritionWarningUnlinked(int n) => n > 1
+      ? '$n ingrédients non liés au référentiel : comptés dans la masse, '
+            'pas dans les nutriments.'
+      : '1 ingrédient non lié au référentiel : compté dans la masse, pas '
+            'dans les nutriments.';
+  String get nutritionWarningSubrecipe =>
+      'Sous-recette non développée : non comptée.';
+  String nutritionWarningAssumed(String label, String assumption) =>
+      '« $label » : $assumption.';
+  String get cookingMethodField => 'Cuisson';
+  String get cookingMethodAuto => 'Auto (étapes)';
+  String get unitField => 'Unité';
+  String get nutritionManualForced =>
+      'Valeurs saisies manuellement : le calcul automatique est désactivé '
+      'pour cette recette (modifier la recette pour le réactiver).';
+  String get nutritionNotComputed =>
+      'Nutrition non calculée : liez les ingrédients au référentiel '
+      '(bouton loupe du formulaire) ou saisissez les valeurs à la main. '
+      'Aucune valeur n’est inventée.';
+
+  // --- Refonte UX (2026-09-26) -------------------------------------
+  // Aides en langage courant.
+  String get nutritionPerServingAr => 'Valeurs par portion · % AR';
+  String get nutritionArHint =>
+      '% AR : part des apports de référence journaliers d’un adulte '
+      '(2 000 kcal, 50 g de protéines, 70 g de lipides, 260 g de '
+      'glucides, 90 g de sucres, 6 g de sel), règlement UE 1169/2011. '
+      'Exemple : 20 % AR en sel = un cinquième du maximum conseillé sur '
+      'la journée.';
+  String get nutriScoreHint =>
+      'Nutri-Score estimé à partir de la composition calculée de la '
+      'recette (algorithme 2023, aliments généraux). Indicatif : ce '
+      'n’est pas un Nutri-Score officiel, qui exige l’analyse du produit '
+      'fini.';
+  String get phHint =>
+      'pH : acidité du mélange, de 0 (très acide) à 14 ; 7 = neutre. '
+      'Sous 4,6, la plupart des bactéries dangereuses ne se développent '
+      'pas (conserves acides, confitures, vinaigrettes). Estimé à partir '
+      'du pH des ingrédients (FDA/CFSAN 2007 quand il est mesuré, sinon '
+      'estimation par catégorie).';
+  String get awHint =>
+      'Activité de l’eau (aw, de 0 à 1) : part de l’eau réellement '
+      'disponible pour les microbes. Au-dessus de 0,86 le produit est '
+      'périssable et se garde au froid ; entre 0,6 et 0,86 il se '
+      'conserve mieux (confiture, fromage affiné) ; sous 0,6 il est sec '
+      'et stable (biscuit, farine). Seuils : FDA, guide n° 39 (1984).';
+  String get brixHint =>
+      'Brix : pourcentage de sucres dissous dans la partie liquide du '
+      'mélange. Repères : fruit frais 8–15 %, sirop 50–65 %, confiture '
+      '60–65 % (il faut au moins 55 % pour que la pectine gélifie).';
+  String get oilPhaseHint =>
+      'Part de matière grasse liquide dans le mélange. Une vinaigrette '
+      'en contient 60–75 %, une mayonnaise plus de 70 % : au-delà, '
+      'l’émulsion a besoin d’un émulsifiant (jaune d’œuf, moutarde).';
+  String get dryMatterHint =>
+      'Matière sèche : tout ce qui n’est pas de l’eau (sucres, protéines, '
+      'graisses, fibres, sels), estimée après évaporation à la cuisson.';
+  String phPlain(double ph) => ph < 4.6
+      ? 'acide : frein aux bactéries pathogènes'
+      : ph < 6.5
+      ? 'peu acide'
+      : ph <= 7.5
+      ? 'proche de la neutralité'
+      : 'basique';
+  String awPlain(double aw) => aw > 0.86
+      ? 'humide : à conserver au frais'
+      : aw >= 0.6
+      ? 'semi-humide : se conserve mieux'
+      : 'sec : stable à température ambiante';
+  String brixPlain(double brix) => brix >= 60
+      ? 'niveau confiture'
+      : brix >= 50
+      ? 'sirop léger'
+      : brix >= 20
+      ? 'bien sucré'
+      : 'peu sucré';
+
+  // Harmonie aromatique et heatmap.
+  String get harmonyHowTo => 'Comment lire ce score ?';
+  String get flavorSortLabel => 'Trier';
+  String get flavorSortRecipe => 'Ordre de la recette';
+  String get flavorSortStrength => 'Force d’accord';
+  String get flavorSortAlpha => 'Alphabétique';
+  String get flavorDocumentedOnly => 'Accords documentés seulement';
+  String get flavorDocumentedOnlyNote =>
+      'Prédictions masquées : seules les paires observées ou reconnues en '
+      'cuisine sont affichées.';
+  String get flavorAddSuggestion => 'Ajouter à la recette';
+  String get flavorNeedsTwo =>
+      'Reliez au moins deux ingrédients au référentiel pour analyser les '
+      'accords aromatiques.';
+  String flavorSuggestionAdded(String name) =>
+      '« $name » ajouté : indiquez sa quantité puis enregistrez.';
+
+  // Fiche recette.
+  String get servingsLabel => 'Portions';
+  String servingsScaledNote(int n, int original) =>
+      'Quantités recalculées pour $n portion${n > 1 ? 's' : ''} '
+      '(recette : $original).';
+  String get servingsReset => 'Revenir à la recette';
+  String get servingsDecrease => 'Une portion de moins';
+  String get servingsIncrease => 'Une portion de plus';
+  String get synthesisTitle => 'Synthèse';
+  String get synthesisPerServing => 'par portion';
+  String synthesisTotal(String kcal, int n) =>
+      '≈ $kcal kcal pour $n portion${n > 1 ? 's' : ''}';
+  String get synthesisNoNutrition => 'Nutrition non calculée';
+  String get synthesisAttention => 'Points d’attention';
+  String get synthesisNothing => 'Aucun point de vigilance détecté.';
+  String get synthesisExpected => 'À savoir';
+  String get allergensContains => 'Contient';
+  String get allergensNone =>
+      'Aucun allergène déclaré pour les ingrédients liés';
+  String allergensUnlinked(int n) =>
+      '$n ingrédient${n > 1 ? 's' : ''} non relié${n > 1 ? 's' : ''} au '
+      'référentiel : vérifier ${n > 1 ? 'leurs' : 'ses'} allergènes.';
+  String get allergensHint =>
+      'Allergènes à déclaration obligatoire (règlement UE 1169/2011, '
+      'annexe II) : étiquettes du référentiel, corrigées et complétées par '
+      'des règles curatées sur le nom et la catégorie des ingrédients. '
+      'Vérifiez toujours l’étiquette des produits réellement utilisés.';
+  String get tabNutrition => 'Nutrition';
+  String get tabFlavor => 'Arômes';
+  String get tabProcess => 'Procédé';
+  String get ingredientUnlinkedHint =>
+      'Non relié au référentiel : exclu des analyses (nutrition, arômes, '
+      'procédé). Modifier la recette pour le relier.';
+  String get ingredientDetailShow => 'Fiche de l’ingrédient';
+
+  // Éditeur.
+  String get editorPreviewTitle => 'Aperçu en direct';
+  String get editorPreviewEmpty =>
+      'Reliez au moins un ingrédient au référentiel (loupe) pour voir '
+      'l’analyse se mettre à jour pendant la saisie.';
+  String get editorPreviewUpdating => 'Mise à jour…';
+
+  // Sources des données.
+  String get sourcesTitle => 'Sources des données';
+  String get sourcesIntro =>
+      'MaestroPesto ne présente que des données sourcées. Chaque valeur '
+      'cite sa source au plus près (nutrition, pH, poids des portions, '
+      'accords) ; les estimations par catégorie sont signalées comme '
+      'telles. Toutes les sources externes ci-dessous sont en libre accès.';
+  String get sourcesCopyLink => 'Copier le lien';
+  String get ingredientCulinaryTitle => 'Données culinaires';
+  String get sourcesLinkCopied => 'Lien copié.';
+  String get sourcesSubtitle =>
+      'Sources ouvertes utilisées, licences et usages.';
+
+  // Paramètres.
+  String get settingsTitle => 'Paramètres';
+  String get settingsAppearance => 'Apparence';
+  String get settingsTheme => 'Thème';
+  String get settingsThemeSystem => 'Système';
+  String get settingsThemeLight => 'Clair';
+  String get settingsThemeDark => 'Sombre';
+  String get settingsTextSize => 'Taille du texte';
+  String get settingsTextStandard => 'Standard';
+  String get settingsTextLarge => 'Grande';
+  String get settingsData => 'Données';
+  String get settingsMetier => 'Bases métier';
+  String get settingsMetierReady => 'Chargées';
+  String get settingsMetierMissing => 'Non importées';
+  String settingsMetierRunning(String phase, int step, int total) =>
+      'Mise à jour en cours — $phase ($step/$total)…';
+  String settingsLastCheck(String when) => 'Dernière vérification : $when';
+  String get settingsMetierHelp =>
+      'La mise à jour ne recharge que les fichiers modifiés depuis la '
+      'dernière vérification ; les recettes ne sont pas touchées.';
+  String get settingsMetierUpdate => 'Mettre à jour les bases métier';
+  String settingsVolumes(int ingredients, int recipes, int schema) =>
+      '$ingredients ingrédients · $recipes recette${recipes > 1 ? 's' : ''}'
+      ' · schéma v$schema';
+  String get settingsDbLocation => 'Emplacement de la base';
+  String get settingsDbInMemory => 'Base en mémoire (session de test).';
+  String get settingsCopyPath => 'Copier le chemin';
+  String get settingsPathCopied => 'Chemin copié.';
+  String get settingsMetierAttention => 'Bases métier à importer';
 }
 
 const appStrings = AppStrings();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maestropesto/app/theme/app_theme.dart';
 
 Widget buildRecipePhoto(String path, {required BoxFit fit}) {
   return _PhotoFallback(path: path);
@@ -12,7 +13,7 @@ class _PhotoFallback extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: const Color(0xFFE9ECE4),
+      color: context.palette.placeholder,
       child: Center(
         child: Icon(
           Icons.broken_image_outlined,

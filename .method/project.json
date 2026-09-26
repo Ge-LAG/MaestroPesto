@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "method_version": "6.1.0",
+  "template": false,
+  "name": "MaestroPesto",
+  "revision": 10,
+  "updated_at": "2026-09-26",
+  "mode": "direct",
+  "po": "Guillaume",
+  "cto": "Robertson Andersen",
+  "focus_id": "phase11-recette-inversee",
+  "next_action": "Reprise directe sur phase11-recette-inversee (cadrage phase11-cadrage accepté) : suivre l'« Amorce » du plan, créer Ge-LAG/recette-inversee depuis main, puis lot A (DesignBrief, catalogue des métriques, squelettes des quatre familles et leurs tests). En parallèle côté PO : consigner les acceptances acceptance-phase09 et acceptance-phase10 (14 étapes) et relire phase10-mandat-arbitrages.",
+  "profile_id": "profile",
+  "roadmap_id": "roadmap",
+  "blocked_on": [],
+  "pending_acceptance": [
+    "acceptance-phase09",
+    "acceptance-phase10"
+  ],
+  "external_authorizations": [
+    "livraison-phase09-10"
+  ]
+}

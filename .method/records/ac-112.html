@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dette : copyWith sans remise à null · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>finding · ac-112</span></header><main>
+<article data-method data-revision="1" data-owner="Robertson Andersen" id="ac-112" data-title="Dette : copyWith sans remise à null" data-summary="IngredientSummary.copyWith et IngredientDetail.copyWith suivent le pattern « ?? this.x » : impossible de remettre un champ nullable à null." data-tags="ac finding models copywith nullable" data-kind="finding" data-status="active">
+<p class="eyebrow">finding / ac-112</p><h1>Dette : copyWith sans remise à null</h1>
+<dl><dt>Origine</dt><dd>Audit Phase 09 (GLM 5.3/ZCode, 2026-08-26).</dd>
+<dt>Impact</dt><dd>Low — aucun usage courant n'en a besoin (la reconstruction passe par le mapping Drift) ; comportement documenté dans les tests.</dd>
+<dt>Localisation</dt><dd>lib/core/models/ingredient_summary.dart, lib/core/models/ingredient_detail.dart.</dd>
+<dt>Résultat attendu</dt><dd>Si un usage émerge, migrer vers le pattern sentinel (comme NutritionProfile.waterContent).</dd></dl>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>

@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Décision PO : ciqual_ids sources incohérents · METHOD V6</title><link rel="stylesheet" href="../assets/method.css"></head>
+<body><header><a class="brand" href="../index.html">METHOD / V6</a><span>finding · ac-114</span></header><main>
+<article data-method data-revision="1" data-owner="Guillaume" id="ac-114" data-title="Décision PO : ciqual_ids sources incohérents" data-summary="Les ciqual_ids du référentiel Phase 1 pointent vers une ancienne numérotation Ciqual : corriger la source un jour, ou maintenir la résolution par nom ?" data-tags="ac finding ciqual ids referentiel decision-po" data-kind="finding" data-status="active" data-requires="ciqual-name-resolution">
+<p class="eyebrow">finding / ac-114</p><h1>Décision PO : ciqual_ids sources incohérents</h1>
+<dl><dt>Origine</dt><dd>Retour PO n°2 (2026-08-26) : découverte de la renumérotation de la table Ciqual 2025-11-03 (le code banane y désigne l'abricot).</dd>
+<dt>Impact</dt><dd>Medium — contouré en production par la <a href="ciqual-name-resolution.html#ciqual-name-resolution">résolution par nom</a> ; la colonne ciqual_ids du référentiel reste fausse vis-à-vis de l'édition 2025.</dd>
+<dt>Localisation</dt><dd>assets/database-metier/phase1-referentiel (source gelée) ; resolver tool/generate_ciqual_enrichment.dart.</dd>
+<dt>Décision attendue du PO</dt><dd>Maintenir la résolution par nom (statu quo documenté), ou piloter une correction du fichier source via le pipeline de données (hors app).</dd></dl>
+</article></main><footer>METHOD 6.1.0 · Canonical HTML · Read only the references needed for the task.</footer></body></html>

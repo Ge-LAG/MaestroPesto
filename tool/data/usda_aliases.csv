@@ -1,0 +1,41 @@
+ingredient_id,fdc_id,match_type,note
+ING-PLANT-PHYSALIS-000001,173043,equivalent,Groundcherries (cape-gooseberries) raw
+ING-PLANT-SOJACUIT-000001,174271,equivalent,Soybeans mature cooked boiled without salt
+ING-PLANT-LUPINCUIT-000001,172424,equivalent,Lupins mature seeds cooked boiled without salt
+ING-PLANT-BLTENDRE-000001,169720,equivalent,Wheat soft white (blé tendre)
+ING-TECH-FLOCONSDEBLT-000001,169720,proxy,grain de blé tendre (les flocons sont du grain aplati)
+ING-PLANT-ANISVERT-000001,171316,equivalent,Spices anise seed
+ING-DAIRY-BEURRECLARIF-000001,171314,equivalent,Butter clarified (ghee)
+ING-FERMENT-SKYR-000001,330137,proxy,yaourt grec nature 0 % (le skyr est un lait fermenté égoutté écrémé)
+ING-TECH-SIROPDEGLUCO-000001,168837,equivalent,Syrups corn light (sirop de glucose)
+ING-TECH-SIROPDEFRUCT-000001,168142,equivalent,Sweeteners tabletop fructose liquid
+ING-TECH-SIROPDEBL-000001,168837,proxy,sirop de glucose de maïs (composition proche d'un sirop de glucose de blé)
+ING-TECH-SIROPDERIZ-000001,168837,proxy,sirop de glucose de maïs (composition proche d'un sirop de riz)
+ING-TECH-HUILEDECARTH-000001,171027,equivalent,Oil safflower high oleic (huile de commerce)
+ING-TECH-PTEDECACAO-000001,167568,equivalent,Baking chocolate unsweetened squares
+ING-TECH-CHOCOLATNOIR-000003,167568,equivalent,Baking chocolate unsweetened squares (chocolat 100 %)
+ING-TECH-PECTINEHM-000001,168821,proxy,pectine sèche USDA (sans distinction HM/LM)
+ING-TECH-PECTINELM-000001,168821,proxy,pectine sèche USDA (sans distinction HM/LM)
+ING-TECH-CARRAGHNANEK-000001,169045,proxy,gommes de graines USDA (hydrocolloïde à forte teneur en fibres)
+ING-TECH-CARRAGHNANEI-000001,169045,proxy,gommes de graines USDA (hydrocolloïde à forte teneur en fibres)
+ING-TECH-CARRAGHNANEL-000001,169045,proxy,gommes de graines USDA (hydrocolloïde à forte teneur en fibres)
+ING-TECH-GOMMEXANTHAN-000001,169045,proxy,gommes de graines USDA (hydrocolloïde à forte teneur en fibres)
+ING-TECH-GOMMEGUAR-000001,169045,equivalent,Gums seed gums (includes locust bean and guar)
+ING-TECH-GOMMEARABIQU-000001,169045,proxy,gommes de graines USDA (hydrocolloïde à forte teneur en fibres)
+ING-TECH-GOMMEDECAROU-000001,169045,equivalent,Gums seed gums (includes locust bean and guar)
+ING-TECH-CRMEDETARTRE-000001,175041,equivalent,Leavening agents cream of tartar
+ING-TECH-ARMENATURELD-000001,173471,equivalent,Vanilla extract
+ING-COND-NATTO-000001,172443,equivalent,Natto
+ING-COND-SAUCEHOISIN-000001,172886,equivalent,Sauce hoisin ready-to-serve
+ING-COND-SAUCESRIRACH-000001,171186,equivalent,Sauce hot chile sriracha
+ING-COND-SRIRACHA-000001,171186,equivalent,Sauce hot chile sriracha
+ING-COND-DASHI-000001,171606,proxy,bouillon de poisson USDA (le dashi est un bouillon de bonite et de kombu)
+ING-TECH-BOUILLONDASH-000001,171606,proxy,bouillon de poisson USDA (le dashi est un bouillon de bonite et de kombu)
+ING-FERMENT-PICKLEDECHOU-000001,169279,equivalent,Sauerkraut canned solids and liquids
+ING-TECH-LACTOSRUMPET-000001,171282,equivalent,Whey sweet fluid
+ING-TECH-SIROPDEMAS-000001,168837,equivalent,Syrups corn light
+ING-TECH-SIROPDEMASHA-000001,169659,equivalent,Syrups corn high-fructose
+ING-PLANT-GRAINEDEMOUT-000001,170929,equivalent,Spices mustard seed ground
+ING-TECH-CHOCOLATNOIR-000002,170273,equivalent,Chocolate dark 70-85% cacao solids
+ING-PLANT-FVECUIT-000001,173753,equivalent,Broadbeans (fava beans) mature seeds cooked boiled without salt
+ING-FUNGUS-SHIITAKE-000001,169242,equivalent,Mushrooms shiitake raw

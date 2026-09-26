@@ -1,0 +1,73 @@
+food_group,method,yield_factor,fat_uptake_g,fat_retention,VITC,THIAMIN,RIBOFLAVINE,NIACINE,VITB6,FOLATES,VITB12,VITA,CAROTENE_B,VITE,VITD,VITB5,MINERALS,K,confidence,note
+vegetable,boiled,0.95,0,1,0.55,0.70,0.75,0.70,0.70,0.55,1,0.90,0.90,0.90,1,0.75,0.85,0.75,0.5,cuisson à l'eau égouttée : lessivage des vitamines hydrosolubles et du potassium
+vegetable,steamed,0.97,0,1,0.75,0.85,0.90,0.85,0.85,0.75,1,0.95,0.95,0.95,1,0.90,0.95,0.95,0.5,vapeur : pertes hydrosolubles limitées
+vegetable,sauteed,0.85,0,1,0.75,0.85,0.90,0.85,0.85,0.75,1,0.90,0.90,0.90,1,0.85,1,1,0.5,poêlé : évaporation d'eau sans lessivage
+vegetable,roasted,0.80,0,1,0.70,0.80,0.90,0.85,0.80,0.70,1,0.90,0.90,0.90,1,0.85,1,1,0.5,rôti au four : évaporation d'eau
+vegetable,grilled,0.80,0,1,0.70,0.80,0.90,0.85,0.80,0.70,1,0.90,0.90,0.90,1,0.85,1,1,0.5,grillé : évaporation d'eau
+vegetable,fried,0.75,0,1,0.70,0.80,0.90,0.85,0.80,0.70,1,0.85,0.85,0.80,1,0.85,1,1,0.5,frit : forte évaporation d'eau (matière grasse comptée à part)
+vegetable,stewed,1.00,0,1,0.60,0.70,0.85,0.80,0.75,0.60,1,0.90,0.90,0.90,1,0.80,1,1,0.5,mijoté : jus de cuisson consommé
+vegetable,baked,0.85,0,1,0.70,0.80,0.90,0.85,0.80,0.70,1,0.90,0.90,0.90,1,0.85,1,1,0.5,cuit au four dans une préparation
+legume,boiled,2.40,0,1,0.60,0.70,0.80,0.75,0.75,0.60,1,1,1,0.90,1,0.75,0.85,0.70,0.5,légumineuse sèche bouillie : absorption d'eau
+legume,stewed,2.40,0,1,0.60,0.70,0.85,0.80,0.75,0.60,1,1,1,0.90,1,0.80,1,1,0.5,légumineuse sèche mijotée : jus consommé
+legume,steamed,2.20,0,1,0.70,0.80,0.90,0.85,0.85,0.70,1,1,1,0.95,1,0.85,0.95,0.90,0.5,légumineuse sèche vapeur (après trempage)
+cereal,boiled,2.30,0,1,1,0.65,0.70,0.70,0.75,0.60,1,1,1,0.90,1,0.70,0.85,0.60,0.5,céréale sèche bouillie : absorption d'eau (pâtes et riz 2 à 3 fois leur masse)
+cereal,steamed,2.00,0,1,1,0.80,0.85,0.85,0.85,0.75,1,1,1,0.95,1,0.85,0.95,0.90,0.5,céréale vapeur (semoule gonflée)
+cereal,stewed,2.30,0,1,1,0.75,0.85,0.80,0.80,0.70,1,1,1,0.90,1,0.80,1,1,0.5,céréale mijotée : liquide absorbé (risotto)
+cereal,baked,0.90,0,1,1,0.80,0.95,0.95,0.90,0.80,1,0.90,0.90,0.90,1,0.90,1,1,0.5,farine cuite au four dans une pâte : évaporation d'eau
+cereal,roasted,0.95,0,1,1,0.85,0.95,0.95,0.90,0.85,1,1,1,0.90,1,0.90,1,1,0.5,torréfié
+cereal,fried,0.90,0,1,1,0.80,0.95,0.90,0.90,0.80,1,1,1,0.85,1,0.90,1,1,0.5,frit (pâte ou chapelure)
+meat,roasted,0.72,0,0.90,1,0.75,0.90,0.80,0.70,0.75,0.80,0.90,0.90,0.90,0.90,0.80,0.95,0.85,0.5,rôti : exsudation et fonte de gras
+meat,grilled,0.70,0,0.85,1,0.70,0.90,0.80,0.70,0.75,0.75,0.90,0.90,0.90,0.90,0.80,0.95,0.85,0.5,grillé : exsudation et gras égoutté
+meat,sauteed,0.75,0,0.95,1,0.80,0.95,0.85,0.80,0.80,0.80,0.90,0.90,0.90,0.90,0.85,1,0.95,0.5,poêlé : jus partiellement conservé
+meat,fried,0.72,0,0.95,1,0.80,0.95,0.85,0.80,0.80,0.80,0.85,0.85,0.85,0.85,0.85,1,0.95,0.5,frit
+meat,stewed,0.65,0,0.90,1,0.60,0.85,0.75,0.60,0.60,0.70,0.90,0.90,0.90,0.90,0.75,1,1,0.5,braisé ou mijoté : sauce consommée
+meat,boiled,0.70,0,0.85,1,0.55,0.80,0.65,0.55,0.60,0.70,0.90,0.90,0.90,0.90,0.70,0.80,0.60,0.5,bouilli : bouillon non consommé
+meat,baked,0.75,0,0.90,1,0.75,0.90,0.80,0.70,0.75,0.80,0.90,0.90,0.90,0.90,0.80,0.95,0.90,0.5,cuit au four dans une préparation
+meat,steamed,0.78,0,0.95,1,0.75,0.90,0.80,0.75,0.75,0.80,0.90,0.90,0.90,0.90,0.80,0.95,0.90,0.5,vapeur
+fish,roasted,0.80,0,0.95,1,0.80,0.90,0.85,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,0.95,0.90,0.5,rôti au four
+fish,grilled,0.78,0,0.90,1,0.80,0.90,0.85,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,0.95,0.90,0.5,grillé
+fish,sauteed,0.82,0,1,1,0.85,0.95,0.90,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,1,0.95,0.5,poêlé
+fish,fried,0.80,0,1,1,0.80,0.95,0.85,0.85,0.80,0.85,0.85,0.85,0.85,0.85,0.85,1,0.95,0.5,frit
+fish,steamed,0.85,0,1,1,0.85,0.95,0.90,0.85,0.85,0.90,0.95,0.95,0.95,0.95,0.90,0.95,0.90,0.5,vapeur
+fish,boiled,0.85,0,1,1,0.80,0.90,0.80,0.80,0.75,0.85,0.95,0.95,0.95,0.95,0.80,0.85,0.75,0.5,poché : pertes dans le liquide
+fish,stewed,0.85,0,1,1,0.80,0.90,0.85,0.80,0.75,0.85,0.95,0.95,0.95,0.95,0.85,1,1,0.5,mijoté : sauce consommée
+fish,baked,0.82,0,0.95,1,0.80,0.90,0.85,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,0.95,0.90,0.5,cuit au four dans une préparation
+egg,boiled,1.00,0,1,1,0.85,0.95,1,0.90,0.75,0.85,0.90,0.90,0.90,0.90,0.90,1,1,0.5,œuf dur ou poché
+egg,steamed,1.00,0,1,1,0.85,0.95,1,0.90,0.75,0.85,0.90,0.90,0.90,0.90,0.90,1,1,0.5,vapeur
+egg,sauteed,0.90,0,1,1,0.85,0.95,1,0.90,0.70,0.80,0.85,0.85,0.85,0.85,0.90,1,1,0.5,brouillé ou au plat
+egg,fried,0.90,0,1,1,0.85,0.95,1,0.90,0.70,0.80,0.85,0.85,0.85,0.85,0.90,1,1,0.5,au plat
+egg,baked,0.90,0,1,1,0.80,0.90,1,0.85,0.70,0.75,0.85,0.85,0.85,0.85,0.85,1,1,0.5,cuit au four dans une préparation
+egg,roasted,0.90,0,1,1,0.80,0.90,1,0.85,0.70,0.75,0.85,0.85,0.85,0.85,0.85,1,1,0.5,cuit au four
+egg,stewed,1.00,0,1,1,0.85,0.95,1,0.90,0.75,0.85,0.90,0.90,0.90,0.90,0.90,1,1,0.5,crème ou sauce liée
+dairy,boiled,0.95,0,1,0.75,0.90,0.95,1,0.90,0.85,0.90,0.95,0.95,0.95,0.95,0.90,1,1,0.5,lait chauffé ou bouilli
+dairy,stewed,0.95,0,1,0.75,0.90,0.95,1,0.90,0.85,0.90,0.95,0.95,0.95,0.95,0.90,1,1,0.5,sauce ou crème mijotée
+dairy,baked,0.90,0,1,0.70,0.85,0.90,1,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,1,1,0.5,gratiné ou cuit au four
+dairy,roasted,0.90,0,1,0.70,0.85,0.90,1,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,1,1,0.5,cuit au four
+dairy,grilled,0.90,0,1,0.70,0.85,0.90,1,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,1,1,0.5,grillé
+dairy,sauteed,0.90,0,1,0.70,0.85,0.90,1,0.85,0.80,0.85,0.90,0.90,0.90,0.90,0.85,1,1,0.5,poêlé
+dairy,steamed,0.95,0,1,0.75,0.90,0.95,1,0.90,0.85,0.90,0.95,0.95,0.95,0.95,0.90,1,1,0.5,vapeur
+fruit,boiled,0.95,0,1,0.60,0.80,0.90,0.90,0.80,0.70,1,0.90,0.90,0.90,1,0.85,1,1,0.5,compote : jus conservé
+fruit,stewed,0.95,0,1,0.60,0.80,0.90,0.90,0.80,0.70,1,0.90,0.90,0.90,1,0.85,1,1,0.5,compoté ou poché au sirop
+fruit,baked,0.85,0,1,0.65,0.85,0.90,0.90,0.85,0.75,1,0.90,0.90,0.90,1,0.90,1,1,0.5,cuit au four (tarte ou crumble)
+fruit,roasted,0.85,0,1,0.65,0.85,0.90,0.90,0.85,0.75,1,0.90,0.90,0.90,1,0.90,1,1,0.5,rôti au four
+fruit,grilled,0.85,0,1,0.65,0.85,0.90,0.90,0.85,0.75,1,0.90,0.90,0.90,1,0.90,1,1,0.5,grillé
+fruit,sauteed,0.85,0,1,0.70,0.85,0.90,0.90,0.85,0.75,1,0.90,0.90,0.90,1,0.90,1,1,0.5,poêlé
+fruit,fried,0.80,0,1,0.65,0.80,0.90,0.90,0.80,0.70,1,0.85,0.85,0.85,1,0.85,1,1,0.5,beignet
+fruit,steamed,0.95,0,1,0.75,0.90,0.95,0.95,0.90,0.80,1,0.95,0.95,0.95,1,0.90,1,1,0.5,vapeur
+mushroom,sauteed,0.70,0,1,1,0.85,0.90,0.85,0.85,0.80,1,1,1,1,0.90,0.85,1,1,0.5,poêlé : forte évaporation d'eau
+mushroom,boiled,0.85,0,1,1,0.75,0.75,0.70,0.75,0.60,1,1,1,1,0.90,0.75,0.85,0.70,0.5,bouilli : lessivage
+mushroom,roasted,0.75,0,1,1,0.85,0.90,0.85,0.85,0.80,1,1,1,1,0.90,0.85,1,1,0.5,rôti
+mushroom,grilled,0.75,0,1,1,0.85,0.90,0.85,0.85,0.80,1,1,1,1,0.90,0.85,1,1,0.5,grillé
+mushroom,stewed,0.80,0,1,1,0.80,0.85,0.80,0.80,0.70,1,1,1,1,0.90,0.80,1,1,0.5,mijoté : jus consommé
+mushroom,fried,0.70,0,1,1,0.80,0.90,0.85,0.80,0.75,1,1,1,1,0.90,0.85,1,1,0.5,frit
+mushroom,steamed,0.85,0,1,1,0.85,0.90,0.85,0.85,0.80,1,1,1,1,0.90,0.85,0.95,0.90,0.5,vapeur
+mushroom,baked,0.75,0,1,1,0.85,0.90,0.85,0.85,0.80,1,1,1,1,0.90,0.85,1,1,0.5,cuit au four dans une préparation
+fat,fried,0.10,0,0.10,1,1,1,1,1,1,1,0.90,0.90,0.70,0.90,1,1,1,0.4,bain de friture : environ 10 % de l'huile absorbée par les aliments (ordre de grandeur)
+other,boiled,1.00,0,1,0.60,0.75,0.85,0.80,0.80,0.65,0.90,0.90,0.90,0.90,0.95,0.80,0.95,0.90,0.4,facteur générique (groupe non spécifique)
+other,steamed,1.00,0,1,0.75,0.85,0.90,0.85,0.85,0.75,0.95,0.95,0.95,0.95,0.95,0.90,1,1,0.4,facteur générique (groupe non spécifique)
+other,sauteed,0.95,0,1,0.75,0.85,0.90,0.85,0.85,0.75,0.90,0.90,0.90,0.90,0.90,0.85,1,1,0.4,facteur générique (groupe non spécifique)
+other,roasted,0.90,0,1,0.70,0.80,0.90,0.85,0.80,0.70,0.85,0.90,0.90,0.90,0.90,0.85,1,1,0.4,facteur générique (groupe non spécifique)
+other,grilled,0.90,0,1,0.70,0.80,0.90,0.85,0.80,0.70,0.85,0.90,0.90,0.90,0.90,0.85,1,1,0.4,facteur générique (groupe non spécifique)
+other,fried,0.90,0,1,0.70,0.80,0.90,0.85,0.80,0.70,0.85,0.85,0.85,0.85,0.85,0.85,1,1,0.4,facteur générique (groupe non spécifique)
+other,stewed,1.00,0,1,0.60,0.70,0.85,0.80,0.75,0.65,0.85,0.90,0.90,0.90,0.90,0.80,1,1,0.4,facteur générique (groupe non spécifique)
+other,baked,0.90,0,1,0.70,0.80,0.90,0.85,0.80,0.75,0.85,0.90,0.90,0.90,0.90,0.85,1,1,0.4,facteur générique (groupe non spécifique)

@@ -1,0 +1,30 @@
+ingredient_id,kind,definition,note,reference
+ING-BEV-SIROPDESUCRE-000001,mix,ING-TECH-SUCREBLANC-000001:50|ING-BEV-EAU-000001:50,sirop simple 1:1 (sucre et eau à poids égaux),Composition calculée depuis Ciqual 2025
+ING-MIX-ROUXBLANC-000001,mix,ING-DAIRY-BEURREDOUX-000001:50|ING-TECH-FARINEDEBLTE-000001:50,roux : beurre et farine à poids égaux,Composition calculée depuis Ciqual 2025
+ING-MIX-ROUXBLOND-000001,mix,ING-DAIRY-BEURREDOUX-000001:50|ING-TECH-FARINEDEBLTE-000001:50,roux : beurre et farine à poids égaux (cuisson plus longue sans effet notable sur la composition),Composition calculée depuis Ciqual 2025
+ING-MIX-ROUXBRUN-000001,mix,ING-DAIRY-BEURREDOUX-000001:50|ING-TECH-FARINEDEBLTE-000001:50,roux : beurre et farine à poids égaux (cuisson plus longue sans effet notable sur la composition),Composition calculée depuis Ciqual 2025
+ING-MIX-MIREPOIX-000001,mix,ING-PLANT-OIGNON-000001:50|ING-PLANT-CAROTTE-000001:25|ING-PLANT-CLERIBRANCHE-000001:25,mirepoix classique : oignon 2 / carotte 1 / céleri 1,Composition calculée depuis Ciqual 2025
+ING-TECH-SAUMURE5SEL-000001,mix,ING-TECH-SELFIN-000001:5|ING-BEV-EAU-000001:95,saumure à 5 % de sel,Composition calculée depuis Ciqual 2025
+ING-TECH-SAUMURE10SEL-000001,mix,ING-TECH-SELFIN-000001:10|ING-BEV-EAU-000001:90,saumure à 10 % de sel,Composition calculée depuis Ciqual 2025
+ING-FERMENT-LEVAINPTE-000001,mix,ING-TECH-FARINEDEBLTE-000001:50|ING-BEV-EAU-000001:50,levain à 100 % d'hydratation (farine et eau à poids égaux),Composition calculée depuis Ciqual 2025
+ING-FERMENT-LEVAINDEBL-000001,mix,ING-TECH-FARINEDEBLTE-000001:50|ING-BEV-EAU-000001:50,levain à 100 % d'hydratation (farine et eau à poids égaux),Composition calculée depuis Ciqual 2025
+ING-FERMENT-LEVAINDESEIG-000001,mix,ING-TECH-FARINEDESEIG-000001:50|ING-BEV-EAU-000001:50,levain de seigle à 100 % d'hydratation,Composition calculée depuis Ciqual 2025
+ING-FERMENT-LASSINATURE-000001,mix,ING-FERMENT-YAOURTNATURE-000001:50|ING-BEV-EAU-000001:50,lassi nature : yaourt allongé d'eau à poids égaux,Composition calculée depuis Ciqual 2025
+ING-MIX-PTECHOUX-000001,mix,ING-BEV-EAU-000001:250|ING-DAIRY-BEURREDOUX-000001:100|ING-TECH-FARINEDEBLTE-000001:150|ING-ANIMAL-UFDEPOULE-000001:200|ING-TECH-SELFIN-000001:3,pâte à choux crue : eau 250 g / beurre 100 g / farine 150 g / 4 œufs / sel,Composition calculée depuis Ciqual 2025
+ING-MIX-PTELEVE-000001,mix,ING-TECH-FARINEDEBLTE-000001:500|ING-ANIMAL-UFDEPOULE-000001:300|ING-DAIRY-BEURREDOUX-000001:250|ING-TECH-SUCREBLANC-000001:60|ING-FERMENT-LEVUREBOULAN-000002:20|ING-TECH-SELFIN-000001:10,pâte à brioche crue : farine 500 g / 6 œufs / beurre 250 g / sucre 60 g / levure 20 g / sel 10 g,Composition calculée depuis Ciqual 2025
+ING-COND-SAUCEVELOUT-000001,mix,ING-TECH-FONDBLANCDEV-000001:1000|ING-DAIRY-BEURREDOUX-000001:50|ING-TECH-FARINEDEBLTE-000001:60,velouté : 1 l de fond blanc lié par 110 g de roux blond,Composition calculée depuis Ciqual 2025
+ING-COND-SAUCEESPAGNO-000001,mix,ING-TECH-FONDBRUNDEVE-000001:1000|ING-DAIRY-BEURREDOUX-000001:60|ING-TECH-FARINEDEBLTE-000001:70,espagnole simplifiée : 1 l de fond brun lié par 130 g de roux brun (garniture aromatique non comptée),Composition calculée depuis Ciqual 2025
+ING-TECH-SUCREINVERTI-000001,pure,WATER:20|GLUS:40|FRUS:40|SUGAR:80|CHOAVL:80|PROCNT:0|FAT:0|FIB-:0|NA:0,sirop de sucre inverti à 80 % de matière sèche (glucose et fructose à parts égales),Règlement (UE) n° 1169/2011 annexe XIV (4 kcal/g)
+ING-TECH-DEXTROSE-000001,pure,WATER:0|GLUS:100|SUGAR:100|CHOAVL:100|PROCNT:0|FAT:0|FIB-:0|NA:0,dextrose anhydre (glucose pur ; le dextrose monohydraté contient environ 9 % d'eau),Règlement (UE) n° 1169/2011 annexe XIV (4 kcal/g)
+ING-TECH-SORBITOLE420-000001,pure,WATER:0|POLYL:100|CHOAVL:100|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:240,polyol pur,Règlement (UE) n° 1169/2011 annexe XIV (polyols 2,4 kcal/g)
+ING-TECH-MANNITOLE421-000001,pure,WATER:0|POLYL:100|CHOAVL:100|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:240,polyol pur,Règlement (UE) n° 1169/2011 annexe XIV (polyols 2,4 kcal/g)
+ING-TECH-XYLITOLE967-000001,pure,WATER:0|POLYL:100|CHOAVL:100|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:240,polyol pur,Règlement (UE) n° 1169/2011 annexe XIV (polyols 2,4 kcal/g)
+ING-TECH-MALTITOLE965-000001,pure,WATER:0|POLYL:100|CHOAVL:100|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:240,polyol pur,Règlement (UE) n° 1169/2011 annexe XIV (polyols 2,4 kcal/g)
+ING-TECH-ERYTHRITOLE9-000001,pure,WATER:0|POLYL:100|CHOAVL:100|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:0,érythritol pur (non métabolisé),Règlement (UE) n° 1169/2011 annexe XIV (érythritol 0 kcal/g)
+ING-TECH-ACIDECITRIQU-000001,pure,WATER:0|OA:100|CHOAVL:0|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:300,acide citrique anhydre,Règlement (UE) n° 1169/2011 annexe XIV (acides organiques 3 kcal/g)
+ING-TECH-ACIDETARTRIQ-000001,pure,WATER:0|OA:100|CHOAVL:0|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:300,acide tartrique,Règlement (UE) n° 1169/2011 annexe XIV (acides organiques 3 kcal/g)
+ING-TECH-ACIDEASCORBI-000001,pure,WATER:0|VITC:100000|CHOAVL:0|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:0,acide ascorbique pur (vitamine C ; utilisé au milligramme : énergie négligée),Composition chimique (C6H8O6)
+ING-TECH-ALGINATEDESO-000001,pure,WATER:12|FIB-:85|NA:10200|CHOAVL:0|SUGAR:0|PROCNT:0|FAT:0|ENERCKCAL:170,alginate de sodium : sel sodique de l'acide alginique (11,6 % de sodium sur matière sèche) ; humidité d'environ 12 %,Composition chimique (NaC6H7O6) ; fibres 2 kcal/g (UE 1169/2011 annexe XIV)
+ING-TECH-MONOETDIGLYC-000001,pure,WATER:0|FAT:100|CHOAVL:0|SUGAR:0|PROCNT:0|FIB-:0|NA:0|ENERCKCAL:900,mono- et diglycérides d'acides gras (lipides),Règlement (UE) n° 1169/2011 annexe XIV (lipides 9 kcal/g)
+ING-TECH-EAUDEROSE-000001,pure,WATER:100|CHOAVL:0|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:0,hydrolat (eau distillée aromatique) : aucun nutriment énergétique,Définition du produit (distillat aqueux)
+ING-TECH-EAUDEFLEURDO-000001,pure,WATER:100|CHOAVL:0|SUGAR:0|PROCNT:0|FAT:0|FIB-:0|NA:0|ENERCKCAL:0,hydrolat (eau distillée aromatique) : aucun nutriment énergétique,Définition du produit (distillat aqueux)

@@ -11,6 +11,7 @@ class Recipe {
     required this.steps,
     required this.nutrition,
     required this.images,
+    this.nutritionMode = RecipeNutritionMode.computed,
   });
 
   final String id;
@@ -24,6 +25,10 @@ class Recipe {
   final List<String> steps;
   final NutritionSummary nutrition;
   final List<RecipeImage> images;
+
+  /// Phase 10 (ac-125) — origine de la nutrition affichée : calculée
+  /// depuis les ingrédients (défaut) ou saisie manuelle forcée.
+  final RecipeNutritionMode nutritionMode;
 
   int get totalMinutes => prepMinutes + cookMinutes;
 
@@ -39,6 +44,7 @@ class Recipe {
     List<String>? steps,
     NutritionSummary? nutrition,
     List<RecipeImage>? images,
+    RecipeNutritionMode? nutritionMode,
   }) {
     return Recipe(
       id: id ?? this.id,
@@ -52,9 +58,13 @@ class Recipe {
       steps: steps ?? this.steps,
       nutrition: nutrition ?? this.nutrition,
       images: images ?? this.images,
+      nutritionMode: nutritionMode ?? this.nutritionMode,
     );
   }
 }
+
+/// Origine de la nutrition d'une recette.
+enum RecipeNutritionMode { computed, manual }
 
 class RecipeImage {
   const RecipeImage({required this.path, required this.label});
@@ -68,24 +78,44 @@ class RecipeIngredient {
     required this.label,
     required this.quantity,
     required this.source,
+    this.ingredientId,
+    this.cookingMethod,
   });
 
   final String label;
   final String quantity;
   final IngredientSource source;
 
+  /// Optional Phase 1 ingredient reference (added in Lot D). When set, the
+  /// UI can resolve the canonical name, allergens and nutrition profile
+  /// from the 4 metier databases.
+  final String? ingredientId;
+
+  /// Phase 10 Lot D — mode de cuisson explicite de la ligne
+  /// (`CookingMethod.id` : raw, boiled, roasted…). Null = non précisé :
+  /// le mode est alors inféré depuis les étapes quand c'est possible.
+  final String? cookingMethod;
+
   RecipeIngredient copyWith({
     String? label,
     String? quantity,
     IngredientSource? source,
+    String? ingredientId,
+    Object? cookingMethod = _unset,
   }) {
     return RecipeIngredient(
       label: label ?? this.label,
       quantity: quantity ?? this.quantity,
       source: source ?? this.source,
+      ingredientId: ingredientId ?? this.ingredientId,
+      cookingMethod: identical(cookingMethod, _unset)
+          ? this.cookingMethod
+          : cookingMethod as String?,
     );
   }
 }
+
+const Object _unset = Object();
 
 enum IngredientSource { ciqual, recipe, free }
 
