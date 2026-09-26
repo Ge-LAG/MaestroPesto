@@ -70,8 +70,13 @@ abstract final class FlavorPairingEngine {
     // Qualité et pont centrés : deux arômes différents ne sont pas
     // incompatibles (accords de complément), un partage fort les
     // rapproche d'un accord « par similarité » (food pairing).
-    final quality = 0.45 + 0.55 * similarity;
-    final bridged = 0.4 + 0.6 * bridge;
+    // Un ingrédient sans arôme propre (sel, sucre, farine, huile
+    // neutre…) ne permet pas de juger l'accord aromatique : ces deux
+    // termes tendent vers une valeur neutre au lieu de pénaliser la
+    // paire (retour test visuel : sel « discutable » avec tout).
+    final aromaInfo = aromaInformation(a, b);
+    final quality = _lerp(0.7, 0.45 + 0.55 * similarity, aromaInfo);
+    final bridged = _lerp(0.6, 0.4 + 0.6 * bridge, aromaInfo);
     final base =
         (w1 * quality + w2 * balance + w3 * bridged + w5 * context) /
         (w1 + w2 + w3 + w5);
@@ -137,6 +142,19 @@ abstract final class FlavorPairingEngine {
 
   /// Vecteur aromatique avec remontée partielle vers la famille (un
   /// agrume partage « fruité » avec une fraise).
+  /// Information aromatique d'une paire (0..1) : 0 quand l'un des deux
+  /// ingrédients n'a pas d'arôme propre, 1 dès que chacun cumule au
+  /// moins 0,8 d'intensité aromatique (hors saveurs).
+  static double aromaInformation(FlavorProfile a, FlavorProfile b) {
+    double weight(FlavorProfile p) => p.descriptors.entries
+        .where((e) => !SensoryOntology.isTaste(e.key))
+        .fold(0.0, (s, e) => s + e.value);
+    return (math.min(weight(a), weight(b)) / 0.8).clamp(0.0, 1.0);
+  }
+
+  static double _lerp(double neutral, double value, double t) =>
+      neutral + (value - neutral) * t;
+
   static Map<String, double> _aromaVector(FlavorProfile p) {
     final v = <String, double>{};
     p.descriptors.forEach((d, x) {
@@ -274,7 +292,12 @@ abstract final class FlavorPairingEngine {
     if (context < 0.5) parts.add('Contextes sucré et salé opposés');
     if (dominance > 0.3) parts.add('Risque de dominance aromatique');
     if (empirical == null) {
-      parts.add('Prédiction par profils sensoriels (sans accord documenté)');
+      parts.add(
+        aromaInformation(a, b) < 0.5
+            ? 'Ingrédient sans arôme propre : accord non discriminant '
+                  '(prédiction neutre)'
+            : 'Prédiction par profils sensoriels (sans accord documenté)',
+      );
     }
     return parts.join(' · ');
   }

@@ -35,6 +35,22 @@ void main() {
     intensity: 0.95,
   );
 
+  test('ingrédient sans arôme (sel) : prédiction neutre, pas discutable', () {
+    final sel = p('sel', {'salty': 1.0}, intensity: 0.6);
+    for (final other in [citron, saumon, vanille]) {
+      final m = FlavorPairingEngine.scorePair(sel, other);
+      expect(m.evidence, FlavorMatchEvidence.predicted);
+      expect(
+        m.overallScore,
+        greaterThanOrEqualTo(0.55),
+        reason: other.ingredientId,
+      );
+      expect(m.explanation, contains('non discriminant'));
+    }
+    expect(FlavorPairingEngine.aromaInformation(sel, citron), 0);
+    expect(FlavorPairingEngine.aromaInformation(citron, zeste), 1);
+  });
+
   test('sans soutien empirique : prédiction, jamais incompatibilité', () {
     final m = FlavorPairingEngine.scorePair(ail, vanille);
     expect(m.evidence, FlavorMatchEvidence.predicted);
