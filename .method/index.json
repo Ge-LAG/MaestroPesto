@@ -635,11 +635,11 @@
       ],
       "kind": "project",
       "status": "active",
-      "sha256": "594d445281237001acce47d6f633fa2ae483a5d3fb2772719dbfc9566deda3f4",
-      "chars": 3515,
-      "size": 4708,
-      "mtime_ns": 1790435230539194300,
-      "revision": 8,
+      "sha256": "92f721fab2bd3c1fb09494d253e38a5b99a6847c9d5450b22307a4ef019b8a72",
+      "chars": 3617,
+      "size": 4824,
+      "mtime_ns": 1790435721674451700,
+      "revision": 9,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -656,7 +656,7 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "a8d418ce1ebad7aeb9e18bede9d7b19443620b41b5e33658cc6689630ac56441",
+      "body_digest": "3c49bea54757d132a5fe8c76fce30a4c7537a382b0ef4204676fdd48c138b101",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -669,6 +669,7 @@
         "../work/phase10-parametres.html#phase10-parametres",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
+        "../records/livraison-phase09-10.html#livraison-phase09-10",
         "../work/phase11-recette-inversee.html#phase11-recette-inversee",
         "../records/phase11-cadrage.html#phase11-cadrage",
         "../work/idea-ocr-recettes.html#idea-ocr-recettes",
@@ -2370,6 +2371,77 @@
       ]
     },
     {
+      "id": "livraison-phase09-10",
+      "path": "records/livraison-phase09-10.html",
+      "title": "Autorisation : livraison des phases 09 à 11 (plan) vers main",
+      "summary": "Push de Ge-LAG/db-connection-strategies vers origin puis fusion sans squash dans main, autorisés par le PO le 2026-09-26.",
+      "tags": [
+        "authorization",
+        "livraison",
+        "push",
+        "merge",
+        "main",
+        "phase-09",
+        "phase-10",
+        "phase-11"
+      ],
+      "kind": "authorization",
+      "status": "accepted",
+      "sha256": "41a9c5ca5309543946e1e9c90fb3782d5a237a9527d92a02907565c84e907b0c",
+      "chars": 1432,
+      "size": 3257,
+      "mtime_ns": 1790435760920749700,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "delivery-gate"
+      ],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "Branche Ge-LAG/db-connection-strategies (phases 09 et 10, plan de la phase 11), en avance sur origin/main ca351d9",
+      "environment": "Dépôt github.com/Ge-LAG/MaestroPesto, poste Windows 11 du PO",
+      "evidence_digest": "4ee3dc267cf808b307550cb4f3e52de6a75682546013453fe0215bbcd2ec7235",
+      "criteria": [
+        {
+          "id": "L1",
+          "text": "Le PO autorise explicitement, dans la session courante, le push de la branche et sa fusion dans main sur origin."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "livraison-phase09-10.html#source-po",
+          "check": "validation explicite du PO dans la session",
+          "by": "Guillaume (PO), consigné par Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "L1",
+          "text": "Autorisation observée dans la session."
+        }
+      ],
+      "body_digest": "c78c368390c83b519307772a9a61b326e84d6061d54bd65d3d2b20ddf99cbbe0",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "delivery-gate.html#delivery-gate",
+        "acceptance-phase09.html#acceptance-phase09",
+        "acceptance-phase10.html#acceptance-phase10",
+        "livraison-phase09-10.html#source-po"
+      ],
+      "anchors": [
+        "livraison-phase09-10",
+        "source-po"
+      ]
+    },
+    {
       "id": "phase10-mandat-arbitrages",
       "path": "records/phase10-mandat-arbitrages.html",
       "title": "Décision : arbitrages phase 10 sous mandat PO du 2026-09-26",
@@ -2434,39 +2506,57 @@
         "garde-fous"
       ],
       "kind": "decision",
-      "status": "review",
-      "sha256": "33d185c26bb8f73bd9123dc5ebaae2e47e7baafb0f156d2726b27bd0a903b250",
-      "chars": 3347,
-      "size": 4983,
-      "mtime_ns": 1790435274670831200,
-      "revision": 4,
+      "status": "accepted",
+      "sha256": "2ca06a93d68828b8fad058448c615e088abdc5f075c9baca12d342fe35feb0b8",
+      "chars": 3484,
+      "size": 5623,
+      "mtime_ns": 1790435754642733800,
+      "revision": 5,
       "owner": "Guillaume",
       "reviewed": "2026-09-26",
       "review_by": "2026-10-31",
       "review_trigger": "Réponse du PO sur D2 à D7, démarrage du lot C (texte de l'avertissement Pure Innovation) ou changement du concept",
-      "review_digest": "35f0f1ea09f5ee1e98a571d4d4d212eacf60eb69d016fe763aef9b5ee70bdbfa",
+      "review_digest": "2cd3f7eff3a3edc2d009f321d04361e95e6acee97f631ab008c13c6754878de3",
       "requires": [],
       "supersedes": [],
       "components": [],
       "applies_to": [],
       "paths": [],
       "watch": [],
-      "candidate": "",
-      "environment": "",
-      "evidence_digest": "",
-      "criteria": [],
-      "evidence": [],
-      "body_digest": "34c3e07069c542593976c3b3f779665c62031d0fcd3fdf1d3ea8db891f69a367",
+      "candidate": "8ac0740 (plan documentaire, aucun code)",
+      "environment": "Session Claude Code du 2026-09-26, machine PO",
+      "evidence_digest": "91fde948769a1aedcac69faca26b0c49d7e3d1b6c30ebaae65731d55aff442b5",
+      "criteria": [
+        {
+          "id": "C1",
+          "text": "Le PO valide explicitement les décisions D1 à D7."
+        }
+      ],
+      "evidence": [
+        {
+          "result": "pass",
+          "ref": "phase11-cadrage.html#validation-po",
+          "check": "validation explicite du PO dans la session",
+          "by": "Guillaume (PO), consigné par Claude (Claude Code)",
+          "date": "2026-09-26",
+          "waiver": "",
+          "for": "C1",
+          "text": "D1 à D7 validés, texte de l'avertissement compris."
+        }
+      ],
+      "body_digest": "0ce507969b1813189d14501d85231d5fa86013738dada35fd17359662b166617",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
         "../index.html",
         "../work/idea-recette-inversee.html#idea-recette-inversee",
         "../work/phase11-recette-inversee.html#phase11-recette-inversee",
-        "honest-data-display.html#honest-data-display"
+        "honest-data-display.html#honest-data-display",
+        "phase11-cadrage.html#validation-po"
       ],
       "anchors": [
-        "phase11-cadrage"
+        "phase11-cadrage",
+        "validation-po"
       ]
     },
     {
@@ -3872,11 +3962,11 @@
       ],
       "kind": "work",
       "status": "ready",
-      "sha256": "7342e1fb5eeacf4ee7e4edd6a4396378a5a1c7096e9fd408e911ae60573b0672",
-      "chars": 7062,
-      "size": 8961,
-      "mtime_ns": 1790435228852125900,
-      "revision": 2,
+      "sha256": "a0a38bc6811b9c18d0dd6be6a217f4aefece9eaba77a95975b0191dcbe8151c6",
+      "chars": 8476,
+      "size": 10586,
+      "mtime_ns": 1790435718516602200,
+      "revision": 3,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -3934,7 +4024,7 @@
         }
       ],
       "evidence": [],
-      "body_digest": "08059ee035e6387e1b5ee54ae190877fa5d0bcbf4cd5d18335d59c6bc3797c6d",
+      "body_digest": "411d33aaa16b5ac26e6506a92205de99ffeb38cfbbb7893905bb7856f40b0324",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -3942,7 +4032,9 @@
         "idea-recette-inversee.html#idea-recette-inversee",
         "../records/phase11-cadrage.html#phase11-cadrage",
         "../records/phase11-cadrage.html#phase11-cadrage",
-        "../records/delivery-gate.html#delivery-gate"
+        "../records/delivery-gate.html#delivery-gate",
+        "../records/delivery-gate.html#delivery-gate",
+        "../records/livraison-phase09-10.html#livraison-phase09-10"
       ],
       "anchors": [
         "phase11-recette-inversee"
