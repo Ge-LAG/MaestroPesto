@@ -519,6 +519,38 @@ void main() {
       ].join(','),
     );
   }
+  // Accords observés dans le corpus du domaine public (Escoffier 1907,
+  // tool/generate_corpus_pairings.dart) : ajoutés quand la paire n'est
+  // pas déjà curatée.
+  var corpusPairs = 0;
+  for (final p in _records('tool/data/corpus_pairings.csv')) {
+    final a = nameToId[p['ingredient_a']];
+    final b = nameToId[p['ingredient_b']];
+    if (a == null || b == null || a == b) continue;
+    final key = ([a, b]..sort()).join('|');
+    if (!seenPairs.add(key)) continue;
+    final sortedPair = [a, b]..sort();
+    pairs++;
+    corpusPairs++;
+    final lift = double.parse(p['lift']!)
+        .toStringAsFixed(1)
+        .replaceAll('.', ',');
+    pairingsOut.writeln(
+      [
+        'CP-${pairs.toString().padLeft(4, '0')}',
+        sortedPair[0],
+        sortedPair[1],
+        'classic',
+        p['strength'],
+        'CORPUS_ESCOFFIER_1907',
+        _cell(
+          'relevé dans ${p['recipes']} recettes du Guide culinaire '
+          "d'Escoffier (1907, domaine public), lift $lift",
+        ),
+      ].join(','),
+    );
+  }
+  stdout.writeln('Accords observés dans le corpus Escoffier : $corpusPairs');
   if (unknownNames.isNotEmpty) {
     stdout.writeln(
       'Accords ignorés (ingrédients absents du référentiel) : '

@@ -1,0 +1,135 @@
+canonical_name_fr,pattern
+Beurre doux,\bbutter\b
+Crème liquide entière,\bcream\b(?! of)
+Lait entier,\bmilk\b
+Œuf de poule,\beggs?\b(?! ?-?plant)
+Jaune d'œuf,\byolks?\b
+Blanc d'œuf,\bwhites? of (the )?eggs?\b|\begg-whites?\b
+Sucre blanc,\bsugar\b
+Farine de blé tendre,\bflour\b
+Sel fin,\bsalt\b
+Poivre noir,\bpepper\b(?!s)|\bpeppercorns?\b
+Muscade,\bnutmeg\b
+Piment de Cayenne,\bcayenne\b
+Paprika,\bpaprika\b
+Safran,\bsaffron\b
+Curry en poudre,\bcurry\b
+Clou de girofle,\bcloves?\b(?! of garlic)
+Cannelle,\bcinnamon\b
+Gingembre,\bginger\b
+Vanille (gousse),\bvanilla\b
+Laurier,\bbay\b
+Thym,\bthyme\b
+Persil,\bparsley\b
+Cerfeuil,\bchervil\b
+Estragon,\btarragon\b
+Ciboulette,\bchives\b
+Basilic,\bbasil\b
+Menthe,\bmint\b
+Romarin,\brosemary\b
+Sauge,\bsage\b
+Aneth,\bdill\b
+Ail,\bgarlic\b
+Échalote,\bshallots?\b
+Oignon,\bonions?\b
+Poireau,\bleeks?\b
+Carotte,\bcarrots?\b
+Céleri branche,\bcelery\b
+Céleri-rave,\bceleriac\b
+Navet,\bturnips?\b
+Pomme de terre,\bpotato(es)?\b
+Topinambour,\bjerusalem artichokes?\b
+Tomate fraîche,\btomato(es)?\b
+Concentré de tomate,\btomato pur[ée]e\b
+Champignon de Paris,\bmushrooms?\b
+Morille,\bmorels?\b
+Cèpe,\bc[èe]pes?\b|\bboletus\b
+Truffe noire,\btruffles?\b
+Épinard,\bspinach\b
+Laitue,\blettuce\b
+Chou blanc,\bcabbages?\b
+Chou-fleur,\bcauliflowers?\b
+Concombre,\bcucumbers?\b
+Aubergine,\baubergines?\b|\begg-?plants?\b
+Courgette,\bmarrows?\b|\bcourgettes?\b
+Poivron rouge,\bpimentos?\b|\bsweet peppers?\b
+Pois cuit,\bpeas\b
+Lentille verte cuit,\blentils\b
+Haricot blanc cuit,\bharicot beans\b|\bwhite beans\b
+Riz grain,\brice\b
+Cornichon aigre-doux,\bgherkins?\b
+Capre,\bcapers\b
+Olive noire en saumure,\bolives?\b
+Moutarde de Dijon,\bmustard\b
+Vinaigre de vin rouge,\bvinegar\b
+Huile d'olive,\boil\b|\bolive[- ]oil\b
+Jus de citron,\blemon[- ]juice\b|\bjuice of (a|one|two|half a) lemons?\b
+Citron jaune cru,\blemons?\b(?![- ]juice)
+Orange cru,\boranges?\b
+Mandarine cru,\btangerines?\b|\bmandarines?\b
+Pomme crue,\bapples?\b
+Pêche crue,\bpeach(es)?\b
+Abricot crue,\bapricots?\b
+Cerise crue,\bcherr(y|ies)\b
+Fraise crue,\bstrawberr(y|ies)\b
+Framboise crue,\braspberr(y|ies)\b
+Groseille crue,\bred[- ]currants?\b
+Ananas,\bpine-?apples?\b
+Banane,\bbananas?\b
+Raisin frais,\bgrapes?\b
+Raisin sec,\braisins\b|\bsultanas\b|\bcurrants\b
+Amande crue,\balmonds?\b
+Noisette crue,\bfilberts?\b|\bhazel-?nuts?\b
+Noix crue,\bwalnuts?\b
+Pistache crue,\bpistachios?\b
+Châtaigne crue,\bchestnuts?\b
+Café filtre,\bcoffee\b
+Thé noir,\btea\b
+Chocolat noir 70%,\bchocolate\b
+Cacao en poudre,\bcocoa\b
+Miel,\bhoney\b
+Parmigiano Reggiano,\bparmesan\b
+Gruyère,\bgruy[èe]re\b
+Vin blanc sec,\bwhite wine\b|\bchablis\b|\bsauterne\b
+Vin rouge,\bred wine\b|\bclaret\b|\bburgundy\b
+Madère,\bmadeira\b
+Porto,\bport\b(?!ion)
+Xérès (Sherry),\bsherry\b
+Eau-de-vie de vin (Cognac),\bbrandy\b|\bcognac\b|\bliqueur-brandy\b
+Rhum blanc,\brum\b
+Kirsch,\bkirsch\b
+Champagne brut,\bchampagne\b
+Gélatine,\bgelatine\b
+Amidon de pomme de terre,\bfecula\b
+Bœuf (viande),\bbeef\b
+Veau (viande),\bveal\b
+Agneau (viande),\blamb\b
+Mouton (viande),\bmutton\b
+Porc (viande),\bpork\b
+Poulet (viande),\bchickens?\b|\bfowls?\b|\bpullets?\b|\bpoulardes?\b
+Canard (viande),\bducks?\b|\bducklings?\b
+Oie (viande),\bgeese\b|\bgoose\b
+Dinde (viande),\bturkeys?\b
+Caille (viande),\bquails?\b
+Faisan (viande),\bpheasants?\b
+Lapin (viande),\brabbits?\b
+Cerf (viande),\bvenison\b
+Foie de volaille,\bfowls?' livers\b|\bchicken livers?\b
+Foie de veau,\bcalf's liver\b
+Ris de veau,\bsweetbreads?\b
+Saindoux,\blard\b
+Sole,\bsoles?\b
+Saumon,\bsalmon\b
+Truite,\btrouts?\b
+Maquereau,\bmackerel\b
+Hareng,\bherrings?\b
+Sardine,\bsardines?\b
+Anchois,\banchov(y|ies)\b
+Cabillaud,\bcod\b
+Homard,\blobsters?\b
+Langouste,\bspiny lobsters?\b|\blangoustes?\b
+Écrevisse,\bcrayfish(es)?\b
+Crevette,\bshrimps?\b|\bprawns?\b
+Huître,\boysters?\b
+Moule,\bmussels?\b
+Coquille Saint-Jacques,\bscallops?\b

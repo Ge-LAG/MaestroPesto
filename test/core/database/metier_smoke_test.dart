@@ -574,4 +574,21 @@ void main() {
       expect(cannelle.densitySource, 'USDA FDC');
     });
   });
+
+  group('Accords observés : Escoffier 1907 (domaine public)', () {
+    test('cerfeuil × estragon : accord documenté par le corpus', () async {
+      final rows = await db.select(db.culinaryPairings).get();
+      expect(rows.length, greaterThan(1000));
+      final corpus = rows.where((r) => r.source == 'CORPUS_ESCOFFIER_1907');
+      expect(corpus.length, greaterThan(700));
+      final repo = FlavorRepository(db);
+      final m = await repo.bestMatchFor([
+        'ING-PLANT-ESTRAGON-000001',
+        'ING-PLANT-CERFEUIL-000001',
+      ]);
+      expect(m, isNotNull);
+      expect(m!.isPrediction, isFalse);
+      expect(m.explanation, contains('Escoffier'));
+    });
+  });
 }

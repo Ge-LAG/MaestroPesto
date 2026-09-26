@@ -1,0 +1,875 @@
+ingredient_a,ingredient_b,recipes,lift,strength
+Beurre doux,Sel fin,199,1.55,0.63
+Poivre noir,Sel fin,172,8.16,0.91
+Beurre doux,Oignon,166,1.71,0.64
+Beurre doux,Champignon de Paris,162,1.78,0.65
+Beurre doux,Persil,151,1.51,0.62
+Poulet (viande),Truffe noire,150,2.31,0.69
+Beurre doux,Pomme de terre,136,1.61,0.63
+Sel fin,Œuf de poule,125,2.25,0.69
+Beurre doux,Poivre noir,109,1.52,0.62
+Champignon de Paris,Truffe noire,109,2.98,0.74
+Crème liquide entière,Vanille (gousse),95,2.99,0.74
+Oignon,Sel fin,91,3.20,0.75
+Beurre doux,Vin blanc sec,91,1.72,0.64
+Beurre doux,Sole,89,1.69,0.64
+Sucre blanc,Œuf de poule,85,1.86,0.66
+Beurre doux,Farine de blé tendre,84,1.81,0.65
+Carotte,Oignon,78,6.60,0.88
+Crème liquide entière,Sucre blanc,78,1.74,0.65
+Beurre doux,Jus de citron,77,1.79,0.65
+Oignon,Persil,75,3.38,0.76
+Persil,Sel fin,75,2.55,0.71
+Persil,Œuf de poule,66,1.52,0.62
+Beurre doux,Pois cuit,65,1.51,0.62
+Beurre doux,Écrevisse,65,1.64,0.64
+Crème liquide entière,Jaune d'œuf,65,2.29,0.69
+Poivre noir,Œuf de poule,64,2.06,0.68
+Champignon de Paris,Poulet (viande),64,1.91,0.66
+Persil,Poivre noir,63,3.82,0.78
+Farine de blé tendre,Sel fin,63,4.62,0.81
+Sel fin,Sucre blanc,62,2.00,0.67
+Lait entier,Œuf de poule,62,2.54,0.71
+Farine de blé tendre,Œuf de poule,61,3.04,0.74
+Huile d'olive,Tomate fraîche,61,5.33,0.84
+Huile d'olive,Persil,61,4.12,0.80
+Oignon,Poivre noir,60,3.77,0.78
+Sucre blanc,Vanille (gousse),60,3.32,0.76
+Truffe noire,Écrevisse,59,3.71,0.78
+Poulet (viande),Veau (viande),59,2.04,0.67
+Crème liquide entière,Lait entier,56,2.34,0.70
+Truffe noire,Veau (viande),56,1.78,0.65
+Poulet (viande),Riz grain,56,2.24,0.69
+Jaune d'œuf,Sel fin,56,2.86,0.73
+Oignon,Poulet (viande),55,1.54,0.62
+Muscade,Sel fin,51,8.23,0.91
+Beurre doux,Olive noire en saumure,50,1.76,0.65
+Persil,Tomate fraîche,50,2.81,0.73
+Madère,Truffe noire,49,3.69,0.78
+Oignon,Tomate fraîche,49,2.85,0.73
+Carotte,Navet,49,16.58,0.92
+Carotte,Sel fin,48,3.06,0.74
+Lait entier,Sucre blanc,48,3.52,0.77
+Kirsch,Vanille (gousse),47,5.90,0.86
+Ail,Oignon,46,7.21,0.89
+Huile d'olive,Sel fin,45,2.38,0.70
+Oignon,Pomme de terre,44,2.35,0.70
+Jaune d'œuf,Sucre blanc,44,2.72,0.72
+Muscade,Poivre noir,44,12.68,0.92
+Persil,Vin blanc sec,43,3.54,0.77
+Huile d'olive,Oignon,43,3.01,0.74
+Ananas,Pomme crue,43,22.12,0.92
+Crème liquide entière,Kirsch,42,2.13,0.68
+Carotte,Pois cuit,42,7.99,0.91
+Huile d'olive,Vinaigre de vin rouge,41,9.91,0.92
+Champignon de Paris,Veau (viande),41,2.51,0.71
+Abricot crue,Vanille (gousse),41,6.36,0.87
+Jaune d'œuf,Lait entier,41,4.75,0.82
+Bœuf (viande),Sel fin,41,3.71,0.78
+Lait entier,Sel fin,40,2.41,0.70
+Sel fin,Veau (viande),40,1.74,0.65
+Orange cru,Sucre blanc,40,4.35,0.80
+Laurier,Thym,40,52.54,0.92
+Carotte,Poulet (viande),39,1.98,0.67
+Champignon de Paris,Oignon,38,1.89,0.66
+Farine de blé tendre,Sucre blanc,38,3.38,0.76
+Oignon,Veau (viande),38,2.19,0.69
+Champignon de Paris,Persil,38,1.82,0.65
+Riz grain,Tomate fraîche,38,3.17,0.75
+Sole,Truffe noire,38,1.79,0.65
+Beurre doux,Échalote,38,1.70,0.64
+Kirsch,Sucre blanc,38,3.38,0.76
+Cerfeuil,Estragon,38,17.18,0.92
+Champignon de Paris,Vin blanc sec,37,3.35,0.76
+Citron jaune cru,Orange cru,37,8.79,0.92
+Muscade,Œuf de poule,37,4.05,0.79
+Ail,Sel fin,37,4.38,0.81
+Crème liquide entière,Fraise crue,36,2.54,0.71
+Jus de citron,Persil,35,3.55,0.77
+Champignon de Paris,Tomate fraîche,35,2.17,0.68
+Abricot crue,Kirsch,35,8.75,0.92
+Pomme crue,Sucre blanc,35,3.14,0.75
+Pomme crue,Vanille (gousse),34,4.31,0.80
+Fraise crue,Kirsch,34,9.57,0.92
+Ail,Clou de girofle,34,27.41,0.92
+Champignon de Paris,Sole,34,3.10,0.75
+Persil,Échalote,34,6.65,0.88
+Cerfeuil,Persil,34,3.71,0.78
+Clou de girofle,Oignon,34,8.16,0.91
+Beurre doux,Muscade,33,1.56,0.63
+Oignon,Riz grain,33,2.20,0.69
+Ail,Tomate fraîche,33,6.45,0.87
+Huile d'olive,Poivre noir,33,3.11,0.75
+Oignon,Vin blanc sec,33,2.81,0.73
+Farine de blé tendre,Lait entier,32,5.33,0.84
+Jus de citron,Sel fin,32,2.53,0.71
+Concentré de tomate,Tomate fraîche,32,14.67,0.92
+Citron jaune cru,Sucre blanc,32,2.74,0.72
+Ail,Persil,32,4.84,0.82
+Navet,Pois cuit,32,13.44,0.92
+Carotte,Céleri branche,31,8.47,0.92
+Ris de veau,Truffe noire,31,4.66,0.82
+Persil,Pomme de terre,31,1.60,0.63
+Farine de blé tendre,Jaune d'œuf,30,4.22,0.80
+Ail,Huile d'olive,30,7.05,0.89
+Céleri branche,Oignon,30,4.52,0.81
+Sel fin,Vinaigre de vin rouge,30,3.65,0.77
+Cerfeuil,Œuf de poule,30,1.74,0.65
+Abricot crue,Sucre blanc,29,3.19,0.75
+Oignon,Thym,29,7.25,0.89
+Clou de girofle,Sel fin,29,5.25,0.84
+Ail,Poivre noir,29,6.13,0.86
+Champignon de Paris,Écrevisse,29,3.52,0.77
+Ris de veau,Veau (viande),29,9.80,0.92
+Parmigiano Reggiano,Œuf de poule,29,2.27,0.69
+Laurier,Sel fin,29,5.36,0.84
+Vin blanc sec,Échalote,29,10.74,0.92
+Pois cuit,Poulet (viande),28,1.76,0.65
+Cerise crue,Kirsch,28,11.43,0.92
+Eau-de-vie de vin (Cognac),Sel fin,28,2.70,0.72
+Jaune d'œuf,Poivre noir,28,2.55,0.71
+Laurier,Oignon,28,6.86,0.88
+Fraise crue,Vanille (gousse),28,4.89,0.82
+Sel fin,Thym,28,5.29,0.84
+Estragon,Œuf de poule,27,2.58,0.71
+Estragon,Persil,27,4.87,0.82
+Citron jaune cru,Sel fin,27,1.90,0.66
+Homard,Truffe noire,27,2.16,0.68
+Beurre doux,Huître,27,1.53,0.62
+Persil,Vinaigre de vin rouge,27,4.20,0.80
+Kirsch,Pomme crue,26,5.31,0.84
+Persil,Thym,26,6.28,0.87
+Lait entier,Vanille (gousse),26,2.69,0.72
+Carotte,Persil,26,2.12,0.68
+Farine de blé tendre,Poivre noir,26,3.40,0.76
+Bœuf (viande),Veau (viande),26,3.85,0.78
+Poivre noir,Veau (viande),26,2.02,0.67
+Cerfeuil,Poulet (viande),26,1.76,0.65
+Laurier,Poivre noir,26,8.58,0.92
+Abricot crue,Crème liquide entière,26,1.63,0.63
+Laurier,Persil,25,5.91,0.86
+Pêche crue,Vanille (gousse),25,7.31,0.89
+Carotte,Clou de girofle,25,10.88,0.92
+Oignon,Vinaigre de vin rouge,25,4.03,0.79
+Parmigiano Reggiano,Truffe noire,25,2.10,0.68
+Eau-de-vie de vin (Cognac),Truffe noire,25,1.76,0.65
+Bœuf (viande),Poivre noir,25,4.04,0.79
+Piment de Cayenne,Sel fin,25,3.41,0.76
+Poivre noir,Vinaigre de vin rouge,25,5.43,0.84
+Amande crue,Crème liquide entière,25,2.51,0.71
+Sole,Vin blanc sec,25,3.92,0.79
+Madère,Poulet (viande),25,2.05,0.67
+Bœuf (viande),Oignon,24,2.88,0.73
+Jus de citron,Poivre noir,24,3.40,0.76
+Amande crue,Vanille (gousse),24,5.98,0.86
+Champignon de Paris,Poivre noir,24,1.60,0.63
+Poivre noir,Thym,24,8.09,0.91
+Curry en poudre,Riz grain,24,10.92,0.92
+Porc (viande),Sel fin,23,2.72,0.72
+Persil,Sole,23,1.91,0.66
+Fraise crue,Sucre blanc,23,2.85,0.73
+Cerfeuil,Sel fin,23,1.96,0.67
+Abricot crue,Pomme crue,23,5.79,0.85
+Amande crue,Lait entier,23,7.60,0.90
+Carotte,Veau (viande),23,2.40,0.70
+Citron jaune cru,Jus de citron,23,4.83,0.82
+Porc (viande),Veau (viande),23,4.45,0.81
+Poulet (viande),Écrevisse,23,1.58,0.63
+Champignon de Paris,Huile d'olive,23,1.71,0.64
+Cerfeuil,Pois cuit,23,5.85,0.86
+Carotte,Pomme de terre,23,2.23,0.69
+Oignon,Porc (viande),23,3.61,0.77
+Navet,Oignon,23,4.29,0.80
+Crème liquide entière,Pêche crue,22,2.60,0.71
+Citron jaune cru,Persil,22,1.98,0.67
+Beurre doux,Crevette,22,1.68,0.64
+Beurre doux,Poireau,22,1.73,0.65
+Faisan (viande),Truffe noire,22,2.79,0.73
+Olive noire en saumure,Truffe noire,22,1.92,0.66
+Vin blanc sec,Écrevisse,22,4.59,0.81
+Madère,Veau (viande),22,3.72,0.78
+Laitue,Pois cuit,22,11.19,0.92
+Poivre noir,Tomate fraîche,21,1.65,0.64
+Chocolat noir 70%,Vanille (gousse),21,9.97,0.92
+Chocolat noir 70%,Crème liquide entière,21,4.03,0.79
+Ananas,Kirsch,21,10.71,0.92
+Bœuf (viande),Carotte,21,4.57,0.81
+Olive noire en saumure,Poulet (viande),21,2.00,0.67
+Beurre doux,Noix crue,21,1.71,0.64
+Carotte,Thym,21,9.52,0.92
+Tomate fraîche,Vin blanc sec,21,2.23,0.69
+Cerise crue,Crème liquide entière,21,2.15,0.68
+Oignon,Poireau,21,7.48,0.90
+Navet,Pomme de terre,21,4.49,0.81
+Eau-de-vie de vin (Cognac),Veau (viande),21,3.32,0.76
+Céleri branche,Poulet (viande),21,1.90,0.66
+Carotte,Poireau,21,13.57,0.92
+Amande crue,Sucre blanc,21,3.71,0.78
+Lait entier,Pomme de terre,21,1.92,0.66
+Anchois,Œuf de poule,20,2.23,0.69
+Carotte,Sucre blanc,20,1.55,0.63
+Oignon,Pois cuit,20,2.10,0.68
+Huile d'olive,Jus de citron,20,3.15,0.75
+Mouton (viande),Oignon,20,3.79,0.78
+Farine de blé tendre,Oignon,20,1.94,0.66
+Groseille crue,Vanille (gousse),20,5.06,0.83
+Crème liquide entière,Groseille crue,20,2.04,0.67
+Kirsch,Pêche crue,20,9.42,0.92
+Jus de citron,Sole,19,3.67,0.77
+Vinaigre de vin rouge,Œuf de poule,19,1.57,0.63
+Raisin sec,Sucre blanc,19,4.26,0.80
+Clou de girofle,Poivre noir,19,6.14,0.86
+Ananas,Vanille (gousse),19,6.01,0.86
+Carotte,Olive noire en saumure,19,5.47,0.84
+Carotte,Poivre noir,19,2.17,0.68
+Poivre noir,Échalote,19,5.19,0.83
+Huile d'olive,Pomme de terre,19,1.52,0.62
+Framboise crue,Groseille crue,19,18.77,0.92
+Sel fin,Échalote,19,2.91,0.73
+Crème liquide entière,Framboise crue,19,2.33,0.70
+Carotte,Laurier,19,8.44,0.92
+Rhum blanc,Sucre blanc,19,4.65,0.82
+Jaune d'œuf,Muscade,19,5.88,0.86
+Champignon de Paris,Olive noire en saumure,19,3.21,0.75
+Oignon,Saindoux,19,3.72,0.78
+Jus de citron,Vin blanc sec,19,3.64,0.77
+Céleri branche,Sel fin,19,2.16,0.68
+Huile d'olive,Vin blanc sec,19,2.43,0.70
+Oignon,Olive noire en saumure,18,2.86,0.73
+Olive noire en saumure,Pomme de terre,18,3.28,0.76
+Fraise crue,Pomme crue,18,5.11,0.83
+Cerfeuil,Vinaigre de vin rouge,18,7.03,0.89
+Beurre doux,Morille,18,2.34,0.70
+Saumon,Œuf de poule,18,1.87,0.66
+Groseille crue,Sucre blanc,18,3.23,0.75
+Poivre noir,Vin blanc sec,18,2.07,0.68
+Ananas,Fraise crue,18,12.77,0.92
+Abricot crue,Riz grain,18,3.09,0.75
+Navet,Poulet (viande),18,2.02,0.67
+Bœuf (viande),Persil,18,2.09,0.68
+Fraise crue,Framboise crue,18,12.26,0.92
+Sole,Écrevisse,18,3.78,0.78
+Eau-de-vie de vin (Cognac),Poivre noir,18,3.10,0.75
+Groseille crue,Raisin sec,17,17.49,0.92
+Ail,Carotte,17,4.83,0.82
+Cerfeuil,Pomme de terre,17,2.20,0.69
+Pois cuit,Pomme de terre,17,2.04,0.67
+Gruyère,Parmigiano Reggiano,17,25.16,0.92
+Homard,Sole,17,4.54,0.81
+Anchois,Huile d'olive,17,5.55,0.85
+Cerfeuil,Huile d'olive,17,2.88,0.73
+Pois cuit,Sucre blanc,17,1.64,0.63
+Abricot crue,Raisin sec,17,10.71,0.92
+Framboise crue,Vanille (gousse),17,5.17,0.83
+Piment de Cayenne,Œuf de poule,17,1.58,0.63
+Kirsch,Orange cru,17,4.20,0.80
+Pomme crue,Raisin sec,17,8.74,0.92
+Huître,Truffe noire,16,2.25,0.69
+Citron jaune cru,Vin blanc sec,16,2.73,0.72
+Crevette,Écrevisse,16,13.54,0.92
+Rhum blanc,Vanille (gousse),16,5.53,0.85
+Homard,Écrevisse,16,5.68,0.85
+Orange cru,Rhum blanc,16,10.88,0.92
+Amande crue,Œuf de poule,16,1.58,0.63
+Carotte,Cerfeuil,16,3.28,0.76
+Citron jaune cru,Farine de blé tendre,16,3.11,0.75
+Poireau,Sel fin,16,4.30,0.80
+Châtaigne crue,Vanille (gousse),16,5.17,0.83
+Framboise crue,Kirsch,16,7.84,0.91
+Farine de blé tendre,Persil,16,1.50,0.62
+Madère,Sel fin,16,1.65,0.64
+Abricot crue,Pêche crue,16,9.30,0.92
+Champignon de Paris,Madère,16,2.33,0.70
+Cerise crue,Groseille crue,16,13.17,0.92
+Huile d'olive,Jaune d'œuf,16,1.62,0.63
+Poivre noir,Porc (viande),16,3.38,0.76
+Cerfeuil,Oignon,16,1.81,0.65
+Aubergine,Huile d'olive,16,11.76,0.92
+Navet,Sel fin,16,2.25,0.69
+Citron jaune cru,Poivre noir,16,2.01,0.67
+Saindoux,Truffe noire,16,1.73,0.64
+Carotte,Chou blanc,16,10.34,0.92
+Céleri branche,Navet,15,9.04,0.92
+Poulet (viande),Ris de veau,15,2.46,0.71
+Fraise crue,Pêche crue,15,9.82,0.92
+Caille (viande),Truffe noire,15,2.43,0.70
+Ail,Vin blanc sec,15,4.29,0.80
+Céleri branche,Poireau,15,17.27,0.92
+Moutarde de Dijon,Œuf de poule,15,2.10,0.68
+Groseille crue,Kirsch,15,6.12,0.86
+Eau-de-vie de vin (Cognac),Oignon,15,1.92,0.66
+Estragon,Sel fin,15,2.11,0.68
+Orange cru,Vanille (gousse),15,2.30,0.69
+Saumon,Truite,15,30.65,0.92
+Veau (viande),Vin blanc sec,15,1.58,0.63
+Laitue,Poulet (viande),15,2.04,0.67
+Crème liquide entière,Muscade,15,1.67,0.64
+Blanc d'œuf,Sucre blanc,15,4.62,0.81
+Champagne brut,Truffe noire,15,2.77,0.73
+Carotte,Riz grain,15,1.82,0.65
+Ananas,Crème liquide entière,15,1.92,0.66
+Lait entier,Riz grain,15,1.72,0.64
+Kirsch,Rhum blanc,15,8.35,0.92
+Carotte,Saindoux,15,5.33,0.84
+Lait entier,Poivre noir,15,1.62,0.63
+Estragon,Vinaigre de vin rouge,15,9.66,0.92
+Ciboulette,Persil,15,8.11,0.91
+Noisette crue,Poulet (viande),15,2.07,0.68
+Crème liquide entière,Gélatine,14,2.68,0.72
+Riz grain,Safran,14,12.40,0.92
+Cerise crue,Sucre blanc,14,2.51,0.71
+Jus de citron,Échalote,14,6.39,0.87
+Framboise crue,Sucre blanc,14,3.02,0.74
+Citron jaune cru,Rhum blanc,14,7.48,0.90
+Lait entier,Muscade,14,5.13,0.83
+Pistache crue,Vanille (gousse),14,6.08,0.86
+Estragon,Vin blanc sec,14,4.77,0.82
+Champignon de Paris,Ris de veau,14,4.07,0.79
+Eau-de-vie de vin (Cognac),Sucre blanc,14,1.64,0.64
+Estragon,Échalote,14,11.35,0.92
+Céleri branche,Veau (viande),14,2.61,0.72
+Pomme de terre,Porc (viande),14,2.51,0.71
+Champignon de Paris,Jus de citron,14,1.56,0.63
+Farine de blé tendre,Muscade,14,6.23,0.87
+Chou blanc,Oignon,14,4.99,0.83
+Laurier,Veau (viande),14,4.24,0.80
+Pomme de terre,Saindoux,14,3.14,0.75
+Chou blanc,Navet,14,19.95,0.92
+Aubergine,Beurre doux,14,1.52,0.62
+Abricot crue,Cerise crue,14,7.05,0.89
+Champignon de Paris,Échalote,14,3.02,0.74
+Cerfeuil,Jaune d'œuf,14,2.29,0.69
+Ail,Champignon de Paris,14,2.33,0.70
+Clou de girofle,Persil,14,3.24,0.75
+Muscade,Oignon,14,2.99,0.74
+Beurre doux,Ciboulette,14,1.73,0.65
+Agneau (viande),Mouton (viande),14,14.54,0.92
+Laitue,Œuf de poule,14,1.62,0.63
+Cerfeuil,Tomate fraîche,14,1.97,0.67
+Pomme de terre,Vinaigre de vin rouge,13,2.40,0.70
+Jus de citron,Tomate fraîche,13,1.70,0.64
+Céleri branche,Pomme de terre,13,2.24,0.69
+Ail,Pomme de terre,13,2.33,0.70
+Oignon,Vin rouge,13,3.92,0.79
+Cerfeuil,Navet,13,5.88,0.86
+Homard,Riz grain,13,2.70,0.72
+Framboise crue,Raisin sec,13,16.05,0.92
+Groseille crue,Pêche crue,13,12.35,0.92
+Crème liquide entière,Noisette crue,13,1.56,0.63
+Aubergine,Tomate fraîche,13,7.95,0.91
+Ciboulette,Estragon,13,29.11,0.92
+Muscade,Veau (viande),13,3.43,0.76
+Paprika,Riz grain,13,6.08,0.86
+Café filtre,Vanille (gousse),13,5.81,0.85
+Farine de blé tendre,Orange cru,13,3.22,0.75
+Moutarde de Dijon,Sel fin,13,2.68,0.72
+Estragon,Huile d'olive,13,3.64,0.77
+Rhum blanc,Œuf de poule,13,1.78,0.65
+Cerfeuil,Échalote,13,6.39,0.87
+Huile d'olive,Moutarde de Dijon,13,5.33,0.84
+Cerfeuil,Ciboulette,13,17.64,0.92
+Framboise crue,Pêche crue,13,14.81,0.92
+Clou de girofle,Thym,13,16.73,0.92
+Anchois,Olive noire en saumure,13,9.64,0.92
+Capre,Œuf de poule,13,3.56,0.77
+Abricot crue,Amande crue,13,6.44,0.87
+Piment de Cayenne,Poivre noir,13,3.17,0.75
+Anchois,Capre,13,32.42,0.92
+Cerfeuil,Laitue,13,7.12,0.89
+Homard,Persil,13,1.82,0.65
+Pêche crue,Sucre blanc,13,2.69,0.72
+Huile d'olive,Échalote,13,3.95,0.79
+Abricot crue,Fraise crue,13,4.52,0.81
+Céleri branche,Persil,12,1.75,0.65
+Caille (viande),Veau (viande),12,4.36,0.80
+Agneau (viande),Veau (viande),12,3.79,0.78
+Homard,Langouste,12,36.58,0.92
+Clou de girofle,Laurier,12,15.12,0.92
+Moutarde de Dijon,Piment de Cayenne,12,12.72,0.92
+Orange cru,Pomme crue,12,2.99,0.74
+Carotte,Vin blanc sec,12,1.85,0.66
+Bœuf (viande),Mouton (viande),12,5.85,0.86
+Cerise crue,Pomme crue,12,4.94,0.83
+Mouton (viande),Sel fin,12,1.72,0.64
+Cerise crue,Vanille (gousse),12,3.04,0.74
+Mandarine cru,Orange cru,12,12.83,0.92
+Crème liquide entière,Pistache crue,12,2.10,0.68
+Saindoux,Sel fin,12,1.77,0.65
+Bœuf (viande),Céleri branche,12,4.65,0.82
+Moutarde de Dijon,Poivre noir,12,4.42,0.81
+Abricot crue,Ananas,12,7.56,0.90
+Crème liquide entière,Moutarde de Dijon,12,1.71,0.64
+Chou blanc,Sel fin,12,3.23,0.75
+Citron jaune cru,Jaune d'œuf,12,1.62,0.63
+Anchois,Persil,12,2.52,0.71
+Cerise crue,Fraise crue,12,6.81,0.88
+Fraise crue,Groseille crue,12,6.81,0.88
+Oignon,Paprika,12,3.92,0.79
+Concombre,Crème liquide entière,12,1.80,0.65
+Fraise crue,Orange cru,12,4.13,0.80
+Pois cuit,Riz grain,12,1.80,0.65
+Citron jaune cru,Huile d'olive,12,1.68,0.64
+Estragon,Tomate fraîche,12,2.79,0.73
+Amande crue,Kirsch,12,4.82,0.82
+Canard (viande),Truffe noire,12,1.65,0.64
+Amande crue,Pistache crue,12,16.65,0.92
+Thym,Veau (viande),12,3.71,0.78
+Huître,Écrevisse,12,7.50,0.90
+Champignon de Paris,Eau-de-vie de vin (Cognac),12,1.63,0.63
+Curry en poudre,Oignon,12,3.81,0.78
+Citron jaune cru,Pomme crue,12,2.35,0.70
+Crevette,Sole,12,7.63,0.90
+Huître,Sole,12,5.64,0.85
+Noisette crue,Pomme de terre,12,3.17,0.75
+Jaune d'œuf,Jus de citron,11,1.67,0.64
+Estragon,Poivre noir,11,2.77,0.73
+Bœuf (viande),Saindoux,11,5.54,0.85
+Vinaigre de vin rouge,Échalote,11,7.70,0.90
+Bœuf (viande),Muscade,11,6.05,0.86
+Citron jaune cru,Kirsch,11,2.14,0.68
+Capre,Estragon,11,23.52,0.92
+Persil,Saumon,11,2.15,0.68
+Café filtre,Crème liquide entière,11,1.98,0.67
+Jaune d'œuf,Vinaigre de vin rouge,11,2.57,0.71
+Vin blanc sec,Vinaigre de vin rouge,11,3.24,0.75
+Eau-de-vie de vin (Cognac),Vin blanc sec,11,2.57,0.71
+Persil,Piment de Cayenne,11,1.92,0.66
+Canard (viande),Veau (viande),11,3.40,0.76
+Bœuf (viande),Courgette,11,10.08,0.92
+Persil,Porc (viande),11,1.67,0.64
+Farine de blé tendre,Huile d'olive,11,1.60,0.63
+Groseille crue,Pomme crue,11,4.53,0.81
+Saumon,Sole,11,4.10,0.79
+Champignon de Paris,Vin rouge,11,3.53,0.77
+Concombre,Poulet (viande),11,1.89,0.66
+Ail,Thym,11,9.25,0.92
+Ail,Laurier,11,9.05,0.92
+Abricot crue,Groseille crue,11,5.54,0.85
+Poireau,Poulet (viande),11,2.35,0.70
+Jaune d'œuf,Orange cru,11,1.89,0.66
+Moutarde de Dijon,Vinaigre de vin rouge,11,10.38,0.92
+Crème liquide entière,Curry en poudre,11,1.82,0.65
+Cerise crue,Framboise crue,11,10.86,0.92
+Citron jaune cru,Lait entier,11,1.76,0.65
+Crevette,Truffe noire,11,2.09,0.68
+Noix crue,Sole,11,7.43,0.90
+Gélatine,Œuf de poule,11,2.07,0.68
+Paprika,Tomate fraîche,11,4.48,0.81
+Crevette,Homard,11,11.83,0.92
+Safran,Tomate fraîche,11,8.49,0.92
+Bœuf (viande),Clou de girofle,11,6.79,0.88
+Cannelle,Sucre blanc,11,7.90,0.91
+Mouton (viande),Persil,11,2.01,0.67
+Laitue,Sel fin,10,1.71,0.64
+Olive noire en saumure,Tomate fraîche,10,1.98,0.67
+Gruyère,Œuf de poule,10,2.32,0.70
+Olive noire en saumure,Vin blanc sec,10,2.90,0.73
+Kirsch,Raisin sec,10,5.10,0.83
+Thym,Échalote,10,10.87,0.92
+Anchois,Saumon,10,9.46,0.92
+Citron jaune cru,Sole,10,1.72,0.64
+Olive noire en saumure,Écrevisse,10,3.89,0.78
+Abricot crue,Framboise crue,10,6.05,0.86
+Café filtre,Kirsch,10,7.20,0.89
+Navet,Olive noire en saumure,10,6.36,0.87
+Clou de girofle,Sucre blanc,10,2.20,0.69
+Capre,Persil,10,5.16,0.83
+Cerfeuil,Homard,10,3.52,0.77
+Oignon,Sauge,10,9.80,0.92
+Clou de girofle,Huile d'olive,10,3.60,0.77
+Concombre,Huile d'olive,10,4.30,0.80
+Pomme crue,Pêche crue,10,4.75,0.82
+Olive noire en saumure,Saindoux,10,6.67,0.88
+Agneau (viande),Poulet (viande),10,1.53,0.62
+Mouton (viande),Veau (viande),10,2.34,0.70
+Anchois,Estragon,10,8.71,0.92
+Cerfeuil,Poivre noir,10,1.52,0.62
+Jaune d'œuf,Piment de Cayenne,10,2.62,0.72
+Céleri branche,Riz grain,10,2.16,0.68
+Crème liquide entière,Paprika,10,1.70,0.64
+Citron jaune cru,Fraise crue,10,2.70,0.72
+Bœuf (viande),Poireau,10,9.16,0.92
+Eau-de-vie de vin (Cognac),Piment de Cayenne,10,4.95,0.83
+Olive noire en saumure,Pois cuit,10,3.58,0.77
+Champignon de Paris,Huître,10,2.72,0.72
+Carotte,Porc (viande),10,2.84,0.73
+Madère,Poivre noir,10,1.84,0.66
+Café filtre,Chocolat noir 70%,10,27.23,0.92
+Ail,Mouton (viande),10,6.37,0.87
+Oignon,Échalote,10,2.03,0.67
+Champignon de Paris,Thym,10,2.66,0.72
+Champignon de Paris,Laurier,10,2.60,0.72
+Cerfeuil,Poireau,10,8.63,0.92
+Champagne brut,Poulet (viande),10,2.02,0.67
+Gélatine,Sucre blanc,10,3.37,0.76
+Anchois,Sel fin,10,1.64,0.64
+Paprika,Truffe noire,10,1.80,0.65
+Céleri branche,Pois cuit,9,3.05,0.74
+Chou blanc,Poireau,9,24.49,0.92
+Estragon,Jaune d'œuf,9,2.43,0.70
+Chou-fleur,Navet,9,20.16,0.92
+Anchois,Tomate fraîche,9,2.44,0.70
+Eau-de-vie de vin (Cognac),Vin rouge,9,7.43,0.90
+Thym,Vin blanc sec,9,4.11,0.79
+Agneau (viande),Oignon,9,2.30,0.69
+Navet,Sucre blanc,9,1.54,0.62
+Paprika,Sel fin,9,2.22,0.69
+Crevette,Œuf de poule,9,1.59,0.63
+Poireau,Pois cuit,9,7.22,0.89
+Crème liquide entière,Poireau,9,1.67,0.64
+Cerfeuil,Vin blanc sec,9,1.86,0.66
+Eau-de-vie de vin (Cognac),Jus de citron,9,2.59,0.71
+Ananas,Sucre blanc,9,2.02,0.67
+Chou-fleur,Pomme de terre,9,5.77,0.85
+Piment de Cayenne,Échalote,9,7.07,0.89
+Chocolat noir 70%,Sucre blanc,9,3.03,0.74
+Homard,Tomate fraîche,9,1.63,0.63
+Muscade,Persil,9,1.86,0.66
+Eau-de-vie de vin (Cognac),Huile d'olive,9,1.73,0.64
+Tomate fraîche,Vinaigre de vin rouge,9,1.81,0.65
+Jus de citron,Piment de Cayenne,9,3.66,0.77
+Eau-de-vie de vin (Cognac),Porc (viande),9,3.86,0.78
+Pomme crue,Rhum blanc,9,5.05,0.83
+Laurier,Échalote,9,9.58,0.92
+Ananas,Cerise crue,9,9.26,0.92
+Blanc d'œuf,Truffe noire,9,1.66,0.64
+Carotte,Vinaigre de vin rouge,9,2.63,0.72
+Cornichon aigre-doux,Œuf de poule,9,2.58,0.71
+Raisin sec,Vanille (gousse),9,2.85,0.73
+Fraise crue,Raisin sec,9,6.39,0.87
+Champagne brut,Vin blanc sec,9,5.52,0.85
+Citron jaune cru,Eau-de-vie de vin (Cognac),9,2.30,0.69
+Jaune d'œuf,Parmigiano Reggiano,9,1.99,0.67
+Champignon de Paris,Faisan (viande),9,2.21,0.69
+Bœuf (viande),Eau-de-vie de vin (Cognac),9,2.96,0.74
+Ananas,Pêche crue,9,10.68,0.92
+Bœuf (viande),Laurier,9,5.67,0.85
+Cerfeuil,Céleri branche,9,3.29,0.76
+Abricot crue,Lait entier,9,1.85,0.66
+Blanc d'œuf,Poulet (viande),9,1.81,0.65
+Champignon de Paris,Châtaigne crue,9,2.39,0.70
+Huile d'olive,Saumon,9,2.74,0.72
+Navet,Poireau,9,12.83,0.92
+Porto,Sucre blanc,9,3.88,0.78
+Cerise crue,Orange cru,9,4.49,0.81
+Ail,Échalote,9,6.13,0.86
+Mouton (viande),Tomate fraîche,9,2.13,0.68
+Citron jaune cru,Moutarde de Dijon,9,4.92,0.83
+Orange cru,Raisin sec,9,5.61,0.85
+Bœuf (viande),Navet,9,4.32,0.80
+Ciboulette,Œuf de poule,9,2.58,0.71
+Piment de Cayenne,Vin blanc sec,9,2.97,0.74
+Hareng,Persil,9,4.64,0.82
+Carotte,Vin rouge,8,4.37,0.81
+Ail,Navet,8,5.02,0.83
+Jaune d'œuf,Moutarde de Dijon,8,3.17,0.75
+Carotte,Mouton (viande),8,2.75,0.72
+Gruyère,Sel fin,8,2.73,0.72
+Homard,Vin blanc sec,8,2.12,0.68
+Champignon de Paris,Saumon,8,1.72,0.64
+Huile d'olive,Laurier,8,2.94,0.74
+Bœuf (viande),Porc (viande),8,3.23,0.75
+Champignon de Paris,Mouton (viande),8,1.61,0.63
+Hareng,Vinaigre de vin rouge,8,14.76,0.92
+Clou de girofle,Mouton (viande),8,7.80,0.91
+Cornichon aigre-doux,Truffe noire,8,2.46,0.71
+Porto,Xérès (Sherry),8,63.21,0.92
+Piment de Cayenne,Tomate fraîche,8,1.81,0.65
+Poireau,Veau (viande),8,3.52,0.77
+Estragon,Moutarde de Dijon,8,8.75,0.92
+Bœuf (viande),Thym,8,5.15,0.83
+Amande crue,Jaune d'œuf,8,2.23,0.69
+Amande crue,Pomme crue,8,3.24,0.75
+Huile d'olive,Olive noire en saumure,8,1.91,0.66
+Cerfeuil,Hareng,8,10.36,0.92
+Cerfeuil,Piment de Cayenne,8,3.51,0.77
+Champignon de Paris,Clou de girofle,8,2.04,0.67
+Parmigiano Reggiano,Tomate fraîche,8,1.52,0.62
+Concentré de tomate,Œuf de poule,8,1.51,0.62
+Canard (viande),Oignon,8,2.00,0.67
+Capre,Huile d'olive,8,6.41,0.87
+Poireau,Sucre blanc,8,2.61,0.72
+Amande crue,Framboise crue,8,7.77,0.90
+Chou blanc,Pomme de terre,8,3.27,0.75
+Poireau,Pomme de terre,8,3.27,0.75
+Citron jaune cru,Piment de Cayenne,8,2.89,0.73
+Beurre doux,Lentille verte cuit,8,1.60,0.63
+Amande crue,Raisin sec,8,8.10,0.91
+Huile d'olive,Piment de Cayenne,8,2.17,0.68
+Courgette,Persil,8,2.75,0.73
+Amande crue,Pêche crue,8,7.47,0.90
+Lait entier,Orange cru,8,1.63,0.63
+Laitue,Oignon,8,1.81,0.65
+Lait entier,Noisette crue,8,3.16,0.75
+Pêche crue,Raisin sec,8,9.50,0.92
+Citron jaune cru,Vinaigre de vin rouge,8,2.58,0.71
+Estragon,Homard,8,4.65,0.82
+Ail,Bœuf (viande),8,3.23,0.75
+Champignon de Paris,Noix crue,8,3.13,0.75
+Olive noire en saumure,Porc (viande),8,4.27,0.80
+Madère,Porto,8,11.03,0.92
+Hareng,Huile d'olive,8,6.41,0.87
+Clou de girofle,Veau (viande),8,2.37,0.70
+Champignon de Paris,Saindoux,8,1.67,0.64
+Olive noire en saumure,Veau (viande),8,1.57,0.63
+Clou de girofle,Navet,8,7.68,0.90
+Chocolat noir 70%,Œuf de poule,8,1.51,0.62
+Citron jaune cru,Échalote,8,3.24,0.75
+Persil,Truite,8,3.63,0.77
+Amande crue,Chocolat noir 70%,8,12.14,0.92
+Champignon de Paris,Crevette,8,2.94,0.74
+Ail,Olive noire en saumure,8,4.27,0.80
+Bœuf (viande),Farine de blé tendre,8,2.00,0.67
+Olive noire en saumure,Poivre noir,8,1.71,0.64
+Capre,Cerfeuil,8,10.36,0.92
+Gélatine,Sel fin,8,2.22,0.69
+Porc (viande),Vin blanc sec,8,2.29,0.69
+Orange cru,Porto,8,9.58,0.92
+Paprika,Poulet (viande),8,1.57,0.63
+Eau-de-vie de vin (Cognac),Rhum blanc,8,5.86,0.86
+Farine de blé tendre,Pois cuit,8,1.75,0.65
+Citron jaune cru,Groseille crue,8,3.14,0.75
+Jaune d'œuf,Rhum blanc,8,3.10,0.75
+Anchois,Jaune d'œuf,8,2.52,0.71
+Café filtre,Rhum blanc,8,15.84,0.92
+Châtaigne crue,Oignon,8,2.00,0.67
+Eau-de-vie de vin (Cognac),Faisan (viande),8,5.05,0.83
+Cerise crue,Raisin sec,8,8.23,0.91
+Muscade,Parmigiano Reggiano,8,5.60,0.85
+Homard,Jaune d'œuf,8,1.68,0.64
+Navet,Veau (viande),8,1.84,0.66
+Clou de girofle,Céleri branche,8,6.20,0.87
+Mouton (viande),Riz grain,8,2.17,0.68
+Cannelle,Citron jaune cru,8,12.54,0.92
+Curry en poudre,Poulet (viande),8,1.53,0.62
+Cerfeuil,Épinard,8,5.56,0.85
+Lait entier,Pistache crue,8,4.61,0.81
+Céleri branche,Thym,8,6.47,0.87
+Laurier,Vin blanc sec,8,3.58,0.77
+Amande crue,Farine de blé tendre,8,3.21,0.75
+Homard,Huître,8,6.36,0.87
+Canard (viande),Sel fin,8,1.51,0.62
+Sole,Truite,8,6.92,0.88
+Laitue,Riz grain,7,2.27,0.69
+Ail,Concentré de tomate,7,8.64,0.92
+Crème liquide entière,Mandarine cru,7,1.53,0.62
+Laitue,Navet,7,6.33,0.87
+Céleri branche,Laitue,7,5.11,0.83
+Carotte,Laitue,7,2.87,0.73
+Curry en poudre,Homard,7,6.92,0.88
+Abricot crue,Orange cru,7,2.14,0.68
+Navet,Riz grain,7,1.87,0.66
+Anchois,Homard,7,4.74,0.82
+Jaune d'œuf,Échalote,7,2.06,0.67
+Saumon,Écrevisse,7,3.47,0.77
+Cerise crue,Pêche crue,7,6.65,0.88
+Chou-fleur,Pois cuit,7,8.82,0.92
+Farine de blé tendre,Saindoux,7,2.86,0.73
+Concentré de tomate,Sel fin,7,1.94,0.66
+Abricot crue,Châtaigne crue,7,4.50,0.81
+Carotte,Chou-fleur,7,7.11,0.89
+Ciboulette,Sel fin,7,2.96,0.74
+Homard,Piment de Cayenne,7,3.94,0.79
+Piment de Cayenne,Vinaigre de vin rouge,7,4.37,0.81
+Groseille crue,Orange cru,7,3.49,0.77
+Mouton (viande),Poivre noir,7,1.79,0.65
+Estragon,Piment de Cayenne,7,5.06,0.83
+Eau-de-vie de vin (Cognac),Homard,7,2.78,0.73
+Noix crue,Vin blanc sec,7,4.70,0.82
+Eau-de-vie de vin (Cognac),Farine de blé tendre,7,1.86,0.66
+Céleri branche,Huile d'olive,7,1.58,0.63
+Muscade,Pomme de terre,7,1.71,0.64
+Dinde (viande),Poulet (viande),7,3.09,0.74
+Bœuf (viande),Vin rouge,7,5.43,0.84
+Capre,Sel fin,7,2.82,0.73
+Aubergine,Riz grain,7,4.91,0.83
+Courgette,Sel fin,7,1.88,0.66
+Eau-de-vie de vin (Cognac),Madère,7,2.62,0.72
+Huître,Jus de citron,7,4.03,0.79
+Saindoux,Tomate fraîche,7,1.71,0.64
+Laurier,Vinaigre de vin rouge,7,5.92,0.86
+Madère,Saindoux,7,4.02,0.79
+Huile d'olive,Mouton (viande),7,1.99,0.67
+Bœuf (viande),Échalote,7,3.65,0.77
+Bœuf (viande),Chou blanc,7,6.41,0.87
+Abricot crue,Citron jaune cru,7,1.68,0.64
+Pistache crue,Pomme crue,7,4.94,0.83
+Anchois,Épinard,7,9.37,0.92
+Jus de citron,Pomme crue,7,1.54,0.62
+Abricot crue,Rhum blanc,7,4.81,0.82
+Laurier,Porc (viande),7,5.76,0.85
+Saindoux,Vin rouge,7,8.86,0.92
+Café filtre,Sucre blanc,7,2.22,0.69
+Chou blanc,Poivre noir,7,3.36,0.76
+Canard (viande),Orange cru,7,4.46,0.81
+Porc (viande),Saindoux,7,4.61,0.81
+Clou de girofle,Pomme de terre,7,1.92,0.66
+Poivre noir,Saindoux,7,1.85,0.66
+Capre,Vinaigre de vin rouge,7,12.91,0.92
+Hareng,Sel fin,7,2.82,0.73
+Abricot crue,Chocolat noir 70%,7,6.61,0.88
+Beurre doux,Maquereau,7,2.28,0.69
+Homard,Saumon,7,4.41,0.81
+Crevette,Saumon,7,10.52,0.92
+Sel fin,Truite,7,2.48,0.71
+Pistache crue,Sucre blanc,7,2.15,0.68
+Concombre,Tomate fraîche,7,2.50,0.71
+Raisin sec,Rhum blanc,7,9.82,0.92
+Chou blanc,Céleri branche,7,8.06,0.91
+Ail,Jus de citron,7,2.47,0.71
+Pois cuit,Ris de veau,7,4.31,0.80
+Champignon de Paris,Muscade,7,1.59,0.63
+Madère,Ris de veau,7,5.61,0.85
+Curry en poudre,Tomate fraîche,7,2.78,0.73
+Chou blanc,Pois cuit,7,5.61,0.85
+Mouton (viande),Pomme de terre,7,1.52,0.62
+Persil,Poireau,7,2.41,0.70
+Orange cru,Pêche crue,7,4.03,0.79
+Veau (viande),Échalote,7,1.75,0.65
+Huile d'olive,Thym,7,2.63,0.72
+Carotte,Madère,7,1.74,0.65
+Abricot crue,Pistache crue,7,6.05,0.86
+Poivre noir,Vin rouge,7,2.84,0.73
+Champagne brut,Madère,7,6.89,0.88
+Concombre,Saumon,7,8.72,0.92
+Kirsch,Pistache crue,7,4.90,0.82
+Champagne brut,Veau (viande),7,2.90,0.73
+Ail,Vinaigre de vin rouge,7,3.79,0.78
+Amidon de pomme de terre,Beurre doux,7,1.66,0.64
+Céleri branche,Laurier,7,5.54,0.85
+Canard (viande),Madère,7,5.13,0.83
+Canard (viande),Poivre noir,7,2.36,0.70
+Moutarde de Dijon,Persil,7,1.85,0.66
+Gruyère,Piment de Cayenne,7,12.27,0.92
+Orange cru,Thé noir,7,16.12,0.92
+Eau-de-vie de vin (Cognac),Orange cru,7,2.28,0.69
+Chocolat noir 70%,Fraise crue,7,7.45,0.90
+Farine de blé tendre,Mouton (viande),7,2.76,0.73
+Sel fin,Vin rouge,7,1.59,0.63
+Laitue,Persil,7,1.53,0.62
+Ail,Farine de blé tendre,7,2.29,0.69
+Anchois,Champignon de Paris,7,1.62,0.63
+Sucre blanc,Thym,7,1.60,0.63
+Bœuf (viande),Vinaigre de vin rouge,7,2.90,0.73
+Homard,Huile d'olive,7,1.52,0.62
+Eau-de-vie de vin (Cognac),Laurier,7,4.70,0.82
+Poivron rouge,Poulet (viande),6,2.82,0.73
+Champagne brut,Citron jaune cru,6,4.03,0.79
+Pomme crue,Sauge,6,12.35,0.92
+Sucre blanc,Thé noir,6,4.97,0.83
+Blanc d'œuf,Orange cru,6,5.13,0.83
+Blanc d'œuf,Vanille (gousse),6,2.60,0.72
+Farine de blé tendre,Rhum blanc,6,3.34,0.76
+Muscade,Porc (viande),6,4.31,0.80
+Orange cru,Vin rouge,6,4.60,0.81
+Sucre blanc,Vin rouge,6,1.66,0.64
+Agneau (viande),Pomme de terre,6,1.76,0.65
+Châtaigne crue,Veau (viande),6,1.85,0.66
+Agneau (viande),Ris de veau,6,8.99,0.92
+Carotte,Ris de veau,6,2.97,0.74
+Clou de girofle,Olive noire en saumure,6,4.90,0.83
+Chou blanc,Porc (viande),6,7.18,0.89
+Café filtre,Lait entier,6,3.56,0.77
+Ail,Saindoux,6,3.95,0.79
+Aubergine,Oignon,6,2.94,0.74
+Navet,Saindoux,6,4.70,0.82
+Pois cuit,Saindoux,6,2.65,0.72
+Homard,Laitue,6,4.22,0.80
+Gruyère,Poivre noir,6,3.66,0.77
+Moule,Vin blanc sec,6,11.71,0.92
+Moule,Sole,6,11.80,0.92
+Amande crue,Orange cru,6,2.94,0.74
+Estragon,Sole,6,2.06,0.67
+Capre,Olive noire en saumure,6,10.92,0.92
+Noix crue,Vanille (gousse),6,2.85,0.73
+Huître,Vin blanc sec,6,2.80,0.73
+Poulet (viande),Truite,6,1.69,0.64
+Ail,Chou blanc,6,7.18,0.89
+Poivron rouge,Riz grain,6,6.73,0.88
+Piment de Cayenne,Écrevisse,6,2.66,0.72
+Eau-de-vie de vin (Cognac),Écrevisse,6,1.88,0.66
+Clou de girofle,Vin rouge,6,9.30,0.92
+Kirsch,Porto,6,5.88,0.86
+Citron jaune cru,Madère,6,1.64,0.64
+Châtaigne crue,Vin blanc sec,6,2.74,0.72
+Farine de blé tendre,Noix crue,6,4.59,0.81
+Chou blanc,Riz grain,6,3.06,0.74
+Abricot crue,Banane,6,10.08,0.92
+Concentré de tomate,Huile d'olive,6,3.31,0.76
+Eau-de-vie de vin (Cognac),Pomme crue,6,1.61,0.63
+Beurre doux,Cèpe,6,1.56,0.63
+Noix crue,Oignon,6,2.20,0.69
+Noix crue,Persil,6,2.13,0.68
+Crevette,Persil,6,2.00,0.67
+Cerfeuil,Concombre,6,4.17,0.80
+Eau-de-vie de vin (Cognac),Thym,6,4.11,0.79
+Rhum blanc,Thé noir,6,31.08,0.92
+Céleri branche,Vinaigre de vin rouge,6,3.12,0.75
+Concombre,Vinaigre de vin rouge,6,5.94,0.86
+Cerise crue,Eau-de-vie de vin (Cognac),6,3.22,0.75
+Céleri branche,Moutarde de Dijon,6,5.30,0.84
+Hareng,Saumon,6,13.93,0.92
+Parmigiano Reggiano,Piment de Cayenne,6,3.55,0.77
+Sauge,Sel fin,6,4.44,0.81
+Parmigiano Reggiano,Écrevisse,6,2.24,0.69
+Moule,Truffe noire,6,3.53,0.77
+Café filtre,Orange cru,6,5.28,0.84
+Crevette,Moule,6,47.53,0.92
+Crevette,Huître,6,11.37,0.92
+Agneau (viande),Champignon de Paris,6,1.63,0.63
+Oignon,Épinard,6,1.72,0.64
+Faisan (viande),Madère,6,4.05,0.79
+Eau-de-vie de vin (Cognac),Muscade,6,3.51,0.77
+Concentré de tomate,Poivre noir,6,2.97,0.74
+Concentré de tomate,Persil,6,2.13,0.68
+Concentré de tomate,Oignon,6,2.20,0.69
+Ail,Eau-de-vie de vin (Cognac),6,2.58,0.71
+Blanc d'œuf,Sel fin,6,1.52,0.62
+Ail,Basilic,6,29.63,0.92
+Thym,Vinaigre de vin rouge,6,5.18,0.83
+Vin blanc sec,Vin rouge,6,3.30,0.76
+Ananas,Raisin sec,6,7.72,0.90
+Champagne brut,Écrevisse,6,4.93,0.83
+Cerfeuil,Saumon,6,2.95,0.74
+Ail,Anchois,6,4.39,0.81
+Amande crue,Noisette crue,6,5.71,0.85
+Capre,Homard,6,9.98,0.92
+Mandarine cru,Vanille (gousse),6,3.26,0.75
+Anchois,Cerfeuil,6,3.17,0.75
+Ciboulette,Oignon,6,3.36,0.76
+Estragon,Jus de citron,6,2.52,0.71
+Cabillaud,Sel fin,6,3.55,0.77
+Champignon de Paris,Curry en poudre,6,2.03,0.67
+Citron jaune cru,Raisin sec,6,2.94,0.74
+Champignon de Paris,Concentré de tomate,6,2.34,0.70
+Curry en poudre,Paprika,6,13.35,0.92
+Sel fin,Xérès (Sherry),6,3.55,0.77
+Ciboulette,Échalote,6,14.60,0.92
+Céleri branche,Lait entier,6,1.55,0.63
+Veau (viande),Xérès (Sherry),6,5.81,0.85
+Poivre noir,Sauge,6,7.92,0.91
+Capre,Cornichon aigre-doux,6,38.48,0.92
+Madère,Raisin sec,6,4.31,0.80
+Porto,Truffe noire,6,1.55,0.63
+Banane,Vanille (gousse),6,5.06,0.83
+Laurier,Tomate fraîche,6,1.83,0.65
+Farine de blé tendre,Porc (viande),6,1.96,0.67
+Clou de girofle,Tomate fraîche,6,1.80,0.65
+Clou de girofle,Farine de blé tendre,6,3.00,0.74
+Sole,Vin rouge,6,3.33,0.76
+Persil,Vin rouge,6,1.75,0.65
+Abricot crue,Gélatine,6,5.67,0.85
+Citron jaune cru,Pêche crue,6,2.71,0.72
+Fraise crue,Gélatine,6,6.39,0.87
+Curry en poudre,Céleri branche,6,6.16,0.86
+Chocolat noir 70%,Kirsch,6,4.59,0.81
+Chocolat noir 70%,Orange cru,6,5.61,0.85
+Poireau,Thym,6,11.46,0.92
+Ananas,Framboise crue,6,7.41,0.90
+Framboise crue,Pomme crue,6,2.96,0.74
+Laurier,Poireau,6,11.22,0.92
+Curry en poudre,Sole,6,3.51,0.77
+Clou de girofle,Poireau,6,10.99,0.92
+Chocolat noir 70%,Rhum blanc,6,12.63,0.92
+Fraise crue,Pistache crue,6,5.84,0.86
+Citron jaune cru,Porto,6,5.64,0.85
