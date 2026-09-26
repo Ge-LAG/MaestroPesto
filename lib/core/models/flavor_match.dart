@@ -14,6 +14,19 @@ import 'package:meta/meta.dart';
 /// (cf. cahier phase 3 et plan Phase 09 §5.4).
 enum FlavorMatchCategory { excellent, good, average, questionable, avoid }
 
+/// Origine du score (Phase 10, ac-123 — décision honest-data-display).
+enum FlavorMatchEvidence {
+  /// Accord observé documenté en base Phase 3.
+  observed,
+
+  /// Accord culinaire curaté (tradition, soutien empirique w4).
+  curated,
+
+  /// Prédiction du moteur de profils sensoriels (pas de soutien
+  /// empirique) : jamais présentée comme une incompatibilité avérée.
+  predicted,
+}
+
 /// Association aromatique entre ingrédients (paire ou combinaison n-aire).
 @immutable
 class FlavorMatch {
@@ -29,6 +42,11 @@ class FlavorMatch {
     this.culinarySupport,
     this.evidenceRefs = const <String>[],
     this.explanation,
+    this.evidence = FlavorMatchEvidence.observed,
+    this.confidence,
+    this.aromaComplement,
+    this.contextualFit,
+    this.sharedDescriptors = const <String>[],
   });
 
   /// Identifiant Phase 1 du premier ingrédient de la combinaison.
@@ -66,6 +84,30 @@ class FlavorMatch {
   /// Résumé lisible de l'association (nullable).
   final String? explanation;
 
+  /// Origine du score (observé, curaté, prédit).
+  final FlavorMatchEvidence evidence;
+
+  /// Confiance du score 0..1 (null = non documentée).
+  final double? confidence;
+
+  /// Complémentarité aromatique (familles partagées) 0..1.
+  final double? aromaComplement;
+
+  /// Cohérence de contexte culinaire (sucré/salé) 0..1.
+  final double? contextualFit;
+
+  /// Descripteurs aromatiques partagés (ids de l'ontologie), du plus
+  /// fort au plus faible.
+  final List<String> sharedDescriptors;
+
+  /// Vrai si le score est une prédiction sans soutien empirique.
+  bool get isPrediction => evidence == FlavorMatchEvidence.predicted;
+
+  /// Vrai si le score désigne une incompatibilité étayée (observée ou
+  /// curatée) — une prédiction basse n'est jamais une incompatibilité.
+  bool get isSupportedIncompatibility =>
+      !isPrediction && category == FlavorMatchCategory.avoid;
+
   /// Catégorie dérivée de [overallScore] (seuils du cahier phase 3) :
   /// ≥ 0.85 excellent, 0.70–0.84 good, 0.55–0.69 average,
   /// 0.40–0.54 questionable, < 0.40 avoid.
@@ -89,6 +131,9 @@ class FlavorMatch {
     Object? culinarySupport = _sentinel,
     List<String>? evidenceRefs,
     Object? explanation = _sentinel,
+    FlavorMatchEvidence? evidence,
+    Object? confidence = _sentinel,
+    List<String>? sharedDescriptors,
   }) {
     return FlavorMatch(
       ingredientAId: ingredientAId ?? this.ingredientAId,
@@ -116,6 +161,13 @@ class FlavorMatch {
       explanation: identical(explanation, _sentinel)
           ? this.explanation
           : explanation as String?,
+      evidence: evidence ?? this.evidence,
+      confidence: identical(confidence, _sentinel)
+          ? this.confidence
+          : confidence as double?,
+      aromaComplement: aromaComplement,
+      contextualFit: contextualFit,
+      sharedDescriptors: sharedDescriptors ?? this.sharedDescriptors,
     );
   }
 
@@ -133,7 +185,10 @@ class FlavorMatch {
         other.maskingRisk == maskingRisk &&
         other.culinarySupport == culinarySupport &&
         _listEq(other.evidenceRefs, evidenceRefs) &&
-        other.explanation == explanation;
+        other.explanation == explanation &&
+        other.evidence == evidence &&
+        other.confidence == confidence &&
+        _listEq(other.sharedDescriptors, sharedDescriptors);
   }
 
   @override
@@ -149,6 +204,9 @@ class FlavorMatch {
     culinarySupport,
     Object.hashAll(evidenceRefs),
     explanation,
+    evidence,
+    confidence,
+    Object.hashAll(sharedDescriptors),
   );
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 // Phase 09 — smoke tests DoD §13.3 / §13.4 sur les données métier RÉELLES
 // (database-metier/, import CSV complet en mémoire).
 //
@@ -224,16 +226,32 @@ void main() {
   });
 
   group('DoD §13.4 — incompatibilité détectée + substituts proposés', () {
-    // Paire réelle la plus incompatible des données : 0.03.
+    // Phase 10 (ac-123) : seule une incompatibilité ÉTAYÉE est une
+    // alerte. Chocolat noir × anchois : contraste négatif observé
+    // (benchmark Phase 3, 0,20) ; abricot × aneth : prédiction basse
+    // sans soutien empirique (plus jamais « À éviter »).
+    const chocolat = 'ING-TECH-CHOCOLATNOIR-000001';
+    const anchois = 'ING-MARINE-ANCHOIS-000001';
     const abricot = 'ING-PLANT-ABRICOT-000001';
     const aneth = 'ING-PLANT-ANETH-000001';
     const ail = 'ING-PLANT-AIL-000001';
 
-    test('incompatiblePairs détecte une paire réelle < 0.40', () async {
+    test('incompatiblePairs détecte une incompatibilité étayée', () async {
       final bad = await FlavorRepository(db)
-          .incompatiblePairs([abricot, aneth, ail]);
+          .incompatiblePairs([chocolat, anchois, ail]);
       expect(bad, isNotEmpty);
       expect(bad.every((m) => m.overallScore < 0.40), isTrue);
+      expect(bad.every((m) => !m.isPrediction), isTrue);
+    });
+
+    test('A4 : une prédiction basse n’est pas une incompatibilité', () async {
+      final repo = FlavorRepository(db);
+      final bad = await repo.incompatiblePairs([abricot, aneth]);
+      expect(bad, isEmpty);
+      final m = await repo.bestMatchFor([abricot, aneth]);
+      expect(m, isNotNull);
+      expect(m!.isPrediction, isTrue);
+      expect(m.isSupportedIncompatibility, isFalse);
     });
 
     test('le Recommender propose des substituts réels et cohérents', () async {
@@ -244,14 +262,14 @@ void main() {
         functional: FunctionalRepository(db),
       );
       final substitutes = await recommender.suggestSubstitutes(
-        targetIngredientId: ail,
-        currentIngredientIds: [abricot, ail],
+        targetIngredientId: anchois,
+        currentIngredientIds: [chocolat, anchois],
         maxResults: 5,
       );
       expect(
         substitutes,
         isNotEmpty,
-        reason: 'la catégorie végétal réelle a > 100 candidats ≥ 0.7',
+        reason: 'la catégorie animal réelle a des candidats ≥ 0.7',
       );
       expect(substitutes.length, lessThanOrEqualTo(5));
 
@@ -259,10 +277,10 @@ void main() {
       final ids = substitutes.map((r) => r.suggestedIngredient.ingredientId);
       expect(
         ids,
-        isNot(anyOf(contains(abricot), contains(ail))),
+        isNot(anyOf(contains(chocolat), contains(anchois))),
         reason: 'un substitut ne doit pas déjà être dans la recette',
       );
-      final target = await ingredientsRepo.summaryFor(ail);
+      final target = await ingredientsRepo.summaryFor(anchois);
       expect(target, isNotNull);
       // NB : la valeur réelle est « végétal » (r-103) — on compare à la
       // catégorie effective de la cible, pas à une chaîne codée en dur.
@@ -280,6 +298,79 @@ void main() {
       final scores = substitutes.map((r) => r.score).toList();
       final sorted = List<double>.of(scores)..sort((a, b) => b.compareTo(a));
       expect(scores, orderedEquals(sorted));
+    });
+  });
+
+  group('Phase 10 Lot E — accords aromatiques', () {
+    test('A6 : 603/603 profils sensoriels, toute paire est scorée', () async {
+      final repo = FlavorRepository(db);
+      final ids = (await db.select(db.ingredients).get())
+          .map((r) => r.ingredientId)
+          .toList();
+      var profiled = 0;
+      for (final id in ids) {
+        if (await repo.profileFor(id) != null) profiled++;
+      }
+      expect(profiled, 603);
+      // Échantillon déterministe de 25 ingrédients : 300 paires.
+      final sample = [for (var i = 0; i < ids.length; i += 24) ids[i]];
+      for (var i = 0; i < sample.length; i++) {
+        for (var j = i + 1; j < sample.length; j++) {
+          final m = await repo.bestMatchFor([sample[i], sample[j]]);
+          expect(m, isNotNull);
+          expect(m!.overallScore, inInclusiveRange(0, 1));
+          expect(m.confidence, isNotNull);
+        }
+      }
+    });
+
+    test('A6 : calibration sur les benchmarks Phase 3', () async {
+      final repo = FlavorRepository(db);
+      final byName = {
+        for (final r in await db.select(db.ingredients).get())
+          r.canonicalNameFr: r.ingredientId,
+      };
+      final lines = File(
+        'assets/database-metier/phase3-flavour/flavor_benchmark.csv',
+      ).readAsLinesSync().skip(1);
+      var checked = 0;
+      for (final line in lines) {
+        final cells = line.split(',');
+        final category = cells[1];
+        final names = cells[2].split(' + ');
+        final ids = [for (final n in names) byName[n]];
+        if (ids.any((id) => id == null)) continue;
+        final m = await repo.bestMatchFor(ids.cast<String>());
+        expect(m, isNotNull, reason: cells[2]);
+        final score = m!.overallScore;
+        if (category == 'contrast_negative') {
+          expect(score, lessThan(0.40), reason: cells[2]);
+        } else if (category == 'classic' || category == 'hyper_interaction') {
+          expect(score, greaterThanOrEqualTo(0.70), reason: cells[2]);
+        } else {
+          expect(score, greaterThanOrEqualTo(0.55), reason: cells[2]);
+        }
+        checked++;
+      }
+      expect(checked, greaterThan(25));
+    });
+
+    test('analyse de recette et suggestions de complément', () async {
+      const tomate = 'ING-PLANT-TOMATE-000001';
+      const basilic = 'ING-PLANT-BASILIC-000001';
+      const huile = 'ING-TECH-HUILEDOLIVEV-000001';
+      final repo = FlavorRepository(db);
+      final analysis = await repo.analyze([tomate, basilic, huile]);
+      expect(analysis, isNotNull);
+      expect(analysis!.pairs, hasLength(3));
+      expect(analysis.harmony, greaterThan(0.7));
+      expect(analysis.supportedPairCount, greaterThanOrEqualTo(2));
+      final suggestions = await repo.suggestComplements([tomate, basilic]);
+      expect(suggestions, isNotEmpty);
+      expect(
+        suggestions.map((s) => s.name),
+        anyElement(anyOf('Mozzarella', 'Ail', "Huile d'olive vierge extra")),
+      );
     });
   });
 

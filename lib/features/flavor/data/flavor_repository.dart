@@ -1,62 +1,153 @@
-// Phase 09 Lot G — G3 : FlavorRepository (plan §7.2).
+// Phase 09 Lot G / Phase 10 Lot E — FlavorRepository.
 //
-// Charge les ~4 594 enregistrements `flavor_compatibility` en mémoire
-// au premier accès (cache §11.2 — ~200 Ko, tient largement en RAM) et
-// sert les lookups depuis ce cache. `invalidateCache()` est appelé par
-// le flux d'import CSV (§11.3).
+// Phase 10 (ac-123) : les scores ne sont plus lus dans les 4 560 paires
+// « prédites » de la Phase 3 (Jaccard ≈ 0 faute de données, rouge
+// trompeur). Ils sont calculés par le [FlavorPairingEngine] à partir des
+// profils sensoriels 603/603, avec deux sources de soutien empirique :
+//   1. les accords OBSERVÉS de la Phase 3 (paires et combinaisons
+//      n-aires `observed_or_predicted = observed`) ;
+//   2. les accords culinaires CURATÉS (`culinary_pairings`).
+// Chaque score porte son origine (observé, curaté, prédit) et sa
+// confiance.
 //
-// dp-106 : l'`overallScore` est lu tel quel depuis la table ; le scoring
-// n-aire (fallback paires) est délégué au [FlavorScorer] pur.
+// Mode hérité : une base sans profils sensoriels (import antérieur,
+// tests) sert les enregistrements `flavor_compatibility` tels quels,
+// comme en Phase 09.
+
+import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/models/flavor_analysis.dart';
 import '../../../core/models/flavor_match.dart';
+import '../../../core/models/flavor_profile.dart';
+import '../../../core/scoring/flavor_pairing_engine.dart';
 import '../../../core/scoring/flavor_scorer.dart';
 
 /// Repository pour la Phase 3 (flavour / associations aromatiques).
 class FlavorRepository {
-  FlavorRepository(this._db) : _preloaded = null;
+  FlavorRepository(this._db) : _preloaded = null, _preloadedProfiles = null;
 
   /// Constructeur de test : injecte directement des matches (pas de Drift).
   @visibleForTesting
   FlavorRepository.fromMatches(List<FlavorMatch> matches)
     : _db = null,
-      _preloaded = matches;
+      _preloaded = matches,
+      _preloadedProfiles = null;
+
+  /// Constructeur de test : profils et accords empiriques injectés.
+  @visibleForTesting
+  FlavorRepository.fromProfiles(
+    List<FlavorProfile> profiles, {
+    Map<String, EmpiricalPairing> empirical = const {},
+    Map<String, String> names = const {},
+  }) : _db = null,
+       _preloaded = null,
+       _preloadedProfiles = profiles {
+    _empirical = {
+      for (final e in empirical.entries) _pairKey(e.key.split('|')): e.value,
+    };
+    _names = names;
+  }
 
   final AppDatabase? _db;
   final List<FlavorMatch>? _preloaded;
+  final List<FlavorProfile>? _preloadedProfiles;
 
-  /// Cache mémoire : clé = ids triés jointes par '|' (ordre indifférent).
+  /// Enregistrements hérités / n-aires observés : clé = ids triés.
   Map<String, FlavorMatch>? _cache;
+  Map<String, FlavorProfile>? _profiles;
+  Map<String, EmpiricalPairing> _empirical = {};
+  Map<String, String> _names = {};
+  Map<String, String> _categories = {};
+  bool _loaded = false;
 
   static String _keyFor(List<String> ingredientIds) =>
       (List<String>.of(ingredientIds)..sort()).join('|');
 
-  Future<Map<String, FlavorMatch>> _ensureCache() async {
-    final cached = _cache;
-    if (cached != null) return cached;
+  static String _pairKey(List<String> ids) => _keyFor(ids);
+
+  /// Vrai quand les profils sensoriels Phase 10 sont disponibles.
+  bool get usesProfiles => (_profiles?.isNotEmpty ?? false);
+
+  Future<void> _ensureLoaded() async {
+    if (_loaded) return;
     final built = <String, FlavorMatch>{};
     final preloaded = _preloaded;
+    final preloadedProfiles = _preloadedProfiles;
     if (preloaded != null) {
       for (final m in preloaded) {
-        _putBest(built, _keyFor(m.allIngredientIds), m);
+        _putBest(built, _keyFor([m.ingredientAId, ?m.ingredientBId]), m);
       }
+      _profiles = const {};
+    } else if (preloadedProfiles != null) {
+      _profiles = {for (final p in preloadedProfiles) p.ingredientId: p};
     } else {
-      final rows = await _db!.select(_db.flavorCompatibility).get();
+      final db = _db!;
+      final profileRows = await db.select(db.ingredientFlavorProfiles).get();
+      _profiles = {
+        for (final r in profileRows)
+          r.ingredientId: FlavorProfile.fromEncoded(
+            ingredientId: r.ingredientId,
+            encoded: r.descriptors,
+            context: r.context,
+            intensity: r.intensity,
+            evidence: r.evidenceLevel,
+            confidence: r.confidence,
+            note: r.note,
+          ),
+      };
+      final useProfiles = _profiles!.isNotEmpty;
+      final rows = await db.select(db.flavorCompatibility).get();
       for (final row in rows) {
         final parsed = _fromRow(row);
-        if (parsed != null) _putBest(built, _keyFor(parsed.ids), parsed.match);
+        if (parsed == null) continue;
+        final observed = (row.observedOrPredicted ?? '') == 'observed';
+        if (useProfiles) {
+          // Phase 10 : seules les observations servent de soutien.
+          if (!observed) continue;
+          if (parsed.ids.length == 2) {
+            _empirical[_pairKey(parsed.ids)] = EmpiricalPairing(
+              score: parsed.match.overallScore,
+              observed: true,
+              kind: 'observed',
+              note: parsed.match.explanation,
+            );
+            continue;
+          }
+        }
+        _putBest(built, _keyFor(parsed.ids), parsed.match);
+      }
+      if (useProfiles) {
+        for (final r in await db.select(db.culinaryPairings).get()) {
+          final key = _pairKey([r.ingredientAId, r.ingredientBId]);
+          // Une observation Phase 3 prime sur une curation.
+          _empirical.putIfAbsent(
+            key,
+            () => EmpiricalPairing(
+              score: r.strength,
+              observed: false,
+              kind: r.kind,
+              note: r.note,
+            ),
+          );
+        }
+        final ingredients = await db.select(db.ingredients).get();
+        _names = {
+          for (final i in ingredients) i.ingredientId: i.canonicalNameFr,
+        };
+        _categories = {
+          for (final i in ingredients)
+            i.ingredientId: i.categoryLevel2 ?? i.categoryLevel1,
+        };
       }
     }
     _cache = built;
-    return built;
+    _loaded = true;
   }
 
-  /// Cahier §7.2 : « le **meilleur** FlavorMatch pour une combinaison ».
-  /// Les données réelles contiennent plusieurs enregistrements par clé
-  /// (contextes prédits/observés) : on garde le score le plus élevé de
-  /// façon déterministe, indépendante de l'ordre de lecture en base.
+  /// Cahier §7.2 : le **meilleur** FlavorMatch pour une combinaison.
   static void _putBest(
     Map<String, FlavorMatch> map,
     String key,
@@ -68,65 +159,109 @@ class FlavorRepository {
     }
   }
 
-  /// Invalide le cache mémoire (appelé après un import CSV, §11.3).
-  void invalidateCache() => _cache = null;
+  /// Invalide les caches mémoire (appelé après un import CSV, §11.3).
+  void invalidateCache() {
+    _cache = null;
+    _profiles = null;
+    _empirical = {};
+    _loaded = false;
+  }
 
-  /// Renvoie le meilleur [FlavorMatch] pour une combinaison d'ingrédients
-  /// (ordre indifférent) : enregistrement n-aire direct s'il existe,
-  /// sinon fallback [FlavorScorer] sur les paires 2×2. Null si la
-  /// combinaison n'a aucune donnée en base.
-  Future<FlavorMatch?> bestMatchFor(List<String> ingredientIds) async {
-    if (ingredientIds.length < 2) return null;
-    final cache = await _ensureCache();
-    return FlavorScorer.scoreCombination(
-      ingredientIds,
-      (ids) => cache[_keyFor(ids)],
+  /// Profil sensoriel d'un ingrédient (null si absent).
+  Future<FlavorProfile?> profileFor(String ingredientId) async {
+    await _ensureLoaded();
+    return _profiles?[ingredientId];
+  }
+
+  /// Score d'une paire par le moteur v2 (null sans profil).
+  FlavorMatch? _enginePair(String a, String b) {
+    final pa = _profiles?[a];
+    final pb = _profiles?[b];
+    if (pa == null || pb == null || a == b) return null;
+    return FlavorPairingEngine.scorePair(
+      pa,
+      pb,
+      empirical: _empirical[_pairKey([a, b])],
     );
   }
 
-  /// Renvoie les paires incompatibles (score < 0.40, catégorie `avoid`)
-  /// parmi les ingrédients donnés. Utilisé par le recommender (§9, Lot H).
+  FlavorMatch? _lookup(List<String> ids) {
+    if (usesProfiles) {
+      if (ids.length == 2) return _enginePair(ids[0], ids[1]);
+      return _cache?[_keyFor(ids)];
+    }
+    return _cache?[_keyFor(ids)];
+  }
+
+  /// Meilleur [FlavorMatch] pour une combinaison (ordre indifférent) :
+  /// paire → moteur v2 ; n-aire → combinaison observée, sinon agrégat
+  /// des paires. Null si aucune donnée.
+  Future<FlavorMatch?> bestMatchFor(List<String> ingredientIds) async {
+    if (ingredientIds.length < 2) return null;
+    await _ensureLoaded();
+    final match = FlavorScorer.scoreCombination(ingredientIds, _lookup);
+    if (match == null || !usesProfiles || ingredientIds.length == 2) {
+      return match;
+    }
+    if (_cache?[_keyFor(ingredientIds)] != null) return match;
+    // Agrégat de paires : prédiction si aucune paire n'est étayée.
+    var supported = false;
+    for (var i = 0; i < ingredientIds.length && !supported; i++) {
+      for (var j = i + 1; j < ingredientIds.length; j++) {
+        final m = _lookup([ingredientIds[i], ingredientIds[j]]);
+        if (m != null && !m.isPrediction) {
+          supported = true;
+          break;
+        }
+      }
+    }
+    return match.copyWith(
+      evidence: supported
+          ? FlavorMatchEvidence.curated
+          : FlavorMatchEvidence.predicted,
+    );
+  }
+
+  /// Paires incompatibles parmi les ingrédients donnés. Phase 10 :
+  /// seules les incompatibilités ÉTAYÉES (observées ou curatées) sont
+  /// renvoyées — une prédiction basse n'est pas une alerte.
   Future<List<FlavorMatch>> incompatiblePairs(
     List<String> ingredientIds,
   ) async {
-    final cache = await _ensureCache();
+    await _ensureLoaded();
     final result = <FlavorMatch>[];
     for (var i = 0; i < ingredientIds.length; i++) {
       for (var j = i + 1; j < ingredientIds.length; j++) {
-        final match = cache[_keyFor([ingredientIds[i], ingredientIds[j]])];
-        if (match != null && match.overallScore < 0.40) {
-          result.add(match);
-        }
+        final match = _lookup([ingredientIds[i], ingredientIds[j]]);
+        if (match == null) continue;
+        final bad = usesProfiles
+            ? match.isSupportedIncompatibility
+            : match.overallScore < 0.40;
+        if (bad) result.add(match);
       }
     }
     return result;
   }
 
-  /// Lookup synchrone d'une paire ou combinaison exacte depuis le cache.
-  /// Nécessite que le cache soit déjà chaud (via [bestMatchFor] ou
-  /// [incompatiblePairs]) ; sinon renvoie null. Exposé pour les widgets
-  /// qui ont déjà déclenché un chargement (heatmap).
+  /// Lookup synchrone d'une combinaison exacte (cache chaud requis).
   FlavorMatch? cachedMatchFor(List<String> ingredientIds) =>
-      _cache?[_keyFor(ingredientIds)];
+      _loaded ? _lookup(ingredientIds) : null;
 
-  /// Retour PO n°3 (vraie heatmap) : meilleure donnée connue pour une
-  /// paire {a, b} :
-  /// 1. l'enregistrement 2×2 direct s'il existe ;
-  /// 2. sinon, à titre d'approximation documentée, la plus petite
-  ///    combinaison N-aire connue contenant les deux ingrédients
-  ///    (score le plus élevé à taille égale).
-  /// Null si aucune donnée ne couvre la paire.
+  /// Meilleure donnée connue pour une paire {a, b} et la taille de la
+  /// combinaison source (2 = paire directe). Mode hérité : repli sur la
+  /// plus petite combinaison N-aire contenant la paire.
   Future<({FlavorMatch match, int size})?> bestKnownMatchFor(
     String a,
     String b,
   ) async {
-    final cache = await _ensureCache();
-    final pairKey = _keyFor([a, b]);
-    final direct = cache[pairKey];
+    await _ensureLoaded();
+    final direct = _lookup([a, b]);
     if (direct != null) return (match: direct, size: 2);
+    if (usesProfiles) return null;
 
+    final pairKey = _keyFor([a, b]);
     ({FlavorMatch match, int size})? best;
-    for (final entry in cache.entries) {
+    for (final entry in _cache!.entries) {
       if (entry.key == pairKey) continue;
       final ids = entry.key.split('|');
       if (ids.length < 3 || !ids.contains(a) || !ids.contains(b)) continue;
@@ -142,6 +277,141 @@ class FlavorRepository {
     return best;
   }
 
+  /// Analyse aromatique d'une recette : toutes les paires, harmonie,
+  /// ponts, profil gustatif pondéré par [weights] (grammes), arômes
+  /// dominants. Null sans profils (mode hérité).
+  Future<RecipeFlavorAnalysis?> analyze(
+    List<String> ingredientIds, {
+    Map<String, double> weights = const {},
+  }) async {
+    await _ensureLoaded();
+    if (!usesProfiles) return null;
+    final ids = ingredientIds.toSet().where(_profiles!.containsKey).toList();
+    if (ids.length < 2) return null;
+    final pairs = <String, FlavorMatch>{};
+    var weighted = 0.0;
+    var weightSum = 0.0;
+    for (var i = 0; i < ids.length; i++) {
+      for (var j = i + 1; j < ids.length; j++) {
+        final m = _enginePair(ids[i], ids[j])!;
+        pairs[RecipeFlavorAnalysis.keyFor(ids[i], ids[j])] = m;
+        final w = (m.confidence ?? 0.5) * _pairWeight(ids[i], ids[j], weights);
+        weighted += m.overallScore * w;
+        weightSum += w;
+      }
+    }
+    final combination = _cache?[_keyFor(ids)];
+    final profiles = [for (final id in ids) _profiles![id]!];
+    final bridgeMap = FlavorPairingEngine.bridges(profiles);
+    final bridges = [
+      for (final e in bridgeMap.entries)
+        FlavorBridge(descriptor: e.key, ingredientIds: e.value),
+    ]..sort((a, b) => b.ingredientIds.length.compareTo(a.ingredientIds.length));
+    // Arômes dominants : intensité × part de masse (défaut uniforme).
+    final aroma = <String, double>{};
+    final total = ids.fold<double>(0, (s, id) => s + (weights[id] ?? 1));
+    for (final p in profiles) {
+      final share = (weights[p.ingredientId] ?? 1) / total;
+      // La puissance aromatique compense une faible masse (épices).
+      final power = math.max(share, p.intensity * 0.25);
+      p.descriptors.forEach((d, x) {
+        if (SensoryOntology.isTaste(d)) return;
+        aroma[d] = (aroma[d] ?? 0) + x * power;
+      });
+    }
+    final dominant = aroma.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    return RecipeFlavorAnalysis(
+      ingredientIds: ids,
+      pairs: pairs,
+      harmony:
+          combination?.overallScore ??
+          (weightSum == 0 ? 0 : weighted / weightSum),
+      combination: combination,
+      bridges: bridges,
+      tasteProfile: FlavorPairingEngine.tasteProfile(profiles, weights),
+      dominantAromas: dominant.take(6).toList(),
+    );
+  }
+
+  static double _pairWeight(String a, String b, Map<String, double> weights) {
+    if (weights.isEmpty) return 1;
+    // Racine du produit des masses : une paire d'ingrédients mineurs
+    // pèse moins, sans être ignorée.
+    final wa = weights[a] ?? 1;
+    final wb = weights[b] ?? 1;
+    return math.sqrt(math.max(wa, 1) * math.max(wb, 1));
+  }
+
+  /// Ingrédients du référentiel qui s'accordent le mieux avec la
+  /// recette (hors ingrédients présents et texturants neutres), classés
+  /// par score moyen puis nombre d'accords étayés.
+  Future<List<FlavorSuggestion>> suggestComplements(
+    List<String> ingredientIds, {
+    int limit = 6,
+  }) async {
+    await _ensureLoaded();
+    if (!usesProfiles) return const [];
+    final present = ingredientIds.toSet();
+    final base = present.where(_profiles!.containsKey).toList();
+    if (base.isEmpty) return const [];
+    final suggestions = <FlavorSuggestion>[];
+    for (final candidate in _profiles!.values) {
+      final id = candidate.ingredientId;
+      if (present.contains(id) || candidate.intensity < 0.15) continue;
+      var sum = 0.0;
+      var supported = 0;
+      var negative = false;
+      final reasons = <String>[];
+      for (final other in base) {
+        final m = _enginePair(id, other);
+        if (m == null) continue;
+        if (m.isSupportedIncompatibility) negative = true;
+        sum += m.overallScore;
+        if (!m.isPrediction && m.overallScore >= 0.7) {
+          supported++;
+          final name = _names[other];
+          if (name != null && reasons.length < 3) {
+            reasons.add('accord reconnu avec $name');
+          }
+        }
+      }
+      if (negative) continue;
+      final score = sum / base.length;
+      if (supported == 0 && score < 0.6) continue;
+      if (reasons.isEmpty) {
+        final shared = <String>{};
+        for (final other in base) {
+          shared.addAll(
+            FlavorPairingEngine.sharedAromas(candidate, _profiles![other]!),
+          );
+        }
+        if (shared.isNotEmpty) {
+          reasons.add(
+            'arômes partagés : '
+            '${shared.take(3).map(SensoryOntology.label).join(', ')}',
+          );
+        }
+      }
+      suggestions.add(
+        FlavorSuggestion(
+          ingredientId: id,
+          name: _names[id] ?? id,
+          category: _categories[id],
+          score: score,
+          supportedPairs: supported,
+          reasons: reasons,
+        ),
+      );
+    }
+    suggestions.sort((a, b) {
+      final bySupport = b.supportedPairs.compareTo(a.supportedPairs);
+      if (bySupport != 0) return bySupport;
+      return b.score.compareTo(a.score);
+    });
+    return suggestions.take(limit).toList();
+  }
+
   ({List<String> ids, FlavorMatch match})? _fromRow(
     FlavorCompatibilityData row,
   ) {
@@ -152,6 +422,7 @@ class FlavorRepository {
         .toList();
     final score = row.overallScore;
     if (ids.isEmpty || score == null) return null;
+    final observed = (row.observedOrPredicted ?? '') == 'observed';
     final match = FlavorMatch(
       ingredientAId: ids.first,
       ingredientBId: ids.length == 2 ? ids[1] : null,
@@ -168,12 +439,11 @@ class FlavorRepository {
           .where((s) => s.isNotEmpty)
           .toList(),
       explanation: row.explanation,
+      evidence: observed
+          ? FlavorMatchEvidence.observed
+          : FlavorMatchEvidence.predicted,
+      confidence: row.confidence,
     );
     return (ids: ids, match: match);
   }
-}
-
-/// Extension interne : tous les ids couverts par un match.
-extension on FlavorMatch {
-  List<String> get allIngredientIds => [ingredientAId, ?ingredientBId];
 }
