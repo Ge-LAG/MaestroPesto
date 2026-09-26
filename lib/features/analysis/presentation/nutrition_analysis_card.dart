@@ -22,9 +22,17 @@ import 'package:maestropesto/features/recipes/domain/recipe.dart';
 import 'package:maestropesto/features/recipes/presentation/widgets/recipe_nutrition_panel.dart';
 
 class NutritionAnalysisCard extends StatelessWidget {
-  const NutritionAnalysisCard({required this.recipe, super.key});
+  const NutritionAnalysisCard({
+    required this.recipe,
+    this.embedded = false,
+    super.key,
+  });
 
   final Recipe recipe;
+
+  /// Vrai dans l'onglet « Nutrition » de la fiche : pas de carte propre,
+  /// valeurs et analyses sur deux colonnes.
+  final bool embedded;
 
   bool get _manualIsEmpty {
     final n = recipe.nutrition;
@@ -39,7 +47,10 @@ class NutritionAnalysisCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = context.strings;
-    final manual = RecipeNutritionPanel(nutrition: recipe.nutrition);
+    final manual = RecipeNutritionPanel(
+      nutrition: recipe.nutrition,
+      framed: !embedded,
+    );
     // Saisie manuelle forcée par l'utilisateur : elle prime.
     if (recipe.nutritionMode == RecipeNutritionMode.manual) {
       return Column(
@@ -66,7 +77,7 @@ class NutritionAnalysisCard extends StatelessWidget {
             ],
           );
         }
-        return _ComputedPanel(analysis: analysis);
+        return _ComputedPanel(analysis: analysis, embedded: embedded);
       },
     );
   }
@@ -123,9 +134,10 @@ class _NotComputedCard extends StatelessWidget {
 }
 
 class _ComputedPanel extends StatelessWidget {
-  const _ComputedPanel({required this.analysis});
+  const _ComputedPanel({required this.analysis, this.embedded = false});
 
   final RecipeAnalysis analysis;
+  final bool embedded;
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +174,8 @@ class _ComputedPanel extends StatelessWidget {
       subtitle: subtitle,
       sugars: p.sugars,
       saturatedFats: p.saturatedFats,
+      framed: !embedded,
+      wideLayout: embedded,
       footer: [
         if (fb.energySplit != null) _EnergySplitBar(split: fb.energySplit!),
         if (fb.highlights.isNotEmpty) _Highlights(items: fb.highlights),

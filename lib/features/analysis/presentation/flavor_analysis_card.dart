@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/formatters.dart';
+import 'package:maestropesto/app/widgets/info_hint.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/models/flavor_analysis.dart';
@@ -17,10 +18,23 @@ import 'package:maestropesto/features/flavor/presentation/widgets/flavor_compati
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 class FlavorAnalysisCard extends StatelessWidget {
-  const FlavorAnalysisCard({required this.recipe, required this.db, super.key});
+  const FlavorAnalysisCard({
+    required this.recipe,
+    required this.db,
+    this.embedded = false,
+    this.onAddSuggestion,
+    super.key,
+  });
 
   final Recipe recipe;
   final AppDatabase db;
+
+  /// Vrai dans l'onglet « Arômes » de la fiche : pas de carte propre,
+  /// matrice à gauche et profil aromatique à droite.
+  final bool embedded;
+
+  /// Ajout d'un accord suggéré à la recette (null = bouton masqué).
+  final ValueChanged<FlavorSuggestion>? onAddSuggestion;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +51,61 @@ class FlavorAnalysisCard extends StatelessWidget {
         };
         final theme = Theme.of(context);
         final strings = context.strings;
+        final matrix = <Widget>[
+          if (flavor != null) ...[
+            _Harmony(analysis: flavor),
+            const SizedBox(height: 4),
+            const _HarmonyExplainer(),
+            const SizedBox(height: 12),
+            FlavorCompatibilityHeatmap(
+              ingredients: recipe.ingredients,
+              db: db,
+              embedded: true,
+            ),
+          ],
+        ];
+        final profile = <Widget>[
+          if (flavor != null) ...[
+            if (flavor.bridges.isNotEmpty)
+              _Bridges(bridges: flavor.bridges, labels: labels),
+            if (flavor.dominantAromas.isNotEmpty)
+              _Dominant(aromas: flavor.dominantAromas),
+            _TasteBalance(profile: flavor.tasteProfile),
+          ],
+          if (suggestions.isNotEmpty)
+            _Suggestions(suggestions: suggestions, onAdd: onAddSuggestion),
+        ];
+        final body = LayoutBuilder(
+          builder: (context, constraints) {
+            if (embedded && constraints.maxWidth >= 960) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: matrix,
+                    ),
+                  ),
+                  const SizedBox(width: 32),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: profile,
+                    ),
+                  ),
+                ],
+              );
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [...matrix, ...profile],
+            );
+          },
+        );
+        if (embedded) return body;
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 12),
           child: Padding(
@@ -58,28 +127,129 @@ class FlavorAnalysisCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (flavor != null) ...[
-                  const SizedBox(height: 12),
-                  _Harmony(analysis: flavor),
-                  const SizedBox(height: 12),
-                  FlavorCompatibilityHeatmap(
-                    ingredients: recipe.ingredients,
-                    db: db,
-                    embedded: true,
-                  ),
-                  if (flavor.bridges.isNotEmpty)
-                    _Bridges(bridges: flavor.bridges, labels: labels),
-                  if (flavor.dominantAromas.isNotEmpty)
-                    _Dominant(aromas: flavor.dominantAromas),
-                  _TasteBalance(profile: flavor.tasteProfile),
-                ],
-                if (suggestions.isNotEmpty)
-                  _Suggestions(suggestions: suggestions),
+                const SizedBox(height: 12),
+                body,
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+/// Note explicative du score d'harmonie et des cases de la matrice.
+class _HarmonyExplainer extends StatelessWidget {
+  const _HarmonyExplainer();
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    final theme = Theme.of(context);
+    final bold = theme.textTheme.bodySmall?.copyWith(
+      fontWeight: FontWeight.w800,
+      color: theme.colorScheme.onSurface,
+    );
+    Widget scale(FlavorMatchCategory c, String range, String label) => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: flavorCategoryColor(c),
+            borderRadius: BorderRadius.circular(3),
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text('$range $label'),
+      ],
+    );
+    Widget para(String text) =>
+        Padding(padding: const EdgeInsets.only(top: 8), child: Text(text));
+    return ExplainerNote(
+      title: strings.harmonyHowTo,
+      children: [
+        Text(
+          'Le score d’harmonie va de 0 à 1. C’est la moyenne des accords de '
+          'toutes les paires d’ingrédients reliés, pondérée par les '
+          'quantités (une pincée de sel compte moins que 500 g de tomates) '
+          'et par la fiabilité de chaque accord.',
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 12,
+          runSpacing: 4,
+          children: [
+            scale(
+              FlavorMatchCategory.excellent,
+              '≥ 0,85',
+              strings.flavorCategoryExcellent,
+            ),
+            scale(
+              FlavorMatchCategory.good,
+              '0,70–0,84',
+              strings.flavorCategoryGood,
+            ),
+            scale(
+              FlavorMatchCategory.average,
+              '0,55–0,69',
+              strings.flavorCategoryAverage,
+            ),
+            scale(
+              FlavorMatchCategory.questionable,
+              '0,40–0,54',
+              strings.flavorCategoryQuestionable,
+            ),
+            scale(
+              FlavorMatchCategory.avoid,
+              '< 0,40',
+              strings.flavorCategoryAvoid,
+            ),
+          ],
+        ),
+        para(
+          'Chaque case de la matrice note l’accord d’une paire : arômes '
+          'partagés ou complémentaires, équilibre des saveurs (sucré/acide, '
+          'gras/acide, amer/sucré…), cohérence sucré/salé, et risques '
+          'qu’un ingrédient domine ou masque l’autre.',
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text.rich(
+            TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(
+                    Icons.check,
+                    size: 14,
+                    color: flavorCategoryColor(FlavorMatchCategory.excellent),
+                  ),
+                ),
+                TextSpan(text: ' Accord documenté', style: bold),
+                const TextSpan(
+                  text:
+                      ' : observé ou reconnu en cuisine, il pèse le plus '
+                      'dans le score. ',
+                ),
+                TextSpan(text: 'Case hachurée', style: bold),
+                const TextSpan(
+                  text:
+                      ' : prédiction à partir des profils aromatiques, sans '
+                      'accord documenté ; indicative, elle n’est jamais '
+                      'classée « À éviter ».',
+                ),
+              ],
+            ),
+          ),
+        ),
+        para(
+          'Un ingrédient sans arôme propre (sel, sucre, farine, huile '
+          'neutre) reçoit une prédiction neutre : on ne peut pas juger son '
+          'accord aromatique.',
+        ),
+      ],
     );
   }
 }
@@ -312,9 +482,10 @@ class _TasteBalance extends StatelessWidget {
 }
 
 class _Suggestions extends StatelessWidget {
-  const _Suggestions({required this.suggestions});
+  const _Suggestions({required this.suggestions, this.onAdd});
 
   final List<FlavorSuggestion> suggestions;
+  final ValueChanged<FlavorSuggestion>? onAdd;
 
   @override
   Widget build(BuildContext context) {
@@ -330,12 +501,15 @@ class _Suggestions extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  s.supportedPairs > 0
-                      ? Icons.add_circle_outline
-                      : Icons.auto_awesome_outlined,
-                  size: 16,
-                  color: const Color(0xFF357A5B),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Icon(
+                    s.supportedPairs > 0
+                        ? Icons.verified_outlined
+                        : Icons.auto_awesome_outlined,
+                    size: 16,
+                    color: const Color(0xFF357A5B),
+                  ),
                 ),
                 const SizedBox(width: 6),
                 Expanded(
@@ -356,6 +530,15 @@ class _Suggestions extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (onAdd != null)
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    iconSize: 20,
+                    tooltip: '${strings.flavorAddSuggestion} : ${s.name}',
+                    onPressed: () => onAdd!(s),
+                    icon: const Icon(Icons.add_circle_outline),
+                    color: theme.colorScheme.primary,
+                  ),
               ],
             ),
           ),

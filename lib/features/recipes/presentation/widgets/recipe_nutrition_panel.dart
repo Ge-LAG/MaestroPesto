@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/app/widgets/info_hint.dart';
 import 'package:maestropesto/core/models/nutrition_profile.dart';
 import 'package:maestropesto/core/scoring/nutrition_aggregator.dart';
 import 'package:maestropesto/core/scoring/nutrition_feedback.dart';
@@ -54,6 +55,8 @@ class RecipeNutritionPanel extends StatelessWidget {
     this.footer = const <Widget>[],
     this.sugars,
     this.saturatedFats,
+    this.framed = true,
+    this.wideLayout = false,
     super.key,
   });
 
@@ -101,6 +104,13 @@ class RecipeNutritionPanel extends StatelessWidget {
   final double? sugars;
   final double? saturatedFats;
 
+  /// Faux : pas de carte propre (panneau intégré à un onglet).
+  final bool framed;
+
+  /// Vrai : valeurs à gauche et analyses ([footer]) à droite quand la
+  /// largeur le permet.
+  final bool wideLayout;
+
   double? _coverage(MacroField field) => coverage?[field];
 
   @override
@@ -111,179 +121,226 @@ class RecipeNutritionPanel extends StatelessWidget {
       nutrition.fats,
     ].reduce((a, b) => a > b ? a : b).clamp(1, double.infinity).toDouble();
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    final header = <Widget>[
+      // Dans un onglet « Nutrition », le titre est déjà porté par l'onglet.
+      if (framed)
+        Row(
           children: [
-            Row(
-              children: [
-                const Icon(Icons.monitor_heart_outlined, size: 19),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    context.strings.nutrition,
-                    style: Theme.of(context).textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                ),
-                _SourceBadge(
-                  computedFrom: computedFromIngredients,
-                  total: totalIngredients,
-                ),
-              ],
+            const Icon(Icons.monitor_heart_outlined, size: 19),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                context.strings.nutrition,
+                style: Theme.of(context).textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w800),
+              ),
             ),
-            const SizedBox(height: 4),
+            _SourceBadge(
+              computedFrom: computedFromIngredients,
+              total: totalIngredients,
+            ),
+          ],
+        ),
+      const SizedBox(height: 4),
+      Text(
+        computedFromIngredients != null && computedFromIngredients! > 0
+            ? context.strings.nutritionComputedFrom(
+                computedFromIngredients!,
+                totalIngredients ?? computedFromIngredients!,
+              )
+            : context.strings.nutritionManualEntry,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      if (sources.isNotEmpty) ...[
+        const SizedBox(height: 2),
+        Wrap(
+          spacing: 4,
+          runSpacing: 2,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
             Text(
-              computedFromIngredients != null && computedFromIngredients! > 0
-                  ? context.strings.nutritionComputedFrom(
-                      computedFromIngredients!,
-                      totalIngredients ?? computedFromIngredients!,
-                    )
-                  : context.strings.nutritionManualEntry,
-              style: Theme.of(context).textTheme.bodySmall,
+              '${context.strings.nutritionSources} :',
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(fontStyle: FontStyle.italic),
             ),
-            if (sources.isNotEmpty) ...[
-              const SizedBox(height: 2),
-              Wrap(
-                spacing: 4,
-                runSpacing: 2,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Text(
-                    '${context.strings.nutritionSources} :',
-                    style: Theme.of(context).textTheme.bodySmall
-                        ?.copyWith(fontStyle: FontStyle.italic),
+            for (final (i, source) in sources.indexed)
+              Tooltip(
+                message: source.citation ?? source.displayLabel,
+                child: Text(
+                  '${source.displayLabel}${i < sources.length - 1 ? ' ·' : ''}',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.dotted,
                   ),
-                  for (final (i, source) in sources.indexed)
-                    Tooltip(
-                      message: source.citation ?? source.displayLabel,
-                      child: Text(
-                        '${source.displayLabel}${i < sources.length - 1 ? ' ·' : ''}',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontStyle: FontStyle.italic,
-                          decoration: TextDecoration.underline,
-                          decorationStyle: TextDecorationStyle.dotted,
-                        ),
-                      ),
+                ),
+              ),
+          ],
+        ),
+      ],
+      if (subtitle != null) ...[
+        const SizedBox(height: 2),
+        Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
+      ],
+      if (nutriScore != null || nutriScoreNote != null) ...[
+        const SizedBox(height: 12),
+        NutriScoreBadge(result: nutriScore, note: nutriScoreNote),
+      ],
+      if (intakePercents.isNotEmpty) ...[
+        const SizedBox(height: 2),
+        LabelWithHint(
+          context.strings.nutritionPerServingAr,
+          context.strings.nutritionArHint,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    ];
+    final values = <Widget>[
+      _EnergyBlock(
+        value: nutrition.energyKcal,
+        coverage: _coverage(MacroField.energy),
+        percent: intakePercents['energy'],
+      ),
+      const SizedBox(height: 16),
+      Column(
+        children: [
+          _MacroLine(
+            label: context.strings.proteins,
+            value: nutrition.proteins,
+            unit: 'g',
+            ratio: nutrition.proteins / maxMacro,
+            color: const Color(0xFF357A5B),
+            coverage: _coverage(MacroField.proteins),
+            percent: intakePercents['proteins'],
+          ),
+          _MacroLine(
+            label: context.strings.carbs,
+            value: nutrition.carbs,
+            unit: 'g',
+            ratio: nutrition.carbs / maxMacro,
+            color: const Color(0xFFD9A441),
+            coverage: _coverage(MacroField.carbs),
+            percent: intakePercents['carbs'],
+          ),
+          if (sugars != null)
+            _SubLine(
+              label: 'dont sucres',
+              value: sugars!,
+              coverage: _coverage(MacroField.sugars),
+              percent: intakePercents['sugars'],
+            ),
+          _MacroLine(
+            label: context.strings.fats,
+            value: nutrition.fats,
+            unit: 'g',
+            ratio: nutrition.fats / maxMacro,
+            color: const Color(0xFFB85C45),
+            coverage: _coverage(MacroField.fats),
+            percent: intakePercents['fats'],
+          ),
+          if (saturatedFats != null)
+            _SubLine(
+              label: 'dont acides gras saturés',
+              value: saturatedFats!,
+              coverage: _coverage(MacroField.saturatedFats),
+              percent: intakePercents['saturatedFats'],
+            ),
+          const Divider(height: 22),
+          _NutrientLine(
+            label: context.strings.fiber,
+            value: nutrition.fiber,
+            unit: 'g',
+            coverage: _coverage(MacroField.fiber),
+            percent: intakePercents['fiber'],
+          ),
+          _NutrientLine(
+            label: context.strings.salt,
+            value: nutrition.salt,
+            unit: 'g',
+            coverage: _coverage(MacroField.salt),
+            percent: intakePercents['salt'],
+          ),
+          if (alcoholPerServing > 0)
+            _NutrientLine(
+              label: context.strings.alcoholLabel,
+              value: alcoholPerServing,
+              unit: 'g',
+            ),
+        ],
+      ),
+      if (micronutrientsPerServing.isNotEmpty) ...[
+        _MicroSection(
+          title: context.strings.mineralsTitle,
+          entries: _sortedMicros(
+            micronutrientsPerServing,
+            where: (tag) => kMineralTags.contains(tag),
+          ),
+          percents: intakePercents,
+        ),
+        _MicroSection(
+          title: context.strings.vitaminsTitle,
+          entries: _sortedMicros(
+            micronutrientsPerServing,
+            where: (tag) => kVitaminTags.contains(tag),
+          ),
+          percents: intakePercents,
+        ),
+        _MicroSection(
+          title: context.strings.otherConstituentsTitle,
+          entries: _sortedMicros(
+            micronutrientsPerServing,
+            where: (tag) =>
+                !kMineralTags.contains(tag) && !kVitaminTags.contains(tag),
+          ),
+          percents: intakePercents,
+        ),
+      ],
+    ];
+    final content = LayoutBuilder(
+      builder: (context, constraints) {
+        if (wideLayout && footer.isNotEmpty && constraints.maxWidth >= 760) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...header,
+              const SizedBox(height: 18),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: values,
                     ),
+                  ),
+                  const SizedBox(width: 32),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: footer,
+                    ),
+                  ),
                 ],
               ),
             ],
-            if (subtitle != null) ...[
-              const SizedBox(height: 2),
-              Text(subtitle!, style: Theme.of(context).textTheme.bodySmall),
-            ],
-            if (nutriScore != null || nutriScoreNote != null) ...[
-              const SizedBox(height: 12),
-              NutriScoreBadge(result: nutriScore, note: nutriScoreNote),
-            ],
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...header,
             const SizedBox(height: 18),
-            _EnergyBlock(
-              value: nutrition.energyKcal,
-              coverage: _coverage(MacroField.energy),
-              percent: intakePercents['energy'],
-            ),
-            const SizedBox(height: 16),
-            Column(
-              children: [
-                _MacroLine(
-                  label: context.strings.proteins,
-                  value: nutrition.proteins,
-                  unit: 'g',
-                  ratio: nutrition.proteins / maxMacro,
-                  color: const Color(0xFF357A5B),
-                  coverage: _coverage(MacroField.proteins),
-                  percent: intakePercents['proteins'],
-                ),
-                _MacroLine(
-                  label: context.strings.carbs,
-                  value: nutrition.carbs,
-                  unit: 'g',
-                  ratio: nutrition.carbs / maxMacro,
-                  color: const Color(0xFFD9A441),
-                  coverage: _coverage(MacroField.carbs),
-                  percent: intakePercents['carbs'],
-                ),
-                if (sugars != null)
-                  _SubLine(
-                    label: 'dont sucres',
-                    value: sugars!,
-                    coverage: _coverage(MacroField.sugars),
-                    percent: intakePercents['sugars'],
-                  ),
-                _MacroLine(
-                  label: context.strings.fats,
-                  value: nutrition.fats,
-                  unit: 'g',
-                  ratio: nutrition.fats / maxMacro,
-                  color: const Color(0xFFB85C45),
-                  coverage: _coverage(MacroField.fats),
-                  percent: intakePercents['fats'],
-                ),
-                if (saturatedFats != null)
-                  _SubLine(
-                    label: 'dont acides gras saturés',
-                    value: saturatedFats!,
-                    coverage: _coverage(MacroField.saturatedFats),
-                    percent: intakePercents['saturatedFats'],
-                  ),
-                const Divider(height: 22),
-                _NutrientLine(
-                  label: context.strings.fiber,
-                  value: nutrition.fiber,
-                  unit: 'g',
-                  coverage: _coverage(MacroField.fiber),
-                  percent: intakePercents['fiber'],
-                ),
-                _NutrientLine(
-                  label: context.strings.salt,
-                  value: nutrition.salt,
-                  unit: 'g',
-                  coverage: _coverage(MacroField.salt),
-                  percent: intakePercents['salt'],
-                ),
-                if (alcoholPerServing > 0)
-                  _NutrientLine(
-                    label: context.strings.alcoholLabel,
-                    value: alcoholPerServing,
-                    unit: 'g',
-                  ),
-              ],
-            ),
-            if (micronutrientsPerServing.isNotEmpty) ...[
-              _MicroSection(
-                title: context.strings.mineralsTitle,
-                entries: _sortedMicros(
-                  micronutrientsPerServing,
-                  where: (tag) => kMineralTags.contains(tag),
-                ),
-                percents: intakePercents,
-              ),
-              _MicroSection(
-                title: context.strings.vitaminsTitle,
-                entries: _sortedMicros(
-                  micronutrientsPerServing,
-                  where: (tag) => kVitaminTags.contains(tag),
-                ),
-                percents: intakePercents,
-              ),
-              _MicroSection(
-                title: context.strings.otherConstituentsTitle,
-                entries: _sortedMicros(
-                  micronutrientsPerServing,
-                  where: (tag) =>
-                      !kMineralTags.contains(tag) &&
-                      !kVitaminTags.contains(tag),
-                ),
-                percents: intakePercents,
-              ),
-            ],
+            ...values,
             ...footer,
           ],
-        ),
-      ),
+        );
+      },
+    );
+    if (!framed) return content;
+    return Card(
+      child: Padding(padding: const EdgeInsets.all(20), child: content),
     );
   }
 
@@ -655,7 +712,7 @@ class NutriScoreBadge extends StatelessWidget {
     final theme = Theme.of(context);
     final r = result;
     return Tooltip(
-      message: note ?? '',
+      message: [?note, context.strings.nutriScoreHint].join('\n\n'),
       child: Row(
         children: [
           Flexible(

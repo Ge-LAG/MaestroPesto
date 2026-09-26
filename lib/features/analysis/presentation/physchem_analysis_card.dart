@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/i18n/app_strings.dart';
+import 'package:maestropesto/app/widgets/info_hint.dart';
 import 'package:maestropesto/core/models/functional_alert.dart';
 import 'package:maestropesto/core/scoring/physchem_estimator.dart';
 import 'package:maestropesto/core/scoring/process_step_parser.dart';
@@ -17,16 +18,28 @@ import 'package:maestropesto/features/functional/presentation/widgets/functional
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
 
 class PhysChemAnalysisCard extends StatelessWidget {
-  const PhysChemAnalysisCard({required this.recipe, super.key});
+  const PhysChemAnalysisCard({
+    required this.recipe,
+    this.embedded = false,
+    this.header,
+    super.key,
+  });
 
   final Recipe recipe;
+
+  /// Vrai dans l'onglet « Procédé » de la fiche : pas de carte propre,
+  /// mélange à gauche et comportements attendus à droite.
+  final bool embedded;
+
+  /// Contenu affiché en tête (ex. bandeau de conseils métier).
+  final Widget? header;
 
   @override
   Widget build(BuildContext context) {
     return RecipeAnalysisBuilder(
       builder: (context, analysis) {
         final s = analysis.physchem;
-        if (s.totalMassG <= 0) return const SizedBox.shrink();
+        if (s.totalMassG <= 0) return header ?? const SizedBox.shrink();
         final strings = context.strings;
         final theme = Theme.of(context);
         final labels = <String, String>{
@@ -46,66 +59,102 @@ class PhysChemAnalysisCard extends StatelessWidget {
         final toCheck = analysis.alerts
             .where((a) => a.severity == FunctionalSeverity.outOfDomain)
             .toList();
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 12),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
+        final note = Text(
+          '${strings.physchemCoverage((s.compositionCoverage * 100).round())}'
+          ' — ${strings.physchemEstimateNote}',
+          style: theme.textTheme.labelSmall?.copyWith(
+            fontStyle: FontStyle.italic,
+          ),
+        );
+        final mix = <Widget>[
+          _Composition(state: s),
+          _Indicators(state: s),
+          _Process(steps: analysis.steps, recipe: recipe),
+        ];
+        final rules = <Widget>[
+          if (warnings.isNotEmpty) ...[
+            _Title(strings.physchemRulesWarnings),
+            for (final a in warnings)
+              FunctionalAlertTile(alert: a, labels: labels),
+          ],
+          if (expected.isNotEmpty) ...[
+            _Title(strings.physchemRulesExpected),
+            for (final a in expected)
+              FunctionalAlertTile(alert: a, labels: labels),
+          ],
+          if (toCheck.isNotEmpty) ...[
+            _Title(strings.physchemRulesToCheck),
+            for (final a in toCheck)
+              FunctionalAlertTile(alert: a, labels: labels),
+          ],
+          if (analysis.alerts.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Text(
+                strings.physchemNoRule,
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+          if (analysis.insights.isNotEmpty) _Insights(items: analysis.insights),
+        ];
+        final body = LayoutBuilder(
+          builder: (context, constraints) {
+            if (embedded && constraints.maxWidth >= 860) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: mix,
+                    ),
+                  ),
+                  const SizedBox(width: 32),
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: rules,
+                    ),
+                  ),
+                ],
+              );
+            }
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.science_outlined, size: 18),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        strings.physchemTitle,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+              children: [...mix, ...rules],
+            );
+          },
+        );
+        final content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ?header,
+            if (!embedded)
+              Row(
+                children: [
+                  const Icon(Icons.science_outlined, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      strings.physchemTitle,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${strings.physchemCoverage((s.compositionCoverage * 100).round())}'
-                  ' — ${strings.physchemEstimateNote}',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    fontStyle: FontStyle.italic,
                   ),
-                ),
-                _Composition(state: s),
-                _Indicators(state: s),
-                _Process(steps: analysis.steps, recipe: recipe),
-                if (warnings.isNotEmpty) ...[
-                  _Title(strings.physchemRulesWarnings),
-                  for (final a in warnings)
-                    FunctionalAlertTile(alert: a, labels: labels),
                 ],
-                if (expected.isNotEmpty) ...[
-                  _Title(strings.physchemRulesExpected),
-                  for (final a in expected)
-                    FunctionalAlertTile(alert: a, labels: labels),
-                ],
-                if (toCheck.isNotEmpty) ...[
-                  _Title(strings.physchemRulesToCheck),
-                  for (final a in toCheck)
-                    FunctionalAlertTile(alert: a, labels: labels),
-                ],
-                if (analysis.alerts.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      strings.physchemNoRule,
-                      style: theme.textTheme.bodySmall,
-                    ),
-                  ),
-                if (analysis.insights.isNotEmpty)
-                  _Insights(items: analysis.insights),
-              ],
-            ),
-          ),
+              ),
+            const SizedBox(height: 4),
+            note,
+            body,
+          ],
+        );
+        if (embedded) return content;
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 12),
+          child: Padding(padding: const EdgeInsets.all(16), child: content),
         );
       },
     );
@@ -181,9 +230,10 @@ class _Composition extends StatelessWidget {
               ],
             ),
           ),
-        Text(
+        LabelWithHint(
           '${strings.physchemDryMatter} : ${_n(state.dryMatterPct, 0)} %'
           '${state.evaporatedG >= 1 ? ' · ≈ ${_n(state.evaporatedG, 0)} g d’eau évaporée à la cuisson' : ''}',
+          strings.dryMatterHint,
           style: theme.textTheme.labelSmall,
         ),
       ],
@@ -199,31 +249,33 @@ class _Indicators extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = context.strings;
-    final items = <(String, String, String?)>[
+    final items = <(String, String, String, String?)>[
       if (state.ph != null)
         (
           strings.physchemPh,
           _n(state.ph!),
-          state.ph! < 4.6
-              ? 'milieu acide (< 4,6) : défavorable aux pathogènes'
-              : null,
+          strings.phHint,
+          strings.phPlain(state.ph!),
         ),
       if (state.aw != null)
         (
           strings.physchemAw,
           _n(state.aw!, 2),
-          state.aw! > 0.86
-              ? 'périssable (> 0,86)'
-              : state.aw! < 0.6
-              ? 'produit sec (< 0,6)'
-              : 'semi-humide',
+          strings.awHint,
+          strings.awPlain(state.aw!),
         ),
       if (state.brix != null && state.sugarPct >= 1)
-        (strings.physchemBrix, '${_n(state.brix!, 0)} %', null),
+        (
+          strings.physchemBrix,
+          '${_n(state.brix!, 0)} %',
+          strings.brixHint,
+          strings.brixPlain(state.brix!),
+        ),
       if (state.oilPhaseFraction != null)
         (
           strings.physchemOilPhase,
           '${_n(state.oilPhaseFraction! * 100, 0)} %',
+          strings.oilPhaseHint,
           null,
         ),
     ];
@@ -237,34 +289,41 @@ class _Indicators extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            for (final (label, value, note) in items)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(label, style: theme.textTheme.labelSmall),
-                    Text(
-                      value,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
+            for (final (label, value, hint, note) in items)
+              ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 120, maxWidth: 220),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      LabelWithHint(
+                        label,
+                        hint,
+                        style: theme.textTheme.labelSmall,
                       ),
-                    ),
-                    if (note != null)
                       Text(
-                        note,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          fontStyle: FontStyle.italic,
+                        value,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
-                  ],
+                      if (note != null)
+                        Text(
+                          note,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
           ],

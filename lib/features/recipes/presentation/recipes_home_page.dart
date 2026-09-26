@@ -215,6 +215,19 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     });
   }
 
+  /// Accord suggéré ajouté depuis l'onglet « Arômes » : l'éditeur
+  /// s'ouvre avec la nouvelle ligne, à doser avant d'enregistrer.
+  Future<void> _addIngredient(Recipe recipe, RecipeIngredient ingredient) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.strings.flavorSuggestionAdded(ingredient.label)),
+      ),
+    );
+    return _editRecipe(
+      recipe.copyWith(ingredients: [...recipe.ingredients, ingredient]),
+    );
+  }
+
   Future<void> _duplicateRecipe(Recipe recipe) async {
     final duplicated = recipe.copyWith(
       id: 'recipe-${DateTime.now().microsecondsSinceEpoch}',
@@ -405,6 +418,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                 onEditRecipe: _editRecipe,
                 onDuplicateRecipe: _duplicateRecipe,
                 onDeleteRecipe: _deleteRecipe,
+                onAddIngredient: _addIngredient,
               );
             }
 
@@ -438,6 +452,8 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                           onEdit: _editRecipe,
                           onDuplicate: _duplicateRecipe,
                           onDelete: _deleteRecipe,
+                          onAddIngredient: (ingredient) =>
+                              _addIngredient(selectedRecipe, ingredient),
                         ),
                 ),
               ],
@@ -466,6 +482,7 @@ class _CompactLayout extends StatelessWidget {
     required this.onEditRecipe,
     required this.onDuplicateRecipe,
     required this.onDeleteRecipe,
+    required this.onAddIngredient,
   });
 
   final AppServices services;
@@ -483,6 +500,8 @@ class _CompactLayout extends StatelessWidget {
   final ValueChanged<Recipe> onEditRecipe;
   final ValueChanged<Recipe> onDuplicateRecipe;
   final ValueChanged<Recipe> onDeleteRecipe;
+  final void Function(Recipe recipe, RecipeIngredient ingredient)
+  onAddIngredient;
 
   @override
   Widget build(BuildContext context) {
@@ -517,6 +536,8 @@ class _CompactLayout extends StatelessWidget {
                   onEdit: onEditRecipe,
                   onDuplicate: onDuplicateRecipe,
                   onDelete: onDeleteRecipe,
+                  onAddIngredient: (ingredient) =>
+                      onAddIngredient(recipe, ingredient),
                 ),
         ),
       ],
