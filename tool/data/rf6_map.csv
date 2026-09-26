@@ -1,0 +1,64 @@
+food_group,method,retn_codes,note
+vegetable,boiled,3775|3005,légumes et verts bouillis à couvert d'eau, égouttés
+vegetable,steamed,3784,légumes à la vapeur
+vegetable,sauteed,3785|3015,légumes et verts sautés
+vegetable,roasted,3771|3001,légumes et verts au four
+vegetable,grilled,3771|3752,légumes au four ; tomates grillées
+vegetable,fried,3780,légumes frits
+vegetable,stewed,3776|3006,légumes bouillis, eau de cuisson consommée
+vegetable,baked,3771|3001,légumes et verts au four
+mushroom,boiled,3775,légumes bouillis égouttés
+mushroom,steamed,3784,légumes à la vapeur
+mushroom,sauteed,3785,légumes sautés
+mushroom,roasted,3771,légumes au four
+mushroom,grilled,3771,légumes au four
+mushroom,fried,3780,légumes frits
+mushroom,stewed,3776,légumes bouillis, eau consommée
+mushroom,baked,3771,légumes au four
+legume,boiled,521,légumineuses cuites 45 à 75 min, égouttées
+legume,stewed,522,légumineuses cuites 45 à 75 min, eau consommée
+legume,steamed,521,légumineuses cuites 45 à 75 min, égouttées
+cereal,boiled,381|431,pâtes et riz cuits égouttés
+cereal,steamed,302,farine ou semoule bouillie ou vapeur
+cereal,stewed,384|432,pâtes et riz, eau de cuisson absorbée
+cereal,baked,301,farine cuite au four
+cereal,roasted,306,farine grillée
+cereal,fried,305,farine sautée
+meat,roasted,601|1254|1004|1954|805,bœuf, porc, agneau, veau et poulet rôtis
+meat,baked,601|1254|1004|1954|805,bœuf, porc, agneau, veau et poulet rôtis
+meat,grilled,602|1251|1001|1951|801,bœuf, porc, agneau, veau et poulet grillés
+meat,fried,604|1252|1952|803,bœuf, porc, veau et poulet frits sans panure
+meat,sauteed,604|1252|1952|803,bœuf, porc, veau et poulet frits sans panure
+meat,boiled,653|1055|2003|855,viandes mijotées, jus non consommé
+meat,steamed,653|1055|2003|855,viandes mijotées, jus non consommé
+meat,stewed,652|1056|2004|856,viandes braisées ou mijotées, jus consommé
+fish,baked,2301|2451,poissons maigres et gras au four
+fish,roasted,2301|2451,poissons maigres et gras au four
+fish,grilled,2305|2455,poissons maigres et gras grillés
+fish,fried,2309|2459,poissons frits sans panure
+fish,sauteed,2309|2459,poissons frits sans panure
+fish,boiled,2401|2551,poissons pochés, jus non consommé
+fish,steamed,2401|2551,poissons pochés, jus non consommé
+fish,stewed,2402|2552,poissons mijotés, jus consommé
+egg,boiled,105,œufs durs
+egg,steamed,107,œufs pochés
+egg,stewed,107,œufs pochés
+egg,fried,103,œufs frits ou brouillés
+egg,sauteed,103,œufs frits ou brouillés
+egg,baked,101,œufs au four
+egg,roasted,101,œufs au four
+dairy,boiled,2151,lait chauffé environ 10 min
+dairy,steamed,2151,lait chauffé environ 10 min
+dairy,sauteed,2151,lait chauffé environ 10 min
+dairy,stewed,2152,lait chauffé environ 30 min
+dairy,baked,1,fromage au four
+dairy,roasted,1,fromage au four
+dairy,grilled,3,fromage grillé
+fruit,baked,151,fruits frais au four
+fruit,roasted,151,fruits frais au four
+fruit,grilled,152,fruits frais grillés
+fruit,sauteed,153,fruits frais sautés
+fruit,fried,153,fruits frais sautés
+fruit,stewed,155,fruits frais cuits en compote
+fruit,boiled,155,fruits frais cuits en compote
+fruit,steamed,155,fruits frais cuits en compote

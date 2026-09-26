@@ -68,12 +68,15 @@ const List<DataSource> kDataSources = [
     id: 'usda_retention',
     name: 'Table of Nutrient Retention Factors, Release 6',
     publisher: 'USDA',
-    version: '2007',
-    license: SourceLicense.publicDomain,
+    version: '2007 (fichier Ag Data Commons)',
+    license: SourceLicense.cc0,
     usage:
-        'Rétention des vitamines et minéraux à la cuisson, quand aucun '
-        'profil cuit mesuré n’existe.',
-    url: 'https://www.ars.usda.gov/',
+        'Rétention des vitamines et minéraux à la cuisson, par groupe '
+        'd’aliments et mode de cuisson (moyenne des catégories USDA '
+        'correspondantes), quand aucun profil cuit mesuré n’existe.',
+    url:
+        'https://catalog.data.gov/dataset/usda-table-of-nutrient-retention-'
+        'factors-release-6-2007',
   ),
   DataSource(
     id: 'bognar',

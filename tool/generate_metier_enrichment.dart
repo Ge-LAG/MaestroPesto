@@ -174,6 +174,12 @@ void main() {
     'MINERALS',
     'K',
   ];
+  // Rétentions mesurées : USDA Table of Nutrient Retention Factors,
+  // Release 6 (2007, CC0), moyenne des catégories retenues par
+  // tool/data/rf6_map.csv ; les rendements restent ceux de la table
+  // curatée (Bognár 2002, ordres de grandeur).
+  final rf6 = _rf6Retentions();
+  var fromRf6 = 0;
   for (final f in factors) {
     final g = f['food_group']!;
     final m = f['method']!;
@@ -182,9 +188,12 @@ void main() {
       failures++;
       continue;
     }
+    final measured = rf6['$g|$m'];
+    if (measured != null) fromRf6++;
     final retention = [
       for (final c in nutrientCols)
-        if (double.parse(f[c]!) != 1) '$c:${f[c]}',
+        if ((measured?.values[c] ?? double.parse(f[c]!)) != 1)
+          '$c:${(measured?.values[c] ?? double.parse(f[c]!)).toStringAsFixed(2)}',
     ].join('|');
     factorOut.writeln(
       [
@@ -195,10 +204,15 @@ void main() {
         f['fat_uptake_g'],
         f['fat_retention'],
         retention,
-        f['confidence'],
+        measured != null ? '0.8' : f['confidence'],
         _cell(
-          'Ordres de grandeur par groupe d\'aliments : USDA Table of '
-          'Nutrient Retention Factors Release 6 (2007) ; Bognár (2002)',
+          measured != null
+              ? 'Rétentions : USDA Table of Nutrient Retention Factors '
+                    'Release 6 (2007, CC0), ${measured.note} (codes '
+                    '${measured.codes}) ; rendement : Bognár (2002), ordre '
+                    'de grandeur'
+              : 'Ordres de grandeur par groupe d\'aliments (estimation '
+                    'MaestroPesto, USDA RF6 et Bognár 2002 comme repères)',
         ),
         _cell(f['note'] ?? ''),
       ].join(','),
@@ -565,6 +579,9 @@ void main() {
     return;
   }
   Directory(_outDir).createSync(recursive: true);
+  stdout.writeln(
+    'Facteurs de procédé : $fromRf6 couples avec rétentions USDA RF6',
+  );
   File('$_outDir/process_factors.csv').writeAsStringSync('$factorOut');
   File('$_outDir/ingredient_culinary.csv').writeAsStringSync('$culinaryOut');
   File('$_outDir/ingredient_functional_components.csv')
@@ -745,6 +762,63 @@ _usdaPortions(Map<String, String> nameToId) {
       densityEvidence: densityEvidence,
       masses: masses,
       massEvidence: massEvidence,
+    );
+  }
+  return out;
+}
+
+/// Rétentions USDA RF6 moyennées par couple (groupe, mode) :
+/// colonne MaestroPesto → facteur (0..1).
+Map<String, ({Map<String, double> values, String codes, String note})>
+_rf6Retentions() {
+  const nutrientColumns = {
+    '401': 'VITC',
+    '404': 'THIAMIN',
+    '405': 'RIBOFLAVINE',
+    '406': 'NIACINE',
+    '415': 'VITB6',
+    '417': 'FOLATES',
+    '418': 'VITB12',
+    '320': 'VITA',
+    '321': 'CAROTENE_B',
+    '410': 'VITB5',
+    '306': 'K',
+  };
+  const minerals = {'301', '303', '304', '305', '309', '312'};
+  final byCode = <String, Map<String, double>>{};
+  for (final r in _records('tool/.cache/usda_retention_rf6.csv')) {
+    final v = double.tryParse(r['Retn_Factor'] ?? '');
+    if (v == null) continue;
+    byCode.putIfAbsent(r['Retn_Code']!, () => {})[r['Nutr_No']!] = v / 100;
+  }
+  final out =
+      <String, ({Map<String, double> values, String codes, String note})>{};
+  for (final m in _records('tool/data/rf6_map.csv')) {
+    final codes = m['retn_codes']!.split('|');
+    final values = <String, double>{};
+    double? avg(Iterable<String> nutrients) {
+      final xs = [
+        for (final c in codes)
+          for (final n in nutrients)
+            if (byCode[c]?[n] != null) byCode[c]![n]!,
+      ];
+      if (xs.isEmpty) return null;
+      return xs.reduce((a, b) => a + b) / xs.length;
+    }
+
+    for (final missing in codes.where((c) => !byCode.containsKey(c))) {
+      throw StateError('rf6_map : code RF6 inconnu $missing');
+    }
+    nutrientColumns.forEach((nutr, column) {
+      final v = avg([nutr]);
+      if (v != null) values[column] = v.clamp(0, 1).toDouble();
+    });
+    final mineral = avg(minerals);
+    if (mineral != null) values['MINERALS'] = mineral.clamp(0, 1).toDouble();
+    out['${m['food_group']}|${m['method']}'] = (
+      values: values,
+      codes: codes.join(', '),
+      note: m['note'] ?? '',
     );
   }
   return out;
