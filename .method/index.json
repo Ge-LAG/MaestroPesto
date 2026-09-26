@@ -635,11 +635,11 @@
       ],
       "kind": "project",
       "status": "active",
-      "sha256": "ce8429aa2c43f084edf771c89f57366079e357946137401166d8707cc0c06eb4",
-      "chars": 3325,
-      "size": 4503,
-      "mtime_ns": 1790434590190432900,
-      "revision": 7,
+      "sha256": "594d445281237001acce47d6f633fa2ae483a5d3fb2772719dbfc9566deda3f4",
+      "chars": 3515,
+      "size": 4708,
+      "mtime_ns": 1790435230539194300,
+      "revision": 8,
       "owner": "Guillaume",
       "reviewed": "",
       "review_by": "",
@@ -656,7 +656,7 @@
       "evidence_digest": "",
       "criteria": [],
       "evidence": [],
-      "body_digest": "dce035fb2ab26cefb8465468a6745eaa0bd57bb95a8dd6251a185a759226b445",
+      "body_digest": "a8d418ce1ebad7aeb9e18bede9d7b19443620b41b5e33658cc6689630ac56441",
       "has_placeholder": false,
       "links": [
         "../assets/method.css",
@@ -669,7 +669,8 @@
         "../work/phase10-parametres.html#phase10-parametres",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
         "../records/phase10-mandat-arbitrages.html#phase10-mandat-arbitrages",
-        "../work/idea-recette-inversee.html#idea-recette-inversee",
+        "../work/phase11-recette-inversee.html#phase11-recette-inversee",
+        "../records/phase11-cadrage.html#phase11-cadrage",
         "../work/idea-ocr-recettes.html#idea-ocr-recettes",
         "../work/phase08-foundations.html#phase08-foundations"
       ],
@@ -2420,6 +2421,55 @@
       ]
     },
     {
+      "id": "phase11-cadrage",
+      "path": "records/phase11-cadrage.html",
+      "title": "Décision : cadrage de la phase 11 (recette à l'envers)",
+      "summary": "Deux modes de conception (Cuisine cohérente par défaut, Pure Innovation), point de départ, priorités, variantes, étapes et contraintes de la conception par objectifs.",
+      "tags": [
+        "decision",
+        "phase-11",
+        "conception-inverse",
+        "modes",
+        "pure-innovation",
+        "garde-fous"
+      ],
+      "kind": "decision",
+      "status": "review",
+      "sha256": "33d185c26bb8f73bd9123dc5ebaae2e47e7baafb0f156d2726b27bd0a903b250",
+      "chars": 3347,
+      "size": 4983,
+      "mtime_ns": 1790435274670831200,
+      "revision": 4,
+      "owner": "Guillaume",
+      "reviewed": "2026-09-26",
+      "review_by": "2026-10-31",
+      "review_trigger": "Réponse du PO sur D2 à D7, démarrage du lot C (texte de l'avertissement Pure Innovation) ou changement du concept",
+      "review_digest": "35f0f1ea09f5ee1e98a571d4d4d212eacf60eb69d016fe763aef9b5ee70bdbfa",
+      "requires": [],
+      "supersedes": [],
+      "components": [],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [],
+      "evidence": [],
+      "body_digest": "34c3e07069c542593976c3b3f779665c62031d0fcd3fdf1d3ea8db891f69a367",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "../work/idea-recette-inversee.html#idea-recette-inversee",
+        "../work/phase11-recette-inversee.html#phase11-recette-inversee",
+        "honest-data-display.html#honest-data-display"
+      ],
+      "anchors": [
+        "phase11-cadrage"
+      ]
+    },
+    {
       "id": "start",
       "path": "START.html",
       "title": "Start here",
@@ -2934,57 +2984,6 @@
       ],
       "anchors": [
         "idea-ocr-recettes"
-      ]
-    },
-    {
-      "id": "idea-recette-inversee",
-      "path": "work/idea-recette-inversee.html",
-      "title": "Idée : recette à l'envers (conception par objectifs)",
-      "summary": "L'utilisateur fixe d'abord des objectifs physico-chimiques/procédé, aromatiques et nutritionnels, avec un ordre de priorité réglable ; l'application compose ensuite les ingrédients, quantités et procédé.",
-      "tags": [
-        "backlog",
-        "idee",
-        "produit",
-        "phase-11",
-        "conception-inverse",
-        "optimisation",
-        "nutrition",
-        "flavor",
-        "physchem"
-      ],
-      "kind": "work",
-      "status": "draft",
-      "sha256": "451dda11a2da0799b81f62f9cc487e0f47bff19c79a4ba67ac4c9bfa000b75dd",
-      "chars": 5377,
-      "size": 6964,
-      "mtime_ns": 1790434569090110700,
-      "revision": 2,
-      "owner": "Guillaume",
-      "reviewed": "",
-      "review_by": "",
-      "review_trigger": "",
-      "review_digest": "",
-      "requires": [],
-      "supersedes": [],
-      "components": [],
-      "applies_to": [],
-      "paths": [],
-      "watch": [],
-      "candidate": "",
-      "environment": "",
-      "evidence_digest": "",
-      "criteria": [],
-      "evidence": [],
-      "body_digest": "17a08263340521d192cf2ef13fa8574212b80042da4d683da0cb4da91af55621",
-      "has_placeholder": false,
-      "links": [
-        "../assets/method.css",
-        "../index.html",
-        "../records/honest-data-display.html#honest-data-display",
-        "../records/delivery-gate.html#delivery-gate"
-      ],
-      "anchors": [
-        "idea-recette-inversee"
       ]
     },
     {
@@ -3854,6 +3853,99 @@
       ],
       "anchors": [
         "phase10-ux-refonte"
+      ]
+    },
+    {
+      "id": "phase11-recette-inversee",
+      "path": "work/phase11-recette-inversee.html",
+      "title": "Phase 11 : recette à l'envers (conception par objectifs)",
+      "summary": "Composer automatiquement une recette à partir d'objectifs procédé/physico-chimie, arômes et nutrition à priorité réglable, en mode Cuisine cohérente ou Pure Innovation.",
+      "tags": [
+        "phase-11",
+        "conception-inverse",
+        "optimisation",
+        "nutrition",
+        "flavor",
+        "physchem",
+        "pure-innovation",
+        "ready"
+      ],
+      "kind": "work",
+      "status": "ready",
+      "sha256": "7342e1fb5eeacf4ee7e4edd6a4396378a5a1c7096e9fd408e911ae60573b0672",
+      "chars": 7062,
+      "size": 8961,
+      "mtime_ns": 1790435228852125900,
+      "revision": 2,
+      "owner": "Guillaume",
+      "reviewed": "",
+      "review_by": "",
+      "review_trigger": "",
+      "review_digest": "",
+      "requires": [
+        "phase11-cadrage"
+      ],
+      "supersedes": [],
+      "components": [
+        "design-engine",
+        "scoring",
+        "recipes",
+        "analysis",
+        "ui"
+      ],
+      "applies_to": [],
+      "paths": [],
+      "watch": [],
+      "candidate": "",
+      "environment": "",
+      "evidence_digest": "",
+      "criteria": [
+        {
+          "id": "R1",
+          "text": "Aller-retour (mode cohérent) : pour chacune des six recettes de démonstration couvertes, en prenant ses propriétés mesurées comme objectifs, au moins une variante atteint chaque objectif vérifiable à ± 10 %, avec une harmonie au moins égale à celle de la recette d'origine."
+        },
+        {
+          "id": "R2",
+          "text": "Pure Innovation : sur une même demande, l'écart pondéré aux objectifs de la meilleure variante est inférieur ou égal à celui du mode cohérent."
+        },
+        {
+          "id": "R3",
+          "text": "Contraintes dures respectées dans les deux modes : aucun ingrédient exclu, aucun allergène exclu, ingrédients imposés présents, 12 ingrédients au plus, masses positives."
+        },
+        {
+          "id": "R4",
+          "text": "Honnêteté : aucune valeur n'est inventée ; un critère dont la couverture est insuffisante est marqué « non vérifiable » ; les accords prédits sont distingués des accords documentés ; les alertes de sécurité alimentaire sont affichées dans les deux modes."
+        },
+        {
+          "id": "R5",
+          "text": "Déterminisme et diversité : une même demande donne les mêmes trois variantes ; deux variantes partagent au plus 60 % de leurs ingrédients."
+        },
+        {
+          "id": "R6",
+          "text": "Performance : une demande se résout en moins de 2 s sur la machine PO (build release), sans bloquer l'interface."
+        },
+        {
+          "id": "R7",
+          "text": "Interface : l'activation de Pure Innovation affiche l'avertissement à confirmer, puis le bandeau et l'étiquette des variantes ; l'assistant et les résultats fonctionnent de 360 à 1400 px, en clair et en sombre ; « Ouvrir dans l'éditeur » crée un brouillon non enregistré."
+        },
+        {
+          "id": "R8",
+          "text": "Qualité : flutter analyze 0, dart format propre, flutter test vert, build release lancé de bout en bout ; acceptance PO via un record dédié."
+        }
+      ],
+      "evidence": [],
+      "body_digest": "08059ee035e6387e1b5ee54ae190877fa5d0bcbf4cd5d18335d59c6bc3797c6d",
+      "has_placeholder": false,
+      "links": [
+        "../assets/method.css",
+        "../index.html",
+        "idea-recette-inversee.html#idea-recette-inversee",
+        "../records/phase11-cadrage.html#phase11-cadrage",
+        "../records/phase11-cadrage.html#phase11-cadrage",
+        "../records/delivery-gate.html#delivery-gate"
+      ],
+      "anchors": [
+        "phase11-recette-inversee"
       ]
     }
   ]
