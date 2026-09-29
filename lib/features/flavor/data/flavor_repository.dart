@@ -14,8 +14,6 @@
 // tests) sert les enregistrements `flavor_compatibility` tels quels,
 // comme en Phase 09.
 
-import 'dart:math' as math;
-
 import 'package:meta/meta.dart';
 
 import '../../../core/database/app_database.dart';
@@ -24,6 +22,7 @@ import '../../../core/models/flavor_match.dart';
 import '../../../core/models/flavor_profile.dart';
 import '../../../core/scoring/flavor_pairing_engine.dart';
 import '../../../core/scoring/flavor_scorer.dart';
+import '../../../core/scoring/recipe_flavor_analyzer.dart';
 
 /// Repository pour la Phase 3 (flavour / associations aromatiques).
 class FlavorRepository {
@@ -288,59 +287,27 @@ class FlavorRepository {
     if (!usesProfiles) return null;
     final ids = ingredientIds.toSet().where(_profiles!.containsKey).toList();
     if (ids.length < 2) return null;
-    final pairs = <String, FlavorMatch>{};
-    var weighted = 0.0;
-    var weightSum = 0.0;
-    for (var i = 0; i < ids.length; i++) {
-      for (var j = i + 1; j < ids.length; j++) {
-        final m = _enginePair(ids[i], ids[j])!;
-        pairs[RecipeFlavorAnalysis.keyFor(ids[i], ids[j])] = m;
-        final w = (m.confidence ?? 0.5) * _pairWeight(ids[i], ids[j], weights);
-        weighted += m.overallScore * w;
-        weightSum += w;
-      }
-    }
-    final combination = _cache?[_keyFor(ids)];
-    final profiles = [for (final id in ids) _profiles![id]!];
-    final bridgeMap = FlavorPairingEngine.bridges(profiles);
-    final bridges = [
-      for (final e in bridgeMap.entries)
-        FlavorBridge(descriptor: e.key, ingredientIds: e.value),
-    ]..sort((a, b) => b.ingredientIds.length.compareTo(a.ingredientIds.length));
-    // Arômes dominants : intensité × part de masse (défaut uniforme).
-    final aroma = <String, double>{};
-    final total = ids.fold<double>(0, (s, id) => s + (weights[id] ?? 1));
-    for (final p in profiles) {
-      final share = (weights[p.ingredientId] ?? 1) / total;
-      // La puissance aromatique compense une faible masse (épices).
-      final power = math.max(share, p.intensity * 0.25);
-      p.descriptors.forEach((d, x) {
-        if (SensoryOntology.isTaste(d)) return;
-        aroma[d] = (aroma[d] ?? 0) + x * power;
-      });
-    }
-    final dominant = aroma.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    return RecipeFlavorAnalysis(
-      ingredientIds: ids,
-      pairs: pairs,
-      harmony:
-          combination?.overallScore ??
-          (weightSum == 0 ? 0 : weighted / weightSum),
-      combination: combination,
-      bridges: bridges,
-      tasteProfile: FlavorPairingEngine.tasteProfile(profiles, weights),
-      dominantAromas: dominant.take(6).toList(),
+    return RecipeFlavorAnalyzer.analyze(
+      ids: ids,
+      profileOf: (id) => _profiles![id]!,
+      pair: (a, b) => _enginePair(a, b)!,
+      combination: _cache?[_keyFor(ids)],
+      weights: weights,
     );
   }
 
-  static double _pairWeight(String a, String b, Map<String, double> weights) {
-    if (weights.isEmpty) return 1;
-    // Racine du produit des masses : une paire d'ingrédients mineurs
-    // pèse moins, sans être ignorée.
-    final wa = weights[a] ?? 1;
-    final wb = weights[b] ?? 1;
-    return math.sqrt(math.max(wa, 1) * math.max(wb, 1));
+  /// Données chargées (profils, soutiens empiriques, combinaisons n-aires
+  /// observées, noms) pour un calcul hors base (moteur de composition).
+  Future<FlavorSnapshot> snapshot() async {
+    await _ensureLoaded();
+    return FlavorSnapshot(
+      profiles: Map.unmodifiable(_profiles ?? const {}),
+      empirical: Map.unmodifiable(_empirical),
+      combinations: {
+        for (final e in (_cache ?? const <String, FlavorMatch>{}).entries)
+          if (e.key.split('|').length > 2) e.key: e.value,
+      },
+    );
   }
 
   /// Ingrédients du référentiel qui s'accordent le mieux avec la
@@ -446,4 +413,22 @@ class FlavorRepository {
     );
     return (ids: ids, match: match);
   }
+}
+
+/// Instantané des données aromatiques (pur, transférable vers un
+/// isolate). Clés des soutiens et combinaisons : identifiants triés
+/// joints par `|`.
+class FlavorSnapshot {
+  const FlavorSnapshot({
+    required this.profiles,
+    required this.empirical,
+    required this.combinations,
+  });
+
+  final Map<String, FlavorProfile> profiles;
+  final Map<String, EmpiricalPairing> empirical;
+  final Map<String, FlavorMatch> combinations;
+
+  static String keyFor(List<String> ids) =>
+      (List<String>.of(ids)..sort()).join('|');
 }

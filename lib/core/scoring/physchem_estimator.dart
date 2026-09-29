@@ -257,9 +257,14 @@ abstract final class PhysChemEstimator {
   }
 
   /// Estime l'état du mélange.
+  ///
+  /// [detailed] = false (moteur de composition) : composition, Brix, aw,
+  /// pH et évaporation identiques, sans le détail par ligne, composant
+  /// et étiquette (règles Phase 4 et notes expertes non évaluables).
   static PhysChemState estimate(
     List<MixLine> lines, {
     List<ParsedStep> steps = const <ParsedStep>[],
+    bool detailed = true,
   }) {
     var total = 0.0;
     var known = 0.0;
@@ -285,10 +290,14 @@ abstract final class PhysChemEstimator {
       final g = line.grams;
       if (g <= 0) continue;
       total += g;
-      lineGrams[line.index] = g;
-      if (line.ingredientId != null) lineIds[line.index] = line.ingredientId!;
-      for (final tag in line.tags) {
-        tags.putIfAbsent(tag, () => []).add(line.index);
+      if (detailed) {
+        lineGrams[line.index] = g;
+        if (line.ingredientId != null) {
+          lineIds[line.index] = line.ingredientId!;
+        }
+        for (final tag in line.tags) {
+          tags.putIfAbsent(tag, () => []).add(line.index);
+        }
       }
       final p = line.profile;
       final f = g / 100;
@@ -319,10 +328,12 @@ abstract final class PhysChemEstimator {
         monosaccharides += glu * f;
       }
       if (line.isLiquidOil) oil += (p?.fats ?? 100) * f;
-      line.components.forEach((cid, per100) {
-        components[cid] = (components[cid] ?? 0) + per100 * f;
-        sources.putIfAbsent(cid, () => []).add(line.index);
-      });
+      if (detailed) {
+        line.components.forEach((cid, per100) {
+          components[cid] = (components[cid] ?? 0) + per100 * f;
+          sources.putIfAbsent(cid, () => []).add(line.index);
+        });
+      }
     }
 
     // Évaporation (Phase 10, retour du test visuel : une confiture

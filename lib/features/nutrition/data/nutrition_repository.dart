@@ -167,6 +167,42 @@ class NutritionRepository {
     return aggregation.withSources(sorted);
   }
 
+  /// Phase 11 — profils de TOUS les ingrédients en une lecture (moteur
+  /// de composition) : profil de l'état « cru » (même sélection que
+  /// [forIngredient]) et profils cuits mesurés par mode de cuisson (même
+  /// préférence que [aggregateForRecipe]). Un ingrédient sans record a un
+  /// profil vide.
+  Future<Map<String, IngredientNutritionProfiles>> loadAllProfiles() async {
+    final byIngredient = <String, List<NutritionRecord>>{};
+    for (final r in await _db.select(_db.nutritionRecords).get()) {
+      byIngredient.putIfAbsent(r.ingredientId, () => []).add(r);
+    }
+    final out = <String, IngredientNutritionProfiles>{};
+    for (final i in await _db.select(_db.ingredients).get()) {
+      final all = byIngredient[i.ingredientId] ?? const <NutritionRecord>[];
+      final raw = selectState(all, 'raw');
+      final states = <String, List<NutritionRecord>>{};
+      for (final r in all) {
+        states.putIfAbsent(r.ingredientStateId ?? 'raw', () => []).add(r);
+      }
+      final cooked = <CookingMethod, NutritionProfile>{};
+      for (final method in CookingMethod.values) {
+        for (final s in preferredStates(method)) {
+          final recs = states[s];
+          if (recs != null && recs.isNotEmpty) {
+            cooked[method] = _aggregate(recs);
+            break;
+          }
+        }
+      }
+      out[i.ingredientId] = IngredientNutritionProfiles(
+        raw: raw.isEmpty ? NutritionProfile.empty : _aggregate(raw),
+        cooked: cooked,
+      );
+    }
+    return out;
+  }
+
   /// États Ciqual acceptés pour un mode de cuisson, par préférence.
   static List<String> preferredStates(CookingMethod method) => switch (method) {
     CookingMethod.raw => const [],
@@ -678,4 +714,15 @@ class NutritionRepository {
       _ => 'mg',
     };
   }
+}
+
+/// Profils d'un ingrédient pour un calcul hors base (Phase 11).
+class IngredientNutritionProfiles {
+  const IngredientNutritionProfiles({required this.raw, required this.cooked});
+
+  /// Profil de l'état cru (vide sans record).
+  final NutritionProfile raw;
+
+  /// Profils cuits mesurés (variantes Ciqual) par mode de cuisson.
+  final Map<CookingMethod, NutritionProfile> cooked;
 }

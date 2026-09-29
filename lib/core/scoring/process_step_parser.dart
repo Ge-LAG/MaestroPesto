@@ -348,8 +348,7 @@ abstract final class ProcessStepParser {
     final seen = <String>{};
     // « Préchauffer le four » ne cuit rien : pas d'opération.
     final preheatOnly =
-        RegExp(r'pr[ée]chauff').hasMatch(lower) &&
-        !RegExp(r'enfourn|puis|ensuite|cuire').hasMatch(lower);
+        _preheat.hasMatch(lower) && !_preheatThen.hasMatch(lower);
     if (!preheatOnly) {
       for (final (pattern, op) in _lexicon) {
         if (pattern.hasMatch(lower) && seen.add(op.labelFr)) ops.add(op);
@@ -397,7 +396,7 @@ abstract final class ProcessStepParser {
         ingredientLabels: ingredientLabels,
         ovenTemperatureC: oven,
       );
-      if (RegExp(r'pr[ée]chauff').hasMatch(steps[i].toLowerCase()) &&
+      if (_preheat.hasMatch(steps[i].toLowerCase()) &&
           step.temperatureC != null) {
         oven = step.temperatureC;
       }
@@ -444,12 +443,8 @@ abstract final class ProcessStepParser {
     final text = _normalize(lower);
     final out = <int>[];
     for (var i = 0; i < labels.length; i++) {
-      final words = _normalize(labels[i].toLowerCase())
-          .split(RegExp(r'[^a-z0-9]+'))
-          .where((w) => w.length >= 4 && !_stop.contains(w));
-      for (final w in words) {
-        final stem = w.length > 5 ? w.substring(0, w.length - 1) : w;
-        if (RegExp('\\b$stem').hasMatch(text)) {
+      for (final pattern in _labelPatterns(labels[i])) {
+        if (pattern.hasMatch(text)) {
           out.add(i);
           break;
         }
@@ -457,6 +452,32 @@ abstract final class ProcessStepParser {
     }
     return out;
   }
+
+  /// Vrai si l'étape [text] cite l'ingrédient [label] (même règle que
+  /// les mentions de [parse]).
+  static bool mentionsLabel(String text, String label) {
+    final normalized = _normalize(text.toLowerCase());
+    for (final pattern in _labelPatterns(label)) {
+      if (pattern.hasMatch(normalized)) return true;
+    }
+    return false;
+  }
+
+  /// Motifs des mots significatifs d'un libellé (radical en début de
+  /// mot), compilés une fois par libellé : le moteur de composition
+  /// analyse les étapes de milliers de compositions.
+  static final Map<String, List<RegExp>> _labelPatternCache = {};
+
+  static List<RegExp> _labelPatterns(String label) =>
+      _labelPatternCache[label] ??= [
+        for (final w in _normalize(label.toLowerCase()).split(_nonWord))
+          if (w.length >= 4 && !_stop.contains(w))
+            RegExp('\\b${w.length > 5 ? w.substring(0, w.length - 1) : w}'),
+      ];
+
+  static final RegExp _preheat = RegExp(r'pr[ée]chauff');
+  static final RegExp _preheatThen = RegExp(r'enfourn|puis|ensuite|cuire');
+  static final RegExp _nonWord = RegExp(r'[^a-z0-9]+');
 
   static const Set<String> _stop = {
     'crue',
@@ -484,10 +505,16 @@ abstract final class ProcessStepParser {
 
   static String _normalize(String s) => s
       .replaceAll('œ', 'oe')
-      .replaceAll(RegExp(r'[éèêë]'), 'e')
-      .replaceAll(RegExp(r'[àâä]'), 'a')
-      .replaceAll(RegExp(r'[ùûü]'), 'u')
-      .replaceAll(RegExp(r'[ôö]'), 'o')
-      .replaceAll(RegExp(r'[ïî]'), 'i')
+      .replaceAll(_accentE, 'e')
+      .replaceAll(_accentA, 'a')
+      .replaceAll(_accentU, 'u')
+      .replaceAll(_accentO, 'o')
+      .replaceAll(_accentI, 'i')
       .replaceAll('ç', 'c');
+
+  static final RegExp _accentE = RegExp(r'[éèêë]');
+  static final RegExp _accentA = RegExp(r'[àâä]');
+  static final RegExp _accentU = RegExp(r'[ùûü]');
+  static final RegExp _accentO = RegExp(r'[ôö]');
+  static final RegExp _accentI = RegExp(r'[ïî]');
 }

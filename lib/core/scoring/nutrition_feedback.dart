@@ -249,20 +249,23 @@ abstract final class NutritionFeedbackEngine {
     );
   }
 
-  /// Feedback complet d'une agrégation. [fvlFor] classe chaque
-  /// ingrédient ; [categoryFor] renvoie sa catégorie de niveau 1 et 2
-  /// (boisson, matière grasse, fromage, viande rouge…).
-  static NutritionFeedback evaluate(
-    NutritionAggregation aggregation, {
+  /// Nutri-Score d'une recette : catégorie dominante (parts massiques
+  /// crues des lignes), puis score 2023 sur 100 g de plat après procédé
+  /// quand la catégorie est « générale » et la couverture suffisante.
+  /// Partagé par [evaluate] et le moteur de composition.
+  static ({NutriScoreCategory category, NutriScoreResult? score, String note})
+  nutriScoreFor({
+    required NutritionProfile? per100g,
+    required bool hasData,
+    required Map<MacroField, double> coverage,
+    required Iterable<({String? ingredientId, double? rawGrams})> lines,
     required FvlClass Function(String ingredientId) fvlFor,
     required ({String level1, String level2, String name}) Function(
       String ingredientId,
     )
     categoryFor,
   }) {
-    final per100 = aggregation.profilePer100g;
-    final serving = aggregation.profilePerServing;
-    final coverage = aggregation.nutrientCoverage;
+    final per100 = per100g;
     double cov(MacroField f) => coverage[f] ?? 0;
 
     // Parts massiques par famille (masse crue).
@@ -271,10 +274,9 @@ abstract final class NutritionFeedbackEngine {
     var beverage = 0.0;
     var fatOil = 0.0;
     var cheese = 0.0;
-    final redMeatByLine = <double>[];
     var largest = 0.0;
     var largestIsRedMeat = false;
-    for (final c in aggregation.contributions) {
+    for (final c in lines) {
       final g = c.rawGrams;
       final id = c.ingredientId;
       if (g == null || g <= 0) continue;
@@ -287,11 +289,14 @@ abstract final class NutritionFeedbackEngine {
         fatOil += g;
       }
       final isCheese =
-          cat.level2 == 'produit laitier' && _cheese.hasMatch(cat.name);
+          cat.level2 == 'produit laitier' &&
+          (_cheeseNames[cat.name] ??= _cheese.hasMatch(cat.name));
       if (isCheese) cheese += g;
       final isRedMeat =
-          cat.level2 == 'viande' && _redMeat.hasMatch(cat.name.toLowerCase());
-      if (isRedMeat) redMeatByLine.add(g);
+          cat.level2 == 'viande' &&
+          (_redMeatNames[cat.name] ??= _redMeat.hasMatch(
+            cat.name.toLowerCase(),
+          ));
       if (g > largest) {
         largest = g;
         largestIsRedMeat = isRedMeat;
@@ -319,7 +324,7 @@ abstract final class NutritionFeedbackEngine {
       MacroField.fiber,
     ];
     final minCov = keyFields.map(cov).fold<double>(1, math.min);
-    if (per100 == null || !aggregation.hasData) {
+    if (per100 == null || !hasData) {
       note = 'Nutri-Score non calculé : aucune donnée nutritionnelle.';
     } else if (category != NutriScoreCategory.general) {
       note = switch (category) {
@@ -351,6 +356,38 @@ abstract final class NutritionFeedbackEngine {
           'des ingrédients.'
           '${minCov < minCoverage ? ' Données incomplètes pour certains ingrédients.' : ''}';
     }
+    return (category: category, score: score, note: note);
+  }
+
+  /// Feedback complet d'une agrégation. [fvlFor] classe chaque
+  /// ingrédient ; [categoryFor] renvoie sa catégorie de niveau 1 et 2
+  /// (boisson, matière grasse, fromage, viande rouge…).
+  static NutritionFeedback evaluate(
+    NutritionAggregation aggregation, {
+    required FvlClass Function(String ingredientId) fvlFor,
+    required ({String level1, String level2, String name}) Function(
+      String ingredientId,
+    )
+    categoryFor,
+  }) {
+    final per100 = aggregation.profilePer100g;
+    final serving = aggregation.profilePerServing;
+    final coverage = aggregation.nutrientCoverage;
+    double cov(MacroField f) => coverage[f] ?? 0;
+    final nutri = nutriScoreFor(
+      per100g: per100,
+      hasData: aggregation.hasData,
+      coverage: coverage,
+      lines: [
+        for (final c in aggregation.contributions)
+          (ingredientId: c.ingredientId, rawGrams: c.rawGrams),
+      ],
+      fvlFor: fvlFor,
+      categoryFor: categoryFor,
+    );
+    final category = nutri.category;
+    final score = nutri.score;
+    final note = nutri.note;
 
     // % des apports de référence par portion.
     ReferenceIntakeLine line(
@@ -476,6 +513,10 @@ abstract final class NutritionFeedbackEngine {
       dishMassG: aggregation.cookedMassG,
     );
   }
+
+  /// Classement mémorisé par nom (évaluations répétées).
+  static final Map<String, bool> _cheeseNames = {};
+  static final Map<String, bool> _redMeatNames = {};
 
   static final RegExp _cheese = RegExp(
     r'fromage|mozzarella|ricotta|mascarpone|chèvre|feta|parmigiano|pecorino|'
