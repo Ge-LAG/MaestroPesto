@@ -3,6 +3,8 @@ import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/core/database/database_bootstrap.dart';
 import 'package:maestropesto/features/analysis/data/metier_reference.dart';
 import 'package:maestropesto/features/analysis/data/recipe_analysis_service.dart';
+import 'package:maestropesto/features/design/data/design_repository.dart';
+import 'package:maestropesto/features/design/presentation/design_wizard_page.dart';
 import 'package:maestropesto/features/recipes/data/demo_recipes.dart';
 import 'package:maestropesto/features/recipes/data/recipes_repository.dart';
 import 'package:maestropesto/features/recipes/domain/recipe.dart';
@@ -206,6 +208,60 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
     });
   }
 
+  /// Phase 11 — « Concevoir par objectifs » : la proposition retenue
+  /// s'ouvre dans l'éditeur ; elle n'est enregistrée que si
+  /// l'utilisateur valide.
+  Future<void> _designRecipe() async {
+    final draft = await showDesignWizard(context, db: widget.services.db);
+    if (draft == null || !mounted) return;
+    final recipe = await showRecipeFormDialog(
+      context: context,
+      title: context.strings.designDraftTitle,
+      recipe: draft,
+      db: widget.services.db,
+    );
+    if (recipe == null) return;
+    await _persist(recipe);
+    if (!mounted) return;
+    setState(() {
+      _recipes.insert(0, recipe);
+      _selectedRecipeId = recipe.id;
+      _selectedTags.clear();
+      _query = '';
+    });
+  }
+
+  /// Phase 11 (lot D) — relance la composition d'une recette composée
+  /// par objectifs, ou en modifie les objectifs ; la nouvelle
+  /// proposition remplace la recette seulement si l'utilisateur
+  /// l'enregistre dans l'éditeur (titre, photos et tags conservés).
+  Future<void> _redesignRecipe(Recipe recipe, {required bool adjust}) async {
+    final brief = recipe.designBrief;
+    if (brief == null) return;
+    final current = brief.copyWith(servings: recipe.servings);
+    final draft = adjust
+        ? await showDesignWizard(
+            context,
+            db: widget.services.db,
+            initial: current,
+            recipeId: recipe.id,
+          )
+        : await regenerateDesign(
+            context,
+            db: widget.services.db,
+            brief: current,
+            recipeId: recipe.id,
+          );
+    if (draft == null || !mounted) return;
+    await _editRecipe(
+      draft.copyWith(
+        title: recipe.title,
+        tags: recipe.tags,
+        images: recipe.images,
+      ),
+    );
+  }
+
   Future<void> _editRecipe(Recipe recipe) async {
     final edited = await showRecipeFormDialog(
       context: context,
@@ -347,6 +403,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
       if (!allSkipped) {
         // Données modifiées : caches de référence et analyses à refaire.
         MetierReference.invalidate(widget.services.db);
+        DesignRepository.invalidate(widget.services.db);
       }
       setState(() {
         _importStatus.value = _importStatus.value.copyWith(
@@ -438,6 +495,8 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
             onTagsChanged: _setSelectedTags,
             onClearFilters: _clearFilters,
             onCreateRecipe: _createRecipe,
+            onDesignRecipe: _designRecipe,
+            onRedesignRecipe: _redesignRecipe,
             onEditRecipe: _editRecipe,
             onDuplicateRecipe: _duplicateRecipe,
             onDeleteRecipe: _deleteRecipe,
@@ -463,6 +522,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                 onTagsChanged: _setSelectedTags,
                 onClearFilters: _clearFilters,
                 onCreateRecipe: _createRecipe,
+                onDesignRecipe: _designRecipe,
                 onOpenSettings: _openSettings,
                 settingsBadge: settingsBadge,
               ),
@@ -470,7 +530,10 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
             const VerticalDivider(width: 1),
             Expanded(
               child: selectedRecipe == null
-                  ? EmptyRecipeState(onCreateRecipe: _createRecipe)
+                  ? EmptyRecipeState(
+                      onCreateRecipe: _createRecipe,
+                      onDesignRecipe: _designRecipe,
+                    )
                   : RecipeDetailView(
                       key: ValueKey('${selectedRecipe.id}@$_dataVersion'),
                       recipe: selectedRecipe,
@@ -481,6 +544,7 @@ class _RecipesHomePageState extends State<RecipesHomePage> {
                       onDelete: _deleteRecipe,
                       onAddIngredient: (ingredient) =>
                           _addIngredient(selectedRecipe, ingredient),
+                      onRedesign: _redesignRecipe,
                     ),
             ),
           ],
@@ -504,6 +568,8 @@ class _CompactLayout extends StatelessWidget {
     required this.onTagsChanged,
     required this.onClearFilters,
     required this.onCreateRecipe,
+    required this.onDesignRecipe,
+    required this.onRedesignRecipe,
     required this.onEditRecipe,
     required this.onDuplicateRecipe,
     required this.onDeleteRecipe,
@@ -524,6 +590,8 @@ class _CompactLayout extends StatelessWidget {
   final ValueChanged<Set<String>> onTagsChanged;
   final VoidCallback onClearFilters;
   final VoidCallback onCreateRecipe;
+  final VoidCallback onDesignRecipe;
+  final void Function(Recipe recipe, {required bool adjust}) onRedesignRecipe;
   final ValueChanged<Recipe> onEditRecipe;
   final ValueChanged<Recipe> onDuplicateRecipe;
   final ValueChanged<Recipe> onDeleteRecipe;
@@ -550,6 +618,7 @@ class _CompactLayout extends StatelessWidget {
             onTagsChanged: onTagsChanged,
             onClearFilters: onClearFilters,
             onCreateRecipe: onCreateRecipe,
+            onDesignRecipe: onDesignRecipe,
             compact: true,
             onOpenSettings: onOpenSettings,
             settingsBadge: settingsBadge,
@@ -557,7 +626,10 @@ class _CompactLayout extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: recipe == null
-              ? EmptyRecipeState(onCreateRecipe: onCreateRecipe)
+              ? EmptyRecipeState(
+                  onCreateRecipe: onCreateRecipe,
+                  onDesignRecipe: onDesignRecipe,
+                )
               : RecipeDetailView(
                   key: ValueKey('${recipe.id}@$dataVersion'),
                   recipe: recipe,
@@ -569,6 +641,7 @@ class _CompactLayout extends StatelessWidget {
                   onDelete: onDeleteRecipe,
                   onAddIngredient: (ingredient) =>
                       onAddIngredient(recipe, ingredient),
+                  onRedesign: onRedesignRecipe,
                 ),
         ),
       ],
@@ -577,9 +650,14 @@ class _CompactLayout extends StatelessWidget {
 }
 
 class EmptyRecipeState extends StatelessWidget {
-  const EmptyRecipeState({required this.onCreateRecipe, super.key});
+  const EmptyRecipeState({
+    required this.onCreateRecipe,
+    this.onDesignRecipe,
+    super.key,
+  });
 
   final VoidCallback onCreateRecipe;
+  final VoidCallback? onDesignRecipe;
 
   @override
   Widget build(BuildContext context) {
@@ -616,6 +694,14 @@ class EmptyRecipeState extends StatelessWidget {
                     icon: const Icon(Icons.add),
                     label: Text(context.strings.newRecipe),
                   ),
+                  if (onDesignRecipe != null) ...[
+                    const SizedBox(height: 8),
+                    OutlinedButton.icon(
+                      onPressed: onDesignRecipe,
+                      icon: const Icon(Icons.auto_awesome),
+                      label: Text(context.strings.designRecipe),
+                    ),
+                  ],
                 ],
               ),
             ),

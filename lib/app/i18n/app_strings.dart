@@ -440,6 +440,128 @@ class AppStrings {
   String get settingsCopyPath => 'Copier le chemin';
   String get settingsPathCopied => 'Chemin copié.';
   String get settingsMetierAttention => 'Bases métier à importer';
+
+  // Phase 11 — recette à l'envers (conception par objectifs).
+  String get designRecipe => 'Concevoir par objectifs';
+  String get designRecipeHint =>
+      'Décrire le plat voulu : l\'application compose trois recettes '
+      'qui s\'en approchent.';
+  String get newRecipeHint => 'Saisir une recette ingrédient par ingrédient.';
+  String get designTitle => 'Concevoir par objectifs';
+  String get designLoading => 'Préparation des données de conception…';
+  String get designDataMissing =>
+      'Les bases métier ne sont pas encore importées : la conception par '
+      'objectifs sera disponible à la fin de l\'import (Paramètres).';
+  String get designStepFrame => 'Cadre';
+  String get designStepTargets => 'Objectifs';
+  String get designStepPriorities => 'Priorités';
+  String get designStepMode => 'Mode';
+  String designStepOf(int step, int total) => 'Étape $step sur $total';
+  String get designNext => 'Suivant';
+  String get designBack => 'Retour';
+  String get designCompose => 'Composer les recettes';
+  String get designComposing => 'Composition en cours…';
+  String get designDishType => 'Type de plat';
+  String get designDishTypeHelp =>
+      'Obligatoire en mode Cuisine cohérente : il fixe les rôles des '
+      'ingrédients (base, liant, matière grasse…) et le procédé. En Pure '
+      'Innovation, il ne fixe que la masse d\'une portion.';
+  String get designNoDishType => 'Aucun (Pure Innovation)';
+  String get designServings => 'Portions';
+  String get designImposed => 'Ingrédients imposés';
+  String get designImposedHelp =>
+      'Présents dans chaque proposition, quelles que soient les autres '
+      'contraintes.';
+  String get designExcluded => 'Ingrédients exclus';
+  String get designExcludedAllergens => 'Allergènes à éviter';
+  String get designAddIngredient => 'Ajouter';
+  String get designTargetsIntro =>
+      'Chaque objectif est facultatif. Cochez ceux qui comptent ; les '
+      'autres ne sont pas pris en compte.';
+  String get designTargetAim => 'Viser';
+  String get designKindValue => '≈ valeur';
+  String get designKindMin => 'au moins';
+  String get designKindMax => 'au plus';
+  String get designKindRange => 'entre';
+  String get designTolerance => 'tolérance ± 10 %';
+  String get designChooseIngredient => 'Choisir un ingrédient';
+  String get designPrioritiesIntro =>
+      'Glisser pour classer les trois aspects : le premier compte pour '
+      '60 %, le deuxième 30 %, le troisième 10 %.';
+  String get designAdvancedWeights => 'Réglage fin des poids';
+  String get designResetWeights => 'Revenir au classement';
+  String designWeightPercent(int percent) => '$percent %';
+  String get designModeCoherent => 'Cuisine cohérente';
+  String get designModeCoherentHelp =>
+      'Propositions culinairement plausibles : rôles par type de plat, '
+      'quantités bornées, ingrédients qui s\'accordent.';
+  String get designModeInnovation => 'Pure Innovation';
+  String get designModeInnovationHelp =>
+      'Seuls vos chiffres commandent : tout le référentiel est candidat, '
+      'sans garde-fous culinaires. Pour les recettes de rupture.';
+  String get designInnovationDialogTitle => 'Mode Pure Innovation activé';
+  String get designInnovationDialogBody =>
+      'Les garde-fous culinaires partent en pause café : seuls vos chiffres '
+      'commandent. Le résultat peut être génial, étrange, ou les deux à la '
+      'fois. La sécurité alimentaire, elle, reste à son poste. Goûtez '
+      'avant de servir à belle-maman.';
+  String get designInnovationConfirm => 'Je veux innover';
+  String get designInnovationCancel => 'Finalement, non';
+  String get designInnovationBanner =>
+      'Pure Innovation : garde-fous culinaires en pause, sécurité '
+      'alimentaire toujours affichée.';
+  String get designInnovationTag => 'Pure Innovation — non testée en cuisine';
+  String get designSummary => 'Récapitulatif';
+  String designSummaryTargets(int n) => n == 0
+      ? 'Aucun objectif chiffré'
+      : '$n objectif${n > 1 ? 's' : ''} visé${n > 1 ? 's' : ''}';
+  String get designNeedDishType =>
+      'Choisir un type de plat (obligatoire en Cuisine cohérente).';
+  String get designNeedTarget =>
+      'Pure Innovation : viser au moins un objectif ou choisir un type de '
+      'plat.';
+  String get designResultsTitle => 'Propositions';
+  String get designResultsIntro =>
+      'Propositions calculées, pas des recettes éprouvées : chaque écart à '
+      'l\'objectif est indiqué. Ouvrez celle qui vous plaît dans '
+      'l\'éditeur pour l\'ajuster.';
+  String get designNoResult => 'Aucune proposition';
+  String designVariant(int rank) => 'Proposition $rank';
+  String designMetCount(int met, int total) => total == 0
+      ? 'Aucun objectif chiffré'
+      : '$met objectif${met > 1 ? 's' : ''} atteint${met > 1 ? 's' : ''} '
+            'sur $total';
+  String get designColTarget => 'Visé';
+  String get designColObtained => 'Obtenu';
+  String get designStatusMet => 'Atteint';
+  String get designStatusNear => 'Proche';
+  String get designStatusMissed => 'Manqué';
+  String get designStatusUnverifiable => 'Non vérifiable';
+  String get designUnverifiableHelp =>
+      'Données insuffisantes pour mesurer ce critère sur cette proposition '
+      '(aucune valeur n\'est supposée).';
+  String get designIngredients => 'Ingrédients et quantités';
+  String get designProcess => 'Procédé cible';
+  String get designSteps => 'Étapes';
+  String get designHarmony => 'Harmonie';
+  String designPairs(int documented, int predicted) =>
+      '$documented accord${documented > 1 ? 's' : ''} '
+      'documenté${documented > 1 ? 's' : ''}, $predicted '
+      'prédit${predicted > 1 ? 's' : ''}';
+  String get designAlerts => 'Alertes';
+  String get designNoAlert => 'Aucune alerte de sécurité.';
+  String get designAllergens => 'Allergènes';
+  String get designOpenInEditor => 'Ouvrir dans l\'éditeur';
+  String get designAdjust => 'Ajuster les objectifs';
+  String get designRegenerate => 'Régénérer';
+  String get designDraftTitle => 'Nouvelle recette (proposition)';
+  String get designOrigin => 'Recette composée par objectifs';
+  String get designOriginHint =>
+      'Cette recette a été composée à partir d\'objectifs. Vous pouvez '
+      'relancer la composition ou modifier les objectifs : le résultat '
+      's\'ouvre dans l\'éditeur, rien n\'est enregistré sans votre accord.';
+  String designDurationMinutes(int minutes) => '$minutes min';
+  String designTemperature(int celsius) => '$celsius °C';
 }
 
 const appStrings = AppStrings();

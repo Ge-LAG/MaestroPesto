@@ -11,6 +11,7 @@ import 'package:maestropesto/app/i18n/app_strings.dart';
 import 'package:maestropesto/app/i18n/formatters.dart';
 import 'package:maestropesto/app/widgets/info_hint.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
+import 'package:maestropesto/core/design/design_brief.dart';
 import 'package:maestropesto/core/models/allergens.dart';
 import 'package:maestropesto/core/models/flavor_analysis.dart';
 import 'package:maestropesto/core/models/flavor_match.dart';
@@ -49,6 +50,7 @@ class RecipeDetailView extends StatefulWidget {
     this.scrollable = true,
     this.db,
     this.onAddIngredient,
+    this.onRedesign,
     super.key,
   });
 
@@ -67,6 +69,11 @@ class RecipeDetailView extends StatefulWidget {
   /// Ajout d'un ingrédient suggéré (accords aromatiques) : ouvre
   /// l'éditeur avec la nouvelle ligne. Null = bouton masqué.
   final ValueChanged<RecipeIngredient>? onAddIngredient;
+
+  /// Phase 11 (lot D) — recette composée par objectifs : relancer la
+  /// composition ([adjust] = faux) ou modifier les objectifs (vrai).
+  /// Null = panneau masqué.
+  final void Function(Recipe recipe, {required bool adjust})? onRedesign;
 
   @override
   State<RecipeDetailView> createState() => _RecipeDetailViewState();
@@ -160,6 +167,13 @@ class _RecipeDetailViewState extends State<RecipeDetailView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             overview,
+            if (recipe.designBrief != null && widget.onRedesign != null) ...[
+              const SizedBox(height: 18),
+              _DesignOriginPanel(
+                recipe: recipe,
+                onRedesign: widget.onRedesign!,
+              ),
+            ],
             if (db != null) ...[
               const SizedBox(height: 18),
               _SynthesisPanel(
@@ -204,6 +218,74 @@ class _RecipeDetailViewState extends State<RecipeDetailView> {
       child: ColoredBox(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: widget.scrollable ? SingleChildScrollView(child: body) : body,
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------
+// Origine « recette à l'envers » (Phase 11, lot D)
+
+class _DesignOriginPanel extends StatelessWidget {
+  const _DesignOriginPanel({required this.recipe, required this.onRedesign});
+
+  final Recipe recipe;
+  final void Function(Recipe recipe, {required bool adjust}) onRedesign;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    final theme = Theme.of(context);
+    final innovation = recipe.designBrief?.mode == DesignMode.pureInnovation;
+    return Card(
+      key: const ValueKey('design-origin'),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  innovation ? Icons.science_outlined : Icons.auto_awesome,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    innovation
+                        ? '${strings.designOrigin} · ${strings.designModeInnovation}'
+                        : strings.designOrigin,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(strings.designOriginHint, style: theme.textTheme.bodySmall),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                OutlinedButton.icon(
+                  key: const ValueKey('design-adjust'),
+                  onPressed: () => onRedesign(recipe, adjust: true),
+                  icon: const Icon(Icons.tune),
+                  label: Text(strings.designAdjust),
+                ),
+                FilledButton.tonalIcon(
+                  key: const ValueKey('design-regenerate'),
+                  onPressed: () => onRedesign(recipe, adjust: false),
+                  icon: const Icon(Icons.refresh),
+                  label: Text(strings.designRegenerate),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

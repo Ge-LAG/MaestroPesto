@@ -19,6 +19,7 @@ class RecipeBookPanel extends StatefulWidget {
     required this.onTagsChanged,
     required this.onClearFilters,
     required this.onCreateRecipe,
+    this.onDesignRecipe,
     this.compact = false,
     this.onOpenSettings,
     this.settingsBadge = false,
@@ -35,6 +36,10 @@ class RecipeBookPanel extends StatefulWidget {
   final ValueChanged<Set<String>> onTagsChanged;
   final VoidCallback onClearFilters;
   final VoidCallback onCreateRecipe;
+
+  /// Phase 11 — « Concevoir par objectifs » (menu du bouton +) ; null :
+  /// le bouton + crée directement une recette.
+  final VoidCallback? onDesignRecipe;
   final bool compact;
 
   /// Ouvre les paramètres (thème, bases métier, sources des données).
@@ -86,6 +91,7 @@ class _RecipeBookPanelState extends State<RecipeBookPanel> {
             _BookHeader(
               compact: widget.compact,
               onCreateRecipe: widget.onCreateRecipe,
+              onDesignRecipe: widget.onDesignRecipe,
               onOpenSettings: widget.onOpenSettings,
               settingsBadge: widget.settingsBadge,
             ),
@@ -360,12 +366,14 @@ class _BookHeader extends StatelessWidget {
   const _BookHeader({
     required this.compact,
     required this.onCreateRecipe,
+    this.onDesignRecipe,
     this.onOpenSettings,
     this.settingsBadge = false,
   });
 
   final bool compact;
   final VoidCallback onCreateRecipe;
+  final VoidCallback? onDesignRecipe;
   final VoidCallback? onOpenSettings;
   final bool settingsBadge;
 
@@ -411,11 +419,17 @@ class _BookHeader extends StatelessWidget {
               : context.strings.settingsAction,
         ),
         const SizedBox(width: 4),
-        IconButton.filled(
-          onPressed: onCreateRecipe,
-          icon: const Icon(Icons.add),
-          tooltip: context.strings.newRecipe,
-        ),
+        if (onDesignRecipe == null)
+          IconButton.filled(
+            onPressed: onCreateRecipe,
+            icon: const Icon(Icons.add),
+            tooltip: context.strings.newRecipe,
+          )
+        else
+          NewRecipeMenu(
+            onCreateRecipe: onCreateRecipe,
+            onDesignRecipe: onDesignRecipe!,
+          ),
       ],
     );
   }
@@ -655,4 +669,65 @@ class _EmptyBookMessage extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Bouton + du classeur : « Nouvelle recette » ou « Concevoir par
+/// objectifs » (Phase 11).
+class NewRecipeMenu extends StatelessWidget {
+  const NewRecipeMenu({
+    required this.onCreateRecipe,
+    required this.onDesignRecipe,
+    super.key,
+  });
+
+  final VoidCallback onCreateRecipe;
+  final VoidCallback onDesignRecipe;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    return MenuAnchor(
+      alignmentOffset: const Offset(-220, 4),
+      menuChildren: [
+        MenuItemButton(
+          key: const ValueKey('menu-new-recipe'),
+          leadingIcon: const Icon(Icons.edit_note),
+          onPressed: onCreateRecipe,
+          child: _MenuLabel(strings.newRecipe, strings.newRecipeHint),
+        ),
+        MenuItemButton(
+          key: const ValueKey('menu-design-recipe'),
+          leadingIcon: const Icon(Icons.auto_awesome),
+          onPressed: onDesignRecipe,
+          child: _MenuLabel(strings.designRecipe, strings.designRecipeHint),
+        ),
+      ],
+      builder: (context, controller, _) => IconButton.filled(
+        onPressed: () =>
+            controller.isOpen ? controller.close() : controller.open(),
+        icon: const Icon(Icons.add),
+        tooltip: strings.newRecipe,
+      ),
+    );
+  }
+}
+
+class _MenuLabel extends StatelessWidget {
+  const _MenuLabel(this.title, this.hint);
+
+  final String title;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) => ConstrainedBox(
+    constraints: const BoxConstraints(maxWidth: 240),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+        Text(hint, style: Theme.of(context).textTheme.bodySmall),
+      ],
+    ),
+  );
 }
