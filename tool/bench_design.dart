@@ -11,6 +11,8 @@
 //   dart compile exe tool/bench_design.dart -o build/bench_design.exe
 //   build/bench_design.exe                           (AOT, comme en release)
 
+import 'dart:io';
+
 import 'package:drift/native.dart';
 import 'package:maestropesto/core/database/app_database.dart' hide Recipe;
 import 'package:maestropesto/core/database/importers/csv_import_service.dart';
@@ -39,10 +41,10 @@ Future<void> main(List<String> args) async {
     db,
     databaseMetierRoot: 'assets/database-metier',
   ).importAll();
-  print('Import des bases : ${sw.elapsedMilliseconds} ms');
+  stdout.writeln('Import des bases : ${sw.elapsedMilliseconds} ms');
   sw.reset();
   final data = await DesignDatasetLoader.load(db);
-  print(
+  stdout.writeln(
     'Jeu de données : ${sw.elapsedMilliseconds} ms '
     '(${data.ingredients.length} ingrédients, '
     '${data.catalog.skeletons.length} gabarits)',
@@ -98,13 +100,13 @@ Future<void> main(List<String> args) async {
   );
 
   for (final round in [1, 2]) {
-    print('--- passe $round');
+    stdout.writeln('--- passe $round');
     for (final e in briefs.entries) {
       sw.reset();
       final res = DesignEngine(data).run(e.value);
       final ms = sw.elapsedMilliseconds;
       final best = res.best;
-      print(
+      stdout.writeln(
         '${e.key.padRight(22)} ${'$ms ms'.padLeft(8)}  '
         '${res.evaluations} évaluations  '
         'meilleure : ${best?.score.metCount}/${best?.score.criteria.length} '
@@ -112,17 +114,17 @@ Future<void> main(List<String> args) async {
       );
       if (verbose && round == 1) {
         for (final v in res.variants) {
-          print(
+          stdout.writeln(
             '   #${v.rank} ${v.skeleton.id} : '
             '${v.ingredients.map((i) => '${i.label} ${i.quantity}').join(', ')}',
           );
           final misses = v.score.criteria
               .where((c) => c.status != CriterionStatus.met)
               .map((c) => '${c.metric.id} ${c.status.name}');
-          if (misses.isNotEmpty) print('      ${misses.join(', ')}');
+          if (misses.isNotEmpty) stdout.writeln('      ${misses.join(', ')}');
         }
         for (final n in res.notices) {
-          print('   ! $n');
+          stdout.writeln('   ! $n');
         }
       }
     }

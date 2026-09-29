@@ -145,12 +145,10 @@ void main() {
     return;
   }
 
-  File('$_outDir/dish_skeletons.csv').writeAsStringSync(
-    _normalized(_rolesPath),
-  );
-  File('$_outDir/dish_processes.csv').writeAsStringSync(
-    _normalized(_processesPath),
-  );
+  File('$_outDir/dish_skeletons.csv')
+      .writeAsStringSync(_normalized(_rolesPath));
+  File('$_outDir/dish_processes.csv')
+      .writeAsStringSync(_normalized(_processesPath));
   final families = catalog.dishFamilies;
   stdout.writeln(
     '${catalog.skeletons.length} gabarits (${families.length} types de '

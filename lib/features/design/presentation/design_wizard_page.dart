@@ -701,7 +701,7 @@ class _DesignWizardPageState extends State<DesignWizardPage> {
           ],
         ),
         if (d.kind == TargetKind.value) ...[
-          field(d.value, m.labelFr.split(' ').first),
+          field(d.value, 'valeur'),
           Text(
             strings.designTolerance,
             style: Theme.of(context).textTheme.bodySmall,
