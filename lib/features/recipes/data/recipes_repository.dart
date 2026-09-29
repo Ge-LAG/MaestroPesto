@@ -4,6 +4,7 @@ import 'package:drift/drift.dart'
     show OrderingTerm, OrderingMode, Value, Variable, innerJoin;
 
 import '../../../core/database/app_database.dart' hide Recipe;
+import '../../../core/design/design_brief.dart';
 import '../../../core/scoring/process_step_parser.dart';
 import '../../../core/scoring/quantity_converter.dart';
 import '../domain/recipe.dart';
@@ -154,6 +155,11 @@ class RecipesRepository {
                 'fiber': n.fiber,
                 'salt': n.salt,
               }),
+            ),
+            designBriefJson: Value(
+              recipe.designBrief == null
+                  ? null
+                  : jsonEncode(recipe.designBrief!.toJson()),
             ),
           ),
         );
@@ -326,7 +332,22 @@ class RecipesRepository {
           ? RecipeNutritionMode.manual
           : RecipeNutritionMode.computed,
       images: images,
+      designBrief: _parseBrief(header.designBriefJson),
     );
+  }
+
+  /// Demande de conception (Phase 11) ; illisible → null (la recette
+  /// reste utilisable, sans « Régénérer »).
+  static DesignBrief? _parseBrief(String? json) {
+    if (json == null || json.isEmpty) return null;
+    try {
+      final decoded = jsonDecode(json);
+      return decoded is Map<String, Object?>
+          ? DesignBrief.fromJson(decoded)
+          : null;
+    } on FormatException {
+      return null;
+    }
   }
 
   static String _trimNumber(double v) =>
