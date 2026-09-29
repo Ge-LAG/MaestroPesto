@@ -121,7 +121,7 @@ void main() {
       await pumpPage(tester, status, () => updates++);
 
       expect(find.textContaining('Non importées'), findsOneWidget);
-      expect(find.textContaining('schéma v5'), findsOneWidget);
+      expect(find.textContaining('schéma v6'), findsOneWidget);
       expect(find.text('Base en mémoire (session de test).'), findsOneWidget);
 
       await tester.tap(find.text('Mettre à jour les bases métier'));

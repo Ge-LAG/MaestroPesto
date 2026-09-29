@@ -90,6 +90,18 @@ class MetierEnrichmentLoader {
       parseIngredientAllergens,
     );
     await load(
+      'enrichment/dish_skeletons',
+      p.join(enrichmentDir, 'dish_skeletons.csv'),
+      db.dishSkeletonRoles,
+      parseDishSkeletonRole,
+    );
+    await load(
+      'enrichment/dish_processes',
+      p.join(enrichmentDir, 'dish_processes.csv'),
+      db.dishProcesses,
+      parseDishProcess,
+    );
+    await load(
       'phase4/functional_components',
       p.join(phase4Dir, 'functional_components.csv'),
       db.functionalComponents,
@@ -201,6 +213,46 @@ Insertable<CulinaryPairing> parseCulinaryPairing(
     strength: Value(c.dbl('strength') ?? 0.8),
     source: Value(c.str('source')),
     note: Value(c.str('note')),
+  );
+}
+
+Insertable<DishSkeletonRole> parseDishSkeletonRole(
+  List<String> row,
+  List<String> header,
+) {
+  final c = CsvCells(row, columnIndex(header));
+  return DishSkeletonRolesCompanion(
+    skeletonId: Value(c.reqStr('skeleton_id')),
+    role: Value(c.reqStr('role')),
+    roleLabel: Value(c.str('role_label')),
+    minCount: Value(c.dbl('min_count')?.round() ?? 0),
+    maxCount: Value(c.dbl('max_count')?.round() ?? 1),
+    minGPerServing: Value(c.dbl('min_g_per_serving') ?? 0),
+    maxGPerServing: Value(c.dbl('max_g_per_serving') ?? 0),
+    candidates: Value(c.str('candidates') ?? ''),
+    note: Value(c.str('note')),
+  );
+}
+
+Insertable<DishProcess> parseDishProcess(
+  List<String> row,
+  List<String> header,
+) {
+  final c = CsvCells(row, columnIndex(header));
+  return DishProcessesCompanion(
+    skeletonId: Value(c.reqStr('skeleton_id')),
+    familyId: Value(c.reqStr('family_id')),
+    familyLabel: Value(c.str('family_label')),
+    skeletonLabel: Value(c.str('skeleton_label')),
+    method: Value(c.reqStr('method')),
+    servingMassG: Value(c.dbl('serving_mass_g') ?? 0),
+    servingMinG: Value(c.dbl('serving_min_g')),
+    servingMaxG: Value(c.dbl('serving_max_g')),
+    durationMin: Value(c.dbl('duration_min')),
+    durationDefault: Value(c.dbl('duration_default')),
+    durationMax: Value(c.dbl('duration_max')),
+    steps: Value(c.reqStr('steps')),
+    source: Value(c.str('source')),
   );
 }
 

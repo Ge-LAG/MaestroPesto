@@ -34,12 +34,15 @@ void main() {
         'experimental_validation_cases',
         'ingredient_flavor_profiles',
         'culinary_pairings',
+        'dish_skeleton_roles',
+        'dish_processes',
       ]) {
         await db.customStatement('DROP TABLE $table');
       }
       for (final (table, column) in [
         ('recipes', 'nutrition_mode'),
         ('recipes', 'nutrition_json'),
+        ('recipes', 'design_brief_json'),
         ('recipe_items', 'quantity_text'),
         ('recipe_items', 'cooking_method'),
         ('recipe_steps', 'op_id'),

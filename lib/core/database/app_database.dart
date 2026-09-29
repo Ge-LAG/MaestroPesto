@@ -50,6 +50,8 @@ part 'app_database.g.dart';
     IngredientFlavorProfiles,
     CulinaryPairings,
     IngredientAllergens,
+    DishSkeletonRoles,
+    DishProcesses,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -68,8 +70,11 @@ class AppDatabase extends _$AppDatabase {
   ///   method, typed steps).
   /// - v5 (2026-09-26, refonte UX): `ingredient_allergens` enrichment
   ///   (declared, inferred and corrected EU annex II allergens).
+  /// - v6 (2026-09-28, Phase 11) : squelettes de plats et gabarits de
+  ///   procédé (recette à l'envers) ; demande de conception conservée
+  ///   avec la recette (`recipes.design_brief_json`).
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -105,6 +110,11 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 5) {
         await m.createTable(ingredientAllergens);
+      }
+      if (from < 6) {
+        await m.createTable(dishSkeletonRoles);
+        await m.createTable(dishProcesses);
+        await m.addColumn(recipes, recipes.designBriefJson);
       }
     },
     beforeOpen: (details) async {

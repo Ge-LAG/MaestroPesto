@@ -158,3 +158,50 @@ class IngredientAllergens extends Table {
   @override
   Set<Column> get primaryKey => {ingredientId};
 }
+
+/// Phase 11 (schéma v6) — rôles des squelettes de plats (recette à
+/// l'envers) : candidats, nombre d'ingrédients et bornes de masse par
+/// portion. Curation `tool/data/dish_skeletons.csv`.
+@DataClassName('DishSkeletonRole')
+class DishSkeletonRoles extends Table {
+  TextColumn get skeletonId => text().named('skeleton_id')();
+  TextColumn get role => text()();
+  TextColumn get roleLabel => text().named('role_label').nullable()();
+  IntColumn get minCount => integer().named('min_count')();
+  IntColumn get maxCount => integer().named('max_count')();
+  RealColumn get minGPerServing => real().named('min_g_per_serving')();
+  RealColumn get maxGPerServing => real().named('max_g_per_serving')();
+
+  /// Identifiants `ING-*` séparés par `|`.
+  TextColumn get candidates => text()();
+  TextColumn get note => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {skeletonId, role};
+}
+
+/// Phase 11 (schéma v6) — gabarit de procédé de chaque squelette :
+/// famille (type de plat), mode de cuisson, masse par portion, durée
+/// réglable et étapes à trous. Curation `tool/data/dish_processes.csv`.
+@DataClassName('DishProcess')
+class DishProcesses extends Table {
+  TextColumn get skeletonId => text().named('skeleton_id')();
+  TextColumn get familyId => text().named('family_id')();
+  TextColumn get familyLabel => text().named('family_label').nullable()();
+  TextColumn get skeletonLabel => text().named('skeleton_label').nullable()();
+  TextColumn get method => text()();
+  RealColumn get servingMassG => real().named('serving_mass_g')();
+  RealColumn get servingMinG => real().named('serving_min_g').nullable()();
+  RealColumn get servingMaxG => real().named('serving_max_g').nullable()();
+  RealColumn get durationMin => real().named('duration_min').nullable()();
+  RealColumn get durationDefault =>
+      real().named('duration_default').nullable()();
+  RealColumn get durationMax => real().named('duration_max').nullable()();
+
+  /// Étapes séparées par ` | `.
+  TextColumn get steps => text()();
+  TextColumn get source => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {skeletonId};
+}

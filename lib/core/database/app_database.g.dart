@@ -129,6 +129,17 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _designBriefJsonMeta = const VerificationMeta(
+    'designBriefJson',
+  );
+  @override
+  late final GeneratedColumn<String> designBriefJson = GeneratedColumn<String>(
+    'design_brief_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -142,6 +153,7 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
     deletedAt,
     nutritionMode,
     nutritionJson,
+    designBriefJson,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -241,6 +253,15 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
         ),
       );
     }
+    if (data.containsKey('design_brief_json')) {
+      context.handle(
+        _designBriefJsonMeta,
+        designBriefJson.isAcceptableOrUnknown(
+          data['design_brief_json']!,
+          _designBriefJsonMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -294,6 +315,10 @@ class $RecipesTable extends Recipes with TableInfo<$RecipesTable, Recipe> {
         DriftSqlType.string,
         data['${effectivePrefix}nutrition_json'],
       ),
+      designBriefJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}design_brief_json'],
+      ),
     );
   }
 
@@ -320,6 +345,7 @@ class Recipe extends DataClass implements Insertable<Recipe> {
   /// Résumé nutritionnel par portion (JSON : energyKcal, proteins,
   /// carbs, fats, fiber, salt).
   final String? nutritionJson;
+  final String? designBriefJson;
   const Recipe({
     required this.id,
     required this.title,
@@ -332,6 +358,7 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     this.deletedAt,
     this.nutritionMode,
     this.nutritionJson,
+    this.designBriefJson,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -352,6 +379,9 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     }
     if (!nullToAbsent || nutritionJson != null) {
       map['nutrition_json'] = Variable<String>(nutritionJson);
+    }
+    if (!nullToAbsent || designBriefJson != null) {
+      map['design_brief_json'] = Variable<String>(designBriefJson);
     }
     return map;
   }
@@ -375,6 +405,9 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       nutritionJson: nutritionJson == null && nullToAbsent
           ? const Value.absent()
           : Value(nutritionJson),
+      designBriefJson: designBriefJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(designBriefJson),
     );
   }
 
@@ -395,6 +428,7 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       deletedAt: serializer.fromJson<String?>(json['deletedAt']),
       nutritionMode: serializer.fromJson<String?>(json['nutritionMode']),
       nutritionJson: serializer.fromJson<String?>(json['nutritionJson']),
+      designBriefJson: serializer.fromJson<String?>(json['designBriefJson']),
     );
   }
   @override
@@ -412,6 +446,7 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       'deletedAt': serializer.toJson<String?>(deletedAt),
       'nutritionMode': serializer.toJson<String?>(nutritionMode),
       'nutritionJson': serializer.toJson<String?>(nutritionJson),
+      'designBriefJson': serializer.toJson<String?>(designBriefJson),
     };
   }
 
@@ -427,6 +462,7 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     Value<String?> deletedAt = const Value.absent(),
     Value<String?> nutritionMode = const Value.absent(),
     Value<String?> nutritionJson = const Value.absent(),
+    Value<String?> designBriefJson = const Value.absent(),
   }) => Recipe(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -443,6 +479,9 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     nutritionJson: nutritionJson.present
         ? nutritionJson.value
         : this.nutritionJson,
+    designBriefJson: designBriefJson.present
+        ? designBriefJson.value
+        : this.designBriefJson,
   );
   Recipe copyWithCompanion(RecipesCompanion data) {
     return Recipe(
@@ -467,6 +506,9 @@ class Recipe extends DataClass implements Insertable<Recipe> {
       nutritionJson: data.nutritionJson.present
           ? data.nutritionJson.value
           : this.nutritionJson,
+      designBriefJson: data.designBriefJson.present
+          ? data.designBriefJson.value
+          : this.designBriefJson,
     );
   }
 
@@ -483,7 +525,8 @@ class Recipe extends DataClass implements Insertable<Recipe> {
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
           ..write('nutritionMode: $nutritionMode, ')
-          ..write('nutritionJson: $nutritionJson')
+          ..write('nutritionJson: $nutritionJson, ')
+          ..write('designBriefJson: $designBriefJson')
           ..write(')'))
         .toString();
   }
@@ -501,6 +544,7 @@ class Recipe extends DataClass implements Insertable<Recipe> {
     deletedAt,
     nutritionMode,
     nutritionJson,
+    designBriefJson,
   );
   @override
   bool operator ==(Object other) =>
@@ -516,7 +560,8 @@ class Recipe extends DataClass implements Insertable<Recipe> {
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
           other.nutritionMode == this.nutritionMode &&
-          other.nutritionJson == this.nutritionJson);
+          other.nutritionJson == this.nutritionJson &&
+          other.designBriefJson == this.designBriefJson);
 }
 
 class RecipesCompanion extends UpdateCompanion<Recipe> {
@@ -531,6 +576,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
   final Value<String?> deletedAt;
   final Value<String?> nutritionMode;
   final Value<String?> nutritionJson;
+  final Value<String?> designBriefJson;
   final Value<int> rowid;
   const RecipesCompanion({
     this.id = const Value.absent(),
@@ -544,6 +590,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     this.deletedAt = const Value.absent(),
     this.nutritionMode = const Value.absent(),
     this.nutritionJson = const Value.absent(),
+    this.designBriefJson = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RecipesCompanion.insert({
@@ -558,6 +605,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     this.deletedAt = const Value.absent(),
     this.nutritionMode = const Value.absent(),
     this.nutritionJson = const Value.absent(),
+    this.designBriefJson = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        title = Value(title),
@@ -575,6 +623,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     Expression<String>? deletedAt,
     Expression<String>? nutritionMode,
     Expression<String>? nutritionJson,
+    Expression<String>? designBriefJson,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -589,6 +638,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
       if (deletedAt != null) 'deleted_at': deletedAt,
       if (nutritionMode != null) 'nutrition_mode': nutritionMode,
       if (nutritionJson != null) 'nutrition_json': nutritionJson,
+      if (designBriefJson != null) 'design_brief_json': designBriefJson,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -605,6 +655,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     Value<String?>? deletedAt,
     Value<String?>? nutritionMode,
     Value<String?>? nutritionJson,
+    Value<String?>? designBriefJson,
     Value<int>? rowid,
   }) {
     return RecipesCompanion(
@@ -619,6 +670,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
       deletedAt: deletedAt ?? this.deletedAt,
       nutritionMode: nutritionMode ?? this.nutritionMode,
       nutritionJson: nutritionJson ?? this.nutritionJson,
+      designBriefJson: designBriefJson ?? this.designBriefJson,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -659,6 +711,9 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
     if (nutritionJson.present) {
       map['nutrition_json'] = Variable<String>(nutritionJson.value);
     }
+    if (designBriefJson.present) {
+      map['design_brief_json'] = Variable<String>(designBriefJson.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -679,6 +734,7 @@ class RecipesCompanion extends UpdateCompanion<Recipe> {
           ..write('deletedAt: $deletedAt, ')
           ..write('nutritionMode: $nutritionMode, ')
           ..write('nutritionJson: $nutritionJson, ')
+          ..write('designBriefJson: $designBriefJson, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -19985,6 +20041,1391 @@ class IngredientAllergensCompanion extends UpdateCompanion<IngredientAllergen> {
   }
 }
 
+class $DishSkeletonRolesTable extends DishSkeletonRoles
+    with TableInfo<$DishSkeletonRolesTable, DishSkeletonRole> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DishSkeletonRolesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _skeletonIdMeta = const VerificationMeta(
+    'skeletonId',
+  );
+  @override
+  late final GeneratedColumn<String> skeletonId = GeneratedColumn<String>(
+    'skeleton_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roleMeta = const VerificationMeta('role');
+  @override
+  late final GeneratedColumn<String> role = GeneratedColumn<String>(
+    'role',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roleLabelMeta = const VerificationMeta(
+    'roleLabel',
+  );
+  @override
+  late final GeneratedColumn<String> roleLabel = GeneratedColumn<String>(
+    'role_label',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _minCountMeta = const VerificationMeta(
+    'minCount',
+  );
+  @override
+  late final GeneratedColumn<int> minCount = GeneratedColumn<int>(
+    'min_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maxCountMeta = const VerificationMeta(
+    'maxCount',
+  );
+  @override
+  late final GeneratedColumn<int> maxCount = GeneratedColumn<int>(
+    'max_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _minGPerServingMeta = const VerificationMeta(
+    'minGPerServing',
+  );
+  @override
+  late final GeneratedColumn<double> minGPerServing = GeneratedColumn<double>(
+    'min_g_per_serving',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maxGPerServingMeta = const VerificationMeta(
+    'maxGPerServing',
+  );
+  @override
+  late final GeneratedColumn<double> maxGPerServing = GeneratedColumn<double>(
+    'max_g_per_serving',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _candidatesMeta = const VerificationMeta(
+    'candidates',
+  );
+  @override
+  late final GeneratedColumn<String> candidates = GeneratedColumn<String>(
+    'candidates',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    skeletonId,
+    role,
+    roleLabel,
+    minCount,
+    maxCount,
+    minGPerServing,
+    maxGPerServing,
+    candidates,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'dish_skeleton_roles';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DishSkeletonRole> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('skeleton_id')) {
+      context.handle(
+        _skeletonIdMeta,
+        skeletonId.isAcceptableOrUnknown(data['skeleton_id']!, _skeletonIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_skeletonIdMeta);
+    }
+    if (data.containsKey('role')) {
+      context.handle(
+        _roleMeta,
+        role.isAcceptableOrUnknown(data['role']!, _roleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_roleMeta);
+    }
+    if (data.containsKey('role_label')) {
+      context.handle(
+        _roleLabelMeta,
+        roleLabel.isAcceptableOrUnknown(data['role_label']!, _roleLabelMeta),
+      );
+    }
+    if (data.containsKey('min_count')) {
+      context.handle(
+        _minCountMeta,
+        minCount.isAcceptableOrUnknown(data['min_count']!, _minCountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_minCountMeta);
+    }
+    if (data.containsKey('max_count')) {
+      context.handle(
+        _maxCountMeta,
+        maxCount.isAcceptableOrUnknown(data['max_count']!, _maxCountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_maxCountMeta);
+    }
+    if (data.containsKey('min_g_per_serving')) {
+      context.handle(
+        _minGPerServingMeta,
+        minGPerServing.isAcceptableOrUnknown(
+          data['min_g_per_serving']!,
+          _minGPerServingMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_minGPerServingMeta);
+    }
+    if (data.containsKey('max_g_per_serving')) {
+      context.handle(
+        _maxGPerServingMeta,
+        maxGPerServing.isAcceptableOrUnknown(
+          data['max_g_per_serving']!,
+          _maxGPerServingMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_maxGPerServingMeta);
+    }
+    if (data.containsKey('candidates')) {
+      context.handle(
+        _candidatesMeta,
+        candidates.isAcceptableOrUnknown(data['candidates']!, _candidatesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_candidatesMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {skeletonId, role};
+  @override
+  DishSkeletonRole map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DishSkeletonRole(
+      skeletonId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}skeleton_id'],
+      )!,
+      role: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}role'],
+      )!,
+      roleLabel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}role_label'],
+      ),
+      minCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}min_count'],
+      )!,
+      maxCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_count'],
+      )!,
+      minGPerServing: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}min_g_per_serving'],
+      )!,
+      maxGPerServing: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}max_g_per_serving'],
+      )!,
+      candidates: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}candidates'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $DishSkeletonRolesTable createAlias(String alias) {
+    return $DishSkeletonRolesTable(attachedDatabase, alias);
+  }
+}
+
+class DishSkeletonRole extends DataClass
+    implements Insertable<DishSkeletonRole> {
+  final String skeletonId;
+  final String role;
+  final String? roleLabel;
+  final int minCount;
+  final int maxCount;
+  final double minGPerServing;
+  final double maxGPerServing;
+
+  /// Identifiants `ING-*` séparés par `|`.
+  final String candidates;
+  final String? note;
+  const DishSkeletonRole({
+    required this.skeletonId,
+    required this.role,
+    this.roleLabel,
+    required this.minCount,
+    required this.maxCount,
+    required this.minGPerServing,
+    required this.maxGPerServing,
+    required this.candidates,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['skeleton_id'] = Variable<String>(skeletonId);
+    map['role'] = Variable<String>(role);
+    if (!nullToAbsent || roleLabel != null) {
+      map['role_label'] = Variable<String>(roleLabel);
+    }
+    map['min_count'] = Variable<int>(minCount);
+    map['max_count'] = Variable<int>(maxCount);
+    map['min_g_per_serving'] = Variable<double>(minGPerServing);
+    map['max_g_per_serving'] = Variable<double>(maxGPerServing);
+    map['candidates'] = Variable<String>(candidates);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  DishSkeletonRolesCompanion toCompanion(bool nullToAbsent) {
+    return DishSkeletonRolesCompanion(
+      skeletonId: Value(skeletonId),
+      role: Value(role),
+      roleLabel: roleLabel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(roleLabel),
+      minCount: Value(minCount),
+      maxCount: Value(maxCount),
+      minGPerServing: Value(minGPerServing),
+      maxGPerServing: Value(maxGPerServing),
+      candidates: Value(candidates),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory DishSkeletonRole.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DishSkeletonRole(
+      skeletonId: serializer.fromJson<String>(json['skeletonId']),
+      role: serializer.fromJson<String>(json['role']),
+      roleLabel: serializer.fromJson<String?>(json['roleLabel']),
+      minCount: serializer.fromJson<int>(json['minCount']),
+      maxCount: serializer.fromJson<int>(json['maxCount']),
+      minGPerServing: serializer.fromJson<double>(json['minGPerServing']),
+      maxGPerServing: serializer.fromJson<double>(json['maxGPerServing']),
+      candidates: serializer.fromJson<String>(json['candidates']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'skeletonId': serializer.toJson<String>(skeletonId),
+      'role': serializer.toJson<String>(role),
+      'roleLabel': serializer.toJson<String?>(roleLabel),
+      'minCount': serializer.toJson<int>(minCount),
+      'maxCount': serializer.toJson<int>(maxCount),
+      'minGPerServing': serializer.toJson<double>(minGPerServing),
+      'maxGPerServing': serializer.toJson<double>(maxGPerServing),
+      'candidates': serializer.toJson<String>(candidates),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  DishSkeletonRole copyWith({
+    String? skeletonId,
+    String? role,
+    Value<String?> roleLabel = const Value.absent(),
+    int? minCount,
+    int? maxCount,
+    double? minGPerServing,
+    double? maxGPerServing,
+    String? candidates,
+    Value<String?> note = const Value.absent(),
+  }) => DishSkeletonRole(
+    skeletonId: skeletonId ?? this.skeletonId,
+    role: role ?? this.role,
+    roleLabel: roleLabel.present ? roleLabel.value : this.roleLabel,
+    minCount: minCount ?? this.minCount,
+    maxCount: maxCount ?? this.maxCount,
+    minGPerServing: minGPerServing ?? this.minGPerServing,
+    maxGPerServing: maxGPerServing ?? this.maxGPerServing,
+    candidates: candidates ?? this.candidates,
+    note: note.present ? note.value : this.note,
+  );
+  DishSkeletonRole copyWithCompanion(DishSkeletonRolesCompanion data) {
+    return DishSkeletonRole(
+      skeletonId: data.skeletonId.present
+          ? data.skeletonId.value
+          : this.skeletonId,
+      role: data.role.present ? data.role.value : this.role,
+      roleLabel: data.roleLabel.present ? data.roleLabel.value : this.roleLabel,
+      minCount: data.minCount.present ? data.minCount.value : this.minCount,
+      maxCount: data.maxCount.present ? data.maxCount.value : this.maxCount,
+      minGPerServing: data.minGPerServing.present
+          ? data.minGPerServing.value
+          : this.minGPerServing,
+      maxGPerServing: data.maxGPerServing.present
+          ? data.maxGPerServing.value
+          : this.maxGPerServing,
+      candidates: data.candidates.present
+          ? data.candidates.value
+          : this.candidates,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DishSkeletonRole(')
+          ..write('skeletonId: $skeletonId, ')
+          ..write('role: $role, ')
+          ..write('roleLabel: $roleLabel, ')
+          ..write('minCount: $minCount, ')
+          ..write('maxCount: $maxCount, ')
+          ..write('minGPerServing: $minGPerServing, ')
+          ..write('maxGPerServing: $maxGPerServing, ')
+          ..write('candidates: $candidates, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    skeletonId,
+    role,
+    roleLabel,
+    minCount,
+    maxCount,
+    minGPerServing,
+    maxGPerServing,
+    candidates,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DishSkeletonRole &&
+          other.skeletonId == this.skeletonId &&
+          other.role == this.role &&
+          other.roleLabel == this.roleLabel &&
+          other.minCount == this.minCount &&
+          other.maxCount == this.maxCount &&
+          other.minGPerServing == this.minGPerServing &&
+          other.maxGPerServing == this.maxGPerServing &&
+          other.candidates == this.candidates &&
+          other.note == this.note);
+}
+
+class DishSkeletonRolesCompanion extends UpdateCompanion<DishSkeletonRole> {
+  final Value<String> skeletonId;
+  final Value<String> role;
+  final Value<String?> roleLabel;
+  final Value<int> minCount;
+  final Value<int> maxCount;
+  final Value<double> minGPerServing;
+  final Value<double> maxGPerServing;
+  final Value<String> candidates;
+  final Value<String?> note;
+  final Value<int> rowid;
+  const DishSkeletonRolesCompanion({
+    this.skeletonId = const Value.absent(),
+    this.role = const Value.absent(),
+    this.roleLabel = const Value.absent(),
+    this.minCount = const Value.absent(),
+    this.maxCount = const Value.absent(),
+    this.minGPerServing = const Value.absent(),
+    this.maxGPerServing = const Value.absent(),
+    this.candidates = const Value.absent(),
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DishSkeletonRolesCompanion.insert({
+    required String skeletonId,
+    required String role,
+    this.roleLabel = const Value.absent(),
+    required int minCount,
+    required int maxCount,
+    required double minGPerServing,
+    required double maxGPerServing,
+    required String candidates,
+    this.note = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : skeletonId = Value(skeletonId),
+       role = Value(role),
+       minCount = Value(minCount),
+       maxCount = Value(maxCount),
+       minGPerServing = Value(minGPerServing),
+       maxGPerServing = Value(maxGPerServing),
+       candidates = Value(candidates);
+  static Insertable<DishSkeletonRole> custom({
+    Expression<String>? skeletonId,
+    Expression<String>? role,
+    Expression<String>? roleLabel,
+    Expression<int>? minCount,
+    Expression<int>? maxCount,
+    Expression<double>? minGPerServing,
+    Expression<double>? maxGPerServing,
+    Expression<String>? candidates,
+    Expression<String>? note,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (skeletonId != null) 'skeleton_id': skeletonId,
+      if (role != null) 'role': role,
+      if (roleLabel != null) 'role_label': roleLabel,
+      if (minCount != null) 'min_count': minCount,
+      if (maxCount != null) 'max_count': maxCount,
+      if (minGPerServing != null) 'min_g_per_serving': minGPerServing,
+      if (maxGPerServing != null) 'max_g_per_serving': maxGPerServing,
+      if (candidates != null) 'candidates': candidates,
+      if (note != null) 'note': note,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DishSkeletonRolesCompanion copyWith({
+    Value<String>? skeletonId,
+    Value<String>? role,
+    Value<String?>? roleLabel,
+    Value<int>? minCount,
+    Value<int>? maxCount,
+    Value<double>? minGPerServing,
+    Value<double>? maxGPerServing,
+    Value<String>? candidates,
+    Value<String?>? note,
+    Value<int>? rowid,
+  }) {
+    return DishSkeletonRolesCompanion(
+      skeletonId: skeletonId ?? this.skeletonId,
+      role: role ?? this.role,
+      roleLabel: roleLabel ?? this.roleLabel,
+      minCount: minCount ?? this.minCount,
+      maxCount: maxCount ?? this.maxCount,
+      minGPerServing: minGPerServing ?? this.minGPerServing,
+      maxGPerServing: maxGPerServing ?? this.maxGPerServing,
+      candidates: candidates ?? this.candidates,
+      note: note ?? this.note,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (skeletonId.present) {
+      map['skeleton_id'] = Variable<String>(skeletonId.value);
+    }
+    if (role.present) {
+      map['role'] = Variable<String>(role.value);
+    }
+    if (roleLabel.present) {
+      map['role_label'] = Variable<String>(roleLabel.value);
+    }
+    if (minCount.present) {
+      map['min_count'] = Variable<int>(minCount.value);
+    }
+    if (maxCount.present) {
+      map['max_count'] = Variable<int>(maxCount.value);
+    }
+    if (minGPerServing.present) {
+      map['min_g_per_serving'] = Variable<double>(minGPerServing.value);
+    }
+    if (maxGPerServing.present) {
+      map['max_g_per_serving'] = Variable<double>(maxGPerServing.value);
+    }
+    if (candidates.present) {
+      map['candidates'] = Variable<String>(candidates.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DishSkeletonRolesCompanion(')
+          ..write('skeletonId: $skeletonId, ')
+          ..write('role: $role, ')
+          ..write('roleLabel: $roleLabel, ')
+          ..write('minCount: $minCount, ')
+          ..write('maxCount: $maxCount, ')
+          ..write('minGPerServing: $minGPerServing, ')
+          ..write('maxGPerServing: $maxGPerServing, ')
+          ..write('candidates: $candidates, ')
+          ..write('note: $note, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DishProcessesTable extends DishProcesses
+    with TableInfo<$DishProcessesTable, DishProcess> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DishProcessesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _skeletonIdMeta = const VerificationMeta(
+    'skeletonId',
+  );
+  @override
+  late final GeneratedColumn<String> skeletonId = GeneratedColumn<String>(
+    'skeleton_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _familyIdMeta = const VerificationMeta(
+    'familyId',
+  );
+  @override
+  late final GeneratedColumn<String> familyId = GeneratedColumn<String>(
+    'family_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _familyLabelMeta = const VerificationMeta(
+    'familyLabel',
+  );
+  @override
+  late final GeneratedColumn<String> familyLabel = GeneratedColumn<String>(
+    'family_label',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _skeletonLabelMeta = const VerificationMeta(
+    'skeletonLabel',
+  );
+  @override
+  late final GeneratedColumn<String> skeletonLabel = GeneratedColumn<String>(
+    'skeleton_label',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _methodMeta = const VerificationMeta('method');
+  @override
+  late final GeneratedColumn<String> method = GeneratedColumn<String>(
+    'method',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _servingMassGMeta = const VerificationMeta(
+    'servingMassG',
+  );
+  @override
+  late final GeneratedColumn<double> servingMassG = GeneratedColumn<double>(
+    'serving_mass_g',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _servingMinGMeta = const VerificationMeta(
+    'servingMinG',
+  );
+  @override
+  late final GeneratedColumn<double> servingMinG = GeneratedColumn<double>(
+    'serving_min_g',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _servingMaxGMeta = const VerificationMeta(
+    'servingMaxG',
+  );
+  @override
+  late final GeneratedColumn<double> servingMaxG = GeneratedColumn<double>(
+    'serving_max_g',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationMinMeta = const VerificationMeta(
+    'durationMin',
+  );
+  @override
+  late final GeneratedColumn<double> durationMin = GeneratedColumn<double>(
+    'duration_min',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationDefaultMeta = const VerificationMeta(
+    'durationDefault',
+  );
+  @override
+  late final GeneratedColumn<double> durationDefault = GeneratedColumn<double>(
+    'duration_default',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationMaxMeta = const VerificationMeta(
+    'durationMax',
+  );
+  @override
+  late final GeneratedColumn<double> durationMax = GeneratedColumn<double>(
+    'duration_max',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _stepsMeta = const VerificationMeta('steps');
+  @override
+  late final GeneratedColumn<String> steps = GeneratedColumn<String>(
+    'steps',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    skeletonId,
+    familyId,
+    familyLabel,
+    skeletonLabel,
+    method,
+    servingMassG,
+    servingMinG,
+    servingMaxG,
+    durationMin,
+    durationDefault,
+    durationMax,
+    steps,
+    source,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'dish_processes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DishProcess> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('skeleton_id')) {
+      context.handle(
+        _skeletonIdMeta,
+        skeletonId.isAcceptableOrUnknown(data['skeleton_id']!, _skeletonIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_skeletonIdMeta);
+    }
+    if (data.containsKey('family_id')) {
+      context.handle(
+        _familyIdMeta,
+        familyId.isAcceptableOrUnknown(data['family_id']!, _familyIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_familyIdMeta);
+    }
+    if (data.containsKey('family_label')) {
+      context.handle(
+        _familyLabelMeta,
+        familyLabel.isAcceptableOrUnknown(
+          data['family_label']!,
+          _familyLabelMeta,
+        ),
+      );
+    }
+    if (data.containsKey('skeleton_label')) {
+      context.handle(
+        _skeletonLabelMeta,
+        skeletonLabel.isAcceptableOrUnknown(
+          data['skeleton_label']!,
+          _skeletonLabelMeta,
+        ),
+      );
+    }
+    if (data.containsKey('method')) {
+      context.handle(
+        _methodMeta,
+        method.isAcceptableOrUnknown(data['method']!, _methodMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_methodMeta);
+    }
+    if (data.containsKey('serving_mass_g')) {
+      context.handle(
+        _servingMassGMeta,
+        servingMassG.isAcceptableOrUnknown(
+          data['serving_mass_g']!,
+          _servingMassGMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_servingMassGMeta);
+    }
+    if (data.containsKey('serving_min_g')) {
+      context.handle(
+        _servingMinGMeta,
+        servingMinG.isAcceptableOrUnknown(
+          data['serving_min_g']!,
+          _servingMinGMeta,
+        ),
+      );
+    }
+    if (data.containsKey('serving_max_g')) {
+      context.handle(
+        _servingMaxGMeta,
+        servingMaxG.isAcceptableOrUnknown(
+          data['serving_max_g']!,
+          _servingMaxGMeta,
+        ),
+      );
+    }
+    if (data.containsKey('duration_min')) {
+      context.handle(
+        _durationMinMeta,
+        durationMin.isAcceptableOrUnknown(
+          data['duration_min']!,
+          _durationMinMeta,
+        ),
+      );
+    }
+    if (data.containsKey('duration_default')) {
+      context.handle(
+        _durationDefaultMeta,
+        durationDefault.isAcceptableOrUnknown(
+          data['duration_default']!,
+          _durationDefaultMeta,
+        ),
+      );
+    }
+    if (data.containsKey('duration_max')) {
+      context.handle(
+        _durationMaxMeta,
+        durationMax.isAcceptableOrUnknown(
+          data['duration_max']!,
+          _durationMaxMeta,
+        ),
+      );
+    }
+    if (data.containsKey('steps')) {
+      context.handle(
+        _stepsMeta,
+        steps.isAcceptableOrUnknown(data['steps']!, _stepsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stepsMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {skeletonId};
+  @override
+  DishProcess map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DishProcess(
+      skeletonId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}skeleton_id'],
+      )!,
+      familyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}family_id'],
+      )!,
+      familyLabel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}family_label'],
+      ),
+      skeletonLabel: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}skeleton_label'],
+      ),
+      method: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}method'],
+      )!,
+      servingMassG: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}serving_mass_g'],
+      )!,
+      servingMinG: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}serving_min_g'],
+      ),
+      servingMaxG: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}serving_max_g'],
+      ),
+      durationMin: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}duration_min'],
+      ),
+      durationDefault: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}duration_default'],
+      ),
+      durationMax: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}duration_max'],
+      ),
+      steps: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}steps'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      ),
+    );
+  }
+
+  @override
+  $DishProcessesTable createAlias(String alias) {
+    return $DishProcessesTable(attachedDatabase, alias);
+  }
+}
+
+class DishProcess extends DataClass implements Insertable<DishProcess> {
+  final String skeletonId;
+  final String familyId;
+  final String? familyLabel;
+  final String? skeletonLabel;
+  final String method;
+  final double servingMassG;
+  final double? servingMinG;
+  final double? servingMaxG;
+  final double? durationMin;
+  final double? durationDefault;
+  final double? durationMax;
+
+  /// Étapes séparées par ` | `.
+  final String steps;
+  final String? source;
+  const DishProcess({
+    required this.skeletonId,
+    required this.familyId,
+    this.familyLabel,
+    this.skeletonLabel,
+    required this.method,
+    required this.servingMassG,
+    this.servingMinG,
+    this.servingMaxG,
+    this.durationMin,
+    this.durationDefault,
+    this.durationMax,
+    required this.steps,
+    this.source,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['skeleton_id'] = Variable<String>(skeletonId);
+    map['family_id'] = Variable<String>(familyId);
+    if (!nullToAbsent || familyLabel != null) {
+      map['family_label'] = Variable<String>(familyLabel);
+    }
+    if (!nullToAbsent || skeletonLabel != null) {
+      map['skeleton_label'] = Variable<String>(skeletonLabel);
+    }
+    map['method'] = Variable<String>(method);
+    map['serving_mass_g'] = Variable<double>(servingMassG);
+    if (!nullToAbsent || servingMinG != null) {
+      map['serving_min_g'] = Variable<double>(servingMinG);
+    }
+    if (!nullToAbsent || servingMaxG != null) {
+      map['serving_max_g'] = Variable<double>(servingMaxG);
+    }
+    if (!nullToAbsent || durationMin != null) {
+      map['duration_min'] = Variable<double>(durationMin);
+    }
+    if (!nullToAbsent || durationDefault != null) {
+      map['duration_default'] = Variable<double>(durationDefault);
+    }
+    if (!nullToAbsent || durationMax != null) {
+      map['duration_max'] = Variable<double>(durationMax);
+    }
+    map['steps'] = Variable<String>(steps);
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    return map;
+  }
+
+  DishProcessesCompanion toCompanion(bool nullToAbsent) {
+    return DishProcessesCompanion(
+      skeletonId: Value(skeletonId),
+      familyId: Value(familyId),
+      familyLabel: familyLabel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(familyLabel),
+      skeletonLabel: skeletonLabel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(skeletonLabel),
+      method: Value(method),
+      servingMassG: Value(servingMassG),
+      servingMinG: servingMinG == null && nullToAbsent
+          ? const Value.absent()
+          : Value(servingMinG),
+      servingMaxG: servingMaxG == null && nullToAbsent
+          ? const Value.absent()
+          : Value(servingMaxG),
+      durationMin: durationMin == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationMin),
+      durationDefault: durationDefault == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationDefault),
+      durationMax: durationMax == null && nullToAbsent
+          ? const Value.absent()
+          : Value(durationMax),
+      steps: Value(steps),
+      source: source == null && nullToAbsent
+          ? const Value.absent()
+          : Value(source),
+    );
+  }
+
+  factory DishProcess.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DishProcess(
+      skeletonId: serializer.fromJson<String>(json['skeletonId']),
+      familyId: serializer.fromJson<String>(json['familyId']),
+      familyLabel: serializer.fromJson<String?>(json['familyLabel']),
+      skeletonLabel: serializer.fromJson<String?>(json['skeletonLabel']),
+      method: serializer.fromJson<String>(json['method']),
+      servingMassG: serializer.fromJson<double>(json['servingMassG']),
+      servingMinG: serializer.fromJson<double?>(json['servingMinG']),
+      servingMaxG: serializer.fromJson<double?>(json['servingMaxG']),
+      durationMin: serializer.fromJson<double?>(json['durationMin']),
+      durationDefault: serializer.fromJson<double?>(json['durationDefault']),
+      durationMax: serializer.fromJson<double?>(json['durationMax']),
+      steps: serializer.fromJson<String>(json['steps']),
+      source: serializer.fromJson<String?>(json['source']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'skeletonId': serializer.toJson<String>(skeletonId),
+      'familyId': serializer.toJson<String>(familyId),
+      'familyLabel': serializer.toJson<String?>(familyLabel),
+      'skeletonLabel': serializer.toJson<String?>(skeletonLabel),
+      'method': serializer.toJson<String>(method),
+      'servingMassG': serializer.toJson<double>(servingMassG),
+      'servingMinG': serializer.toJson<double?>(servingMinG),
+      'servingMaxG': serializer.toJson<double?>(servingMaxG),
+      'durationMin': serializer.toJson<double?>(durationMin),
+      'durationDefault': serializer.toJson<double?>(durationDefault),
+      'durationMax': serializer.toJson<double?>(durationMax),
+      'steps': serializer.toJson<String>(steps),
+      'source': serializer.toJson<String?>(source),
+    };
+  }
+
+  DishProcess copyWith({
+    String? skeletonId,
+    String? familyId,
+    Value<String?> familyLabel = const Value.absent(),
+    Value<String?> skeletonLabel = const Value.absent(),
+    String? method,
+    double? servingMassG,
+    Value<double?> servingMinG = const Value.absent(),
+    Value<double?> servingMaxG = const Value.absent(),
+    Value<double?> durationMin = const Value.absent(),
+    Value<double?> durationDefault = const Value.absent(),
+    Value<double?> durationMax = const Value.absent(),
+    String? steps,
+    Value<String?> source = const Value.absent(),
+  }) => DishProcess(
+    skeletonId: skeletonId ?? this.skeletonId,
+    familyId: familyId ?? this.familyId,
+    familyLabel: familyLabel.present ? familyLabel.value : this.familyLabel,
+    skeletonLabel: skeletonLabel.present
+        ? skeletonLabel.value
+        : this.skeletonLabel,
+    method: method ?? this.method,
+    servingMassG: servingMassG ?? this.servingMassG,
+    servingMinG: servingMinG.present ? servingMinG.value : this.servingMinG,
+    servingMaxG: servingMaxG.present ? servingMaxG.value : this.servingMaxG,
+    durationMin: durationMin.present ? durationMin.value : this.durationMin,
+    durationDefault: durationDefault.present
+        ? durationDefault.value
+        : this.durationDefault,
+    durationMax: durationMax.present ? durationMax.value : this.durationMax,
+    steps: steps ?? this.steps,
+    source: source.present ? source.value : this.source,
+  );
+  DishProcess copyWithCompanion(DishProcessesCompanion data) {
+    return DishProcess(
+      skeletonId: data.skeletonId.present
+          ? data.skeletonId.value
+          : this.skeletonId,
+      familyId: data.familyId.present ? data.familyId.value : this.familyId,
+      familyLabel: data.familyLabel.present
+          ? data.familyLabel.value
+          : this.familyLabel,
+      skeletonLabel: data.skeletonLabel.present
+          ? data.skeletonLabel.value
+          : this.skeletonLabel,
+      method: data.method.present ? data.method.value : this.method,
+      servingMassG: data.servingMassG.present
+          ? data.servingMassG.value
+          : this.servingMassG,
+      servingMinG: data.servingMinG.present
+          ? data.servingMinG.value
+          : this.servingMinG,
+      servingMaxG: data.servingMaxG.present
+          ? data.servingMaxG.value
+          : this.servingMaxG,
+      durationMin: data.durationMin.present
+          ? data.durationMin.value
+          : this.durationMin,
+      durationDefault: data.durationDefault.present
+          ? data.durationDefault.value
+          : this.durationDefault,
+      durationMax: data.durationMax.present
+          ? data.durationMax.value
+          : this.durationMax,
+      steps: data.steps.present ? data.steps.value : this.steps,
+      source: data.source.present ? data.source.value : this.source,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DishProcess(')
+          ..write('skeletonId: $skeletonId, ')
+          ..write('familyId: $familyId, ')
+          ..write('familyLabel: $familyLabel, ')
+          ..write('skeletonLabel: $skeletonLabel, ')
+          ..write('method: $method, ')
+          ..write('servingMassG: $servingMassG, ')
+          ..write('servingMinG: $servingMinG, ')
+          ..write('servingMaxG: $servingMaxG, ')
+          ..write('durationMin: $durationMin, ')
+          ..write('durationDefault: $durationDefault, ')
+          ..write('durationMax: $durationMax, ')
+          ..write('steps: $steps, ')
+          ..write('source: $source')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    skeletonId,
+    familyId,
+    familyLabel,
+    skeletonLabel,
+    method,
+    servingMassG,
+    servingMinG,
+    servingMaxG,
+    durationMin,
+    durationDefault,
+    durationMax,
+    steps,
+    source,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DishProcess &&
+          other.skeletonId == this.skeletonId &&
+          other.familyId == this.familyId &&
+          other.familyLabel == this.familyLabel &&
+          other.skeletonLabel == this.skeletonLabel &&
+          other.method == this.method &&
+          other.servingMassG == this.servingMassG &&
+          other.servingMinG == this.servingMinG &&
+          other.servingMaxG == this.servingMaxG &&
+          other.durationMin == this.durationMin &&
+          other.durationDefault == this.durationDefault &&
+          other.durationMax == this.durationMax &&
+          other.steps == this.steps &&
+          other.source == this.source);
+}
+
+class DishProcessesCompanion extends UpdateCompanion<DishProcess> {
+  final Value<String> skeletonId;
+  final Value<String> familyId;
+  final Value<String?> familyLabel;
+  final Value<String?> skeletonLabel;
+  final Value<String> method;
+  final Value<double> servingMassG;
+  final Value<double?> servingMinG;
+  final Value<double?> servingMaxG;
+  final Value<double?> durationMin;
+  final Value<double?> durationDefault;
+  final Value<double?> durationMax;
+  final Value<String> steps;
+  final Value<String?> source;
+  final Value<int> rowid;
+  const DishProcessesCompanion({
+    this.skeletonId = const Value.absent(),
+    this.familyId = const Value.absent(),
+    this.familyLabel = const Value.absent(),
+    this.skeletonLabel = const Value.absent(),
+    this.method = const Value.absent(),
+    this.servingMassG = const Value.absent(),
+    this.servingMinG = const Value.absent(),
+    this.servingMaxG = const Value.absent(),
+    this.durationMin = const Value.absent(),
+    this.durationDefault = const Value.absent(),
+    this.durationMax = const Value.absent(),
+    this.steps = const Value.absent(),
+    this.source = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DishProcessesCompanion.insert({
+    required String skeletonId,
+    required String familyId,
+    this.familyLabel = const Value.absent(),
+    this.skeletonLabel = const Value.absent(),
+    required String method,
+    required double servingMassG,
+    this.servingMinG = const Value.absent(),
+    this.servingMaxG = const Value.absent(),
+    this.durationMin = const Value.absent(),
+    this.durationDefault = const Value.absent(),
+    this.durationMax = const Value.absent(),
+    required String steps,
+    this.source = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : skeletonId = Value(skeletonId),
+       familyId = Value(familyId),
+       method = Value(method),
+       servingMassG = Value(servingMassG),
+       steps = Value(steps);
+  static Insertable<DishProcess> custom({
+    Expression<String>? skeletonId,
+    Expression<String>? familyId,
+    Expression<String>? familyLabel,
+    Expression<String>? skeletonLabel,
+    Expression<String>? method,
+    Expression<double>? servingMassG,
+    Expression<double>? servingMinG,
+    Expression<double>? servingMaxG,
+    Expression<double>? durationMin,
+    Expression<double>? durationDefault,
+    Expression<double>? durationMax,
+    Expression<String>? steps,
+    Expression<String>? source,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (skeletonId != null) 'skeleton_id': skeletonId,
+      if (familyId != null) 'family_id': familyId,
+      if (familyLabel != null) 'family_label': familyLabel,
+      if (skeletonLabel != null) 'skeleton_label': skeletonLabel,
+      if (method != null) 'method': method,
+      if (servingMassG != null) 'serving_mass_g': servingMassG,
+      if (servingMinG != null) 'serving_min_g': servingMinG,
+      if (servingMaxG != null) 'serving_max_g': servingMaxG,
+      if (durationMin != null) 'duration_min': durationMin,
+      if (durationDefault != null) 'duration_default': durationDefault,
+      if (durationMax != null) 'duration_max': durationMax,
+      if (steps != null) 'steps': steps,
+      if (source != null) 'source': source,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DishProcessesCompanion copyWith({
+    Value<String>? skeletonId,
+    Value<String>? familyId,
+    Value<String?>? familyLabel,
+    Value<String?>? skeletonLabel,
+    Value<String>? method,
+    Value<double>? servingMassG,
+    Value<double?>? servingMinG,
+    Value<double?>? servingMaxG,
+    Value<double?>? durationMin,
+    Value<double?>? durationDefault,
+    Value<double?>? durationMax,
+    Value<String>? steps,
+    Value<String?>? source,
+    Value<int>? rowid,
+  }) {
+    return DishProcessesCompanion(
+      skeletonId: skeletonId ?? this.skeletonId,
+      familyId: familyId ?? this.familyId,
+      familyLabel: familyLabel ?? this.familyLabel,
+      skeletonLabel: skeletonLabel ?? this.skeletonLabel,
+      method: method ?? this.method,
+      servingMassG: servingMassG ?? this.servingMassG,
+      servingMinG: servingMinG ?? this.servingMinG,
+      servingMaxG: servingMaxG ?? this.servingMaxG,
+      durationMin: durationMin ?? this.durationMin,
+      durationDefault: durationDefault ?? this.durationDefault,
+      durationMax: durationMax ?? this.durationMax,
+      steps: steps ?? this.steps,
+      source: source ?? this.source,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (skeletonId.present) {
+      map['skeleton_id'] = Variable<String>(skeletonId.value);
+    }
+    if (familyId.present) {
+      map['family_id'] = Variable<String>(familyId.value);
+    }
+    if (familyLabel.present) {
+      map['family_label'] = Variable<String>(familyLabel.value);
+    }
+    if (skeletonLabel.present) {
+      map['skeleton_label'] = Variable<String>(skeletonLabel.value);
+    }
+    if (method.present) {
+      map['method'] = Variable<String>(method.value);
+    }
+    if (servingMassG.present) {
+      map['serving_mass_g'] = Variable<double>(servingMassG.value);
+    }
+    if (servingMinG.present) {
+      map['serving_min_g'] = Variable<double>(servingMinG.value);
+    }
+    if (servingMaxG.present) {
+      map['serving_max_g'] = Variable<double>(servingMaxG.value);
+    }
+    if (durationMin.present) {
+      map['duration_min'] = Variable<double>(durationMin.value);
+    }
+    if (durationDefault.present) {
+      map['duration_default'] = Variable<double>(durationDefault.value);
+    }
+    if (durationMax.present) {
+      map['duration_max'] = Variable<double>(durationMax.value);
+    }
+    if (steps.present) {
+      map['steps'] = Variable<String>(steps.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DishProcessesCompanion(')
+          ..write('skeletonId: $skeletonId, ')
+          ..write('familyId: $familyId, ')
+          ..write('familyLabel: $familyLabel, ')
+          ..write('skeletonLabel: $skeletonLabel, ')
+          ..write('method: $method, ')
+          ..write('servingMassG: $servingMassG, ')
+          ..write('servingMinG: $servingMinG, ')
+          ..write('servingMaxG: $servingMaxG, ')
+          ..write('durationMin: $durationMin, ')
+          ..write('durationDefault: $durationDefault, ')
+          ..write('durationMax: $durationMax, ')
+          ..write('steps: $steps, ')
+          ..write('source: $source, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -20035,6 +21476,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $IngredientAllergensTable ingredientAllergens =
       $IngredientAllergensTable(this);
+  late final $DishSkeletonRolesTable dishSkeletonRoles =
+      $DishSkeletonRolesTable(this);
+  late final $DishProcessesTable dishProcesses = $DishProcessesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -20066,6 +21510,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     ingredientFlavorProfiles,
     culinaryPairings,
     ingredientAllergens,
+    dishSkeletonRoles,
+    dishProcesses,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -20126,6 +21572,7 @@ typedef $$RecipesTableCreateCompanionBuilder = RecipesCompanion Function({
   Value<String?> deletedAt,
   Value<String?> nutritionMode,
   Value<String?> nutritionJson,
+  Value<String?> designBriefJson,
   Value<int> rowid,
 });
 typedef $$RecipesTableUpdateCompanionBuilder = RecipesCompanion Function({
@@ -20140,6 +21587,7 @@ typedef $$RecipesTableUpdateCompanionBuilder = RecipesCompanion Function({
   Value<String?> deletedAt,
   Value<String?> nutritionMode,
   Value<String?> nutritionJson,
+  Value<String?> designBriefJson,
   Value<int> rowid,
 });
 
@@ -20299,6 +21747,11 @@ class $$RecipesTableFilterComposer
 
   ColumnFilters<String> get nutritionJson => $composableBuilder(
     column: $table.nutritionJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get designBriefJson => $composableBuilder(
+    column: $table.designBriefJson,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -20491,6 +21944,11 @@ class $$RecipesTableOrderingComposer
     column: $table.nutritionJson,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get designBriefJson => $composableBuilder(
+    column: $table.designBriefJson,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$RecipesTableAnnotationComposer
@@ -20542,6 +22000,11 @@ class $$RecipesTableAnnotationComposer
 
   GeneratedColumn<String> get nutritionJson => $composableBuilder(
     column: $table.nutritionJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get designBriefJson => $composableBuilder(
+    column: $table.designBriefJson,
     builder: (column) => column,
   );
 
@@ -20716,6 +22179,7 @@ class $$RecipesTableTableManager
                 Value<String?> deletedAt = const Value.absent(),
                 Value<String?> nutritionMode = const Value.absent(),
                 Value<String?> nutritionJson = const Value.absent(),
+                Value<String?> designBriefJson = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipesCompanion(
                 id: id,
@@ -20729,6 +22193,7 @@ class $$RecipesTableTableManager
                 deletedAt: deletedAt,
                 nutritionMode: nutritionMode,
                 nutritionJson: nutritionJson,
+                designBriefJson: designBriefJson,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -20744,6 +22209,7 @@ class $$RecipesTableTableManager
                 Value<String?> deletedAt = const Value.absent(),
                 Value<String?> nutritionMode = const Value.absent(),
                 Value<String?> nutritionJson = const Value.absent(),
+                Value<String?> designBriefJson = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecipesCompanion.insert(
                 id: id,
@@ -20757,6 +22223,7 @@ class $$RecipesTableTableManager
                 deletedAt: deletedAt,
                 nutritionMode: nutritionMode,
                 nutritionJson: nutritionJson,
+                designBriefJson: designBriefJson,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -31915,6 +33382,673 @@ typedef $$IngredientAllergensTableProcessedTableManager =
       IngredientAllergen,
       PrefetchHooks Function()
     >;
+typedef $$DishSkeletonRolesTableCreateCompanionBuilder =
+    DishSkeletonRolesCompanion Function({
+      required String skeletonId,
+      required String role,
+      Value<String?> roleLabel,
+      required int minCount,
+      required int maxCount,
+      required double minGPerServing,
+      required double maxGPerServing,
+      required String candidates,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+typedef $$DishSkeletonRolesTableUpdateCompanionBuilder =
+    DishSkeletonRolesCompanion Function({
+      Value<String> skeletonId,
+      Value<String> role,
+      Value<String?> roleLabel,
+      Value<int> minCount,
+      Value<int> maxCount,
+      Value<double> minGPerServing,
+      Value<double> maxGPerServing,
+      Value<String> candidates,
+      Value<String?> note,
+      Value<int> rowid,
+    });
+
+class $$DishSkeletonRolesTableFilterComposer
+    extends Composer<_$AppDatabase, $DishSkeletonRolesTable> {
+  $$DishSkeletonRolesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get skeletonId => $composableBuilder(
+    column: $table.skeletonId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get roleLabel => $composableBuilder(
+    column: $table.roleLabel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get minCount => $composableBuilder(
+    column: $table.minCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get maxCount => $composableBuilder(
+    column: $table.maxCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get minGPerServing => $composableBuilder(
+    column: $table.minGPerServing,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get maxGPerServing => $composableBuilder(
+    column: $table.maxGPerServing,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get candidates => $composableBuilder(
+    column: $table.candidates,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DishSkeletonRolesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DishSkeletonRolesTable> {
+  $$DishSkeletonRolesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get skeletonId => $composableBuilder(
+    column: $table.skeletonId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get role => $composableBuilder(
+    column: $table.role,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get roleLabel => $composableBuilder(
+    column: $table.roleLabel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get minCount => $composableBuilder(
+    column: $table.minCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get maxCount => $composableBuilder(
+    column: $table.maxCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get minGPerServing => $composableBuilder(
+    column: $table.minGPerServing,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get maxGPerServing => $composableBuilder(
+    column: $table.maxGPerServing,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get candidates => $composableBuilder(
+    column: $table.candidates,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DishSkeletonRolesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DishSkeletonRolesTable> {
+  $$DishSkeletonRolesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get skeletonId => $composableBuilder(
+    column: $table.skeletonId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get role =>
+      $composableBuilder(column: $table.role, builder: (column) => column);
+
+  GeneratedColumn<String> get roleLabel =>
+      $composableBuilder(column: $table.roleLabel, builder: (column) => column);
+
+  GeneratedColumn<int> get minCount =>
+      $composableBuilder(column: $table.minCount, builder: (column) => column);
+
+  GeneratedColumn<int> get maxCount =>
+      $composableBuilder(column: $table.maxCount, builder: (column) => column);
+
+  GeneratedColumn<double> get minGPerServing => $composableBuilder(
+    column: $table.minGPerServing,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get maxGPerServing => $composableBuilder(
+    column: $table.maxGPerServing,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get candidates => $composableBuilder(
+    column: $table.candidates,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$DishSkeletonRolesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DishSkeletonRolesTable,
+          DishSkeletonRole,
+          $$DishSkeletonRolesTableFilterComposer,
+          $$DishSkeletonRolesTableOrderingComposer,
+          $$DishSkeletonRolesTableAnnotationComposer,
+          $$DishSkeletonRolesTableCreateCompanionBuilder,
+          $$DishSkeletonRolesTableUpdateCompanionBuilder,
+          (
+            DishSkeletonRole,
+            BaseReferences<
+              _$AppDatabase,
+              $DishSkeletonRolesTable,
+              DishSkeletonRole
+            >,
+          ),
+          DishSkeletonRole,
+          PrefetchHooks Function()
+        > {
+  $$DishSkeletonRolesTableTableManager(
+    _$AppDatabase db,
+    $DishSkeletonRolesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DishSkeletonRolesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DishSkeletonRolesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DishSkeletonRolesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> skeletonId = const Value.absent(),
+                Value<String> role = const Value.absent(),
+                Value<String?> roleLabel = const Value.absent(),
+                Value<int> minCount = const Value.absent(),
+                Value<int> maxCount = const Value.absent(),
+                Value<double> minGPerServing = const Value.absent(),
+                Value<double> maxGPerServing = const Value.absent(),
+                Value<String> candidates = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DishSkeletonRolesCompanion(
+                skeletonId: skeletonId,
+                role: role,
+                roleLabel: roleLabel,
+                minCount: minCount,
+                maxCount: maxCount,
+                minGPerServing: minGPerServing,
+                maxGPerServing: maxGPerServing,
+                candidates: candidates,
+                note: note,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String skeletonId,
+                required String role,
+                Value<String?> roleLabel = const Value.absent(),
+                required int minCount,
+                required int maxCount,
+                required double minGPerServing,
+                required double maxGPerServing,
+                required String candidates,
+                Value<String?> note = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DishSkeletonRolesCompanion.insert(
+                skeletonId: skeletonId,
+                role: role,
+                roleLabel: roleLabel,
+                minCount: minCount,
+                maxCount: maxCount,
+                minGPerServing: minGPerServing,
+                maxGPerServing: maxGPerServing,
+                candidates: candidates,
+                note: note,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DishSkeletonRolesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DishSkeletonRolesTable,
+      DishSkeletonRole,
+      $$DishSkeletonRolesTableFilterComposer,
+      $$DishSkeletonRolesTableOrderingComposer,
+      $$DishSkeletonRolesTableAnnotationComposer,
+      $$DishSkeletonRolesTableCreateCompanionBuilder,
+      $$DishSkeletonRolesTableUpdateCompanionBuilder,
+      (
+        DishSkeletonRole,
+        BaseReferences<
+          _$AppDatabase,
+          $DishSkeletonRolesTable,
+          DishSkeletonRole
+        >,
+      ),
+      DishSkeletonRole,
+      PrefetchHooks Function()
+    >;
+typedef $$DishProcessesTableCreateCompanionBuilder =
+    DishProcessesCompanion Function({
+      required String skeletonId,
+      required String familyId,
+      Value<String?> familyLabel,
+      Value<String?> skeletonLabel,
+      required String method,
+      required double servingMassG,
+      Value<double?> servingMinG,
+      Value<double?> servingMaxG,
+      Value<double?> durationMin,
+      Value<double?> durationDefault,
+      Value<double?> durationMax,
+      required String steps,
+      Value<String?> source,
+      Value<int> rowid,
+    });
+typedef $$DishProcessesTableUpdateCompanionBuilder =
+    DishProcessesCompanion Function({
+      Value<String> skeletonId,
+      Value<String> familyId,
+      Value<String?> familyLabel,
+      Value<String?> skeletonLabel,
+      Value<String> method,
+      Value<double> servingMassG,
+      Value<double?> servingMinG,
+      Value<double?> servingMaxG,
+      Value<double?> durationMin,
+      Value<double?> durationDefault,
+      Value<double?> durationMax,
+      Value<String> steps,
+      Value<String?> source,
+      Value<int> rowid,
+    });
+
+class $$DishProcessesTableFilterComposer
+    extends Composer<_$AppDatabase, $DishProcessesTable> {
+  $$DishProcessesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get skeletonId => $composableBuilder(
+    column: $table.skeletonId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get familyId => $composableBuilder(
+    column: $table.familyId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get familyLabel => $composableBuilder(
+    column: $table.familyLabel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get skeletonLabel => $composableBuilder(
+    column: $table.skeletonLabel,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get method => $composableBuilder(
+    column: $table.method,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get servingMassG => $composableBuilder(
+    column: $table.servingMassG,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get servingMinG => $composableBuilder(
+    column: $table.servingMinG,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get servingMaxG => $composableBuilder(
+    column: $table.servingMaxG,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get durationMin => $composableBuilder(
+    column: $table.durationMin,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get durationDefault => $composableBuilder(
+    column: $table.durationDefault,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get durationMax => $composableBuilder(
+    column: $table.durationMax,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get steps => $composableBuilder(
+    column: $table.steps,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DishProcessesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DishProcessesTable> {
+  $$DishProcessesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get skeletonId => $composableBuilder(
+    column: $table.skeletonId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get familyId => $composableBuilder(
+    column: $table.familyId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get familyLabel => $composableBuilder(
+    column: $table.familyLabel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get skeletonLabel => $composableBuilder(
+    column: $table.skeletonLabel,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get method => $composableBuilder(
+    column: $table.method,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get servingMassG => $composableBuilder(
+    column: $table.servingMassG,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get servingMinG => $composableBuilder(
+    column: $table.servingMinG,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get servingMaxG => $composableBuilder(
+    column: $table.servingMaxG,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get durationMin => $composableBuilder(
+    column: $table.durationMin,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get durationDefault => $composableBuilder(
+    column: $table.durationDefault,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get durationMax => $composableBuilder(
+    column: $table.durationMax,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get steps => $composableBuilder(
+    column: $table.steps,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DishProcessesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DishProcessesTable> {
+  $$DishProcessesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get skeletonId => $composableBuilder(
+    column: $table.skeletonId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get familyId =>
+      $composableBuilder(column: $table.familyId, builder: (column) => column);
+
+  GeneratedColumn<String> get familyLabel => $composableBuilder(
+    column: $table.familyLabel,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get skeletonLabel => $composableBuilder(
+    column: $table.skeletonLabel,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get method =>
+      $composableBuilder(column: $table.method, builder: (column) => column);
+
+  GeneratedColumn<double> get servingMassG => $composableBuilder(
+    column: $table.servingMassG,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get servingMinG => $composableBuilder(
+    column: $table.servingMinG,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get servingMaxG => $composableBuilder(
+    column: $table.servingMaxG,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get durationMin => $composableBuilder(
+    column: $table.durationMin,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get durationDefault => $composableBuilder(
+    column: $table.durationDefault,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get durationMax => $composableBuilder(
+    column: $table.durationMax,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get steps =>
+      $composableBuilder(column: $table.steps, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+}
+
+class $$DishProcessesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DishProcessesTable,
+          DishProcess,
+          $$DishProcessesTableFilterComposer,
+          $$DishProcessesTableOrderingComposer,
+          $$DishProcessesTableAnnotationComposer,
+          $$DishProcessesTableCreateCompanionBuilder,
+          $$DishProcessesTableUpdateCompanionBuilder,
+          (
+            DishProcess,
+            BaseReferences<_$AppDatabase, $DishProcessesTable, DishProcess>,
+          ),
+          DishProcess,
+          PrefetchHooks Function()
+        > {
+  $$DishProcessesTableTableManager(_$AppDatabase db, $DishProcessesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DishProcessesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DishProcessesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DishProcessesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> skeletonId = const Value.absent(),
+                Value<String> familyId = const Value.absent(),
+                Value<String?> familyLabel = const Value.absent(),
+                Value<String?> skeletonLabel = const Value.absent(),
+                Value<String> method = const Value.absent(),
+                Value<double> servingMassG = const Value.absent(),
+                Value<double?> servingMinG = const Value.absent(),
+                Value<double?> servingMaxG = const Value.absent(),
+                Value<double?> durationMin = const Value.absent(),
+                Value<double?> durationDefault = const Value.absent(),
+                Value<double?> durationMax = const Value.absent(),
+                Value<String> steps = const Value.absent(),
+                Value<String?> source = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DishProcessesCompanion(
+                skeletonId: skeletonId,
+                familyId: familyId,
+                familyLabel: familyLabel,
+                skeletonLabel: skeletonLabel,
+                method: method,
+                servingMassG: servingMassG,
+                servingMinG: servingMinG,
+                servingMaxG: servingMaxG,
+                durationMin: durationMin,
+                durationDefault: durationDefault,
+                durationMax: durationMax,
+                steps: steps,
+                source: source,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String skeletonId,
+                required String familyId,
+                Value<String?> familyLabel = const Value.absent(),
+                Value<String?> skeletonLabel = const Value.absent(),
+                required String method,
+                required double servingMassG,
+                Value<double?> servingMinG = const Value.absent(),
+                Value<double?> servingMaxG = const Value.absent(),
+                Value<double?> durationMin = const Value.absent(),
+                Value<double?> durationDefault = const Value.absent(),
+                Value<double?> durationMax = const Value.absent(),
+                required String steps,
+                Value<String?> source = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DishProcessesCompanion.insert(
+                skeletonId: skeletonId,
+                familyId: familyId,
+                familyLabel: familyLabel,
+                skeletonLabel: skeletonLabel,
+                method: method,
+                servingMassG: servingMassG,
+                servingMinG: servingMinG,
+                servingMaxG: servingMaxG,
+                durationMin: durationMin,
+                durationDefault: durationDefault,
+                durationMax: durationMax,
+                steps: steps,
+                source: source,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DishProcessesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DishProcessesTable,
+      DishProcess,
+      $$DishProcessesTableFilterComposer,
+      $$DishProcessesTableOrderingComposer,
+      $$DishProcessesTableAnnotationComposer,
+      $$DishProcessesTableCreateCompanionBuilder,
+      $$DishProcessesTableUpdateCompanionBuilder,
+      (
+        DishProcess,
+        BaseReferences<_$AppDatabase, $DishProcessesTable, DishProcess>,
+      ),
+      DishProcess,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -31984,4 +34118,8 @@ class $AppDatabaseManager {
       $$CulinaryPairingsTableTableManager(_db, _db.culinaryPairings);
   $$IngredientAllergensTableTableManager get ingredientAllergens =>
       $$IngredientAllergensTableTableManager(_db, _db.ingredientAllergens);
+  $$DishSkeletonRolesTableTableManager get dishSkeletonRoles =>
+      $$DishSkeletonRolesTableTableManager(_db, _db.dishSkeletonRoles);
+  $$DishProcessesTableTableManager get dishProcesses =>
+      $$DishProcessesTableTableManager(_db, _db.dishProcesses);
 }

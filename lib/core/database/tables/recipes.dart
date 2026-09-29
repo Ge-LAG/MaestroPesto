@@ -21,6 +21,11 @@ class Recipes extends Table {
   /// carbs, fats, fiber, salt).
   TextColumn get nutritionJson => text().named('nutrition_json').nullable()();
 
+  // Phase 11 (lot D, schéma v6) — demande de conception (recette à
+  // l'envers) conservée pour « Régénérer » ou « Ajuster les objectifs ».
+  TextColumn get designBriefJson =>
+      text().named('design_brief_json').nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }

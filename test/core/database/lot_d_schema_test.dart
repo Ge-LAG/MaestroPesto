@@ -5,7 +5,7 @@ import 'package:maestropesto/core/database/app_database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('AppDatabase schema v5', () {
+  group('AppDatabase schema v6', () {
     late AppDatabase db;
 
     setUp(() {
@@ -16,8 +16,8 @@ void main() {
       await db.close();
     });
 
-    test('schemaVersion is 5', () {
-      expect(db.schemaVersion, 5);
+    test('schemaVersion is 6', () {
+      expect(db.schemaVersion, 6);
     });
 
     test('recipe_images table exists and supports CRUD + cascade', () async {
