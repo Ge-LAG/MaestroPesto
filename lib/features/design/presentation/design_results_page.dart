@@ -171,8 +171,9 @@ class _VariantCard extends StatelessWidget {
     final physchem = measure.physchem;
     final alerts = [
       for (final a in eval.alerts)
-        if (a.severity == FunctionalSeverity.warning ||
-            a.severity == FunctionalSeverity.danger)
+        if ((a.severity == FunctionalSeverity.warning ||
+                a.severity == FunctionalSeverity.danger) &&
+            a.status != RuleStatus.notMet)
           a,
     ];
     final labels = {

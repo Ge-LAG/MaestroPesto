@@ -416,9 +416,11 @@ class _DesignWizardPageState extends State<DesignWizardPage> {
     final strings = context.strings;
     final theme = Theme.of(context);
     final last = _step == _steps - 1;
-    return Material(
-      elevation: 3,
-      color: theme.colorScheme.surface,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        border: Border(top: BorderSide(color: context.palette.border)),
+      ),
       child: SafeArea(
         top: false,
         child: Padding(
@@ -457,7 +459,9 @@ class _DesignWizardPageState extends State<DesignWizardPage> {
                         onPressed: _compose,
                         icon: const Icon(Icons.auto_awesome),
                         label: Text(
-                          strings.designCompose,
+                          MediaQuery.sizeOf(context).width < 420
+                              ? strings.designComposeShort
+                              : strings.designCompose,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -1028,6 +1032,7 @@ class _StepHeader extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 6),
                   child: ChoiceChip(
+                    showCheckmark: false,
                     avatar: CircleAvatar(
                       radius: 10,
                       child: Text(

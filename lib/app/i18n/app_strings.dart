@@ -460,6 +460,7 @@ class AppStrings {
   String get designNext => 'Suivant';
   String get designBack => 'Retour';
   String get designCompose => 'Composer les recettes';
+  String get designComposeShort => 'Composer';
   String get designComposing => 'Composition en cours…';
   String get designDishType => 'Type de plat';
   String get designDishTypeHelp =>

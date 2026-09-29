@@ -338,9 +338,22 @@ void main() {
               ),
               lessThanOrEqualTo(DesignEngine.maxOverlap + 1e-9),
             );
+            // Et au plus 70 % de la masse d'une portion en commun :
+            // des propositions réellement différentes.
+            expect(
+              DesignEngine.massOverlap(
+                r.variants[i].composition,
+                r.variants[j].composition,
+              ),
+              lessThanOrEqualTo(DesignEngine.maxMassOverlap + 1e-9),
+            );
           }
         }
-        expect(r.variants, hasLength(3));
+        expect(
+          r.variants,
+          hasLength(3),
+          reason: "${r.brief.familyId} ${r.notices}",
+        );
       }
     });
 

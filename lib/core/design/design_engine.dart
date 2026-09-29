@@ -82,15 +82,50 @@ class DesignVariant {
     final base = skeleton.isGeneric
         ? 'Composition'
         : skeleton.label.replaceFirst(RegExp(r'\s*\(.*\)$'), '');
-    final main = [...composition.lines]
-      ..sort((a, b) => b.grams.compareTo(a.grams));
-    final names = [
-      for (final l in main.take(2))
-        evaluation.ingredients[composition.lines.indexOf(l)].label
-            .toLowerCase(),
+    // Ingrédients caractéristiques d'abord : la matière grasse, le sel,
+    // le sucre ou le liquide de cuisson ne distinguent pas deux
+    // propositions.
+    final lines = [
+      for (var i = 0; i < composition.lines.length; i++)
+        (composition.lines[i], evaluation.ingredients[i].label),
+    ]..sort((a, b) => b.$1.grams.compareTo(a.$1.grams));
+    bool neutral((DesignLine, String) e) =>
+        _neutralRoles.contains(e.$1.role) || _neutralName.hasMatch(e.$2);
+    final characteristic = [
+      for (final e in lines)
+        if (!neutral(e)) e.$2,
     ];
+    // Complément : liant, sucrant… plutôt que matière grasse ou sel.
+    final names = <String>{
+      ...characteristic,
+      for (final e in lines)
+        if (!_basicRoles.contains(e.$1.role) && !_neutralName.hasMatch(e.$2))
+          e.$2,
+      for (final e in lines) e.$2,
+    }.take(2).map((n) => n.toLowerCase()).toList();
     return '$base : ${ProcessTemplate.joinFr(names)}';
   }
+
+  static const Set<String> _basicRoles = {
+    'matiere_grasse',
+    'assaisonnement',
+    'liquide',
+  };
+
+  static const Set<String> _neutralRoles = {
+    'matiere_grasse',
+    'assaisonnement',
+    'sucrant',
+    'liquide',
+    'gelifiant',
+    'epaississant',
+    'emulsifiant',
+    'liant_oeuf',
+  };
+
+  static final RegExp _neutralName = RegExp(
+    r"^(Huile|Sel|Fleur de sel|Sucre|Eau|Poivre|Beurre)",
+  );
 
   /// Minutes de cuisson : durées des étapes chauffées.
   int get cookMinutes {
@@ -265,6 +300,37 @@ class DesignEngine {
       notices: notices,
       evaluations: evaluator.evaluations,
     );
+  }
+
+  /// Part maximale de la masse portée par des ingrédients partagés.
+  static const double maxMassOverlap = 0.7;
+
+  /// Part de la masse d'une portion portée par les ingrédients communs
+  /// (minimum des deux parts, ingrédients [exclude] ignorés).
+  static double massOverlap(
+    DesignComposition a,
+    DesignComposition b, {
+    Iterable<String> exclude = const [],
+  }) {
+    Map<String, double> shares(DesignComposition c) {
+      final total = c.servingMassG;
+      final out = <String, double>{};
+      for (final l in c.lines) {
+        out[l.ingredientId] =
+            (out[l.ingredientId] ?? 0) + (total <= 0 ? 0 : l.grams / total);
+      }
+      return out;
+    }
+
+    final sa = shares(a);
+    final sb = shares(b);
+    final skip = exclude.toSet();
+    var shared = 0.0;
+    sa.forEach((id, x) {
+      final y = sb[id];
+      if (y != null && !skip.contains(id)) shared += math.min(x, y);
+    });
+    return shared;
   }
 
   /// Part d'ingrédients partagés : |A ∩ B| / max(|A|, |B|).
@@ -530,7 +596,12 @@ class _Search {
   // ------------------------------------------------------------------
 
   /// Descente par coordonnées multiplicatives.
-  _Scored optimize(DesignComposition c, {bool quick = false}) {
+  /// [accept] : contrainte sur les quantités (diversité par masse).
+  _Scored optimize(
+    DesignComposition c, {
+    bool quick = false,
+    bool Function(DesignComposition c)? accept,
+  }) {
     var best = _score(_clampAll(c));
     final levels = quick ? const [0.3, 0.1] : const [0.4, 0.15, 0.05, 0.015];
     final passes = quick ? 1 : 2;
@@ -559,9 +630,9 @@ class _Search {
               );
               if (next[i].grams == lines[i].grams) continue;
             }
-            final cand = _score(
-              best.composition.copyWith(lines: next, sameSet: true),
-            );
+            final moved = best.composition.copyWith(lines: next, sameSet: true);
+            if (accept != null && !accept(moved)) continue;
+            final cand = _score(moved);
             if (cand.objective < best.objective - 1e-9) {
               best = cand;
               improved = true;
@@ -741,7 +812,7 @@ class _Search {
     DesignComposition start, {
     bool Function(DesignComposition c)? accept,
   }) {
-    var current = optimize(start);
+    var current = optimize(start, accept: accept);
     for (var it = 0; it < budget.maxIterations && !_exhausted; it++) {
       // Pure Innovation : criblage du référentiel toutes les trois
       // itérations (le classement évolue peu d'un pas à l'autre).
@@ -750,7 +821,7 @@ class _Search {
       for (final n in _neighbours(current.composition)) {
         if (accept != null && !accept(n)) continue;
         if (_exhausted) break;
-        final known = _archive[n.setKey];
+        final known = _known(n.setKey, accept);
         candidates.add(known ?? _score(_clampAll(n)));
       }
       if (candidates.isEmpty) break;
@@ -758,8 +829,9 @@ class _Search {
       _Scored? bestNeighbour;
       for (final cand in candidates.take(budget.shortlist)) {
         if (_exhausted) break;
-        final known = _archive[cand.composition.setKey];
-        final quick = known ?? optimize(cand.composition, quick: true);
+        final known = _known(cand.composition.setKey, accept);
+        final quick =
+            known ?? optimize(cand.composition, quick: true, accept: accept);
         if (bestNeighbour == null ||
             quick.objective < bestNeighbour.objective) {
           bestNeighbour = quick;
@@ -769,12 +841,21 @@ class _Search {
           bestNeighbour.objective >= current.objective - 1e-6) {
         break;
       }
-      final known = _archive[bestNeighbour.composition.setKey];
-      final refined = known ?? optimize(bestNeighbour.composition);
+      final known = _known(bestNeighbour.composition.setKey, accept);
+      final refined =
+          known ?? optimize(bestNeighbour.composition, accept: accept);
       if (refined.objective >= current.objective - 1e-6) break;
       current = refined;
     }
     return current;
+  }
+
+  /// Composition déjà optimisée de l'ensemble [key], si elle respecte
+  /// [accept].
+  _Scored? _known(String key, bool Function(DesignComposition c)? accept) {
+    final known = _archive[key];
+    if (known == null) return null;
+    return accept == null || accept(known.composition) ? known : null;
   }
 
   static int _byObjective(_Scored a, _Scored b) {
@@ -882,8 +963,15 @@ class _Search {
   // Variantes.
   // ------------------------------------------------------------------
 
-  bool _diverse(Iterable<String> ids, List<_Scored> chosen) => chosen.every(
-    (v) => DesignEngine.overlap(ids, v.ids) <= DesignEngine.maxOverlap + 1e-9,
+  /// Diversité : au plus 60 % d'ingrédients partagés et au plus 70 %
+  /// de la masse d'une portion portée par des ingrédients partagés
+  /// (hors imposés) — deux propositions ne diffèrent pas seulement par
+  /// une pincée d'épice.
+  bool _diverse(DesignComposition c, List<_Scored> chosen) => chosen.every(
+    (v) =>
+        DesignEngine.overlap(c.ids, v.ids) <= DesignEngine.maxOverlap + 1e-9 &&
+        DesignEngine.massOverlap(c, v.composition, exclude: p.required) <=
+            DesignEngine.maxMassOverlap - _roundingMargin,
   );
 
   /// Meilleure composition trouvée depuis [starts] : chaque départ est
@@ -898,17 +986,19 @@ class _Search {
     final ranked = <_Scored>[];
     for (final start in starts) {
       if (_exhausted) break;
-      if (!_diverse(start.ids, chosen) || !seen.add(start.setKey)) continue;
-      ranked.add(optimize(start, quick: true));
+      if (!_diverse(start, chosen) || !seen.add(start.setKey)) continue;
+      ranked.add(
+        optimize(start, quick: true, accept: (c) => _diverse(c, chosen)),
+      );
     }
     ranked.sort(_byObjective);
     _Scored? best;
     for (final r in ranked.take(searches)) {
       final found = localSearch(
         r.composition,
-        accept: (c) => _diverse(c.ids, chosen),
+        accept: (c) => _diverse(c, chosen),
       );
-      if (!_diverse(found.ids, chosen)) continue;
+      if (!_diverse(found.composition, chosen)) continue;
       if (best == null || _byObjective(found, best) < 0) best = found;
     }
     return best;
@@ -939,7 +1029,7 @@ class _Search {
     final entries =
         _archive.values
             .where((e) => e.composition.skeleton.id == s.id)
-            .where((e) => _diverse(e.ids, chosen))
+            .where((e) => _diverse(e.composition, chosen))
             .toList()
           ..sort(_byObjective);
     return entries.isEmpty ? null : entries.first.composition;
@@ -970,15 +1060,13 @@ class _Search {
     final finals = _finalize(chosen);
     // Les départs cohérents (déjà arrondis) restent candidats : la
     // meilleure variante n'est jamais moins proche des objectifs.
-    final bestSeed = _finalize(seedFinals)
+    final bestSeed = _finalize(seedFinals, prune: false)
       ..sort((a, b) => a.deviation.compareTo(b.deviation));
     if (bestSeed.isNotEmpty &&
         (finals.isEmpty || bestSeed.first.deviation < finals.first.deviation)) {
       final others = [
         for (final f in finals)
-          if (DesignEngine.overlap(f.ids, bestSeed.first.ids) <=
-              DesignEngine.maxOverlap + 1e-9)
-            f,
+          if (_diverse(f.composition, [bestSeed.first])) f,
       ];
       return [bestSeed.first, ...others.take(2)];
     }
@@ -1018,7 +1106,7 @@ class _Search {
 
   /// Quantités arrondies (grammes de la recette), meilleur arrondi par
   /// ligne, puis écart recalculé.
-  List<_Scored> _finalize(List<_Scored> chosen) {
+  List<_Scored> _finalize(List<_Scored> chosen, {bool prune = true}) {
     final n = p.brief.servings;
     final out = <_Scored>[];
     for (final v in chosen) {
@@ -1031,7 +1119,8 @@ class _Search {
         sameSet: true,
       );
       var best = _score(c);
-      for (var i = 0; i < c.lines.length; i++) {
+      if (prune && !p.coherent) best = _prune(best, out);
+      for (var i = 0; i < best.composition.lines.length; i++) {
         final g = best.composition.lines[i].grams * n;
         for (final alt in _gridNeighbours(g)) {
           final next = [...best.composition.lines];
@@ -1039,12 +1128,51 @@ class _Search {
           final cand = _score(
             best.composition.copyWith(lines: next, sameSet: true),
           );
-          if (cand.objective < best.objective - 1e-12) best = cand;
+          if (cand.objective < best.objective - 1e-12 &&
+              _finalDiverse(cand.composition, out)) {
+            best = cand;
+          }
         }
       }
       out.add(best);
     }
     return out..sort(_byObjective);
+  }
+
+  /// Marge de la recherche sur la part de masse commune : l'arrondi
+  /// des quantités ne doit pas faire franchir le seuil garanti.
+  static const double _roundingMargin = 0.03;
+
+  /// Diversité garantie des variantes finales (seuils publiés).
+  bool _finalDiverse(DesignComposition c, List<_Scored> done) => done.every(
+    (v) =>
+        DesignEngine.overlap(c.ids, v.ids) <= DesignEngine.maxOverlap + 1e-9 &&
+        DesignEngine.massOverlap(c, v.composition, exclude: p.required) <=
+            DesignEngine.maxMassOverlap + 1e-9,
+  );
+
+  /// Pure Innovation : retire les lignes négligeables (moins de 2 % de
+  /// la portion) qui n'apportent presque rien à l'écart aux objectifs.
+  _Scored _prune(_Scored start, List<_Scored> done) {
+    var best = start;
+    var changed = true;
+    while (changed && best.composition.lines.length > 1) {
+      changed = false;
+      final c = best.composition;
+      final total = c.servingMassG;
+      for (var i = 0; i < c.lines.length; i++) {
+        final l = c.lines[i];
+        if (_isRequired(l.ingredientId) || l.grams >= total * 0.02) continue;
+        final cand = _score(c.copyWith(lines: [...c.lines]..removeAt(i)));
+        if (cand.objective <= best.objective + 0.005 &&
+            _finalDiverse(cand.composition, done)) {
+          best = cand;
+          changed = true;
+          break;
+        }
+      }
+    }
+    return best;
   }
 
   /// Valeurs voisines sur la grille d'arrondi.
