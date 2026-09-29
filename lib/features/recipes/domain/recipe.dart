@@ -1,3 +1,5 @@
+import 'package:maestropesto/core/design/design_brief.dart';
+
 class Recipe {
   const Recipe({
     required this.id,
@@ -12,6 +14,7 @@ class Recipe {
     required this.nutrition,
     required this.images,
     this.nutritionMode = RecipeNutritionMode.computed,
+    this.designBrief,
   });
 
   final String id;
@@ -30,6 +33,11 @@ class Recipe {
   /// depuis les ingrédients (défaut) ou saisie manuelle forcée.
   final RecipeNutritionMode nutritionMode;
 
+  /// Phase 11 (lot D) — demande de conception d'une recette composée par
+  /// objectifs (« Régénérer », « Ajuster les objectifs ») ; null pour une
+  /// recette saisie.
+  final DesignBrief? designBrief;
+
   int get totalMinutes => prepMinutes + cookMinutes;
 
   Recipe copyWith({
@@ -45,6 +53,7 @@ class Recipe {
     NutritionSummary? nutrition,
     List<RecipeImage>? images,
     RecipeNutritionMode? nutritionMode,
+    Object? designBrief = _unset,
   }) {
     return Recipe(
       id: id ?? this.id,
@@ -59,6 +68,9 @@ class Recipe {
       nutrition: nutrition ?? this.nutrition,
       images: images ?? this.images,
       nutritionMode: nutritionMode ?? this.nutritionMode,
+      designBrief: identical(designBrief, _unset)
+          ? this.designBrief
+          : designBrief as DesignBrief?,
     );
   }
 }
